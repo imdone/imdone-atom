@@ -1,9 +1,15 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "0.0.0",
-  "description": "A short description of your package",
-  "keywords": [],
+  "version": "0.0.1",
+  "description": "Issue Tracking for Tiny Teams and MVP's",
+  "keywords": [
+    "mvp",
+    "tasks",
+    "todo",
+    "productivity",
+    "issues"
+  ],
   "activationCommands": {
     "atom-workspace": [
       "imdone-atom:tasks"
@@ -16,6 +22,6 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
-    "imdone-core": "~1.1.5"
+    "imdone-core": "~1.1.7"
   }
 }

@@ -16,6 +16,10 @@
   "lists": [
     {
       "name": "TODO",
+      "hidden": true
+    },
+    {
+      "name": "DOING",
       "hidden": false
     }
   ],

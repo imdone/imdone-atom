@@ -10,6 +10,8 @@ class ImdoneAtomView extends ScrollView
     @div class: "imdone-atom pane-item", =>
       @div outlet: "loading", class: "imdone-loading", =>
         @h4 "Loading #{path.basename(params.path)} Issues..."
+        # DOING:20 Update progress bar on repo load
+        @progress class:'inline-block', outlet: "progress", max:100, value:50
       @div outlet: "board", class: "imdone-board"
 
   getTitle: ->
@@ -20,7 +22,10 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo = imdoneRepo = @getImdoneRepo()
     imdoneRepo.on 'initialized', @onRepoUpdate.bind(this)
     imdoneRepo.on 'file.update', @onRepoUpdate.bind(this)
-    imdoneRepo.on 'config.update', -> imdoneRepo.refresh()
+    imdoneRepo.on 'config.update', (->
+      @board.hide()
+      @loading.show()
+      imdoneRepo.refresh()).bind(this)
 
     # TODO:0 Maybe we need to check file stats first (For configuration)
     setTimeout (-> imdoneRepo.init()), 1000
@@ -30,7 +35,7 @@ class ImdoneAtomView extends ScrollView
 
   onRepoUpdate: ->
     @loading.hide()
-    @board.empty()
+    @board.show().empty()
 
     repo = @imdoneRepo
     lists = repo.getVisibleLists()
@@ -43,6 +48,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-text', =>
             @raw task.getHtml()
           @div class: 'task-source', =>
+            # DOING:10 Add todo.txt stuff like chrome app
             @a class: 'source-link', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
 

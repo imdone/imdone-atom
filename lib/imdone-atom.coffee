@@ -1,7 +1,7 @@
 ImdoneAtomView = require './imdone-atom-view'
 url = require 'url'
 {CompositeDisposable} = require 'atom'
-path = require 'path'
+_path = require 'path'
 
 module.exports = ImdoneAtom =
   imdoneView: null
@@ -9,18 +9,16 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # Register the todolist URI, which will then open our custom view
     atom.workspace.addOpener ((uriToOpen) ->
       {protocol, host, pathname} = url.parse(uriToOpen)
       return unless protocol is 'imdone:'
       projectPath = @getCurrentProject()
       return unless projectPath
+      # DOING:0 If a view exists for this uri, open it
       new ImdoneAtomView(path: projectPath)).bind(this)
 
-    # Events subscribed to in atom's system can be easily cleaned up with a CompositeDisposable
     @subscriptions = new CompositeDisposable
 
-    # Register command that toggles this view
     @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", => @tasks()
 
   tasks: ->
@@ -47,4 +45,4 @@ module.exports = ImdoneAtom =
       paths[0]
 
   uriForProject: ->
-    uri = 'imdone://' + path.basename(@getCurrentProject())
+    uri = 'imdone://' + _path.basename(@getCurrentProject())
