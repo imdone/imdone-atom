@@ -41,6 +41,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
+    # TODO:10 Add task drag and drop support
 
     getTask = (task) ->
       $$$ ->
@@ -48,7 +49,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-text', =>
             @raw task.getHtml()
           @div class: 'task-source', =>
-            # DOING:10 Add todo.txt stuff like chrome app
+            # DOING:10 Add todo.txt stuff like chrome app!
             @a class: 'source-link', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
 

@@ -22,6 +22,6 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
-    "imdone-core": "~1.1.7"
+    "imdone-core": "~1.1.8"
   }
 }
