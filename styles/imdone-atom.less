@@ -6,11 +6,37 @@
 
 .imdone-atom {
   color: @text-color;
-  margin: 1em;
   overflow: auto;
-  .imdone-board .list {
-    float: left;
-    width: 362px;
-    padding: 10px;
+  .imdone-board {
+    margin: 1em;
+    .list {
+      float: left;
+      width: 362px;
+      padding: 10px;
+      background-color: @panel-heading-background-color;
+      margin-right: 10px;
+      .list-name {
+        background-color: @inset-panel-background-color;
+        font-size: 2em;
+        padding: .5em;
+      }
+      .task {
+        background-color: @inset-panel-background-color;
+        font-size: 1.5em;
+        white-space: normal;
+        word-wrap: break-word;
+        .task-source {
+          a {
+            color: @text-color-info;
+          }
+        }
+      }
+    }
+  }
+
+  .well {
+    padding: 1em;
+    border-radius: 2px;
+    margin-bottom: 1em;
   }
 }

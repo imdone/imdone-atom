@@ -1,6 +1,7 @@
 ImdoneAtomView = require './imdone-atom-view'
 url = require 'url'
 {CompositeDisposable} = require 'atom'
+path = require 'path'
 
 module.exports = ImdoneAtom =
   imdoneView: null
@@ -20,10 +21,11 @@ module.exports = ImdoneAtom =
     @subscriptions = new CompositeDisposable
 
     # Register command that toggles this view
-    @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", => @tasks('imdone:///')
+    @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", => @tasks()
 
-  tasks: (uri) ->
+  tasks: ->
     previousActivePane = atom.workspace.getActivePane()
+    uri = @uriForProject()
     atom.workspace.open(uri).done (imdoneAtomView) ->
       return unless imdoneAtomView instanceof ImdoneAtomView
       previousActivePane.activate()
@@ -43,3 +45,6 @@ module.exports = ImdoneAtom =
       return path for path in paths when active.getPath().indexOf(path) == 0
     else
       paths[0]
+
+  uriForProject: ->
+    uri = 'imdone://' + path.basename(@getCurrentProject())
