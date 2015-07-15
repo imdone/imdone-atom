@@ -1,8 +1,7 @@
-# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Show Tasks'
+      'label': 'Show Tasks - iMDone'
       'command': 'imdone-atom:tasks'
     }
   ]
@@ -10,7 +9,7 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'imdone-atom'
+      'label': 'iMDone'
       'submenu': [
         {
           'label': 'Show Tasks'

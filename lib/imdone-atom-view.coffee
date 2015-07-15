@@ -16,7 +16,13 @@ class ImdoneAtomView extends ScrollView
         @h4 "Loading #{path.basename(params.path)} Issues..."
         # DOING:20 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:50
-      @div outlet: "board", class: "imdone-board"
+      @div outlet: "menu", class: "imdone-menu", =>
+        @div click: "toggleMenu",  class: "block imdone-menu-toggle", =>
+          @span class: "icon icon-gear"
+        @div outlet: "filter"
+        @ul outlet: "lists", class: "lists"
+      @div outlet: "boardWrapper", class: "imdone-board-wrapper", =>
+        @div outlet: "board", class: "imdone-board"
 
   getTitle: ->
     "#{path.basename(@path)} Issues"
@@ -27,22 +33,63 @@ class ImdoneAtomView extends ScrollView
   constructor: ({@path, @uri}) ->
     super
     @imdoneRepo = imdoneRepo = @getImdoneRepo()
+    @handleEvents()
     imdoneRepo.on 'initialized', @onRepoUpdate.bind(this)
     imdoneRepo.on 'file.update', @onRepoUpdate.bind(this)
-    imdoneRepo.on 'config.update', (->
-      @board.hide()
-      @loading.show()
-      imdoneRepo.refresh()).bind(this)
+    imdoneRepo.on 'config.update', (-> imdoneRepo.refresh()).bind(this)
 
     # TODO:10 Maybe we need to check file stats first (For configuration)
     setTimeout (-> imdoneRepo.init()), 1000
+
+  toggleMenu: (event, element) ->
+    @menu.toggleClass('open')
+    @boardWrapper.toggleClass('shift')
 
   getImdoneRepo: ->
     fsStore(new ImdoneRepo(@path))
 
   onRepoUpdate: ->
+    @updateBoard()
+    @updateMenu()
+
     @loading.hide()
-    @board.show().empty()
+    @menu.show()
+    @boardWrapper.show();
+
+  updateMenu: ->
+    @lists.empty()
+
+    repo = @imdoneRepo
+    lists = repo.getLists()
+    hiddenList = "hidden-list"
+
+    getList = (list) ->
+      $$ ->
+        @li "data-list": list.name, =>
+          @span class: "reorder icon icon-three-bars"
+          @span class: "toggle-list  #{hiddenList if list.hidden}", "data-list": list.name, =>
+            @span class: "icon icon-eye"
+            @span list.name
+
+    elements = (-> getList list for list in lists)
+
+    @lists.append elements
+
+    jquery('.lists').sortable(
+      delay: 300
+      axis: "y"
+      items: "li"
+      handle:".reorder"
+      containment: "parent"
+      tolerance: "pointer"
+      stop: (e, ui) ->
+        name = ui.item.attr "data-list"
+        pos = ui.item.index()
+        repo.moveList name, pos
+    ).disableSelection()
+
+  updateBoard: ->
+    @board.empty()
 
     repo = @imdoneRepo
     lists = repo.getVisibleLists()
@@ -72,30 +119,22 @@ class ImdoneAtomView extends ScrollView
 
     @board.append elements
 
-    jquery('.tasks').sortable(
-      delay: 300
-      axis: "y"
-      items: ".task"
-      containment: "parent"
-      tolerance: "pointer"
-      # stop: function(e, ui) {
-      #   loading.show();
-      #   var name = ui.item.attr("data-list");
-      #   var pos = ui.item.index();
-      #   self.model.moveList(name, pos, loading.hide);
-      # }
-    ).disableSelection()
-
-  initialize: ->
-    @handleEvents()
-
   destroy: ->
     @detach()
 
   handleEvents: ->
+    repo = @imdoneRepo
+
     @on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath(link.dataset.uri, link.dataset.line)
+
+    @on 'click', '.toggle-list', (e) =>
+      target = e.target
+      name = target.dataset.list || target.parentElement.dataset.list
+      if (repo.getList(name).hidden)
+        repo.showList name
+      else repo.hideList name
 
   openPath: (filePath, line) ->
     return unless filePath
