@@ -3,6 +3,10 @@
 ImdoneRepo = require 'imdone-core/lib/repository'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
+jquery = require 'jquery'
+require 'jquery-ui/draggable'
+require 'jquery-ui/droppable'
+require 'jquery-ui/sortable'
 
 module.exports =
 class ImdoneAtomView extends ScrollView
@@ -17,7 +21,10 @@ class ImdoneAtomView extends ScrollView
   getTitle: ->
     "#{path.basename(@path)} Issues"
 
-  constructor: ({@path}) ->
+  getURI: ->
+    @uri
+
+  constructor: ({@path, @uri}) ->
     super
     @imdoneRepo = imdoneRepo = @getImdoneRepo()
     imdoneRepo.on 'initialized', @onRepoUpdate.bind(this)
@@ -27,7 +34,7 @@ class ImdoneAtomView extends ScrollView
       @loading.show()
       imdoneRepo.refresh()).bind(this)
 
-    # TODO:0 Maybe we need to check file stats first (For configuration)
+    # TODO:10 Maybe we need to check file stats first (For configuration)
     setTimeout (-> imdoneRepo.init()), 1000
 
   getImdoneRepo: ->
@@ -41,7 +48,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # TODO:10 Add task drag and drop support
+    # TODO:20 Add task drag and drop support
 
     getTask = (task) ->
       $$$ ->
@@ -64,6 +71,20 @@ class ImdoneAtomView extends ScrollView
     elements = (-> getList list for list in lists)
 
     @board.append elements
+
+    jquery('.tasks').sortable(
+      delay: 300
+      axis: "y"
+      items: ".task"
+      containment: "parent"
+      tolerance: "pointer"
+      # stop: function(e, ui) {
+      #   loading.show();
+      #   var name = ui.item.attr("data-list");
+      #   var pos = ui.item.index();
+      #   self.model.moveList(name, pos, loading.hide);
+      # }
+    ).disableSelection()
 
   initialize: ->
     @handleEvents()

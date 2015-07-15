@@ -12,10 +12,7 @@ module.exports = ImdoneAtom =
     atom.workspace.addOpener ((uriToOpen) ->
       {protocol, host, pathname} = url.parse(uriToOpen)
       return unless protocol is 'imdone:'
-      projectPath = @getCurrentProject()
-      return unless projectPath
-      # DOING:0 If a view exists for this uri, open it
-      new ImdoneAtomView(path: projectPath)).bind(this)
+      @viewForUri(uriToOpen)).bind(this)
 
     @subscriptions = new CompositeDisposable
 
@@ -24,8 +21,9 @@ module.exports = ImdoneAtom =
   tasks: ->
     previousActivePane = atom.workspace.getActivePane()
     uri = @uriForProject()
-    atom.workspace.open(uri).done (imdoneAtomView) ->
+    atom.workspace.open(uri, searchAllPanes: true).done (imdoneAtomView) ->
       return unless imdoneAtomView instanceof ImdoneAtomView
+      # TODO:0 save split pane settings and open in pane for configured location
       previousActivePane.activate()
 
   deactivate: ->
@@ -46,3 +44,8 @@ module.exports = ImdoneAtom =
 
   uriForProject: ->
     uri = 'imdone://' + _path.basename(@getCurrentProject())
+
+  viewForUri: (uri) ->
+    projectPath = @getCurrentProject()
+    return unless projectPath
+    new ImdoneAtomView(path: projectPath, uri: uri)
