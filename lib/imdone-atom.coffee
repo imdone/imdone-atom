@@ -23,7 +23,6 @@ module.exports = ImdoneAtom =
     uri = @uriForProject()
     atom.workspace.open(uri, searchAllPanes: true).done (imdoneAtomView) ->
       return unless imdoneAtomView instanceof ImdoneAtomView
-      # TODO:0 save split pane settings and open in pane for configured location
       previousActivePane.activate()
 
   deactivate: ->
@@ -37,7 +36,7 @@ module.exports = ImdoneAtom =
     paths = atom.project.getPaths()
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
-    if active
+    if active && active.getPath
       return path for path in paths when active.getPath().indexOf(path) == 0
     else
       paths[0]
