@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "0.2.1",
+  "version": "0.2.0",
   "description": "Issue Tracking for Tiny Teams and MVP's and a better way to manage TODOs, FIXMEs, HACKs, etc in your project.",
   "keywords": [
     "mvp",
