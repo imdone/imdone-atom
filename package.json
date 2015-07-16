@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Issue Tracking for Tiny Teams and MVP's",
   "keywords": [
     "mvp",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
-    "imdone-core": "~1.1.8",
+    "imdone-core": "~1.1.9",
     "jquery": "^2.1.4",
     "jquery-ui": "^1.10.5"
   }

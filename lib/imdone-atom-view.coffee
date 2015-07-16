@@ -13,9 +13,9 @@ class ImdoneAtomView extends ScrollView
   @content: (params) ->
     @div class: "imdone-atom pane-item", =>
       @div outlet: "loading", class: "imdone-loading", =>
-        @h4 "Loading #{path.basename(params.path)} Issues..."
+        @h4 "Loading #{path.basename(params.path)} Issues.  It's gonna be legen... wait for it."
         # DOING:20 Update progress bar on repo load
-        @progress class:'inline-block', outlet: "progress", max:100, value:50
+        @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
       @div outlet: "menu", class: "imdone-menu", =>
         @div click: "toggleMenu",  class: "block imdone-menu-toggle", =>
           @span class: "icon icon-gear"
@@ -37,6 +37,16 @@ class ImdoneAtomView extends ScrollView
     imdoneRepo.on 'initialized', @onRepoUpdate.bind(this)
     imdoneRepo.on 'file.update', @onRepoUpdate.bind(this)
     imdoneRepo.on 'config.update', (-> imdoneRepo.refresh()).bind(this)
+
+    imdoneRepo.fileStats ((err, files) ->
+      if files.length > 1000
+        @progress.show()
+        imdoneRepo.on 'file.read', ((data) ->
+          complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
+          @progress.attr 'value', complete
+          console.log(complete)
+        ).bind(this)
+    ).bind(this)
 
     # TODO:10 Maybe we need to check file stats first (For configuration)
     setTimeout (-> imdoneRepo.init()), 1000
@@ -69,7 +79,7 @@ class ImdoneAtomView extends ScrollView
           @span class: "reorder icon icon-three-bars"
           @span class: "toggle-list  #{hiddenList if list.hidden}", "data-list": list.name, =>
             @span class: "icon icon-eye"
-            @span list.name
+            @span "#{list.name} (#{repo.getTasksInList(list.name).length})"
 
     elements = (-> getList list for list in lists)
 
@@ -100,6 +110,8 @@ class ImdoneAtomView extends ScrollView
     getTask = (task) ->
       $$$ ->
         @div class: 'inset-panel padded task well', id: "#{task.id}", =>
+          @div class:'task-order', =>
+            @span class: 'badge', task.order
           @div class: 'task-text', =>
             @raw task.getHtml()
           @div class: 'task-source', =>
