@@ -22,8 +22,7 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
-    "imdone-core": "~1.1.9",
-    "jquery": "^2.1.4",
-    "jquery-ui": "^1.10.5"
+    "html5sortable": "^0.2.9",
+    "imdone-core": "~1.1.9"
   }
 }

@@ -3,10 +3,11 @@
 ImdoneRepo = require 'imdone-core/lib/repository'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
-jquery = require 'jquery'
-require 'jquery-ui/draggable'
-require 'jquery-ui/droppable'
-require 'jquery-ui/sortable'
+sortable = require 'html5sortable'
+$.fn.sortable = (options) ->
+  sortable(this, options);
+
+console.log(sortable);
 
 module.exports =
 class ImdoneAtomView extends ScrollView
@@ -85,18 +86,15 @@ class ImdoneAtomView extends ScrollView
 
     @lists.append elements
 
-    jquery('.lists').sortable(
-      delay: 300
-      axis: "y"
+    $('.lists').sortable(
       items: "li"
       handle:".reorder"
-      containment: "parent"
-      tolerance: "pointer"
-      stop: (e, ui) ->
-        name = ui.item.attr "data-list"
-        pos = ui.item.index()
-        repo.moveList name, pos
-    ).disableSelection()
+      forcePlaceholderSize: true
+    ).bind('sortupdate', (e, ui) ->
+      name = ui.item.attr "data-list"
+      pos = ui.item.index()
+      repo.moveList name, pos
+    )
 
   updateBoard: ->
     @board.empty()

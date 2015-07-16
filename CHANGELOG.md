@@ -1,5 +1,9 @@
-## 0.1.0 - First Release
-* Every feature added
-* Every bug fixed
+## 0.2.0 - First Release
+* Allow show and hide lists
+* Allow Reorder lists
 
-- #DOING:40 user:piasikj Remember to update changelog before publishing
+## 0.2.1
+* Switch to html5sortable
+
+
+- [user:piasikj Remember to update changelog before publishing](#DOING:40)
