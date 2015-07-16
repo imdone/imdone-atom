@@ -2,7 +2,7 @@
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
   "version": "0.1.0",
-  "description": "Issue Tracking for Tiny Teams and MVP's",
+  "description": "Issue Tracking for Tiny Teams and MVP's and a better way to manage TODOs, FIXMEs, HACKs, etc in your project.",
   "keywords": [
     "mvp",
     "tasks",
@@ -15,7 +15,7 @@
       "imdone-atom:tasks"
     ]
   },
-  "repository": "https://github.com/atom/imdone-atom",
+  "repository": "https://github.com/imdone/imdone-atom",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
