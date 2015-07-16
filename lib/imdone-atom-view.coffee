@@ -7,8 +7,6 @@ sortable = require 'html5sortable'
 $.fn.sortable = (options) ->
   sortable(this, options);
 
-console.log(sortable);
-
 module.exports =
 class ImdoneAtomView extends ScrollView
   @content: (params) ->
@@ -45,7 +43,6 @@ class ImdoneAtomView extends ScrollView
         imdoneRepo.on 'file.read', ((data) ->
           complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
           @progress.attr 'value', complete
-          console.log(complete)
         ).bind(this)
     ).bind(this)
 
