@@ -23,6 +23,6 @@
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
     "html5sortable": "^0.2.9",
-    "imdone-core": "~1.1.9"
+    "imdone-core": "~1.2.0"
   }
 }

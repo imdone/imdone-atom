@@ -12,8 +12,9 @@ class ImdoneAtomView extends ScrollView
   @content: (params) ->
     @div class: "imdone-atom pane-item", =>
       @div outlet: "loading", class: "imdone-loading", =>
-        @h4 "Loading #{path.basename(params.path)} Issues.  It's gonna be legen... wait for it."
-        # DOING:20 Update progress bar on repo load
+        @h4 "Loading #{path.basename(params.path)} Issues."
+        @h4 "It's gonna be legen... wait for it."
+        # DONE:20 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
       @div outlet: "menu", class: "imdone-menu", =>
         @div click: "toggleMenu",  class: "block imdone-menu-toggle", =>
@@ -33,9 +34,9 @@ class ImdoneAtomView extends ScrollView
     super
     @imdoneRepo = imdoneRepo = @getImdoneRepo()
     @handleEvents()
-    imdoneRepo.on 'initialized', @onRepoUpdate.bind(this)
-    imdoneRepo.on 'file.update', @onRepoUpdate.bind(this)
-    imdoneRepo.on 'config.update', (-> imdoneRepo.refresh()).bind(this)
+    imdoneRepo.on 'initialized', => @onRepoUpdate()
+    imdoneRepo.on 'file.update', => @onRepoUpdate()
+    imdoneRepo.on 'config.update', => imdoneRepo.refresh()
 
     imdoneRepo.fileStats ((err, files) ->
       if files.length > 1000
@@ -46,7 +47,7 @@ class ImdoneAtomView extends ScrollView
         ).bind(this)
     ).bind(this)
 
-    # TODO:10 Maybe we need to check file stats first (For configuration)
+    # TODO:25 Maybe we need to check file stats first (For configuration)
     setTimeout (-> imdoneRepo.init()), 1000
 
   toggleMenu: (event, element) ->
@@ -78,6 +79,7 @@ class ImdoneAtomView extends ScrollView
           @span class: "toggle-list  #{hiddenList if list.hidden}", "data-list": list.name, =>
             @span class: "icon icon-eye"
             @span "#{list.name} (#{repo.getTasksInList(list.name).length})"
+            # DOING:10.5 Add delete list icon if length is 0
 
     elements = (-> getList list for list in lists)
 
@@ -108,9 +110,34 @@ class ImdoneAtomView extends ScrollView
           @div class:'task-order', =>
             @span class: 'badge', task.order
           @div class: 'task-text', =>
-            @raw task.getHtml()
+            @raw task.getHtml(stripMeta: true, stripDates: true)
+          # DOING:10 Add todo.txt stuff like chrome app!
+          @div class: 'task-context', task.getContext().join(',') if task.getContext()
+          @div class: 'task-tags', task.getTags().join(',') if task.getTags()
+          @div class: 'task-meta', =>
+            @table =>
+              for data in task.getMetaDataWithLinks(repo.getConfig())
+                do (data) =>
+                  @tr =>
+                    @td data.key
+                    if data.link
+                      @td =>
+                        @a href: data.link.url, title: data.link.title, data.value
+                    else
+                      @td data.value
+                if task.getDateDue()
+                  @tr =>
+                    @td "due"
+                    @td task.getDateDue()
+                if task.getDateCreated()
+                  @tr =>
+                    @td "created"
+                    @td task.getDateCreated()
+                if task.getDateCompleted()
+                  @tr =>
+                    @td "completed"
+                    @td task.getDateCompleted()
           @div class: 'task-source', =>
-            # DOING:10 Add todo.txt stuff like chrome app!
             @a class: 'source-link', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
 

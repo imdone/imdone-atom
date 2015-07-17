@@ -21,6 +21,10 @@
     {
       "name": "DOING",
       "hidden": false
+    },
+    {
+      "name": "DONE",
+      "hidden": true
     }
   ],
   "marked": {
@@ -30,5 +34,11 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
+  },
+  "meta": {
+    "user": {
+      "urlTemplate": "https://github.com/%s",
+      "titleTemplate": "github profile for %s"
+    }
   }
 }

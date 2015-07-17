@@ -6,4 +6,4 @@
 * Switch to html5sortable
 
 
-- [user:piasikj Remember to update changelog before publishing](#DOING:40)
+- [x 2015-07-17 2015-07-24 due:2015-08-01 user:piascikj Remember to update changelog before +publishing @product](#DOING:40)
