@@ -1,11 +1,10 @@
-{$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
+{$, $$, $$$, ScrollView, TextEditorView} = require 'atom-space-pen-views'
 {Emitter, Disposable, CompositeDisposable} = require 'atom'
 ImdoneRepo = require 'imdone-core/lib/repository'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
-sortable = require 'html5sortable'
-$.fn.sortable = (options) ->
-  sortable(this, options);
+util = require 'util'
+require('./jq-utils')($)
 
 module.exports =
 class ImdoneAtomView extends ScrollView
@@ -17,9 +16,12 @@ class ImdoneAtomView extends ScrollView
         # DONE:20 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
       @div outlet: "menu", class: "imdone-menu", =>
-        @div click: "toggleMenu",  class: "block imdone-menu-toggle", =>
+        @div click: "toggleMenu",  class: "imdone-menu-toggle", =>
           @span class: "icon icon-gear"
-        @div outlet: "filter"
+        @div class: "imdone-filter", =>
+          # @input outlet:"filterField", type:"text", placeholder: "filter tasks" #, keyup: "onFilterKeyup"
+          @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
+          @div click: "clearFilter", class:"icon icon-x clear-filter"
         @ul outlet: "lists", class: "lists"
       @div outlet: "boardWrapper", class: "imdone-board-wrapper", =>
         @div outlet: "board", class: "imdone-board"
@@ -50,9 +52,46 @@ class ImdoneAtomView extends ScrollView
     # TODO:25 Maybe we need to check file stats first (For configuration)
     setTimeout (-> imdoneRepo.init()), 1000
 
+  handleEvents: ->
+    repo = @imdoneRepo
+
+    @on 'click', '.source-link',  (e) =>
+      link = e.target
+      @openPath(link.dataset.uri, link.dataset.line)
+
+    @on 'click', '.toggle-list', (e) =>
+      target = e.target
+      name = target.dataset.list || target.parentElement.dataset.list
+      if (repo.getList(name).hidden)
+        repo.showList name
+      else repo.hideList name
+
+    editor = @filterField.getModel()
+    editor.onDidStopChanging () =>
+      @filter editor.getText()
+
   toggleMenu: (event, element) ->
     @menu.toggleClass('open')
     @boardWrapper.toggleClass('shift')
+
+  clearFilter: (event, element) ->
+    @filterField.getModel().setText('')
+    @board.find('.task').show()
+
+  onFilterKeyup: (event, element) ->
+    @filter @filterField.val()
+    return true
+
+  filter: (text) ->
+    @lastFilter = text
+    if text == ''
+      @board.find('.task').show()
+    else
+      @board.find('.task').hide()
+      @board.find(util.format('.task:regex(data-path,%s)', text)).show()
+      @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each( ->
+        $(this).closest('.task').show()
+      )
 
   getImdoneRepo: ->
     fsStore(new ImdoneRepo(@path))
@@ -106,9 +145,11 @@ class ImdoneAtomView extends ScrollView
 
     getTask = (task) ->
       $$$ ->
-        @div class: 'inset-panel padded task well', id: "#{task.id}", =>
+        @div class: 'inset-panel padded task well', id: "#{task.id}", "data-path": task.source.path, =>
           @div class:'task-order', =>
             @span class: 'badge', task.order
+          @div class: 'task-full-text hidden', =>
+            @raw task.getText()
           @div class: 'task-text', =>
             @raw task.getHtml(stripMeta: true, stripDates: true)
           # DOING:10 Add todo.txt stuff like chrome app!
@@ -155,20 +196,6 @@ class ImdoneAtomView extends ScrollView
 
   destroy: ->
     @detach()
-
-  handleEvents: ->
-    repo = @imdoneRepo
-
-    @on 'click', '.source-link',  (e) =>
-      link = e.target
-      @openPath(link.dataset.uri, link.dataset.line)
-
-    @on 'click', '.toggle-list', (e) =>
-      target = e.target
-      name = target.dataset.list || target.parentElement.dataset.list
-      if (repo.getList(name).hidden)
-        repo.showList name
-      else repo.hideList name
 
   openPath: (filePath, line) ->
     return unless filePath

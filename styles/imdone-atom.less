@@ -3,6 +3,8 @@
 // See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 // for a full listing of what's available.
 @import "ui-variables";
+@menu-component-width: 188px;
+@menu-width: 224px;
 
 .imdone-atom {
   .imdone-loading {
@@ -21,7 +23,7 @@
     top: 0;
     bottom: 0;
     left: -200px;
-    width: 224px;
+    width: @menu-width;
     display: none;
     z-index: 1;
     background-color: @base-background-color;
@@ -32,16 +34,39 @@
     .imdone-menu-toggle {
       cursor: pointer;
       position: absolute;
-      top: 0;
-      right: 1em;
-      width: 16px;
-      height: 16px;
+      top: 2px;
+      right: 6px;
+      width: 24px;
+      border: none;
+      background-color: inherit;
+      height: 22px;
+      padding: 4px;
+    }
+    .imdone-filter {
+      width: @menu-component-width;
+      atom-text-editor {
+        padding-right: 24px;
+      }
+      // input::-webkit-input-placeholder {
+      //    @text-color-subtle;
+      // }
+      .clear-filter {
+        cursor: pointer;
+        position: absolute;
+        top: 2px;
+        right: 36px;
+        width: 24px;
+        border: none;
+        background-color: inherit;
+        height: 22px;
+        padding: 4px;
+      }
     }
     .lists {
       list-style: none;
       padding-left: 0;
       margin-top: 1.5em;
-      width: 190px;
+      width: @menu-component-width;
       .hidden-list {
         color: @text-color-subtle;
       }
@@ -71,7 +96,7 @@
     right: 0;
     overflow: auto;
     &.shift {
-      left: 224px;
+      left: @menu-width;
     }
     transition: left 0.2s;
     .imdone-board {
@@ -92,6 +117,11 @@
           font-size: 1.25em;
           white-space: normal;
           word-wrap: break-word;
+          .task-text {
+            p {
+              margin: 0 0 5px;
+            }
+          }
           .task-order {
             position: absolute;
             top: 2px;
@@ -127,7 +157,7 @@
 
   .well {
     padding: 1em;
-    border-radius: 2px;
+    border-radius: @component-border-radius;
     margin-bottom: 1em;
   }
 }
