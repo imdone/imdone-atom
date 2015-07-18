@@ -16,8 +16,10 @@ class ImdoneAtomView extends ScrollView
         # DONE:20 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
       @div outlet: "menu", class: "imdone-menu", =>
-        @div click: "toggleMenu",  class: "imdone-menu-toggle", =>
-          @span class: "icon icon-gear"
+        @div click: "toggleMenu",  class: "imdone-menu-toggle imdone-toolbar-button", title: "show tools", =>
+          @a href: "#", class: "icon icon-tools"
+        @div class: "imdone-help imdone-toolbar-button", title: "syntax help", =>
+          @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
         @div class: "imdone-filter", =>
           # @input outlet:"filterField", type:"text", placeholder: "filter tasks" #, keyup: "onFilterKeyup"
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
@@ -40,14 +42,12 @@ class ImdoneAtomView extends ScrollView
     imdoneRepo.on 'file.update', => @onRepoUpdate()
     imdoneRepo.on 'config.update', => imdoneRepo.refresh()
 
-    imdoneRepo.fileStats ((err, files) ->
+    imdoneRepo.fileStats (err, files) =>
       if files.length > 1000
         @progress.show()
-        imdoneRepo.on 'file.read', ((data) ->
+        imdoneRepo.on 'file.read', (data) =>
           complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
           @progress.attr 'value', complete
-        ).bind(this)
-    ).bind(this)
 
     # TODO:25 Maybe we need to check file stats first (For configuration)
     setTimeout (-> imdoneRepo.init()), 1000
@@ -70,6 +70,11 @@ class ImdoneAtomView extends ScrollView
     editor.onDidStopChanging () =>
       @filter editor.getText()
 
+    @on 'click', '.filter-link', (e) =>
+      target = e.target
+      filter = target.dataset.filter || target.parentElement.dataset.filter
+      editor.setText filter
+
   toggleMenu: (event, element) ->
     @menu.toggleClass('open')
     @boardWrapper.toggleClass('shift')
@@ -77,10 +82,6 @@ class ImdoneAtomView extends ScrollView
   clearFilter: (event, element) ->
     @filterField.getModel().setText('')
     @board.find('.task').show()
-
-  onFilterKeyup: (event, element) ->
-    @filter @filterField.val()
-    return true
 
   filter: (text) ->
     @lastFilter = text
@@ -144,6 +145,11 @@ class ImdoneAtomView extends ScrollView
     # TODO:20 Add task drag and drop support
 
     getTask = (task) ->
+      contexts = task.getContext()
+      tags = task.getTags()
+      dateDue = task.getDateDue()
+      dateCreated = task.getDateCreated()
+      dateCompleted = task.getDateCompleted()
       $$$ ->
         @div class: 'inset-panel padded task well', id: "#{task.id}", "data-path": task.source.path, =>
           @div class:'task-order', =>
@@ -153,31 +159,54 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-text', =>
             @raw task.getHtml(stripMeta: true, stripDates: true)
           # DOING:10 Add todo.txt stuff like chrome app!
-          @div class: 'task-context', task.getContext().join(',') if task.getContext()
-          @div class: 'task-tags', task.getTags().join(',') if task.getTags()
+          if contexts
+            @div =>
+              for context, i in contexts
+                do (context, i) =>
+                  @a href:"#", title: "filter by #{context}", class: "filter-link", "data-filter": "@#{context}", =>
+                    @span class: "task-context", context
+                    @span ", " if (i < contexts.length-1)
+          if tags
+            @div =>
+              for tag, i in tags
+                do (tag, i) =>
+                  @a href:"#", title: "filter by #{tag}", class: "filter-link", "data-filter": "\\+#{tag}", =>
+                    @span class: "task-tags", tag
+                    @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
               for data in task.getMetaDataWithLinks(repo.getConfig())
                 do (data) =>
                   @tr =>
                     @td data.key
-                    if data.link
-                      @td =>
-                        @a href: data.link.url, title: data.link.title, data.value
-                    else
-                      @td data.value
-                if task.getDateDue()
+                    @td data.value
+                    @td =>
+                      @a href:"#", title: "filter by #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}", =>
+                        @span class:"icon icon-light-bulb"
+                      if data.link
+                          @a href: data.link.url, title: data.link.title, =>
+                            @span class:"icon icon-link-external"
+                if dateDue
                   @tr =>
                     @td "due"
-                    @td task.getDateDue()
-                if task.getDateCreated()
+                    @td dateDue
+                    @td =>
+                      @a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}", =>
+                        @span class:"icon icon-light-bulb"
+                if dateCreated
                   @tr =>
                     @td "created"
-                    @td task.getDateCreated()
-                if task.getDateCompleted()
+                    @td dateCreated
+                    @td =>
+                      @a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}", =>
+                        @span class:"icon icon-light-bulb"
+                if dateCompleted
                   @tr =>
                     @td "completed"
-                    @td task.getDateCompleted()
+                    @td dateCompleted
+                    @td =>
+                      @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
+                        @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
             @a class: 'source-link', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"

@@ -31,16 +31,21 @@
     &.open {
       left: 0;
     }
-    .imdone-menu-toggle {
+    .imdone-toolbar-button {
       cursor: pointer;
       position: absolute;
-      top: 2px;
       right: 6px;
       width: 24px;
       border: none;
       background-color: inherit;
       height: 22px;
       padding: 4px;
+    }
+    .imdone-menu-toggle {
+      top: 2px;
+    }
+    .imdone-help {
+      top: 26px;
     }
     .imdone-filter {
       width: @menu-component-width;
@@ -140,6 +145,7 @@
             margin: .5em 0 .5em 0;
             tr {
               border-bottom: 1px solid @panel-heading-background-color;
+              word-break: break-word;
               td {
                 padding: 3px;
               }
