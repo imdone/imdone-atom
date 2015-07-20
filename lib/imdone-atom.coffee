@@ -18,6 +18,8 @@ module.exports = ImdoneAtom =
 
     @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", => @tasks()
 
+    # #TODO:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21 
+
   tasks: ->
     previousActivePane = atom.workspace.getActivePane()
     uri = @uriForProject()

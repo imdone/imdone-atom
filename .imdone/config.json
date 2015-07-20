@@ -24,7 +24,7 @@
     },
     {
       "name": "DONE",
-      "hidden": false
+      "hidden": true
     }
   ],
   "marked": {

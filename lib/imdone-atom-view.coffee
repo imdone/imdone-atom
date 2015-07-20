@@ -50,7 +50,7 @@ class ImdoneAtomView extends ScrollView
           complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
           @progress.attr 'value', complete
 
-    # #TODO:10 Check file stats.  If too many files, ask user to add excludes in config.json
+    # #TODO:20 Check file stats.  If too many files, ask user to add excludes in config.json
     setTimeout (-> imdoneRepo.init()), 1000
 
   handleEvents: ->
