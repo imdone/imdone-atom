@@ -4,6 +4,7 @@ ImdoneRepo = require 'imdone-core/lib/repository'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
 util = require 'util'
+Sortable = require 'sortablejs'
 require('./jq-utils')($)
 
 module.exports =
@@ -13,7 +14,7 @@ class ImdoneAtomView extends ScrollView
       @div outlet: "loading", class: "imdone-loading", =>
         @h4 "Loading #{path.basename(params.path)} Issues."
         @h4 "It's gonna be legen... wait for it."
-        # DONE:20 Update progress bar on repo load
+        # #DONE:60 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
       @div outlet: "menu", class: "imdone-menu", =>
         @div click: "toggleMenu",  class: "imdone-menu-toggle imdone-toolbar-button", title: "show tools", =>
@@ -49,7 +50,7 @@ class ImdoneAtomView extends ScrollView
           complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
           @progress.attr 'value', complete
 
-    # TODO:25 Maybe we need to check file stats first (For configuration)
+    # #TODO:10 Check file stats.  If too many files, ask user to add excludes in config.json
     setTimeout (-> imdoneRepo.init()), 1000
 
   handleEvents: ->
@@ -65,6 +66,11 @@ class ImdoneAtomView extends ScrollView
       if (repo.getList(name).hidden)
         repo.showList name
       else repo.hideList name
+
+    @on 'click', '.delete-list', (e) =>
+      target = e.target
+      name = target.dataset.list || target.parentElement.dataset.list
+      repo.removeList(name)
 
     editor = @filterField.getModel()
     editor.onDidStopChanging () =>
@@ -106,6 +112,7 @@ class ImdoneAtomView extends ScrollView
     @boardWrapper.show();
 
   updateMenu: ->
+    @listsSortable.destroy() if @listsSortable
     @lists.empty()
 
     repo = @imdoneRepo
@@ -119,21 +126,20 @@ class ImdoneAtomView extends ScrollView
           @span class: "toggle-list  #{hiddenList if list.hidden}", "data-list": list.name, =>
             @span class: "icon icon-eye"
             @span "#{list.name} (#{repo.getTasksInList(list.name).length})"
-            # DOING:10.5 Add delete list icon if length is 0
 
     elements = (-> getList list for list in lists)
 
     @lists.append elements
 
-    $('.lists').sortable(
-      items: "li"
-      handle:".reorder"
-      forcePlaceholderSize: true
-    ).bind('sortupdate', (e, ui) ->
-      name = ui.item.attr "data-list"
-      pos = ui.item.index()
-      repo.moveList name, pos
-    )
+    opts =
+      draggable: 'li'
+      handle: '.reorder'
+      onEnd: (evt) ->
+        name = evt.item.dataset.list
+        pos = evt.newIndex
+        repo.moveList name, pos
+
+    @listsSortable = Sortable.create @lists.get(0), opts
 
   updateBoard: ->
     @board.empty()
@@ -142,23 +148,23 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # TODO:20 Add task drag and drop support
+    # #DONE:0 Add task drag and drop support
 
-    getTask = (task) ->
+    getTask = (task) =>
       contexts = task.getContext()
       tags = task.getTags()
       dateDue = task.getDateDue()
       dateCreated = task.getDateCreated()
       dateCompleted = task.getDateCompleted()
       $$$ ->
-        @div class: 'inset-panel padded task well', id: "#{task.id}", "data-path": task.source.path, =>
-          @div class:'task-order', =>
+        @div class: 'task well', id: "#{task.id}", "data-path": task.source.path, =>
+          @div class:'task-order', title: 'move task', =>
             @span class: 'badge', task.order
           @div class: 'task-full-text hidden', =>
             @raw task.getText()
           @div class: 'task-text', =>
             @raw task.getHtml(stripMeta: true, stripDates: true)
-          # DOING:10 Add todo.txt stuff like chrome app!
+          # #DONE:40 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -205,23 +211,48 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
+                      # #DOING:0 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
-            @a class: 'source-link', 'data-uri': "#{repo.getFullPath(task.source.path)}",
+            @a class: 'source-link', title: 'go to task source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
 
-    getList = (list) ->
+    getList = (list) =>
       $$ ->
-        @div class: "top list well", =>
-          @div class: 'panel', =>
-            @div class: 'list-name well', list.name
-            @div class: 'panel-body tasks', "data-list":"#{list.name}", =>
-              @raw getTask(task) for task in repo.getTasksInList(list.name)
+        tasks = repo.getTasksInList(list.name)
+        @div class: 'top list well', =>
+          @div class: 'list-name-wrapper well', =>
+            @span class: 'list-name', list.name
+            # #DONE:10 Add delete list icon if length is 0
+            if (tasks.length < 1)
+              @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
+                @span class:'icon icon-trashcan'
+          @div class: 'tasks', "data-list":"#{list.name}", =>
+            @raw getTask(task) for task in tasks
 
     elements = (-> getList list for list in lists)
 
     @board.append elements
+
+    opts =
+      draggable: '.task'
+      group: 'tasks'
+      handle: '.task-order'
+      onEnd: (evt) ->
+        id = evt.item.id
+        pos = evt.newIndex
+        list = evt.item.parentNode.dataset.list
+        filePath = repo.getFullPath evt.item.dataset.path
+        task = repo.getTask filePath, id
+        repo.moveTasks [task], list, pos
+
+    if @tasksSortables
+      sortable.destroy() for sortable in @tasksSortables
+
+    @tasksSortables = tasksSortables = []
+    $('.tasks').each ->
+      tasksSortables.push(Sortable.create $(this).get(0), opts)
 
   destroy: ->
     @detach()

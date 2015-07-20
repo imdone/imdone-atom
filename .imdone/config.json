@@ -15,16 +15,16 @@
   },
   "lists": [
     {
-      "name": "DOING",
-      "hidden": false
-    },
-    {
       "name": "TODO",
       "hidden": false
     },
     {
+      "name": "DOING",
+      "hidden": false
+    },
+    {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     }
   ],
   "marked": {

@@ -5,6 +5,8 @@
 @import "ui-variables";
 @menu-component-width: 188px;
 @menu-width: 224px;
+@board-list-width: 362px;
+@board-list-name-width: 300px;
 
 .imdone-atom {
   .imdone-loading {
@@ -106,22 +108,31 @@
     transition: left 0.2s;
     .imdone-board {
       margin: 1em;
+      min-height: 100%;
       .list {
         float: left;
-        width: 362px;
+        width: @board-list-width;
         padding: 10px;
         background-color: @panel-heading-background-color;
         margin-right: 10px;
-        .list-name {
+        .list-name-wrapper {
           background-color: @inset-panel-background-color;
           font-size: 1.5em;
           padding: .5em;
+          .list-name {
+            width: @board-list-name-width;
+            display: inline-block;
+          }
+        }
+        .tasks {
+          min-height: 200px;
         }
         .task {
           background-color: @inset-panel-background-color;
           font-size: 1.25em;
           white-space: normal;
           word-wrap: break-word;
+          position: relative;
           .task-text {
             p {
               margin: 0 0 5px;
@@ -131,6 +142,7 @@
             position: absolute;
             top: 2px;
             right: 2px;
+            cursor: move;
           }
           .task-context {
             color: @text-color-warning;
@@ -162,8 +174,7 @@
   }
 
   .well {
-    padding: 1em;
-    border-radius: @component-border-radius;
+    padding: 10px;
     margin-bottom: 1em;
   }
 }
