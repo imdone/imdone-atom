@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Manage your TODOs, FIXMEs, HACKs, etc in a drag and drop task board.",
   "keywords": [
     "mvp",
