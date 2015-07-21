@@ -56,12 +56,8 @@ class ImdoneAtomView extends ScrollView
           complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
           @progress.attr 'value', complete
 
-    # #TODO:20 Check file stats.  If too many files, ask user to add excludes in config.json
+    # #TODO:30 Check file stats.  If too many files, ask user to add excludes in config.json
     imdoneRepo.init()
-    # setTimeout (->
-    #   debugger
-    #   imdoneRepo.init()
-    # ), 2000
 
   handleEvents: ->
     repo = @imdoneRepo
@@ -82,24 +78,43 @@ class ImdoneAtomView extends ScrollView
       name = target.dataset.list || target.parentElement.dataset.list
       repo.removeList(name)
 
-    editor = @filterField.getModel()
-    editor.onDidStopChanging () =>
-      @filter editor.getText()
+    @getFilterEditor().onDidStopChanging () =>
+      @filter()
 
     @on 'click', '.filter-link', (e) =>
       target = e.target
       filter = target.dataset.filter || target.parentElement.dataset.filter
-      editor.setText filter
+      @setFilter filter
+
+    @on 'click', '[href^="#filter/"]', (e) =>
+      target = e.target
+      target = target.closest('a') unless (target.nodeName == 'A')
+      e.stopPropagation()
+      e.preventDefault()
+      filterAry = target.getAttribute('href').split('/');
+      filterAry.shift()
+      filter = filterAry.join '/' ;
+      @setFilter filter
 
   toggleMenu: (event, element) ->
     @menu.toggleClass('open')
     @boardWrapper.toggleClass('shift')
 
+  getFilterEditor: ->
+    @filterField.getModel()
+
   clearFilter: (event, element) ->
-    @filterField.getModel().setText('')
+    @getFilterEditor().setText('')
     @board.find('.task').show()
 
+  setFilter: (text) ->
+    @getFilterEditor().setText text
+
+  getFilter: ->
+    @getFilterEditor().getText()
+
   filter: (text) ->
+    text = @getFilter() unless text
     @lastFilter = text
     if text == ''
       @board.find('.task').show()
@@ -144,6 +159,7 @@ class ImdoneAtomView extends ScrollView
     opts =
       draggable: 'li'
       handle: '.reorder'
+      ghostClass: 'imdone-ghost'
       onEnd: (evt) ->
         name = evt.item.dataset.list
         pos = evt.newIndex
@@ -221,7 +237,7 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
-                      # #DOING:0 Implement #filter/*filterRegex* links
+                      # #DOING:10 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
@@ -249,6 +265,7 @@ class ImdoneAtomView extends ScrollView
       draggable: '.task'
       group: 'tasks'
       handle: '.task-order'
+      ghostClass: 'imdone-ghost'
       onEnd: (evt) ->
         id = evt.item.id
         pos = evt.newIndex

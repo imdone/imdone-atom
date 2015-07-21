@@ -1,3 +1,7 @@
+## 1.1.2
+* Add filter link support #filter/*filter*
+* Color ghost background on sort
+
 ## 1.1.1
 * Add tab checklist icon
 * Add file tree context menu item for projects
@@ -18,4 +22,4 @@
 * Allow show and hide lists
 * Allow Reorder lists
 
-- [user:piascikj Remember to update changelog before +publishing +package](#DOING:10)
+- [user:piascikj Remember to update changelog before +publishing +package](#DOING:0)
