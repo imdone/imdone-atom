@@ -9,20 +9,27 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    atom.workspace.addOpener ((uriToOpen) ->
-      {protocol, host, pathname} = url.parse(uriToOpen)
-      return unless protocol is 'imdone:'
-      @viewForUri(uriToOpen)).bind(this)
-
     @subscriptions = new CompositeDisposable
 
-    @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", => @tasks()
+    @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", (evt) =>
+      evt.stopPropagation()
+      evt.stopImmediatePropagation()
+      target = evt.target
+      projectRoot = target.closest '.project-root'
+      if projectRoot
+        path = projectRoot.getElementsByClassName('name')[0].dataset.path
+      @tasks(path)
 
-    # #TODO:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21 
+    atom.workspace.addOpener (uriToOpen) =>
+      {protocol, host, pathname} = url.parse(uriToOpen)
+      return unless protocol is 'imdone:'
+      @viewForUri(uriToOpen)
 
-  tasks: ->
+    # #DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
+
+  tasks: (path) ->
     previousActivePane = atom.workspace.getActivePane()
-    uri = @uriForProject()
+    uri = @uriForProject(path)
     atom.workspace.open(uri, searchAllPanes: true).done (imdoneAtomView) ->
       return unless imdoneAtomView instanceof ImdoneAtomView
       previousActivePane.activate()
@@ -31,8 +38,9 @@ module.exports = ImdoneAtom =
     @subscriptions.dispose()
     @imdoneView.destroy()
 
-  serialize: ->
-    imdoneAtomViewState: @imdoneView.serialize()
+  # TODO: Add back serialization (The right way)
+  # serialize: ->
+  #   imdoneAtomViewState: @imdoneView.serialize()
 
   getCurrentProject: ->
     paths = atom.project.getPaths()
@@ -43,10 +51,12 @@ module.exports = ImdoneAtom =
     else
       paths[0]
 
-  uriForProject: ->
-    uri = 'imdone://' + _path.basename(@getCurrentProject())
+  uriForProject: (path) ->
+    projectPath = path || @getCurrentProject()
+    uri = 'imdone://tasks' + projectPath
+    uri
 
   viewForUri: (uri) ->
-    projectPath = @getCurrentProject()
-    return unless projectPath
-    new ImdoneAtomView(path: projectPath, uri: uri)
+    {protocol, host, pathname} = url.parse(uri)
+    return unless pathname
+    new ImdoneAtomView(path: pathname, uri: uri)

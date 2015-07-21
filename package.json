@@ -10,11 +10,6 @@
     "productivity",
     "issues"
   ],
-  "activationCommands": {
-    "atom-workspace": [
-      "imdone-atom:tasks"
-    ]
-  },
   "repository": "https://github.com/imdone/imdone-atom",
   "license": "MIT",
   "engines": {
@@ -22,7 +17,7 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
-    "imdone-core": "~1.2.0",
+    "imdone-core": ">1.2.0",
     "sortablejs": "^1.2.0"
   }
 }

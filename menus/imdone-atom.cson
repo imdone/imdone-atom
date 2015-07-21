@@ -4,6 +4,12 @@
       'label': 'Show Tasks - iMDone'
       'command': 'imdone-atom:tasks'
     }
+  ],
+  '.tree-view.full-menu': [
+    {
+      'label': 'Show Tasks - iMDone'
+      'command': 'imdone-atom:tasks'
+    }
   ]
 'menu': [
   {

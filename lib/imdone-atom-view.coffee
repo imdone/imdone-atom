@@ -14,7 +14,7 @@ class ImdoneAtomView extends ScrollView
       @div outlet: "loading", class: "imdone-loading", =>
         @h4 "Loading #{path.basename(params.path)} Issues."
         @h4 "It's gonna be legen... wait for it."
-        # #DONE:60 Update progress bar on repo load
+        # #DONE:80 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
       @div outlet: "menu", class: "imdone-menu", =>
         @div click: "toggleMenu",  class: "imdone-menu-toggle imdone-toolbar-button", title: "show tools", =>
@@ -32,6 +32,10 @@ class ImdoneAtomView extends ScrollView
   getTitle: ->
     "#{path.basename(@path)} Issues"
 
+  getIconName: ->
+    # #DONE:10 Add icon to tab
+    "checklist"
+
   getURI: ->
     @uri
 
@@ -42,8 +46,10 @@ class ImdoneAtomView extends ScrollView
     imdoneRepo.on 'initialized', => @onRepoUpdate()
     imdoneRepo.on 'file.update', => @onRepoUpdate()
     imdoneRepo.on 'config.update', => imdoneRepo.refresh()
+    imdoneRepo.on 'error', (err) => console.log('error:', err)
 
     imdoneRepo.fileStats (err, files) =>
+      debugger
       if files.length > 1000
         @progress.show()
         imdoneRepo.on 'file.read', (data) =>
@@ -51,7 +57,11 @@ class ImdoneAtomView extends ScrollView
           @progress.attr 'value', complete
 
     # #TODO:20 Check file stats.  If too many files, ask user to add excludes in config.json
-    setTimeout (-> imdoneRepo.init()), 1000
+    imdoneRepo.init()
+    # setTimeout (->
+    #   debugger
+    #   imdoneRepo.init()
+    # ), 2000
 
   handleEvents: ->
     repo = @imdoneRepo
@@ -148,7 +158,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:0 Add task drag and drop support
+    # #DONE:20 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -164,7 +174,7 @@ class ImdoneAtomView extends ScrollView
             @raw task.getText()
           @div class: 'task-text', =>
             @raw task.getHtml(stripMeta: true, stripDates: true)
-          # #DONE:40 Add todo.txt stuff like chrome app!
+          # #DONE:60 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -224,7 +234,7 @@ class ImdoneAtomView extends ScrollView
         @div class: 'top list well', =>
           @div class: 'list-name-wrapper well', =>
             @span class: 'list-name', list.name
-            # #DONE:10 Add delete list icon if length is 0
+            # #DONE:30 Add delete list icon if length is 0
             if (tasks.length < 1)
               @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                 @span class:'icon icon-trashcan'
@@ -255,7 +265,9 @@ class ImdoneAtomView extends ScrollView
       tasksSortables.push(Sortable.create $(this).get(0), opts)
 
   destroy: ->
+    @imdoneRepo.destroy()
     @detach()
+
 
   openPath: (filePath, line) ->
     return unless filePath
