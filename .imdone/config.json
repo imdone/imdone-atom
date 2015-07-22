@@ -23,8 +23,12 @@
       "hidden": false
     },
     {
-      "name": "DONE",
+      "name": "READY",
       "hidden": false
+    },
+    {
+      "name": "DONE",
+      "hidden": true
     }
   ],
   "marked": {

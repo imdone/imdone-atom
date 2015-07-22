@@ -6,7 +6,7 @@
 @menu-component-width: 188px;
 @menu-width: 224px;
 @board-list-width: 362px;
-@board-list-name-width: 300px;
+@board-list-name-width: 330px;
 
 .imdone-atom {
   .imdone-ghost {
@@ -39,6 +39,7 @@
     .imdone-toolbar-button {
       cursor: pointer;
       position: absolute;
+      text-align: center;
       right: 6px;
       width: 24px;
       border: none;
@@ -72,10 +73,16 @@
         padding: 4px;
       }
     }
+    .lists-wrapper {
+      overflow: auto;
+      position: absolute;
+      top: 30px;
+      bottom: 0;
+    }
     .lists {
       list-style: none;
       padding-left: 0;
-      margin-top: 1.5em;
+      margin-top: .5em;
       width: @menu-component-width;
       .hidden-list {
         color: @text-color-subtle;
@@ -83,7 +90,7 @@
       li {
         line-height: 1.5;
         font-size: 1em;
-        padding-left: 1em;
+        padding-left: 2px;
         &:hover {
           background-color: @background-color-highlight;
         }
@@ -123,12 +130,22 @@
           font-size: 1.5em;
           padding: .5em;
           .list-name {
-            width: @board-list-name-width;
             display: inline-block;
+            width: @board-list-name-width;
+            .rename-list {
+              display: none;
+              float: right;
+            }
+            .delete-list {
+              float: right;
+            }
+            // &:hover .rename-list {
+            //   display: inline;
+            // }
           }
         }
         .tasks {
-          min-height: 200px;
+          min-height: 50px;
         }
         .task {
           padding-top: 18px;

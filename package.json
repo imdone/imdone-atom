@@ -10,6 +10,10 @@
     "productivity",
     "issues"
   ],
+  "author": {
+    "name": "Jesse Piascik",
+    "email": "jesse@piascik.net"
+  },
   "repository": "https://github.com/imdone/imdone-atom",
   "license": "MIT",
   "engines": {
@@ -17,6 +21,7 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
+    "atom-utils": "^0.6.2",
     "imdone-core": ">1.2.0",
     "sortablejs": "^1.2.0"
   }
