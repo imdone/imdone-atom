@@ -1,3 +1,6 @@
+## 1.1.4
+* Remove clunky transition on list rename
+
 ## 1.1.3
 * Add list rename
 

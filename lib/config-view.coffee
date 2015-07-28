@@ -31,8 +31,8 @@ class ConfigView extends View
     @listNameField.getModel().getText()
 
   show: ->
-    @toggleClass 'open'
     @emitter.emit 'config.open'
+    @toggleClass 'open'
 
   hide: ->
     @toggleClass 'open'
