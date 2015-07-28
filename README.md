@@ -14,11 +14,10 @@ iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 
 # Roadmap
 - [ ] #DOING:10 Add configuration editor view for .imdone/config.json +Roadmap +Epic
-- [x] #DONE:0 Add list rename +Roadmap
 - [ ] #BACKLOG:30 Integrate with github issues +Roadmap
+
+# Completed
+- [x] #DONE:0 Add list rename +Roadmap
 - [x] #DONE:50 Add help for configuration
 - [x] #DONE:60 Add help for task syntax
 - [x] #DONE:80 Add help for todo.txt syntax
-
-# Miscellaneous
-- #TODO:10 Create animated gif for readme. [How To Turn A Video Into A GIF on Ubuntu With Qgifer](http://www.omgubuntu.co.uk/2013/08/how-to-create-a-gif-from-video-on-ubuntu-with-qgifer)
