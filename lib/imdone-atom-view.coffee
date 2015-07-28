@@ -65,6 +65,9 @@ class ImdoneAtomView extends ScrollView
     @configView.emitter.on 'config.open', =>
       @appContainer.toggleClass 'shift'
 
+    @configView.emitter.on 'config.close', =>
+      @appContainer.toggleClass 'shift'
+
     @on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath link.dataset.uri, link.dataset.line

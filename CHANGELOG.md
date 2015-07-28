@@ -1,3 +1,6 @@
+## 1.1.3
+* Add list rename
+
 ## 1.1.2
 * Add filter link support #filter/*filter*
 * Color ghost background on sort
