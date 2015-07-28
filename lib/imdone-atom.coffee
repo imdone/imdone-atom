@@ -2,6 +2,8 @@ ImdoneAtomView = require './imdone-atom-view'
 url = require 'url'
 {CompositeDisposable} = require 'atom'
 _path = require 'path'
+ImdoneRepo = require 'imdone-core/lib/repository'
+fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 
 module.exports = ImdoneAtom =
   imdoneView: null
@@ -25,7 +27,7 @@ module.exports = ImdoneAtom =
       return unless protocol is 'imdone:'
       @viewForUri(uriToOpen)
 
-    # #DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
+    # #DONE:10 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 
   tasks: (path) ->
     previousActivePane = atom.workspace.getActivePane()
@@ -59,4 +61,4 @@ module.exports = ImdoneAtom =
   viewForUri: (uri) ->
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
-    new ImdoneAtomView(path: pathname, uri: uri)
+    new ImdoneAtomView(imdoneRepo: fsStore(new ImdoneRepo(pathname)), path: pathname, uri: uri)

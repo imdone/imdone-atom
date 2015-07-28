@@ -7,8 +7,34 @@
 @menu-width: 224px;
 @board-list-width: 362px;
 @board-list-name-width: 330px;
+@config-height: 300px;
 
 .imdone-atom {
+  .imdone-app-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    &.shift {
+      bottom: @config-height;
+    }
+    transition: bottom 0.2s;
+    display: none;
+  }
+  .imdone-config-container {
+    position: absolute;
+    bottom: -@config-height;
+    right: 0;
+    left: 0;
+    height: @config-height;
+    transition: bottom  0.2s;
+    background-color: @tool-panel-background-color;
+    border-top: 1px solid @tool-panel-border-color;
+    &.open {
+      bottom: 0;
+    }
+  }
   .imdone-ghost {
     background-color: @background-color-highlight !important;
   }
@@ -29,7 +55,6 @@
     bottom: 0;
     left: -200px;
     width: @menu-width;
-    display: none;
     z-index: 1;
     background-color: @base-background-color;
     transition: left  0.2s;
@@ -47,6 +72,9 @@
       height: 22px;
       padding: 4px;
     }
+    .imdone-config-toggle {
+      top: 2px;
+    }
     .imdone-menu-toggle {
       top: 2px;
     }
@@ -58,9 +86,6 @@
       atom-text-editor {
         padding-right: 24px;
       }
-      // input::-webkit-input-placeholder {
-      //    @text-color-subtle;
-      // }
       .clear-filter {
         cursor: pointer;
         position: absolute;
@@ -118,7 +143,7 @@
     transition: left 0.2s;
     .imdone-board {
       margin: 1em;
-      min-height: 100%;
+      min-height: 50%;
       .list {
         float: left;
         width: @board-list-width;
@@ -132,16 +157,16 @@
           .list-name {
             display: inline-block;
             width: @board-list-name-width;
-            .rename-list {
+            .toggle-list-rename {
               display: none;
               float: right;
             }
             .delete-list {
               float: right;
             }
-            // &:hover .rename-list {
-            //   display: inline;
-            // }
+            &:hover .toggle-list-rename {
+              display: inline;
+            }
           }
         }
         .tasks {

@@ -22,4 +22,4 @@
 * Allow show and hide lists
 * Allow Reorder lists
 
-- [user:piascikj Remember to update changelog before +publishing +package](#DOING:10)
+- [user:piascikj Remember to update changelog before +publishing +package](#DOING:30)

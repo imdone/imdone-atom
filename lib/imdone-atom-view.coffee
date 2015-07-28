@@ -1,7 +1,6 @@
-{$, $$, $$$, ScrollView, TextEditorView} = require 'atom-space-pen-views'
-{Emitter, Disposable, CompositeDisposable} = require 'atom'
-ImdoneRepo = require 'imdone-core/lib/repository'
-fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
+{$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
+MenuView = require './menu-view'
+ConfigView = require './config-view'
 path = require 'path'
 util = require 'util'
 Sortable = require 'sortablejs'
@@ -14,41 +13,34 @@ class ImdoneAtomView extends ScrollView
       @div outlet: "loading", class: "imdone-loading", =>
         @h4 "Loading #{path.basename(params.path)} Issues."
         @h4 "It's gonna be legen... wait for it."
-        # #DONE:80 Update progress bar on repo load
+        # #DONE:90 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
-      @div outlet: "menu", class: "imdone-menu", =>
-        @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "toggle tools", =>
-          @a href: "#", class: "icon icon-tools"
-        @div class: "imdone-help imdone-toolbar-button", title: "syntax help", =>
-          @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
-        @div class: "imdone-filter", =>
-          @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
-          @div click: "clearFilter", class:"icon icon-x clear-filter"
-        @div class:'lists-wrapper', =>
-          @ul outlet: "lists", class: "lists"
-      @div outlet: "boardWrapper", class: "imdone-board-wrapper", =>
-        @div outlet: "board", class: "imdone-board"
+      @subview 'configView', new ConfigView(params)
+      @div outlet: 'appContainer', class:'imdone-app-container', =>
+        @subview 'menuView', new MenuView(params)
+        @div outlet: "boardWrapper", class: "imdone-board-wrapper", =>
+          @div outlet: "board", class: "imdone-board"
 
   getTitle: ->
     "#{path.basename(@path)} Issues"
 
   getIconName: ->
-    # #DONE:10 Add icon to tab
+    # #DONE:20 Add icon to tab
     "checklist"
 
   getURI: ->
     @uri
 
-  constructor: ({@path, @uri}) ->
+  constructor: ({@imdoneRepo, @path, @uri}) ->
     super
-    @imdoneRepo = imdoneRepo = @getImdoneRepo()
+    imdoneRepo = @imdoneRepo
     @handleEvents()
-    imdoneRepo.on 'initialized', => @onRepoUpdate()
-    imdoneRepo.on 'file.update', => @onRepoUpdate()
-    imdoneRepo.on 'config.update', => imdoneRepo.refresh()
-    imdoneRepo.on 'error', (err) => console.log('error:', err)
+    @imdoneRepo.on 'initialized', => @onRepoUpdate()
+    @imdoneRepo.on 'file.update', => @onRepoUpdate()
+    @imdoneRepo.on 'config.update', => imdoneRepo.refresh()
+    @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
-    imdoneRepo.fileStats (err, files) =>
+    @imdoneRepo.fileStats (err, files) =>
       if files.length > 1000
         @progress.show()
         imdoneRepo.on 'file.read', (data) =>
@@ -56,29 +48,35 @@ class ImdoneAtomView extends ScrollView
           @progress.attr 'value', complete
 
     # #TODO:20 Check file stats.  If too many files, ask user to add excludes in config.json
-    imdoneRepo.init()
+    @imdoneRepo.init()
 
   handleEvents: ->
     repo = @imdoneRepo
 
+    @menuView.emitter.on 'menu.toggle', =>
+      @boardWrapper.toggleClass 'shift'
+
+    @menuView.emitter.on 'filter', (text) =>
+      @filter(text)
+
+    @menuView.emitter.on 'filter.clear', =>
+      @board.find('.task').show()
+
+    @configView.emitter.on 'config.open', =>
+      @appContainer.toggleClass 'shift'
+
     @on 'click', '.source-link',  (e) =>
       link = e.target
-      @openPath(link.dataset.uri, link.dataset.line)
+      @openPath link.dataset.uri, link.dataset.line
 
-    @on 'click', '.toggle-list', (e) =>
-      target = e.target
-      name = target.dataset.list || target.parentElement.dataset.list
-      if (repo.getList(name).hidden)
-        repo.showList name
-      else repo.hideList name
+    @on 'click', '.list-name', (e) =>
+      name = e.target.dataset.list
+      @configView.editListName(name)
 
     @on 'click', '.delete-list', (e) =>
       target = e.target
       name = target.dataset.list || target.parentElement.dataset.list
       repo.removeList(name)
-
-    @getFilterEditor().onDidStopChanging () =>
-      @filter()
 
     @on 'click', '.filter-link', (e) =>
       target = e.target
@@ -95,25 +93,11 @@ class ImdoneAtomView extends ScrollView
       filter = filterAry.join '/' ;
       @setFilter filter
 
-  toggleMenu: (event, element) ->
-    @menu.toggleClass('open')
-    @boardWrapper.toggleClass('shift')
-
-  renameListModal: (event, element) ->
-    # #DOING:0 implement rename list modal
-
-  getFilterEditor: ->
-    @filterField.getModel()
-
-  clearFilter: (event, element) ->
-    @getFilterEditor().setText('')
-    @board.find('.task').show()
-
   setFilter: (text) ->
-    @getFilterEditor().setText text
+    @menuView.setFilter text
 
   getFilter: ->
-    @getFilterEditor().getText()
+    @menuView.getFilter()
 
   filter: (text) ->
     text = @getFilter() unless text
@@ -127,47 +111,11 @@ class ImdoneAtomView extends ScrollView
         $(this).closest('.task').show()
       )
 
-  getImdoneRepo: ->
-    fsStore(new ImdoneRepo(@path))
-
   onRepoUpdate: ->
     @updateBoard()
-    @updateMenu()
 
     @loading.hide()
-    @menu.show()
-    @boardWrapper.show();
-
-  updateMenu: ->
-    @listsSortable.destroy() if @listsSortable
-    @lists.empty()
-
-    repo = @imdoneRepo
-    lists = repo.getLists()
-    hiddenList = "hidden-list"
-
-    getList = (list) ->
-      $$ ->
-        @li "data-list": list.name, =>
-          @span class: "reorder icon icon-three-bars"
-          @span class: "toggle-list  #{hiddenList if list.hidden}", "data-list": list.name, =>
-            @span class: "icon icon-eye"
-            @span "#{list.name} (#{repo.getTasksInList(list.name).length})"
-
-    elements = (-> getList list for list in lists)
-
-    @lists.append elements
-
-    opts =
-      draggable: 'li'
-      handle: '.reorder'
-      ghostClass: 'imdone-ghost'
-      onEnd: (evt) ->
-        name = evt.item.dataset.list
-        pos = evt.newIndex
-        repo.moveList name, pos
-
-    @listsSortable = Sortable.create @lists.get(0), opts
+    @appContainer.show()
 
   updateBoard: ->
     @board.empty()
@@ -176,7 +124,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:20 Add task drag and drop support
+    # #DONE:30 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -192,7 +140,7 @@ class ImdoneAtomView extends ScrollView
             @raw task.getText()
           @div class: 'task-text', =>
             @raw task.getHtml(stripMeta: true, stripDates: true)
-          # #DONE:60 Add todo.txt stuff like chrome app!
+          # #DONE:70 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -239,7 +187,7 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
-                      # #READY:0 Implement #filter/*filterRegex* links
+                      # #DONE:0 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
@@ -251,14 +199,12 @@ class ImdoneAtomView extends ScrollView
         tasks = repo.getTasksInList(list.name)
         @div class: 'top list well', =>
           @div class: 'list-name-wrapper well', =>
-            @span class: 'list-name', =>
+            @div class: 'list-name', 'data-list': list.name, title: 'click to rename list', =>
               @raw list.name
-              # #DONE:30 Add delete list icon if length is 0
+              # #DONE:40 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
-              @a href: '#', title: "rename #{list.name}", class: 'rename-list', "data-list": list.name, =>
-                @span class:'icon icon-pencil'
           @div class: 'tasks', "data-list":"#{list.name}", =>
             @raw getTask(task) for task in tasks
 
@@ -289,7 +235,6 @@ class ImdoneAtomView extends ScrollView
   destroy: ->
     @imdoneRepo.destroy()
     @detach()
-
 
   openPath: (filePath, line) ->
     return unless filePath
