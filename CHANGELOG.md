@@ -1,8 +1,11 @@
+# 1.1.5
+* Add new list support
+
 ## 1.1.4
 * Remove clunky transition on list rename
 
 ## 1.1.3
-* Add list rename
+* Add list rename supprt
 
 ## 1.1.2
 * Add filter link support #filter/*filter*
@@ -28,4 +31,4 @@
 * Allow show and hide lists
 * Allow Reorder lists
 
-- [user:piascikj Remember to update changelog before +publishing +package](#DOING:30)
+- [user:piascikj Remember to update changelog before +publishing +package](#DOING:20)

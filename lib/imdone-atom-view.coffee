@@ -62,11 +62,14 @@ class ImdoneAtomView extends ScrollView
     @menuView.emitter.on 'filter.clear', =>
       @board.find('.task').show()
 
+    @menuView.emitter.on 'list.new', =>
+      @configView.addList()
+
     @configView.emitter.on 'config.open', =>
-      @appContainer.toggleClass 'shift'
+      @appContainer.addClass 'shift'
 
     @configView.emitter.on 'config.close', =>
-      @appContainer.toggleClass 'shift'
+      @appContainer.removeClass 'shift'
 
     @on 'click', '.source-link',  (e) =>
       link = e.target
@@ -77,6 +80,8 @@ class ImdoneAtomView extends ScrollView
       @configView.editListName(name)
 
     @on 'click', '.delete-list', (e) =>
+      e.stopPropagation()
+      e.preventDefault()
       target = e.target
       name = target.dataset.list || target.parentElement.dataset.list
       repo.removeList(name)

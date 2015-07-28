@@ -6,37 +6,47 @@ class ConfigView extends View
 
   @content: ->
     @div class:'imdone-config-container', =>
-      @div outlet: 'renameList', class:'rename-list', =>
+      @div outlet: 'renameList', class:'rename-list config-panel', =>
         @h2 =>
           @span outlet:'renameListLabel'
         @div class: 'block', =>
           @div class: 'input-small', =>
-            @subview 'listNameField', new TextEditorView(mini: true)
+            @subview 'renameListField', new TextEditorView(mini: true)
           @button click: 'cancelRename', class:'inline-block-tight btn', 'Cancel'
           @button click: 'doListRename', class:'inline-block-tight btn', 'Save'
+      @div outlet: 'newList', class:'new-list config-panel', =>
+        @h2 'New List'
+        @div class: 'block', =>
+          @div class: 'input-small', =>
+            @subview 'newListField', new TextEditorView(mini: true)
+          @button click: 'cancelNewList', class:'inline-block-tight btn', 'Cancel'
+          @button click: 'doNewList', class:'inline-block-tight btn', 'Save'
+      # #DOING:0 Add config view here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
 
-  showRename: (name) ->
-    @renameListLabel.text 'Rename '+name
-    @listToRename = name
-    @listNameField.getModel().setText name
-    @listNameField.getModel().selectAll()
-    @listNameField.focus()
-    @renameList.show()
-    @show()
-
-  getListName: ->
-    @listNameField.getModel().getText()
-
   show: ->
     @emitter.emit 'config.open'
-    @toggleClass 'open'
+    @addClass 'open'
 
   hide: ->
-    @toggleClass 'open'
+    @find('.config-panel').hide()
+    @removeClass 'open'
     @emitter.emit 'config.close'
+
+  showRename: (name) ->
+    @hide()
+    @renameListLabel.text 'Rename '+name
+    @listToRename = name
+    @renameListField.getModel().setText name
+    @renameListField.getModel().selectAll()
+    @renameList.show()
+    @show()
+    @renameListField.focus()
+
+  getRenameList: ->
+    @renameListField.getModel().getText()
 
   editListName: (name) ->
     @showRename name
@@ -45,5 +55,25 @@ class ConfigView extends View
     @hide()
 
   doListRename: ->
-    @imdoneRepo.renameList @listToRename, @getListName()
+    @imdoneRepo.renameList @listToRename, @getRenameList()
+    @hide()
+
+  showNewList: ->
+    @hide()
+    @newListField.getModel().setText ''
+    @newList.show()
+    @show()
+    @newListField.focus()
+
+  getNewList: ->
+    @newListField.getModel().getText()
+
+  addList: ->
+    @showNewList()
+
+  cancelNewList: ->
+    @hide()
+
+  doNewList: ->
+    @imdoneRepo.addList(name: @getNewList(), hidden:false)
     @hide()

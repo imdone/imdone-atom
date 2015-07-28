@@ -13,6 +13,8 @@ class MenuView extends View
       #   @a href: "#", class: "icon icon-gear"
       @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "toggle tools", =>
         @a href: "#", class: "icon icon-tools"
+      @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "add a list", =>
+        @a href: "#", class: "icon icon-list-ordered"
       @div class: "imdone-help imdone-toolbar-button", title: "syntax help", =>
         @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
       @div class: "imdone-filter", =>
@@ -47,6 +49,9 @@ class MenuView extends View
   clearFilter: (event, element) ->
     @getFilterEditor().setText('')
     @emitter.emit 'filter.clear'
+
+  newList: ->
+    @emitter.emit 'list.new'
 
   handleEvents: ->
     repo = @imdoneRepo
