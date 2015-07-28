@@ -1,3 +1,6 @@
+# 1.1.7
+* enter and esc in rename and new list for save and cancel
+
 # 1.1.5
 * Add new list support
 

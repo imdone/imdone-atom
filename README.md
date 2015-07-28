@@ -16,6 +16,12 @@ iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 - [ ] #DOING:10 Add configuration editor view for .imdone/config.json +Roadmap +Epic
 - [ ] #BACKLOG:30 Integrate with github issues +Roadmap
 
+# Documentation
+- [ ] #TODO:0 Add rename list gif
+- [ ] #TODO:5 Add new list gif
+- [ ] #TODO:10 Add hide/show list gif
+- [ ] #TODO:15 Add move list gif
+
 # Completed
 - [x] #DONE:0 Add list rename +Roadmap
 - [x] #DONE:50 Add help for configuration

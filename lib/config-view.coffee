@@ -25,6 +25,22 @@ class ConfigView extends View
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
+    @handleEvents()
+
+  handleEvents: ->
+    @newListField.on 'keyup', (e) =>
+       code = e.keyCode || e.which
+       if(code == 13)
+         @doNewList()
+       if(code ==27)
+         @cancelNewList()
+
+    @renameListField.on 'keyup', (e) =>
+       code = e.keyCode || e.which
+       if(code == 13)
+         @doListRename()
+       if(code ==27)
+         @cancelRename()
 
   show: ->
     @emitter.emit 'config.open'
