@@ -1,3 +1,6 @@
+# 1.1.8
+* Fix meta alignment
+
 # 1.1.7
 * enter and esc in rename and new list for save and cancel
 
@@ -34,4 +37,4 @@
 * Allow show and hide lists
 * Allow Reorder lists
 
-- [user:piascikj Remember to update changelog before +publishing +package](#DOING:20)
+- [user:piascikj Remember to update changelog before +publishing +package](#DOING:10)

@@ -13,7 +13,7 @@ iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 ![Create and move task](https://cloud.githubusercontent.com/assets/233505/8939831/6abf146a-352c-11e5-8689-96dd57d5433e.gif)
 
 # Roadmap
-- [ ] #DOING:10 Add configuration editor view for .imdone/config.json +Roadmap +Epic
+- [ ] #DOING:20 Add configuration editor view for .imdone/config.json +Roadmap +Epic
 - [ ] #BACKLOG:30 Integrate with github issues +Roadmap
 
 # Documentation
