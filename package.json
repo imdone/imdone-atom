@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "A task-board for TODOs, FIXMEs, HACKs, etc in your code.",
   "keywords": [
     "mvp",
