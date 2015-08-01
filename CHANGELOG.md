@@ -1,3 +1,6 @@
+# 1.1.9
+* Fix funky white border on task drag
+
 # 1.1.8
 * Fix meta alignment
 

@@ -40,7 +40,7 @@ module.exports = ImdoneAtom =
     @subscriptions.dispose()
     @imdoneView.destroy()
 
-  # #TODO:0 Add back serialization (The right way)
+  # #TODO:40 Add back serialization (The right way)
   # serialize: ->
   #   imdoneAtomViewState: @imdoneView.serialize()
 

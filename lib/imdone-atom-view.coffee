@@ -47,7 +47,7 @@ class ImdoneAtomView extends ScrollView
           complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
           @progress.attr 'value', complete
 
-    # #TODO:20 Check file stats.  If too many files, ask user to add excludes in config.json
+    # #TODO:10 Check file stats.  If too many files, ask user to add excludes in config.json
     @imdoneRepo.init()
 
   handleEvents: ->
@@ -141,7 +141,7 @@ class ImdoneAtomView extends ScrollView
       dateCreated = task.getDateCreated()
       dateCompleted = task.getDateCompleted()
       $$$ ->
-        @div class: 'task well', id: "#{task.id}", "data-path": task.source.path, =>
+        @li class: 'task well', id: "#{task.id}", "data-path": task.source.path, =>
           @div class:'task-order', title: 'move task', =>
             @span class: 'badge', task.order
           @div class: 'task-full-text hidden', =>
@@ -213,7 +213,7 @@ class ImdoneAtomView extends ScrollView
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
-          @div class: 'tasks', "data-list":"#{list.name}", =>
+          @ol class: 'tasks', "data-list":"#{list.name}", =>
             @raw getTask(task) for task in tasks
 
     elements = (-> getList list for list in lists)
@@ -223,7 +223,7 @@ class ImdoneAtomView extends ScrollView
     opts =
       draggable: '.task'
       group: 'tasks'
-      handle: '.task-order'
+      sort: true
       ghostClass: 'imdone-ghost'
       onEnd: (evt) ->
         id = evt.item.id

@@ -17,10 +17,10 @@ iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 - [ ] #BACKLOG:30 Integrate with github issues +Roadmap
 
 # Documentation
-- [ ] #TODO:0 Add rename list gif
-- [ ] #TODO:5 Add new list gif
-- [ ] #TODO:10 Add hide/show list gif
-- [ ] #TODO:15 Add move list gif
+- [ ] #TODO:30 Add rename list gif
+- [ ] #TODO:20 Add new list gif
+- [ ] #TODO:0 Add hide/show list gif
+- [ ] #TODO:50 Add move list gif
 
 # Completed
 - [x] #DONE:0 Add list rename +Roadmap
