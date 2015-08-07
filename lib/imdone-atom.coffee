@@ -55,10 +55,11 @@ module.exports = ImdoneAtom =
 
   uriForProject: (path) ->
     projectPath = path || @getCurrentProject()
-    uri = 'imdone://tasks' + projectPath
-    uri
+    projectPath = encodeURIComponent(projectPath)
+    'imdone://tasks/' + projectPath
 
   viewForUri: (uri) ->
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
+    pathname = decodeURIComponent(pathname.split('/')[1])
     new ImdoneAtomView(imdoneRepo: fsStore(new ImdoneRepo(pathname)), path: pathname, uri: uri)
