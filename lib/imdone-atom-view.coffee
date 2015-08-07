@@ -13,7 +13,7 @@ class ImdoneAtomView extends ScrollView
       @div outlet: "loading", class: "imdone-loading", =>
         @h4 "Loading #{path.basename(params.path)} Issues."
         @h4 "It's gonna be legen... wait for it."
-        # #DONE:90 Update progress bar on repo load
+        # #DONE:100 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
       @subview 'configView', new ConfigView(params)
       @div outlet: 'appContainer', class:'imdone-app-container', =>
@@ -25,7 +25,7 @@ class ImdoneAtomView extends ScrollView
     "#{path.basename(@path)} Issues"
 
   getIconName: ->
-    # #DONE:20 Add icon to tab
+    # #DONE:30 Add icon to tab
     "checklist"
 
   getURI: ->
@@ -47,7 +47,7 @@ class ImdoneAtomView extends ScrollView
           complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
           @progress.attr 'value', complete
 
-    # #TODO:10 Check file stats.  If too many files, ask user to add excludes in config.json
+    # #BACKLOG:30 Check file stats.  If too many files, ask user to add excludes in config.json
     @imdoneRepo.init()
 
   handleEvents: ->
@@ -132,7 +132,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:30 Add task drag and drop support
+    # #DONE:40 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -148,7 +148,7 @@ class ImdoneAtomView extends ScrollView
             @raw task.getText()
           @div class: 'task-text', =>
             @raw task.getHtml(stripMeta: true, stripDates: true)
-          # #DONE:70 Add todo.txt stuff like chrome app!
+          # #DONE:80 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -195,7 +195,7 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
-                      # #DONE:0 Implement #filter/*filterRegex* links
+                      # #DONE:10 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
@@ -209,7 +209,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: 'click to rename list', =>
               @raw list.name
-              # #DONE:40 Add delete list icon if length is 0
+              # #DONE:50 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'

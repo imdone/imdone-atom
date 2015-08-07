@@ -15,6 +15,10 @@
   },
   "lists": [
     {
+      "name": "BACKLOG",
+      "hidden": true
+    },
+    {
       "name": "TODO",
       "hidden": false
     },
@@ -23,8 +27,8 @@
       "hidden": false
     },
     {
-      "name": "BACKLOG",
-      "hidden": true
+      "name": "READY",
+      "hidden": false
     },
     {
       "name": "DONE",
@@ -40,6 +44,10 @@
     "langPrefix": "language-"
   },
   "meta": {
+    "git-iss": {
+      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
+      "titleTemplate": "Show github issue %s"
+    },
     "user": {
       "urlTemplate": "https://github.com/%s",
       "titleTemplate": "github profile for %s"
