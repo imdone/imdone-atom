@@ -1,4 +1,7 @@
-#1.1.11
+#1.1.13
+* Update version of imdone-core to allow haxe/.hx file extension
+
+#1.1.12
 * Fix Path for windows users
 
 #1.1.10
