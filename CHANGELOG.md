@@ -1,3 +1,6 @@
+#1.1.4
+* If no files are open don't attempt to gather tasks
+
 #1.1.13
 * Update version of imdone-core to allow haxe/.hx file extension
 
