@@ -6,6 +6,7 @@ class ConfigView extends View
 
   @content: ->
     @div class:'imdone-config-container', =>
+      @div outlet: 'error', class:'text-error'
       @div outlet: 'renameList', class:'rename-list config-panel', =>
         @h2 =>
           @span outlet:'renameListLabel'
@@ -47,6 +48,7 @@ class ConfigView extends View
     @addClass 'open'
 
   hide: ->
+    @error.empty()
     @find('.config-panel').hide()
     @removeClass 'open'
     @emitter.emit 'config.close'
@@ -71,6 +73,7 @@ class ConfigView extends View
     @hide()
 
   doListRename: ->
+    return unless @listOk @getRenameList()
     @imdoneRepo.renameList @listToRename, @getRenameList()
     @hide()
 
@@ -91,5 +94,11 @@ class ConfigView extends View
     @hide()
 
   doNewList: ->
+    return unless @listOk @getNewList()
     @imdoneRepo.addList(name: @getNewList(), hidden:false)
     @hide()
+
+  listOk: (name) ->
+    return true if /^[\w\-]+$/.test(name)
+    @error.html('List name can only contain letters, numbers , dashes and underscores')
+    false

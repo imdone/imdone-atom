@@ -1,4 +1,7 @@
-#1.1.4
+#1.1.15
+* Show error text if list name does not conform to `^[\w\-]+$`
+
+#1.1.14
 * If no files are open don't attempt to gather tasks
 
 #1.1.13
