@@ -32,6 +32,7 @@ module.exports = ImdoneAtom =
   tasks: (path) ->
     previousActivePane = atom.workspace.getActivePane()
     uri = @uriForProject(path)
+    return unless uri
     atom.workspace.open(uri, searchAllPanes: true).done (imdoneAtomView) ->
       return unless imdoneAtomView instanceof ImdoneAtomView
       previousActivePane.activate()
@@ -55,6 +56,7 @@ module.exports = ImdoneAtom =
 
   uriForProject: (path) ->
     projectPath = path || @getCurrentProject()
+    return unless projectPath
     projectPath = encodeURIComponent(projectPath)
     'imdone://tasks/' + projectPath
 
