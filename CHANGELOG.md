@@ -1,3 +1,6 @@
+#1.1.16
+* Show more debug data on path.join error for getFullPath
+
 #1.1.15
 * Show error text if list name does not conform to `^[\w\-]+$`
 
