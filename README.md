@@ -1,4 +1,4 @@
-# imdone-atomth
+# imdone-atom
 A task-board for TODOs, FIXMEs, HACKs, etc in your code.
 
 Great issue tracking for tiny teams and MVP's.
