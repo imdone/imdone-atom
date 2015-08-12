@@ -27,7 +27,7 @@ module.exports = ImdoneAtom =
       return unless protocol is 'imdone:'
       @viewForUri(uriToOpen)
 
-    # #DONE:20 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
+    # #DONE:40 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 
   tasks: (path) ->
     previousActivePane = atom.workspace.getActivePane()

@@ -10,7 +10,13 @@
       "DONE",
       "PLANNING",
       "FIXME",
-      "ARCHIVE"
+      "ARCHIVE",
+      "HACK",
+      "CHANGED",
+      "XXX",
+      "IDEA",
+      "NOTE",
+      "REVIEW"
     ]
   },
   "lists": [
@@ -27,12 +33,8 @@
       "hidden": false
     },
     {
-      "name": "READY",
-      "hidden": true
-    },
-    {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     }
   ],
   "marked": {
@@ -42,15 +44,5 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
-  },
-  "meta": {
-    "git-iss": {
-      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
-      "titleTemplate": "Show github issue %s"
-    },
-    "user": {
-      "urlTemplate": "https://github.com/%s",
-      "titleTemplate": "github profile for %s"
-    }
   }
 }

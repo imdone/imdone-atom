@@ -1,3 +1,6 @@
+#1.1.17
+* Add .imdoneignore support
+
 #1.1.16
 * Show more debug data on path.join error for getFullPath
 
@@ -14,7 +17,7 @@
 * Fix Path for windows users
 
 #1.1.10
-* [Fix config path checking for windows git-iss:5](#READY:0)
+* [Fix config path checking for windows git-iss:5](#DONE:10)
 * Update version of imdone-core to allow pks and pkb files
 
 # 1.1.9
