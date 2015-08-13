@@ -1,3 +1,6 @@
+#1.1.18
+* Update marked and show better error message on getFullPath
+
 #1.1.17
 * Add .imdoneignore support
 

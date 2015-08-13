@@ -14,16 +14,16 @@ iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 ![Create and move task](https://cloud.githubusercontent.com/assets/233505/8939831/6abf146a-352c-11e5-8689-96dd57d5433e.gif)
 
 # Roadmap
-- [ ] #BACKLOG:20 Add configuration editor view for .imdone/config.json +Roadmap +Epic
+- [ ] #BACKLOG:20 Add configuration editor view for .imdone/config.json +Roadmap
 - [ ] #DOING:0 Integrate with github issues +Roadmap
   - If git-iss exists in meta config then add button for create when no issue is present.
   - Maybe another package???
 
 # Documentation
-- [ ] #TODO:30 Add rename list gif
-- [ ] #TODO:20 Add new list gif
-- [ ] #TODO:10 Add hide/show list gif
-- [ ] #TODO:40 Add move list gif
+- [ ] #TODO:30 Add rename list gif +help
+- [ ] #TODO:20 Add new list gif +help
+- [ ] #TODO:10 Add hide/show list gif +help
+- [ ] #TODO:40 Add move list gif +help
 
 # Completed
 - [x] #DONE:0 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
