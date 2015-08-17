@@ -1,3 +1,6 @@
+#1.1.21
+* Add Earl-Grey support
+
 #1.1.18
 * Update marked and show better error message on getFullPath
 
