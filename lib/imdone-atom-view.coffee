@@ -13,8 +13,10 @@ class ImdoneAtomView extends ScrollView
       @div outlet: "loading", class: "imdone-loading", =>
         @h4 "Loading #{path.basename(params.path)} Issues."
         @h4 "It's gonna be legen... wait for it."
+        @div outlet: "messages", class: "imdone-messages"
         # #DONE:120 Update progress bar on repo load
         @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
+      @div outlet: "error", class: "imdone-error"
       @subview 'configView', new ConfigView(params)
       @div outlet: 'appContainer', class:'imdone-app-container', =>
         @subview 'menuView', new MenuView(params)
@@ -41,6 +43,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
     @imdoneRepo.fileStats (err, files) =>
+      @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
       # #TODO:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if files.length > 1000
         @progress.show()
@@ -195,7 +198,7 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
-                      # #DONE:30 Implement #filter/*filterRegex* links
+                      # DONE:30 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>

@@ -1,3 +1,6 @@
+#1.1.22
+* Fix errors on destroy
+
 #1.1.21
 * Add Earl-Grey support
 
