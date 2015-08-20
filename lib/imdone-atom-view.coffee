@@ -47,8 +47,7 @@ class ImdoneAtomView extends ScrollView
     imdoneRepo = @imdoneRepo
     @handleEvents()
     @imdoneRepo.on 'initialized', => @onRepoUpdate()
-    @imdoneRepo.on 'file.update', => @onRepoUpdate()    console.log('removing me')
-
+    @imdoneRepo.on 'file.update', => @onRepoUpdate()
     @imdoneRepo.on 'config.update', => imdoneRepo.refresh()
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
