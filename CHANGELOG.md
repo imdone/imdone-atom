@@ -1,3 +1,6 @@
+#1.1.23
+* Add prompt and config setting for max files
+
 #1.1.22
 * Fix errors on destroy
 

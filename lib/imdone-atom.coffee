@@ -6,6 +6,14 @@ ImdoneRepo = require 'imdone-core/lib/repository'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 
 module.exports = ImdoneAtom =
+  config:
+    maxFilesPrompt:
+      description: 'How many files is too many to parse without prompting?'
+      type: 'integer'
+      default: 2000
+      minimum: 1000
+      maximum: 10000
+
   imdoneView: null
   pane: null
   subscriptions: null

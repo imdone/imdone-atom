@@ -1,4 +1,5 @@
 {$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
+{Emitter} = require 'atom'
 MenuView = require './menu-view'
 ConfigView = require './config-view'
 path = require 'path'
@@ -9,19 +10,26 @@ require('./jq-utils')($)
 module.exports =
 class ImdoneAtomView extends ScrollView
   @content: (params) ->
-    @div class: "imdone-atom pane-item", =>
-      @div outlet: "loading", class: "imdone-loading", =>
-        @h4 "Loading #{path.basename(params.path)} Issues."
-        @h4 "It's gonna be legen... wait for it."
-        @div outlet: "messages", class: "imdone-messages"
+    @div class: 'imdone-atom pane-item', =>
+      @div outlet: 'loading', class: 'imdone-loading', =>
+        @h1 "Loading #{path.basename(params.path)} Issues."
+        @p "It's gonna be legen... wait for it."
+        @ul outlet: 'messages', class: 'imdone-messages'
         # #DONE:120 Update progress bar on repo load
-        @progress class:'inline-block', outlet: "progress", max:100, value:1, style: "display:none;"
-      @div outlet: "error", class: "imdone-error"
+        @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
+          @h2 class:'text-warning', "Help!  Don't make me crash!"
+          @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
+          @div class: 'block', =>
+            @button click: 'openIgnore', class:'inline-block-tight btn btn-primary', "Edit .imdoneignore"
+            @button click: 'initImdone', class:'inline-block-tight btn btn-warning', "Who cares, keep going"
+        @div outlet: 'progressContainer', style: 'display: none;', =>
+          @progress class:'inline-block', outlet: 'progress', max:100, value:1
+      @div outlet: 'error', class: 'imdone-error'
       @subview 'configView', new ConfigView(params)
       @div outlet: 'appContainer', class:'imdone-app-container', =>
         @subview 'menuView', new MenuView(params)
-        @div outlet: "boardWrapper", class: "imdone-board-wrapper", =>
-          @div outlet: "board", class: "imdone-board"
+        @div outlet: 'boardWrapper', class: 'imdone-board-wrapper', =>
+          @div outlet: 'board', class: 'imdone-board'
 
   getTitle: ->
     "#{path.basename(@path)} Issues"
@@ -35,23 +43,22 @@ class ImdoneAtomView extends ScrollView
 
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
+    @emitter = new Emitter
     imdoneRepo = @imdoneRepo
     @handleEvents()
     @imdoneRepo.on 'initialized', => @onRepoUpdate()
-    @imdoneRepo.on 'file.update', => @onRepoUpdate()
+    @imdoneRepo.on 'file.update', => @onRepoUpdate()    console.log('removing me')
+
     @imdoneRepo.on 'config.update', => imdoneRepo.refresh()
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
     @imdoneRepo.fileStats (err, files) =>
+      @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
       # #TODO:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
-      if files.length > 1000
-        @progress.show()
-        imdoneRepo.on 'file.read', (data) =>
-          complete = Math.ceil (data.completed/imdoneRepo.files.length)*100
-          @progress.attr 'value', complete
-
-    @imdoneRepo.init()
+      if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
+        @ignorePrompt.show()
+      else @initImdone()
 
   handleEvents: ->
     repo = @imdoneRepo
@@ -121,6 +128,21 @@ class ImdoneAtomView extends ScrollView
       @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each( ->
         $(this).closest('.task').show()
       )
+
+  initImdone: () ->
+    if @numFiles > 2000
+      @ignorePrompt.hide()
+      @progressContainer.show()
+      @imdoneRepo.on 'file.read', (data) =>
+        complete = Math.ceil (data.completed/@numFiles)*100
+        @progress.attr 'value', complete
+    @imdoneRepo.init()
+
+  openIgnore: () ->
+    ignorePath = path.join(@imdoneRepo.path, '.imdoneignore')
+    item = @
+    atom.workspace.open(ignorePath, split: 'left').done =>
+      item.destroy()
 
   onRepoUpdate: ->
     @updateBoard()
@@ -244,8 +266,13 @@ class ImdoneAtomView extends ScrollView
       tasksSortables.push(Sortable.create $(this).get(0), opts)
 
   destroy: ->
+    @emitter.emit 'did-destroy', @
     @imdoneRepo.destroy()
-    @detach()
+    @emitter.dispose()
+    @remove()
+
+  onDidDestroy: (callback) ->
+    @emitter.on 'did-destroy', callback
 
   openPath: (filePath, line) ->
     return unless filePath
