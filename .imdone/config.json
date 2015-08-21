@@ -44,5 +44,15 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
+  },
+  "meta": {
+    "user": {
+      "urlTemplate": "https://github.com/%s",
+      "titleTemplate": "github profile for %s"
+    },
+    "git-iss": {
+      "urlTemplate": "https://github.com/imdone/imdone-core/issues/%s",
+      "titleTemplate": "github issue #%s"
+    }
   }
 }

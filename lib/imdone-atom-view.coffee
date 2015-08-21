@@ -112,6 +112,9 @@ class ImdoneAtomView extends ScrollView
 
   setFilter: (text) ->
     @menuView.setFilter text
+    @menuView.addClass 'open'
+    @boardWrapper.addClass 'shift'
+
 
   getFilter: ->
     @menuView.getFilter()
@@ -129,7 +132,7 @@ class ImdoneAtomView extends ScrollView
       )
 
   initImdone: () ->
-    if @numFiles > 2000
+    if @numFiles > 1000
       @ignorePrompt.hide()
       @progressContainer.show()
       @imdoneRepo.on 'file.read', (data) =>

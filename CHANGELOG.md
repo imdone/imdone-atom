@@ -1,3 +1,7 @@
+#1.1.25
+* Added excludeVcsIgnoredPaths config setting
+* Show menu when filter link is clicked
+
 #1.1.23
 * Add prompt and config setting for max files
 

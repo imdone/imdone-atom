@@ -1,7 +1,7 @@
 ImdoneAtomView = require './imdone-atom-view'
 url = require 'url'
 {CompositeDisposable} = require 'atom'
-_path = require 'path'
+path = require 'path'
 ImdoneRepo = require 'imdone-core/lib/repository'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 
@@ -13,6 +13,9 @@ module.exports = ImdoneAtom =
       default: 2000
       minimum: 1000
       maximum: 10000
+    excludeVcsIgnoredPaths:
+      type: 'boolean'
+      default: true
 
   imdoneView: null
   pane: null
@@ -27,8 +30,8 @@ module.exports = ImdoneAtom =
       target = evt.target
       projectRoot = target.closest '.project-root'
       if projectRoot
-        path = projectRoot.getElementsByClassName('name')[0].dataset.path
-      @tasks(path)
+        projectPath = projectRoot.getElementsByClassName('name')[0].dataset.path
+      @tasks(projectPath)
 
     atom.workspace.addOpener (uriToOpen) =>
       {protocol, host, pathname} = url.parse(uriToOpen)
@@ -37,9 +40,9 @@ module.exports = ImdoneAtom =
 
     # #DONE:40 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 
-  tasks: (path) ->
+  tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()
-    uri = @uriForProject(path)
+    uri = @uriForProject(projectPath)
     return unless uri
     atom.workspace.open(uri, searchAllPanes: true).done (imdoneAtomView) ->
       return unless imdoneAtomView instanceof ImdoneAtomView
@@ -58,12 +61,12 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath
-      return path for path in paths when active.getPath().indexOf(path) == 0
+      return projectPath for projectPath in paths when active.getPath().indexOf(projectPath) == 0
     else
       paths[0]
 
-  uriForProject: (path) ->
-    projectPath = path || @getCurrentProject()
+  uriForProject: (projectPath) ->
+    projectPath = projectPath || @getCurrentProject()
     return unless projectPath
     projectPath = encodeURIComponent(projectPath)
     'imdone://tasks/' + projectPath
@@ -72,4 +75,27 @@ module.exports = ImdoneAtom =
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])
-    new ImdoneAtomView(imdoneRepo: fsStore(new ImdoneRepo(pathname)), path: pathname, uri: uri)
+    imdoneRepo = fsStore(new ImdoneRepo(pathname))
+    @excludeVcsIgnoresMixin(imdoneRepo)
+    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: pathname, uri: uri)
+
+  excludeVcsIgnoresMixin: (imdoneRepo) ->
+    keyPath = 'imdone-atom.excludeVcsIgnoredPaths'
+    repoPath = imdoneRepo.getPath()
+    vcsRepo = @repoForPath repoPath
+    _shouldExclude = imdoneRepo.shouldExclude
+    shouldExclude = (relPath) ->
+      return true if vcsRepo.isPathIgnored(relPath)
+      _shouldExclude.call imdoneRepo, relPath
+
+    imdoneRepo.shouldExclude = shouldExclude if atom.config.get(keyPath)
+    atom.config.observe keyPath, (exclude) ->
+      console.log "excludeVcsIgnoredPaths #{exclude}"
+      imdoneRepo.shouldExclude = if exclude then shouldExclude else _shouldExclude
+      imdoneRepo.refresh() if imdoneRepo.initialized
+
+  repoForPath: (repoPath) ->
+    for projectPath, i in atom.project.getPaths()
+      if repoPath is projectPath or repoPath.indexOf(projectPath + path.sep) is 0
+        return atom.project.getRepositories()[i]
+    null
