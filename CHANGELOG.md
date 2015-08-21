@@ -1,3 +1,6 @@
+#1.1.26
+* Fix padding for task
+
 #1.1.25
 * Added excludeVcsIgnoredPaths config setting
 * Show menu when filter link is clicked
@@ -33,7 +36,7 @@
 * Fix Path for windows users
 
 #1.1.10
-* [Fix config path checking for windows git-iss:5](#DONE:10)
+* [Fix config path checking for windows git-iss:5](#DONE:20)
 * Update version of imdone-core to allow pks and pkb files
 
 # 1.1.9

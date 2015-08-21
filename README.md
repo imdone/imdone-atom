@@ -30,7 +30,8 @@ Check out [this example](https://github.com/imdone/imdone-atom/blob/master/.imdo
 
 Roadmap
 ----
-- [ ] #BACKLOG:20 Add configuration editor view for .imdone/config.json +Roadmap
+- [ ] #TODO:0 Add configuration editor view for .imdone/config.json +Roadmap
+  - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
 - [ ] #DOING:0 Integrate with github issues +Roadmap
   - If git-iss exists in meta config then add button for create when no issue is present.
   - Maybe another package???
@@ -44,8 +45,8 @@ Documentation
 
 Completed
 ----
-- [x] #DONE:0 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
-- [x] #DONE:20 Add list rename +Roadmap
-- [x] #DONE:80 Add help for configuration
-- [x] #DONE:90 Add help for task syntax
-- [x] #DONE:110 Add help for todo.txt syntax
+- [x] #DONE:10 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
+- [x] #DONE:30 Add list rename +Roadmap
+- [x] #DONE:90 Add help for configuration
+- [x] #DONE:100 Add help for task syntax
+- [x] #DONE:120 Add help for todo.txt syntax

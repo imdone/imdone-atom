@@ -15,7 +15,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Issues."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:120 Update progress bar on repo load
+        # #DONE:130 Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -35,7 +35,7 @@ class ImdoneAtomView extends ScrollView
     "#{path.basename(@path)} Issues"
 
   getIconName: ->
-    # #DONE:50 Add icon to tab
+    # #DONE:60 Add icon to tab
     "checklist"
 
   getURI: ->
@@ -54,7 +54,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #TODO:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -159,7 +159,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:60 Add task drag and drop support
+    # #DONE:70 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -175,7 +175,7 @@ class ImdoneAtomView extends ScrollView
             @raw task.getText()
           @div class: 'task-text', =>
             @raw task.getHtml(stripMeta: true, stripDates: true)
-          # #DONE:100 Add todo.txt stuff like chrome app!
+          # #DONE:110 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -222,7 +222,7 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
-                      # DONE:30 Implement #filter/*filterRegex* links
+                      # #DONE:40 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
@@ -236,7 +236,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: 'click to rename list', =>
               @raw list.name
-              # #DONE:70 Add delete list icon if length is 0
+              # #DONE:80 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
