@@ -167,14 +167,15 @@ class ImdoneAtomView extends ScrollView
       dateDue = task.getDateDue()
       dateCreated = task.getDateCreated()
       dateCompleted = task.getDateCompleted()
+      opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
+      html = task.getHtml(opts)
       $$$ ->
         @li class: 'task well', id: "#{task.id}", "data-path": task.source.path, =>
           @div class:'task-order', title: 'move task', =>
             @span class: 'badge', task.order
-          @div class: 'task-full-text hidden', =>
-            @raw task.getText()
+          @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
-            @raw task.getHtml(stripMeta: true, stripDates: true)
+            @raw html
           # #DONE:110 Add todo.txt stuff like chrome app!
           if contexts
             @div =>

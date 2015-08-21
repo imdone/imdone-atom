@@ -34,7 +34,7 @@
     },
     {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     }
   ],
   "marked": {

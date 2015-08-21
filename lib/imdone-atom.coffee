@@ -90,7 +90,6 @@ module.exports = ImdoneAtom =
 
     imdoneRepo.shouldExclude = shouldExclude if atom.config.get(keyPath)
     atom.config.observe keyPath, (exclude) ->
-      console.log "excludeVcsIgnoredPaths #{exclude}"
       imdoneRepo.shouldExclude = if exclude then shouldExclude else _shouldExclude
       imdoneRepo.refresh() if imdoneRepo.initialized
 

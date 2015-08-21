@@ -1,3 +1,6 @@
+#1.1.27
+* Sanitize task markdown
+
 #1.1.26
 * Fix padding for task
 
