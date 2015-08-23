@@ -1,57 +1,60 @@
-#1.1.27
+## 1.1.28
+* Fix VCSRepo equals null bug
+
+## 1.1.27
 * Sanitize task markdown
 
-#1.1.26
+## 1.1.26
 * Fix padding for task
 
-#1.1.25
+## 1.1.25
 * Added excludeVcsIgnoredPaths config setting
 * Show menu when filter link is clicked
 
-#1.1.23
+## 1.1.23
 * Add prompt and config setting for max files
 
-#1.1.22
+## 1.1.22
 * Fix errors on destroy
 
-#1.1.21
+## 1.1.21
 * Add Earl-Grey support
 
-#1.1.18
+## 1.1.18
 * Update marked and show better error message on getFullPath
 
-#1.1.17
+## 1.1.17
 * Add .imdoneignore support
 
-#1.1.16
+## 1.1.16
 * Show more debug data on path.join error for getFullPath
 
-#1.1.15
+## 1.1.15
 * Show error text if list name does not conform to `^[\w\-]+$`
 
-#1.1.14
+## 1.1.14
 * If no files are open don't attempt to gather tasks
 
-#1.1.13
+## 1.1.13
 * Update version of imdone-core to allow haxe/.hx file extension
 
-#1.1.12
+## 1.1.12
 * Fix Path for windows users
 
-#1.1.10
+## 1.1.10
 * [Fix config path checking for windows git-iss:5](#DONE:20)
 * Update version of imdone-core to allow pks and pkb files
 
-# 1.1.9
+## 1.1.9
 * Fix funky white border on task drag
 
-# 1.1.8
+## 1.1.8
 * Fix meta alignment
 
-# 1.1.7
+## 1.1.7
 * enter and esc in rename and new list for save and cancel
 
-# 1.1.5
+## 1.1.5
 * Add new list support
 
 ## 1.1.4

@@ -83,6 +83,7 @@ module.exports = ImdoneAtom =
     keyPath = 'imdone-atom.excludeVcsIgnoredPaths'
     repoPath = imdoneRepo.getPath()
     vcsRepo = @repoForPath repoPath
+    return unless vcsRepo
     _shouldExclude = imdoneRepo.shouldExclude
     shouldExclude = (relPath) ->
       return true if vcsRepo.isPathIgnored(relPath)
