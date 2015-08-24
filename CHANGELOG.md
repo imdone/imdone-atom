@@ -1,5 +1,8 @@
+## 1.1.29
+* Update imdone-core to include Jade and Stylus comments
+
 ## 1.1.28
-* Fix VCSRepo equals null bug
+* Fix vcsRepo equals null bug
 
 ## 1.1.27
 * Sanitize task markdown
