@@ -1,3 +1,6 @@
+## 1.1.30
+* Update imdone-core to allow **languages** in `.imdone/config.json`.  Previously required a change to [imdone-core/lib/languages](https://github.com/imdone/imdone-core/blob/master/lib/languages.js)
+
 ## 1.1.29
 * Update imdone-core to include Jade and Stylus comments
 
