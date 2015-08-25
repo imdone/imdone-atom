@@ -22,7 +22,7 @@ class ConfigView extends View
             @subview 'newListField', new TextEditorView(mini: true)
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Cancel'
           @button click: 'doNewList', class:'inline-block-tight btn', 'Save'
-      # #BACKLOG:10 Add config view here
+      # #BACKLOG:0 Add config view here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter

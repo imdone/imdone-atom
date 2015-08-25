@@ -5,7 +5,7 @@ iMDone gives you an interface similar to Trello for your TODO comments.  Most to
 
 iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats)
 
-![Create and move task](https://cloud.githubusercontent.com/assets/233505/8939831/6abf146a-352c-11e5-8689-96dd57d5433e.gif)
+![Create filter and move](https://cloud.githubusercontent.com/assets/233505/9454838/d3784fb2-4a8a-11e5-8503-73bf7a2028f1.gif)
 
 Ignoring files
 ----
@@ -30,7 +30,7 @@ Check out [this example](https://github.com/imdone/imdone-atom/blob/master/.imdo
 
 Roadmap
 ----
-- [ ] #TODO:0 Add configuration editor view for .imdone/config.json +Roadmap
+- [ ] #BACKLOG:20 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
 - [ ] #DOING:0 Integrate with github issues +Roadmap
   - If git-iss exists in meta config then add button for create when no issue is present.
@@ -38,15 +38,15 @@ Roadmap
 
 Documentation
 ----
-- [ ] #TODO:30 Add rename list gif +help
-- [ ] #TODO:20 Add new list gif +help
-- [ ] #TODO:10 Add hide/show list gif +help
-- [ ] #TODO:40 Add move list gif +help
+- [ ] #BACKLOG:40 Add rename list gif +help
+- [ ] #BACKLOG:30 Add new list gif +help
+- [ ] #BACKLOG:10 Add hide/show list gif +help
+- [ ] #BACKLOG:50 Add move list gif +help
 
 Completed
 ----
-- [x] #DONE:10 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
-- [x] #DONE:30 Add list rename +Roadmap
-- [x] #DONE:90 Add help for configuration
-- [x] #DONE:100 Add help for task syntax
-- [x] #DONE:120 Add help for todo.txt syntax
+- [x] #DONE:20 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
+- [x] #DONE:40 Add list rename +Roadmap
+- [x] #DONE:100 Add help for configuration
+- [x] #DONE:110 Add help for task syntax
+- [x] #DONE:130 Add help for todo.txt syntax

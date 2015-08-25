@@ -22,11 +22,11 @@
   "lists": [
     {
       "name": "BACKLOG",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "TODO",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DOING",

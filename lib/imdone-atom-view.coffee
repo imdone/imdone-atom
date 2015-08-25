@@ -2,6 +2,7 @@
 {Emitter} = require 'atom'
 MenuView = require './menu-view'
 ConfigView = require './config-view'
+imdoneHelper = require './imdone-helper'
 path = require 'path'
 util = require 'util'
 Sortable = require 'sortablejs'
@@ -9,13 +10,21 @@ require('./jq-utils')($)
 
 module.exports =
 class ImdoneAtomView extends ScrollView
+  atom.deserializers.add(this)
+
+  @deserialize: ({data}) ->
+    imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)
+    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: data.path, uri: data.uri)
+
+  serialize: -> { deserializer: 'ImdoneAtomView', data: {path: @path, uri: @uri} }
+
   @content: (params) ->
     @div class: 'imdone-atom pane-item', =>
       @div outlet: 'loading', class: 'imdone-loading', =>
         @h1 "Loading #{path.basename(params.path)} Issues."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:130 Update progress bar on repo load
+        # #DONE:140 Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -35,7 +44,7 @@ class ImdoneAtomView extends ScrollView
     "#{path.basename(@path)} Issues"
 
   getIconName: ->
-    # #DONE:60 Add icon to tab
+    # #DONE:70 Add icon to tab
     "checklist"
 
   getURI: ->
@@ -54,7 +63,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:10 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -159,7 +168,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:70 Add task drag and drop support
+    # #DONE:80 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -176,7 +185,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:110 Add todo.txt stuff like chrome app!
+          # #DONE:120 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -223,7 +232,7 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
-                      # #DONE:40 Implement #filter/*filterRegex* links
+                      # #DONE:50 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
@@ -237,7 +246,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: 'click to rename list', =>
               @raw list.name
-              # #DONE:80 Add delete list icon if length is 0
+              # #DONE:90 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
