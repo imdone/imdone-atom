@@ -45,7 +45,7 @@ Documentation
 
 Completed
 ----
-- [x] #DONE:20 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
+- [x] #DONE:30 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
 - [x] #DONE:40 Add list rename +Roadmap
 - [x] #DONE:100 Add help for configuration
 - [x] #DONE:110 Add help for task syntax
