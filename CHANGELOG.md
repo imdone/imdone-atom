@@ -1,3 +1,7 @@
+## 1.1.33
+* Fix windows line endings issue
+* Fix Windows .imdoneignore handling
+
 ## 1.1.32
 * Implement serialization!
 

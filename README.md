@@ -32,7 +32,7 @@ Roadmap
 ----
 - [ ] #BACKLOG:20 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #DOING:0 Integrate with github issues +Roadmap
+- [ ] #DOING:10 Integrate with github issues +Roadmap
   - If git-iss exists in meta config then add button for create when no issue is present.
   - Maybe another package???
 
