@@ -1,3 +1,7 @@
+## 1.1.34
+* Add julia language support
+* Fix task sorting issues
+
 ## 1.1.33
 * Fix windows line endings issue
 * Fix Windows .imdoneignore handling

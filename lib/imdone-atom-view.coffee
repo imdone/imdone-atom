@@ -274,7 +274,7 @@ class ImdoneAtomView extends ScrollView
       sortable.destroy() for sortable in @tasksSortables
 
     @tasksSortables = tasksSortables = []
-    $('.tasks').each ->
+    @find('.tasks').each ->
       tasksSortables.push(Sortable.create $(this).get(0), opts)
 
   destroy: ->
