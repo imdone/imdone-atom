@@ -1,3 +1,6 @@
+## 1.1.35
+* Add typescript support
+
 ## 1.1.34
 * Add julia language support
 * Fix task sorting issues
