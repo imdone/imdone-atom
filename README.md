@@ -9,15 +9,15 @@ iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 
 Ignoring files
 ----
-1. Configuration setting  
+- Configuration setting  
 You can ignore files with the "Exclude Vcs Ignored Paths" setting
 
-2. .imdoneignore  
+- .imdoneignore  
 [Glob](https://www.npmjs.com/package/glob) patterns in `.imdoneignore` will be matched against files and directories.  For example, if your project is in `/home/jesse/projects/imdone-atom` and your `.imdoneignore` looks like this, then all files and folders in `/home/jesse/projects/imdone-atom/lib` will be ignored.
 ```
 lib
 ```
-3. .imdone/config.json  
+- .imdone/config.json  
 iMDone will also ignore files and folders that match a regex in the `.imdone/config.json`, `exclude` array.  The array is seeded with some common excludes on first run.
 
 **IMPORTANT:** If your project is large (#files > 1000) consider adding an .imdoneignore file.
@@ -26,7 +26,7 @@ How To Link Code And Github Issues
 ----
 Using [todo.txt metadata](https://github.com/imdone/imdone-core#metadata) in your tasks and a minor change to `.imdone/config.json`, you can link to external resources like github issues and profiles.  
 
-1. Add a `meta` attribute to `.imdone/config.json`
+- Add a `meta` attribute to `.imdone/config.json`  
 ```javascript
 "meta": {
   "issue": {
@@ -36,12 +36,12 @@ Using [todo.txt metadata](https://github.com/imdone/imdone-core#metadata) in you
 }
 ```
 
-2. Use `issue:[gh issue id]` as metadata in your tasks.
+- Use `issue:[gh issue id]` as metadata in your tasks.  
 <pre>
 // &#35;BACKLOG:0 issue:27 Export TODOs
 </pre>
 
-3. Your issue is linked to the comment!  
+- Your issue is linked to the comment!  
 ![gh-issue-imdone](https://cloud.githubusercontent.com/assets/233505/9595122/72542350-502a-11e5-87b3-a4eb49428b7c.png)
 
 Look at [imdone/imdone-core#metadata](https://github.com/imdone/imdone-core#metadata) for more info.
