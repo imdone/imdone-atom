@@ -26,7 +26,7 @@
     },
     {
       "name": "TODO",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DOING",
@@ -34,7 +34,7 @@
     },
     {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     }
   ],
   "marked": {
@@ -50,8 +50,8 @@
       "urlTemplate": "https://github.com/%s",
       "titleTemplate": "github profile for %s"
     },
-    "git-iss": {
-      "urlTemplate": "https://github.com/imdone/imdone-core/issues/%s",
+    "issue": {
+      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
       "titleTemplate": "github issue #%s"
     }
   }

@@ -107,4 +107,6 @@
 * Allow show and hide lists
 * Allow Reorder lists
 
-- [user:piascikj Remember to update changelog before +publishing +package](#DOING:20)
+----
+
+- [Remember to update changelog before +publishing +package user:piascikj](#DOING:20)

@@ -22,26 +22,46 @@ iMDone will also ignore files and folders that match a regex in the `.imdone/con
 
 **IMPORTANT:** If your project is large (#files > 1000) consider adding an .imdoneignore file.
 
-Linking to External Resources with Metadata
+How To Link Code And Github Issues
 ----
-Using [todo.txt metadata](https://github.com/imdone/imdone-core#metadata) in your tasks and a few modifications to `.imdone/config.json`, you can link to external resources like github issues and profiles.  Look at [imdone/imdone-core#metadata](https://github.com/imdone/imdone-core#metadata) for more info.
+Using [todo.txt metadata](https://github.com/imdone/imdone-core#metadata) in your tasks and a minor change to `.imdone/config.json`, you can link to external resources like github issues and profiles.  
 
-Check out [this example](https://github.com/imdone/imdone-atom/blob/master/.imdone/config.json#L48).
+1. Add a `meta` attribute to `.imdone/config.json`
+```javascript
+"meta": {
+  "issue": {
+    "urlTemplate": "https://github.com/imdone/imdone-core/issues/%s",
+    "titleTemplate": "github issue #%s"
+  }
+}
+```
+
+2. Use `issue:[gh issue id]` as metadata in your tasks.
+<pre>
+// &#35;BACKLOG:0 issue:27 Export TODOs
+</pre>
+
+3. Your issue is linked to the comment!  
+![gh-issue-imdone](https://cloud.githubusercontent.com/assets/233505/9595122/72542350-502a-11e5-87b3-a4eb49428b7c.png)
+
+Look at [imdone/imdone-core#metadata](https://github.com/imdone/imdone-core#metadata) for more info.
 
 Roadmap
 ----
-- [ ] #BACKLOG:20 Add configuration editor view for .imdone/config.json +Roadmap
+- [ ] #BACKLOG:30 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
 - [ ] #DOING:10 Integrate with github issues +Roadmap
-  - If git-iss exists in meta config then add button for create when no issue is present.
-  - Maybe another package???
+  - If gh-issue exists in meta config then add button for create when no issue is present.
+  - Maybe another package for searching issues???
+- [ ] #DOING:0 Re-apply filter when board is refreshed
+
 
 Documentation
 ----
-- [ ] #BACKLOG:40 Add rename list gif +help
-- [ ] #BACKLOG:30 Add new list gif +help
-- [ ] #BACKLOG:10 Add hide/show list gif +help
-- [ ] #BACKLOG:50 Add move list gif +help
+- [ ] #BACKLOG:50 Add rename list gif +help
+- [ ] #BACKLOG:40 Add new list gif +help
+- [ ] #BACKLOG:20 Add hide/show list gif +help
+- [ ] #BACKLOG:60 Add move list gif +help
 
 Completed
 ----
