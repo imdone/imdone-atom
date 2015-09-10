@@ -1,11 +1,24 @@
-# imdone-atom
+imdone-atom
+====
+
+[![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
+[![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
+
 A task-board for TODOs, FIXMEs, HACKs, etc in your code.
 
-iMDone gives you an interface similar to Trello for your TODO comments.  Most tools give you a list of TODO comments with no regard to order.  iMDone lets you sort them in the order you want and keeps them in sync with your project files.
-
-iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats)
-
 ![Create filter and move](https://cloud.githubusercontent.com/assets/233505/9454838/d3784fb2-4a8a-11e5-8503-73bf7a2028f1.gif)
+
+
+iMDone gives you an interface similar to Trello for TODO comments in your code.  Most tools give you a list of TODO comments with no regard to order.  iMDone lets you sort them in the order you want and keeps them in sync with your project files.
+
+iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
+
+Install
+----
+```
+$ apm install imdone-atom
+```
+or open Atom and go to Preferences > Install and search for `imdone-atom`
 
 Ignoring files
 ----
@@ -65,7 +78,7 @@ Documentation
 
 Completed
 ----
-- [x] #DONE:30 Consider respecting "Exclude VCS ignored paths" or .imdoneignore git-iss:6 +enhancement
+- [x] #DONE:30 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 +enhancement
 - [x] #DONE:40 Add list rename +Roadmap
 - [x] #DONE:100 Add help for configuration
 - [x] #DONE:110 Add help for task syntax

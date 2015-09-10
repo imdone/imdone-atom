@@ -1,3 +1,6 @@
+## 1.1.38
+* Close rename/new list dialog when list is modified
+
 ## 1.1.35
 * Add typescript support
 

@@ -21,7 +21,7 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # #DONE:0 Add back serialization (The right way) +Roadmap
+    # #DONE:0 Add back serialization (The right way) +Roadmap @testing
     atom.deserializers.deserialize(state) if (state)
 
     @subscriptions = new CompositeDisposable

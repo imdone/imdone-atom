@@ -43,15 +43,23 @@ class ConfigView extends View
        if(code ==27)
          @cancelRename()
 
+    @imdoneRepo.on 'list.modified', (list) =>
+      @hide()
+
+  isOpen: ->
+    @hasClass 'open'
+
   show: ->
-    @emitter.emit 'config.open'
-    @addClass 'open'
+    unless @isOpen()
+      @emitter.emit 'config.open'
+      @addClass 'open'
 
   hide: ->
-    @error.empty()
-    @find('.config-panel').hide()
-    @removeClass 'open'
-    @emitter.emit 'config.close'
+    if @isOpen()
+      @error.empty()
+      @find('.config-panel').hide()
+      @removeClass 'open'
+      @emitter.emit 'config.close'
 
   showRename: (name) ->
     @hide()
