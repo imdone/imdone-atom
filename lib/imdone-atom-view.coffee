@@ -157,7 +157,6 @@ class ImdoneAtomView extends ScrollView
 
   onRepoUpdate: ->
     @updateBoard()
-
     @loading.hide()
     @appContainer.show()
 
@@ -190,14 +189,14 @@ class ImdoneAtomView extends ScrollView
             @div =>
               for context, i in contexts
                 do (context, i) =>
-                  @a href:"#", title: "filter by #{context}", class: "filter-link", "data-filter": "@#{context}", =>
+                  @a href:"#", title: "just show me tasks with @#{context}", class: "filter-link", "data-filter": "@#{context}", =>
                     @span class: "task-context", context
                     @span ", " if (i < contexts.length-1)
           if tags
             @div =>
               for tag, i in tags
                 do (tag, i) =>
-                  @a href:"#", title: "filter by #{tag}", class: "filter-link", "data-filter": "\\+#{tag}", =>
+                  @a href:"#", title: "just show me tasks with +#{tag}", class: "filter-link", "data-filter": "\\+#{tag}", =>
                     @span class: "task-tags", tag
                     @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
@@ -208,7 +207,7 @@ class ImdoneAtomView extends ScrollView
                     @td data.key
                     @td data.value
                     @td =>
-                      @a href:"#", title: "filter by #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}", =>
+                      @a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}", =>
                         @span class:"icon icon-light-bulb"
                       if data.link
                           @a href: data.link.url, title: data.link.title, =>
@@ -236,7 +235,7 @@ class ImdoneAtomView extends ScrollView
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
-            @a class: 'source-link', title: 'go to task source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
+            @a class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
 
     getList = (list) =>
@@ -244,7 +243,7 @@ class ImdoneAtomView extends ScrollView
         tasks = repo.getTasksInList(list.name)
         @div class: 'top list well', =>
           @div class: 'list-name-wrapper well', =>
-            @div class: 'list-name', 'data-list': list.name, title: 'click to rename list', =>
+            @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
               # #DONE:90 Add delete list icon if length is 0
               if (tasks.length < 1)

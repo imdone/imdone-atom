@@ -21,7 +21,15 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
-    "imdone-core": "1.2.19",
+    "imdone-core": "1.2.20",
     "sortablejs": "1.2.0"
+  },
+  "providedServices": {
+    "imdone": {
+      "description": "Extend iMDone with project and task level buttons",
+      "versions": {
+        "1.0.0": "provideService"
+      }
+    }
   }
 }

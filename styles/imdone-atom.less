@@ -74,28 +74,19 @@
     &.open {
       left: 0;
     }
-    .imdone-toolbar-button {
-      cursor: pointer;
-      position: absolute;
-      text-align: center;
+    .imdone-toolbar {
       right: 6px;
+      top: 2px;
+      position: absolute;
       width: 24px;
-      border: none;
-      background-color: inherit;
-      height: 22px;
-      padding: 4px;
-    }
-    .imdone-config-toggle {
-      top: 2px;
-    }
-    .imdone-menu-toggle {
-      top: 2px;
-    }
-    .new-list-open {
-      top: 26px;
-    }
-    .imdone-help {
-      top: 50px;
+      .imdone-toolbar-button {
+        cursor: pointer;
+        text-align: center;
+        border: none;
+        background-color: inherit;
+        height: 24px;
+        padding: 4px;
+      }
     }
     .imdone-filter {
       width: @menu-component-width;
@@ -158,7 +149,7 @@
     }
     transition: left 0.2s;
     .imdone-board {
-      margin: 1em;
+      margin: .5em 1em 1em 1em;
       height: 96%;
       .list {
         float: left;

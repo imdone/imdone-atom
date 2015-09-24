@@ -9,14 +9,16 @@ module.exports =
 class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
-      # @div click: "toggleConfig", class: "imdone-config-toggle imdone-toolbar-button", title: "toggle config", =>
-      #   @a href: "#", class: "icon icon-gear"
-      @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "toggle tools", =>
-        @a href: "#", class: "icon icon-tools"
-      @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "add a list", =>
-        @a href: "#", class: "icon icon-list-ordered"
-      @div class: "imdone-help imdone-toolbar-button", title: "syntax help", =>
-        @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
+      @div class: "imdone-toolbar", =>
+        @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
+          @a href: "#", class: "icon icon-tools"
+        # @div click: "toggleConfig", class: "imdone-config-toggle imdone-toolbar-button", title: "toggle config", =>
+        #   @a href: "#", class: "icon icon-gear"
+        @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
+          @a href: "#", class: "icon icon-list-ordered"
+        @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
+          @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
+        @div class: "imdone-project-plugins"
       @div class: "imdone-filter", =>
         @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
         @div click: "clearFilter", class:"icon icon-x clear-filter"
