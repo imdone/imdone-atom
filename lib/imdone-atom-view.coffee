@@ -6,6 +6,7 @@ imdoneHelper = require './imdone-helper'
 path = require 'path'
 util = require 'util'
 Sortable = require 'sortablejs'
+pluginManager = require './plugin-manager'
 require('./jq-utils')($)
 
 module.exports =
@@ -63,7 +64,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:10 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -118,6 +119,10 @@ class ImdoneAtomView extends ScrollView
       filterAry.shift()
       filter = filterAry.join '/' ;
       @setFilter filter
+
+    pluginManager.emitter.on 'plugin.added', (plugin) =>
+      console.log "received plugin.added"
+      console.log plugin
 
   setFilter: (text) ->
     @menuView.setFilter text
@@ -179,8 +184,8 @@ class ImdoneAtomView extends ScrollView
       html = task.getHtml(opts)
       $$$ ->
         @li class: 'task well', id: "#{task.id}", "data-path": task.source.path, =>
-          @div class:'task-order', title: 'move task', =>
-            @span class: 'badge', task.order
+          # @div class:'task-order', title: 'move task', =>
+          #   @span class: 'highlight', task.order
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html

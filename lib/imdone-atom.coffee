@@ -21,9 +21,8 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # #DONE:0 Add back serialization (The right way) +Roadmap @testing
+    # #DONE:10 Add back serialization (The right way) +Roadmap @testing
     atom.deserializers.deserialize(state) if (state)
-
     @subscriptions = new CompositeDisposable
 
     @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", (evt) =>
@@ -64,8 +63,7 @@ module.exports = ImdoneAtom =
     else
       paths[0]
 
-  provideService: ->
-    addPlugin: ({project, task}) -> console.log "#{project} #{task}"
+  provideService: -> require './plugin-manager' 
 
   uriForProject: (projectPath) ->
     projectPath = projectPath || @getCurrentProject()

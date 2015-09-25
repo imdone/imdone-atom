@@ -8,6 +8,7 @@
 @board-list-width: 362px;
 @board-list-name-width: 330px;
 @config-height: 300px;
+@task-font-size: 14px;
 
 .imdone-atom {
   .imdone-loading {
@@ -63,7 +64,7 @@
   overflow: hidden;
   .imdone-menu {
     position:absolute;
-    margin: 1em;
+    margin: 1.5em 1em 1em 1em;
     top: 0;
     bottom: 0;
     left: -200px;
@@ -182,9 +183,8 @@
           padding-left: 0;
         }
         .task {
-          padding-top: @font-size+8;
           background-color: @inset-panel-background-color;
-          font-size: 14px;
+          font-size: @task-font-size;
           white-space: normal;
           word-wrap: break-word;
           position: relative;
@@ -233,6 +233,6 @@
 
   .well {
     padding: 10px;
-    margin-bottom: 1em;
+    margin-bottom: @task-font-size;
   }
 }

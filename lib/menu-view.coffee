@@ -12,8 +12,6 @@ class MenuView extends View
       @div class: "imdone-toolbar", =>
         @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
           @a href: "#", class: "icon icon-tools"
-        # @div click: "toggleConfig", class: "imdone-config-toggle imdone-toolbar-button", title: "toggle config", =>
-        #   @a href: "#", class: "icon icon-gear"
         @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
           @a href: "#", class: "icon icon-list-ordered"
         @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
@@ -34,10 +32,6 @@ class MenuView extends View
   toggleMenu: (event, element) ->
     @toggleClass 'open'
     @emitter.emit 'menu.toggle'
-
-  toggleConfig: (event, element) ->
-    # @configContainer.toggleClass('open')
-    # @appContainer.toggleClass('shift')
 
   getFilterEditor: ->
     @filterField.getModel()
