@@ -121,8 +121,10 @@ class ImdoneAtomView extends ScrollView
       @setFilter filter
 
     pluginManager.emitter.on 'plugin.added', (plugin) =>
-      console.log "received plugin.added"
-      console.log plugin
+      @addPluginTaskButtons()
+
+    pluginManager.emitter.on 'plugin.removed', (plugin) =>
+      @addPluginTaskButtons()
 
   setFilter: (text) ->
     @menuView.setFilter text
@@ -186,6 +188,7 @@ class ImdoneAtomView extends ScrollView
         @li class: 'task well', id: "#{task.id}", "data-path": task.source.path, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
+          @div class: 'imdone-task-plugins'
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
@@ -260,6 +263,7 @@ class ImdoneAtomView extends ScrollView
     elements = (-> getList list for list in lists)
 
     @board.append elements
+    @addPluginTaskButtons()
 
     opts =
       draggable: '.task'
@@ -271,7 +275,7 @@ class ImdoneAtomView extends ScrollView
         pos = evt.newIndex
         list = evt.item.parentNode.dataset.list
         filePath = repo.getFullPath evt.item.dataset.path
-        task = repo.getTask filePath, id
+        task = repo.getTask id
         repo.moveTasks [task], list, pos
 
     if @tasksSortables
@@ -282,6 +286,21 @@ class ImdoneAtomView extends ScrollView
       tasksSortables.push(Sortable.create $(this).get(0), opts)
     @filter()
     @board.show()
+
+  addPluginTaskButtons: ->
+    imdoneRepo = @imdoneRepo
+    @board.find('.imdone-task-plugins').empty()
+    @board.find('.task').each ->
+      $task = $(this)
+      $taskPlugins = $task.find '.imdone-task-plugins'
+      id = $task.attr('id')
+      task = imdoneRepo.getTask(id)
+      for name, plugin of pluginManager.plugins
+        if typeof plugin.taskButton is 'function'
+          $button = plugin.taskButton(imdoneRepo, task)
+          if $button
+            $button.addClass 'task-plugin-button'
+            $taskPlugins.append $button
 
   destroy: ->
     @emitter.emit 'did-destroy', @

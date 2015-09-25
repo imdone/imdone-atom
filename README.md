@@ -63,7 +63,7 @@ Roadmap
 ----
 - [ ] #BACKLOG:30 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #DOING:10 Provide service for plugins
+- [ ] #DOING:0 Provide service for plugins
 
 Documentation
 ----

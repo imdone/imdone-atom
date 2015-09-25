@@ -1,3 +1,7 @@
+## 1.1.39
+* Keep filter on board refresh
+* Remove order number from UI
+
 ## 1.1.38
 * Close rename/new list dialog when list is modified
 
@@ -112,4 +116,4 @@
 
 ----
 
-- [Remember to update changelog before +publishing +package user:piascikj](#DOING:0)
+- [Remember to update changelog before +publishing +package user:piascikj](#DOING:10)
