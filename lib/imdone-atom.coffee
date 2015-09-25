@@ -21,7 +21,7 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # #DONE:10 Add back serialization (The right way) +Roadmap @testing
+    # #DONE:30 Add back serialization (The right way) +Roadmap @testing
     atom.deserializers.deserialize(state) if (state)
     @subscriptions = new CompositeDisposable
 
@@ -39,7 +39,7 @@ module.exports = ImdoneAtom =
       return unless protocol is 'imdone:'
       @viewForUri(uriToOpen)
 
-    # #DONE:60 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
+    # #DONE:70 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()

@@ -63,12 +63,7 @@ Roadmap
 ----
 - [ ] #BACKLOG:30 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #DOING:20 Integrate with github issues +Roadmap
-  - If gh-issue exists in meta config then add button for create when no issue is present.
-  - Maybe another package for searching issues???
-  - [New Services API](http://blog.atom.io/2015/03/25/new-services-API.html)
-- [ ] #DOING:10 Re-apply filter when board is refreshed
-
+- [ ] #DOING:10 Provide service for plugins
 
 Documentation
 ----
@@ -79,8 +74,9 @@ Documentation
 
 Completed
 ----
-- [x] #DONE:30 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 +enhancement
-- [x] #DONE:40 Add list rename +Roadmap
-- [x] #DONE:100 Add help for configuration
-- [x] #DONE:110 Add help for task syntax
-- [x] #DONE:130 Add help for todo.txt syntax
+- [x] #DONE:0 Re-apply filter when board is refreshed
+- [x] #DONE:50 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 +enhancement
+- [x] #DONE:20 Add list rename +Roadmap
+- [x] #DONE:110 Add help for configuration
+- [x] #DONE:120 Add help for task syntax
+- [x] #DONE:140 Add help for todo.txt syntax
