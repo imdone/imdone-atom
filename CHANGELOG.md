@@ -1,3 +1,7 @@
+## 1.1.40
+* Add groovy language
+* Handle errors on loading config.json
+
 ## 1.1.39
 * Keep filter on board refresh
 * Remove order number from UI

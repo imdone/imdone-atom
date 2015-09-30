@@ -12,7 +12,7 @@ require('./jq-utils')($)
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
-
+  plugins: {}
   @deserialize: ({data}) ->
     imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)
     new ImdoneAtomView(imdoneRepo: imdoneRepo, path: data.path, uri: data.uri)
@@ -75,17 +75,7 @@ class ImdoneAtomView extends ScrollView
     @menuView.emitter.on 'menu.toggle', =>
       @boardWrapper.toggleClass 'shift'
 
-    @menuView.emitter.on 'filter', (text) =>
-      @filter(text)
-
-    @menuView.emitter.on 'filter.clear', =>
-      @board.find('.task').show()
-
-    @menuView.emitter.on 'list.new', =>
-      @configView.addList()
-
-    @configView.emitter.on 'config.open', =>
-      @appContainer.addClass 'shift'
+    @menuView.emitter.on 'filter', (text) =>name
 
     @configView.emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
@@ -120,17 +110,29 @@ class ImdoneAtomView extends ScrollView
       filter = filterAry.join '/' ;
       @setFilter filter
 
-    pluginManager.emitter.on 'plugin.added', (plugin) =>
+    pluginManager.emitter.on 'plugin.added', (Plugin) =>
+      if (repo.getConfig())
+        @addPlugin(Plugin)
+      else
+        repo.on 'initialized', => @addPlugin(Plugin)
+
+    pluginManager.emitter.on 'plugin.removed', (Plugin) =>
+      delete @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
 
-    pluginManager.emitter.on 'plugin.removed', (plugin) =>
+  addPlugin: (Plugin) ->
+    if @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
+    else
+      plugin = new Plugin(@imdoneRepo)
+      if plugin instanceof Emitter
+        plugin.on 'ready', => @addPluginTaskButtons()
+      @plugins[Plugin.pluginName] = plugin
 
   setFilter: (text) ->
     @menuView.setFilter text
     @menuView.addClass 'open'
     @boardWrapper.addClass 'shift'
-
 
   getFilter: ->
     @menuView.getFilter()
@@ -288,16 +290,15 @@ class ImdoneAtomView extends ScrollView
     @board.show()
 
   addPluginTaskButtons: ->
-    imdoneRepo = @imdoneRepo
+    plugins = @plugins
     @board.find('.imdone-task-plugins').empty()
     @board.find('.task').each ->
       $task = $(this)
       $taskPlugins = $task.find '.imdone-task-plugins'
       id = $task.attr('id')
-      task = imdoneRepo.getTask(id)
-      for name, plugin of pluginManager.plugins
+      for name, plugin of plugins
         if typeof plugin.taskButton is 'function'
-          $button = plugin.taskButton(imdoneRepo, task)
+          $button = plugin.taskButton(id)
           if $button
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button

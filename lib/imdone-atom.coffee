@@ -15,9 +15,6 @@ module.exports = ImdoneAtom =
     excludeVcsIgnoredPaths:
       type: 'boolean'
       default: true
-
-  imdoneView: null
-  pane: null
   subscriptions: null
 
   activate: (state) ->
@@ -51,19 +48,18 @@ module.exports = ImdoneAtom =
 
   deactivate: ->
     @subscriptions.dispose()
-    @imdoneView.destroy()
 
   getCurrentProject: ->
     paths = atom.project.getPaths()
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath
-      # #TODO:10 This fails for projects that start with the name of another project
+      # #TODO:0 This fails for projects that start with the name of another project
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath) == 0
     else
       paths[0]
 
-  provideService: -> require './plugin-manager' 
+  provideService: -> require './plugin-manager'
 
   uriForProject: (projectPath) ->
     projectPath = projectPath || @getCurrentProject()

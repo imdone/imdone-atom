@@ -4,12 +4,12 @@ module.exports =
   emitter: new Emitter
   plugins: {}
 
-  addPlugin: (plugin) ->
-    return unless plugin && plugin.name
-    @plugins[plugin.name] = plugin
-    @emitter.emit 'plugin.added', plugin
+  addPlugin: (Plugin) ->
+    return unless Plugin && Plugin.pluginName
+    @plugins[Plugin.pluginName] = Plugin
+    @emitter.emit 'plugin.added', Plugin
 
-  removePlugin: (plugin) ->
-    return unless plugin && plugin.name
-    delete @plugins[plugin.name]
-    @emitter.emit 'plugin.removed', plugin
+  removePlugin: (Plugin) ->
+    return unless Plugin && Plugin.pluginName
+    delete @plugins[Plugin.pluginName]
+    @emitter.emit 'plugin.removed', Plugin
