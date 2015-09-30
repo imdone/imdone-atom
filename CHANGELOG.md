@@ -1,3 +1,6 @@
+## 1.1.41
+* Fix metadata links when same key is used more than once
+
 ## 1.1.40
 * Add groovy language
 * Handle errors on loading config.json
