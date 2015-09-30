@@ -77,8 +77,13 @@ class ImdoneAtomView extends ScrollView
 
     @menuView.emitter.on 'filter', (text) =>name
 
+    @menuView.emitter.on 'list.new', => @configView.showNewList()
+
     @configView.emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
+
+    @configView.emitter.on 'config.open', =>
+      @appContainer.addClass 'shift'
 
     @on 'click', '.source-link',  (e) =>
       link = e.target
