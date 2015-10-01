@@ -4,7 +4,7 @@
 // for a full listing of what's available.
 @import "ui-variables";
 @menu-component-width: 188px;
-@menu-width: 224px;
+@menu-width: 232px;
 @board-list-width: 362px;
 @board-list-name-width: 330px;
 @config-height: 300px;
@@ -64,7 +64,6 @@
   overflow: hidden;
   .imdone-menu {
     position:absolute;
-    margin: 1.5em 1em 1em 1em;
     top: 0;
     bottom: 0;
     left: -200px;
@@ -74,6 +73,14 @@
     transition: left  0.2s;
     &.open {
       left: 0;
+    }
+    .imdone-menu-inner {
+      position:absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      margin: 1.5em 0 1em 1em;
     }
     .imdone-toolbar {
       right: 6px;
@@ -150,7 +157,7 @@
     }
     transition: left 0.2s;
     .imdone-board {
-      margin: .5em 1em 1em 1em;
+      margin: .5em 1em 1em 0;
       height: 96%;
       .list {
         float: left;

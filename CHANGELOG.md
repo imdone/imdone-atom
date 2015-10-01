@@ -1,3 +1,7 @@
+## 1.1.43
+* Fix hotkey task-board open for projects with prefix that is the same as a project name
+* Visual fix for scrolling past menu
+
 ## 1.1.41
 * Fix metadata links when same key is used more than once
 
@@ -76,7 +80,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5](#DONE:40)
+* [Fix config path checking for windows git-iss:5](#DONE:60)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -123,4 +127,4 @@
 
 ----
 
-- [Remember to update changelog before +publishing +package user:piascikj](#DOING:10)
+- [Remember to update changelog before +publishing +package user:piascikj](#DOING:0)

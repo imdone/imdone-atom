@@ -9,19 +9,20 @@ module.exports =
 class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
-      @div class: "imdone-toolbar", =>
-        @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
-          @a href: "#", class: "icon icon-tools"
-        @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
-          @a href: "#", class: "icon icon-list-ordered"
-        @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
-          @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
-        @div class: "imdone-project-plugins"
-      @div class: "imdone-filter", =>
-        @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
-        @div click: "clearFilter", class:"icon icon-x clear-filter"
-      @div class:'lists-wrapper', =>
-        @ul outlet: "lists", class: "lists"
+      @div class: "imdone-menu-inner", =>
+        @div class: "imdone-toolbar", =>
+          @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
+            @a href: "#", class: "icon icon-tools"
+          @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
+            @a href: "#", class: "icon icon-list-ordered"
+          @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
+            @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
+          @div class: "imdone-project-plugins"
+        @div class: "imdone-filter", =>
+          @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
+          @div click: "clearFilter", class:"icon icon-x clear-filter"
+        @div class:'lists-wrapper', =>
+          @ul outlet: "lists", class: "lists"
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
