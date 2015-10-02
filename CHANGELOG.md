@@ -1,3 +1,6 @@
+## 1.1.44
+* Add HTML
+
 ## 1.1.43
 * Fix hotkey task-board open for projects with prefix that is the same as a project name
 * Visual fix for scrolling past menu
