@@ -75,7 +75,11 @@ class ImdoneAtomView extends ScrollView
     @menuView.emitter.on 'menu.toggle', =>
       @boardWrapper.toggleClass 'shift'
 
-    @menuView.emitter.on 'filter', (text) =>name
+    @menuView.emitter.on 'filter', (text) =>
+      @filter text
+
+    @menuView.emitter.on 'filter.clear', =>
+      @board.find('.task').show()
 
     @menuView.emitter.on 'list.new', => @configView.showNewList()
 

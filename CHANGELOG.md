@@ -1,3 +1,7 @@
+## 1.1.45
+* Add React jsx
+* Fix filtering issues
+
 ## 1.1.44
 * Add HTML
 
