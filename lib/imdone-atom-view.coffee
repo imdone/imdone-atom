@@ -40,6 +40,8 @@ class ImdoneAtomView extends ScrollView
         @subview 'menuView', new MenuView(params)
         @div outlet: 'boardWrapper', class: 'imdone-board-wrapper', =>
           @div outlet: 'board', class: 'imdone-board'
+          # @div outlet: 'spinner', =>
+          #   @span class: 'loading loading-spinner-large inline-block'
 
   getTitle: ->
     "#{path.basename(@path)} Issues"
@@ -58,6 +60,7 @@ class ImdoneAtomView extends ScrollView
     @handleEvents()
     @imdoneRepo.on 'initialized', => @onRepoUpdate()
     @imdoneRepo.on 'file.update', => @onRepoUpdate()
+    @imdoneRepo.on 'tasks.move', => @onRepoUpdate()
     @imdoneRepo.on 'config.update', => imdoneRepo.refresh()
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
@@ -138,6 +141,9 @@ class ImdoneAtomView extends ScrollView
         plugin.on 'ready', => @addPluginTaskButtons()
       @plugins[Plugin.pluginName] = plugin
 
+  hasPlugins: ->
+    Object.keys(@plugins).length > 0
+
   setFilter: (text) ->
     @menuView.setFilter text
     @menuView.addClass 'open'
@@ -180,7 +186,6 @@ class ImdoneAtomView extends ScrollView
 
   updateBoard: ->
     @board.empty().hide()
-
     repo = @imdoneRepo
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
@@ -275,7 +280,6 @@ class ImdoneAtomView extends ScrollView
 
     @board.append elements
     @addPluginTaskButtons()
-
     opts =
       draggable: '.task'
       group: 'tasks'
@@ -290,7 +294,8 @@ class ImdoneAtomView extends ScrollView
         repo.moveTasks [task], list, pos
 
     if @tasksSortables
-      sortable.destroy() for sortable in @tasksSortables
+      for sortable in @tasksSortables
+        sortable.destroy() if sortable.el
 
     @tasksSortables = tasksSortables = []
     @find('.tasks').each ->
@@ -299,6 +304,7 @@ class ImdoneAtomView extends ScrollView
     @board.show()
 
   addPluginTaskButtons: ->
+    return unless @hasPlugins()
     plugins = @plugins
     @board.find('.imdone-task-plugins').empty()
     @board.find('.task').each ->
