@@ -1,3 +1,9 @@
+## 1.1.47
+* Update menu on tasks.move event (Bug introduced last release)
+
+## 1.1.46
+* Improved performance on move task
+
 ## 1.1.45
 * Add React jsx
 * Fix filtering issues

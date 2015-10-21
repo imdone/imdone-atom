@@ -29,6 +29,7 @@ class MenuView extends View
     @handleEvents()
     @imdoneRepo.on 'initialized', => @updateMenu()
     @imdoneRepo.on 'file.update', => @updateMenu()
+    @imdoneRepo.on 'tasks.move', => @updateMenu()
 
   toggleMenu: (event, element) ->
     @toggleClass 'open'
