@@ -67,10 +67,10 @@ Roadmap
 
 Documentation
 ----
-- [ ] #BACKLOG:50 Add rename list gif +help
-- [ ] #BACKLOG:40 Add new list gif +help
-- [ ] #BACKLOG:20 Add hide/show list gif +help
-- [ ] #BACKLOG:60 Add move list gif +help
+- [ ] #BACKLOG:40 Add rename list gif +help
+- [ ] #BACKLOG:20 Add new list gif +help
+- [ ] #BACKLOG:10 Add hide/show list gif +help
+- [ ] #BACKLOG:50 Add move list gif +help
 
 Completed
 ----

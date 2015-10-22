@@ -1,3 +1,6 @@
+## 1.1.48
+* Don't refresh repo on list modification (performance++)
+
 ## 1.1.47
 * Update menu on tasks.move event (Bug introduced last release)
 
