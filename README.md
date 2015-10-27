@@ -1,15 +1,12 @@
-imdone-atom
+// The &#35;HACK:4 ble task-board for your code.
 ====
+
+![Create filter and move](https://cloud.githubusercontent.com/assets/233505/9454838/d3784fb2-4a8a-11e5-8503-73bf7a2028f1.gif)
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
-A task-board for TODOs, FIXMEs, HACKs, etc in your code.
-
-![Create filter and move](https://cloud.githubusercontent.com/assets/233505/9454838/d3784fb2-4a8a-11e5-8503-73bf7a2028f1.gif)
-
-
-iMDone gives you an interface similar to Trello for TODO comments in your code.  Most tools give you a list of TODO comments with no regard to order.  iMDone lets you sort them in the order you want and keeps them in sync with your project files.
+iMDone provides a task-board for TODO comments in your code.  Most tools give you a list of TODO comments with no regard to order.  iMDone lets you sort them in the order you want and keeps them in sync with your project files.
 
 iMDone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
@@ -63,20 +60,20 @@ Roadmap
 ----
 - [ ] #BACKLOG:30 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #DONE:0 Provide service for plugins
+- [ ] #DONE:10 Provide service for plugins
 
 Documentation
 ----
 - [ ] #BACKLOG:40 Add rename list gif +help
-- [ ] #BACKLOG:20 Add new list gif +help
-- [ ] #BACKLOG:10 Add hide/show list gif +help
+- [ ] #BACKLOG:0 Add new list gif +help
+- [ ] #BACKLOG:20 Add hide/show list gif +help
 - [ ] #BACKLOG:50 Add move list gif +help
 
 Completed
 ----
-- [x] #DONE:20 Re-apply filter when board is refreshed
-- [x] #DONE:70 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 +enhancement
-- [x] #DONE:40 Add list rename +Roadmap
-- [x] #DONE:130 Add help for configuration
-- [x] #DONE:140 Add help for task syntax
-- [x] #DONE:160 Add help for todo.txt syntax
+- [x] #DONE:30 Re-apply filter when board is refreshed
+- [x] #DONE:80 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 +enhancement
+- [x] #DONE:50 Add list rename +Roadmap
+- [x] #DONE:140 Add help for configuration
+- [x] #DONE:150 Add help for task syntax
+- [x] #DONE:170 Add help for todo.txt syntax

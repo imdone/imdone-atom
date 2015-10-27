@@ -17,6 +17,13 @@
     }
   }
 
+  .split-handle-y {
+    height: 8px;
+    margin-top: -2px;
+    width: 100%;
+    cursor: row-resize;
+  }
+
   .imdone-app-container {
     position: absolute;
     top: 0;
@@ -26,8 +33,12 @@
     &.shift {
       bottom: @config-height;
     }
+  }
+
+  .imdone-main-container {
     display: none;
   }
+
   .imdone-config-container {
     position: absolute;
     bottom: -@config-height;
@@ -36,9 +47,10 @@
     height: @config-height;
     background-color: @tool-panel-background-color;
     border-top: 1px solid @tool-panel-border-color;
-    padding: 1em;
+    padding: 0 1em;
     &.open {
       bottom: 0;
+      z-index: 100;
     }
     .input-small {
       width: 200px;

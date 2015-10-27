@@ -6,6 +6,7 @@ class ConfigView extends View
 
   @content: ->
     @div class:'imdone-config-container', =>
+      @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'error', class:'text-error'
       @div outlet: 'renameList', class:'rename-list config-panel', =>
         @h2 =>
@@ -22,26 +23,51 @@ class ConfigView extends View
             @subview 'newListField', new TextEditorView(mini: true)
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
-      # #BACKLOG:0 Add config view here
+      # #BACKLOG:10 Add config view here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
     @handleEvents()
 
   handleEvents: ->
+    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
+    startY = startHeight = null
+    container = this
+    @resizer.on 'mousedown', (e) =>
+      e.stopPropagation()
+      e.preventDefault()
+      container.emitter.emit 'resize.start'
+      startY = e.clientY
+      startHeight = container.height()
+      $imdoneAtom = container.closest('.pane-item')
+      doDrag = (e) =>
+        e.preventDefault()
+        e.stopPropagation()
+        height = startHeight + startY - e.clientY
+        container.height(height)
+        container.emitter.emit 'resize.change', height
+
+      stopDrag = (e) =>
+        container.emitter.emit 'resize.stop'
+        $imdoneAtom.off 'mousemove', doDrag
+        $imdoneAtom.off 'mouseup', stopDrag
+
+      $imdoneAtom.on 'mousemove', doDrag
+      $imdoneAtom.on 'mouseup', stopDrag
+
     @newListField.on 'keyup', (e) =>
-       code = e.keyCode || e.which
-       if(code == 13)
-         @doNewList()
-       if(code ==27)
-         @cancelNewList()
+      code = e.keyCode || e.which
+      if(code == 13)
+        @doNewList()
+      if(code ==27)
+        @cancelNewList()
 
     @renameListField.on 'keyup', (e) =>
-       code = e.keyCode || e.which
-       if(code == 13)
-         @doListRename()
-       if(code ==27)
-         @cancelRename()
+      code = e.keyCode || e.which
+      if(code == 13)
+        @doListRename()
+      if(code ==27)
+        @cancelRename()
 
     @imdoneRepo.on 'list.modified', (list) =>
       @hide()
@@ -59,6 +85,7 @@ class ConfigView extends View
       @error.empty()
       @find('.config-panel').hide()
       @removeClass 'open'
+      @css 'height', ''
       @emitter.emit 'config.close'
 
   showRename: (name) ->

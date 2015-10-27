@@ -25,7 +25,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Issues."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:170 Update progress bar on repo load
+        # #DONE:180 Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -35,19 +35,21 @@ class ImdoneAtomView extends ScrollView
         @div outlet: 'progressContainer', style: 'display: none;', =>
           @progress class:'inline-block', outlet: 'progress', max:100, value:1
       @div outlet: 'error', class: 'imdone-error'
-      @subview 'configView', new ConfigView(params)
-      @div outlet: 'appContainer', class:'imdone-app-container', =>
-        @subview 'menuView', new MenuView(params)
-        @div outlet: 'boardWrapper', class: 'imdone-board-wrapper', =>
-          @div outlet: 'board', class: 'imdone-board'
-          # @div outlet: 'spinner', =>
-          #   @span class: 'loading loading-spinner-large inline-block'
+      @div outlet:'mainContainer', class:'imdone-main-container', =>
+        @div outlet: 'appContainer', class:'imdone-app-container', =>
+          @subview 'menuView', new MenuView(params)
+          @div outlet: 'boardWrapper', class: 'imdone-board-wrapper', =>
+            @div outlet: 'board', class: 'imdone-board'
+            # @div outlet: 'spinner', =>
+            #   @span class: 'loading loading-spinner-large inline-block'
+        @div class:'imdone-config-wrapper', =>
+          @subview 'configView', new ConfigView(params)
 
   getTitle: ->
     "#{path.basename(@path)} Issues"
 
   getIconName: ->
-    # #DONE:100 Add icon to tab
+    # #DONE:110 Add icon to tab
     "checklist"
 
   getURI: ->
@@ -56,25 +58,24 @@ class ImdoneAtomView extends ScrollView
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
     @emitter = new Emitter
-    imdoneRepo = @imdoneRepo
     @handleEvents()
-    @imdoneRepo.on 'initialized', => @onRepoUpdate()
-    @imdoneRepo.on 'file.update', => @onRepoUpdate()
-    @imdoneRepo.on 'tasks.move', => @onRepoUpdate()
-    @imdoneRepo.on 'list.modified', => @onRepoUpdate()
-    @imdoneRepo.on 'config.update', => imdoneRepo.refresh()
-    @imdoneRepo.on 'error', (err) => console.log('error:', err)
-
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:30 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:40 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
 
   handleEvents: ->
     repo = @imdoneRepo
+
+    @imdoneRepo.on 'initialized', => @onRepoUpdate()
+    @imdoneRepo.on 'file.update', => @onRepoUpdate()
+    @imdoneRepo.on 'tasks.move', => @onRepoUpdate()
+    @imdoneRepo.on 'list.modified', => @onRepoUpdate()
+    @imdoneRepo.on 'config.update', => repo.refresh()
+    @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
     @menuView.emitter.on 'menu.toggle', =>
       @boardWrapper.toggleClass 'shift'
@@ -89,9 +90,13 @@ class ImdoneAtomView extends ScrollView
 
     @configView.emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
+      @appContainer.css 'bottom', ''
 
     @configView.emitter.on 'config.open', =>
       @appContainer.addClass 'shift'
+
+    @configView.emitter.on 'resize.change', (height) =>
+      @appContainer.css('bottom', height + 'px')
 
     @on 'click', '.source-link',  (e) =>
       link = e.target
@@ -182,8 +187,10 @@ class ImdoneAtomView extends ScrollView
 
   onRepoUpdate: ->
     @updateBoard()
+    @appContainer.css 'bottom', 0
+    @configView.attr 'style', ''
     @loading.hide()
-    @appContainer.show()
+    @mainContainer.show()
 
   updateBoard: ->
     @board.empty().hide()
@@ -191,7 +198,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:110 Add task drag and drop support
+    # #DONE:120 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -209,7 +216,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:150 Add todo.txt stuff like chrome app!
+          # #DONE:160 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -256,7 +263,7 @@ class ImdoneAtomView extends ScrollView
                     @td "completed"
                     @td dateCompleted
                     @td =>
-                      # #DONE:80 Implement #filter/*filterRegex* links
+                      # #DONE:90 Implement #filter/*filterRegex* links
                       @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                         @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
@@ -270,7 +277,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE:120 Add delete list icon if length is 0
+              # #DONE:130 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
