@@ -7,6 +7,8 @@ class ConfigView extends View
   @content: ->
     @div class:'imdone-config-container', =>
       @div outlet: 'resizer', class:'split-handle-y'
+      @div outlet: 'closeButton', class:'close-button', =>
+        @raw '&times;'
       @div outlet: 'error', class:'text-error'
       @div outlet: 'renameList', class:'rename-list config-panel', =>
         @h2 =>
@@ -23,7 +25,7 @@ class ConfigView extends View
             @subview 'newListField', new TextEditorView(mini: true)
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
-      @div outlet: 'plugins', class:'imdone-plugins-container'
+      @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
       # #BACKLOG:10 Add config view here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
@@ -73,6 +75,9 @@ class ConfigView extends View
     @imdoneRepo.on 'list.modified', (list) =>
       @hide()
 
+    @closeButton.on 'click', =>
+      @hide()
+
   isOpen: ->
     @hasClass 'open'
 
@@ -82,14 +87,31 @@ class ConfigView extends View
       @addClass 'open'
 
   hide: ->
+    @find('.config-panel').hide()
     if @isOpen()
       @error.empty()
-      @find('.config-panel').hide()
       @removeClass 'open'
       @css 'height', ''
       @emitter.emit 'config.close'
+  setHeight: (px) ->
+    @height(px)
+    @emitter.emit 'resize.change', px
+
+  addPlugin: (plugin) ->
+    pluginView = plugin.getView()
+    pluginView.addClass "imdone-plugin #{plugin.constructor.pluginName}"
+    pluginView.appendTo @plugins
+    plugin.on 'view.show', => @showPlugin plugin
+
+  showPlugin: (plugin) ->
+    @hide()
+    @plugins.find('.imdone-plugin').hide()
+    @plugins.find(".#{plugin.constructor.pluginName}").show()
+    @plugins.show()
+    @show()
 
   showRename: (name) ->
+    @setHeight(100)
     @hide()
     @renameListLabel.text 'Rename '+name
     @listToRename = name
@@ -114,6 +136,7 @@ class ConfigView extends View
     @hide()
 
   showNewList: ->
+    @setHeight(100)
     @hide()
     @newListField.getModel().setText ''
     @newList.show()

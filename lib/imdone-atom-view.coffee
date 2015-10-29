@@ -70,7 +70,9 @@ class ImdoneAtomView extends ScrollView
   handleEvents: ->
     repo = @imdoneRepo
 
-    @imdoneRepo.on 'initialized', => @onRepoUpdate()
+    @imdoneRepo.on 'initialized', =>
+      @onRepoUpdate()
+      @addPlugin(Plugin) for Plugin in pluginManager.getAll()
     @imdoneRepo.on 'file.update', => @onRepoUpdate()
     @imdoneRepo.on 'tasks.move', => @onRepoUpdate()
     @imdoneRepo.on 'list.modified', => @onRepoUpdate()
@@ -155,9 +157,7 @@ class ImdoneAtomView extends ScrollView
 
   addPluginView: (plugin) ->
     return unless plugin.getView
-    pluginView = plugin.getView()
-    pluginView.addClass "imdone-plugin #{plugin.constructor.pluginName}"
-    pluginView.appendTo @configView.plugins
+    @configView.addPlugin plugin
 
   initPluginView: (plugin) ->
     @addPluginTaskButtons()
@@ -169,7 +169,10 @@ class ImdoneAtomView extends ScrollView
     else
       plugin = new Plugin @imdoneRepo
       if plugin instanceof Emitter
-        plugin.on 'ready', => @initPluginView(plugin)
+        if plugin.isReady()
+          @initPluginView(plugin)
+        else
+          plugin.on 'ready', => @initPluginView(plugin)
       else
         @initPluginView(plugin)
       @plugins[Plugin.pluginName] = plugin

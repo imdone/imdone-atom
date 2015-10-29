@@ -1,3 +1,8 @@
+## 1.1.50
+* Prepare for plugin architecture
+* Add close icon for bottom-pane
+* Set size smaller for rename and new lists
+
 ## 1.1.49
 * Add bottom panel resize
 

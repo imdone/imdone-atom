@@ -13,3 +13,6 @@ module.exports =
     return unless Plugin && Plugin.pluginName
     delete @plugins[Plugin.pluginName]
     @emitter.emit 'plugin.removed', Plugin
+
+  getAll: ->
+    (val for key, val of @plugins)
