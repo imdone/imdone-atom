@@ -93,6 +93,7 @@ class ConfigView extends View
       @removeClass 'open'
       @css 'height', ''
       @emitter.emit 'config.close'
+
   setHeight: (px) ->
     @height(px)
     @emitter.emit 'resize.change', px
@@ -111,13 +112,13 @@ class ConfigView extends View
     @show()
 
   showRename: (name) ->
-    @setHeight(100)
     @hide()
     @renameListLabel.text 'Rename '+name
     @listToRename = name
     @renameListField.getModel().setText name
     @renameListField.getModel().selectAll()
     @renameList.show()
+    @setHeight(100)
     @show()
     @renameListField.focus()
 
@@ -136,10 +137,10 @@ class ConfigView extends View
     @hide()
 
   showNewList: ->
-    @setHeight(100)
     @hide()
     @newListField.getModel().setText ''
     @newList.show()
+    @setHeight(100)
     @show()
     @newListField.focus()
 

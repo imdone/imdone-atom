@@ -1,3 +1,6 @@
+## 1.1.51
+* Fix height issue for rename and new task
+
 ## 1.1.50
 * Prepare for plugin architecture
 * Add close icon for bottom-pane
