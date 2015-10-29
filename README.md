@@ -1,5 +1,5 @@
-// The &#35;HACK:4 ble task-board for your code.
-====
+// A &#35;HACK:4 ble task-board in your code.
+----
 
 ![Create filter and move](https://cloud.githubusercontent.com/assets/233505/9454838/d3784fb2-4a8a-11e5-8503-73bf7a2028f1.gif)
 
@@ -60,7 +60,7 @@ Roadmap
 ----
 - [ ] #BACKLOG:30 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #DONE:10 Provide service for plugins
+- [ ] #DONE:20 Provide service for plugins
 
 Documentation
 ----
@@ -71,9 +71,9 @@ Documentation
 
 Completed
 ----
-- [x] #DONE:30 Re-apply filter when board is refreshed
-- [x] #DONE:80 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 +enhancement
-- [x] #DONE:50 Add list rename +Roadmap
+- [x] #DONE:40 Re-apply filter when board is refreshed
+- [x] #DONE:10 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
+- [x] #DONE:60 Add list rename +Roadmap
 - [x] #DONE:140 Add help for configuration
 - [x] #DONE:150 Add help for task syntax
 - [x] #DONE:170 Add help for todo.txt syntax

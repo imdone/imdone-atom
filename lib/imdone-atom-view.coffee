@@ -62,7 +62,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:40 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:50 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -138,13 +138,40 @@ class ImdoneAtomView extends ScrollView
       delete @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
 
+  addPluginTaskButtons: ->
+    return unless @hasPlugins()
+    plugins = @plugins
+    @board.find('.imdone-task-plugins').empty()
+    @board.find('.task').each ->
+      $task = $(this)
+      $taskPlugins = $task.find '.imdone-task-plugins'
+      id = $task.attr('id')
+      for name, plugin of plugins
+        if typeof plugin.taskButton is 'function'
+          $button = plugin.taskButton(id)
+          if $button
+            $button.addClass 'task-plugin-button'
+            $taskPlugins.append $button
+
+  addPluginView: (plugin) ->
+    return unless plugin.getView
+    pluginView = plugin.getView()
+    pluginView.addClass "imdone-plugin #{plugin.constructor.pluginName}"
+    pluginView.appendTo @configView.plugins
+
+  initPluginView: (plugin) ->
+    @addPluginTaskButtons()
+    @addPluginView plugin
+
   addPlugin: (Plugin) ->
     if @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
     else
-      plugin = new Plugin(@imdoneRepo)
+      plugin = new Plugin @imdoneRepo
       if plugin instanceof Emitter
-        plugin.on 'ready', => @addPluginTaskButtons()
+        plugin.on 'ready', => @initPluginView(plugin)
+      else
+        @initPluginView(plugin)
       @plugins[Plugin.pluginName] = plugin
 
   hasPlugins: ->
@@ -310,21 +337,6 @@ class ImdoneAtomView extends ScrollView
       tasksSortables.push(Sortable.create $(this).get(0), opts)
     @filter()
     @board.show()
-
-  addPluginTaskButtons: ->
-    return unless @hasPlugins()
-    plugins = @plugins
-    @board.find('.imdone-task-plugins').empty()
-    @board.find('.task').each ->
-      $task = $(this)
-      $taskPlugins = $task.find '.imdone-task-plugins'
-      id = $task.attr('id')
-      for name, plugin of plugins
-        if typeof plugin.taskButton is 'function'
-          $button = plugin.taskButton(id)
-          if $button
-            $button.addClass 'task-plugin-button'
-            $taskPlugins.append $button
 
   destroy: ->
     @emitter.emit 'did-destroy', @

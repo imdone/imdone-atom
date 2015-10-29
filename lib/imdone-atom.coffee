@@ -18,7 +18,7 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # #DONE:60 Add back serialization (The right way) +Roadmap @testing
+    # #DONE:70 Add back serialization (The right way) +Roadmap @testing
     atom.deserializers.deserialize(state) if (state)
     @subscriptions = new CompositeDisposable
 
@@ -54,7 +54,7 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath
-      # #DONE:20 This fails for projects that start with the name of another project
+      # #DONE:30 This fails for projects that start with the name of another project
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]

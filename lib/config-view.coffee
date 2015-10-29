@@ -23,6 +23,7 @@ class ConfigView extends View
             @subview 'newListField', new TextEditorView(mini: true)
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
+      @div outlet: 'plugins', class:'imdone-plugins-container'
       # #BACKLOG:10 Add config view here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
