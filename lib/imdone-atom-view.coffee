@@ -12,7 +12,6 @@ require('./jq-utils')($)
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
-  plugins: {}
   @deserialize: ({data}) ->
     imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)
     new ImdoneAtomView(imdoneRepo: imdoneRepo, path: data.path, uri: data.uri)
@@ -25,7 +24,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Issues."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:180 Update progress bar on repo load
+        # #DONE:170 Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -49,7 +48,6 @@ class ImdoneAtomView extends ScrollView
     "#{path.basename(@path)} Issues"
 
   getIconName: ->
-    # #DONE:110 Add icon to tab
     "checklist"
 
   getURI: ->
@@ -57,6 +55,7 @@ class ImdoneAtomView extends ScrollView
 
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
+    @plugins = {}
     @emitter = new Emitter
     @handleEvents()
     @imdoneRepo.fileStats (err, files) =>
@@ -168,6 +167,7 @@ class ImdoneAtomView extends ScrollView
       @addPluginTaskButtons()
     else
       plugin = new Plugin @imdoneRepo
+      @plugins[Plugin.pluginName] = plugin
       if plugin instanceof Emitter
         if plugin.isReady()
           @initPluginView(plugin)
@@ -175,7 +175,6 @@ class ImdoneAtomView extends ScrollView
           plugin.on 'ready', => @initPluginView(plugin)
       else
         @initPluginView(plugin)
-      @plugins[Plugin.pluginName] = plugin
 
   hasPlugins: ->
     Object.keys(@plugins).length > 0
@@ -228,7 +227,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:120 Add task drag and drop support
+    # #DONE:110 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -246,7 +245,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:160 Add todo.txt stuff like chrome app!
+          # #DONE:150 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -307,7 +306,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE:130 Add delete list icon if length is 0
+              # #DONE:120 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
