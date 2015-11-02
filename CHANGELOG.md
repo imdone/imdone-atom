@@ -1,3 +1,6 @@
+## 1.1.53
+* Update readme and add padding to buttons
+
 ## 1.1.52
 * Fix duplicate list issue and issues 38 and 39
 
