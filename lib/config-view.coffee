@@ -26,7 +26,7 @@ class ConfigView extends View
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
-      # #BACKLOG:10 Add config view here
+      # #BACKLOG:0 Add config view here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
@@ -155,8 +155,8 @@ class ConfigView extends View
 
   doNewList: ->
     return unless @listOk @getNewList()
-    @imdoneRepo.addList(name: @getNewList(), hidden:false)
     @hide()
+    @imdoneRepo.addList(name: @getNewList(), hidden:false)
 
   listOk: (name) ->
     return true if /^[\w\-]+$/.test(name)

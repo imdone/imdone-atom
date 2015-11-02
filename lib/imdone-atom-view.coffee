@@ -72,10 +72,18 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.on 'initialized', =>
       @onRepoUpdate()
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
-    @imdoneRepo.on 'file.update', => @onRepoUpdate()
-    @imdoneRepo.on 'tasks.move', => @onRepoUpdate()
-    @imdoneRepo.on 'list.modified', => @onRepoUpdate()
-    @imdoneRepo.on 'config.update', => repo.refresh()
+    @imdoneRepo.on 'list.modified', =>
+      console.log 'list.modified'
+      @onRepoUpdate()
+    @imdoneRepo.on 'file.update', =>
+      console.log 'file.update'
+      @onRepoUpdate()
+    @imdoneRepo.on 'tasks.move', =>
+      console.log 'tasks.move'
+      @onRepoUpdate()
+    @imdoneRepo.on 'config.update', =>
+      console.log 'config.update'
+      repo.refresh()
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
     @menuView.emitter.on 'menu.toggle', =>

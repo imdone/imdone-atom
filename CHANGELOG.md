@@ -1,3 +1,6 @@
+## 1.1.52
+* Fix duplicate list issue and issues 38 and 39
+
 ## 1.1.51
 * Fix height issue for rename and new task
 

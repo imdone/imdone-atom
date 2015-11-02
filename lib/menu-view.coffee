@@ -27,10 +27,6 @@ class MenuView extends View
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
     @handleEvents()
-    @imdoneRepo.on 'initialized', => @updateMenu()
-    @imdoneRepo.on 'file.update', => @updateMenu()
-    @imdoneRepo.on 'tasks.move', => @updateMenu()
-    @imdoneRepo.on 'list.modified', => @updateMenu()
 
   toggleMenu: (event, element) ->
     @toggleClass 'open'
@@ -64,7 +60,17 @@ class MenuView extends View
     @getFilterEditor().onDidStopChanging () =>
       @emitter.emit 'filter', @getFilter()
 
+    @imdoneRepo.on 'initialized', =>
+      @updateMenu()
+    @imdoneRepo.on 'list.modified', =>
+      @updateMenu()
+    @imdoneRepo.on 'file.update', =>
+      @updateMenu()
+    @imdoneRepo.on 'tasks.move', =>
+      @updateMenu()
+
   updateMenu: ->
+    console.log "menu update"
     @listsSortable.destroy() if @listsSortable
     @lists.empty()
 
