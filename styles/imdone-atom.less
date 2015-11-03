@@ -222,6 +222,7 @@
           word-wrap: break-word;
           position: relative;
           cursor: move;
+          border: 2px solid @inset-panel-background-color;
           .task-text {
             p {
               margin: 0 0 5px;
@@ -261,6 +262,9 @@
           }
           .imdone-task-plugins {
             text-align: right;
+          }
+          &.selected {
+            border-color: @text-color-info;
           }
         }
       }

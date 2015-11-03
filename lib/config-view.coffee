@@ -102,7 +102,7 @@ class ConfigView extends View
     pluginView = plugin.getView()
     pluginView.addClass "imdone-plugin #{plugin.constructor.pluginName}"
     pluginView.appendTo @plugins
-    plugin.on 'view.show', => @showPlugin plugin
+    # plugin.on 'view.show', => @showPlugin plugin
 
   showPlugin: (plugin) ->
     @hide()

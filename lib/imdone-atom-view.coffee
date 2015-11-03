@@ -100,6 +100,7 @@ class ImdoneAtomView extends ScrollView
     @configView.emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
       @appContainer.css 'bottom', ''
+      @clearSelection()
 
     @configView.emitter.on 'config.open', =>
       @appContainer.addClass 'shift'
@@ -174,15 +175,19 @@ class ImdoneAtomView extends ScrollView
     if @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
     else
-      plugin = new Plugin @imdoneRepo
+      plugin = new Plugin @imdoneRepo,
+        showPlugin: (plugin) =>
+          @configView.showPlugin plugin
+        selectTask: (id) =>
+          @selectTask id
       @plugins[Plugin.pluginName] = plugin
       if plugin instanceof Emitter
         if plugin.isReady()
-          @initPluginView(plugin)
+          @initPluginView plugin
         else
-          plugin.on 'ready', => @initPluginView(plugin)
+          plugin.on 'ready', => @initPluginView plugin
       else
-        @initPluginView(plugin)
+        @initPluginView plugin
 
   hasPlugins: ->
     Object.keys(@plugins).length > 0
@@ -370,3 +375,10 @@ class ImdoneAtomView extends ScrollView
       position = [lineNumber-1, 0]
       textEditor.setCursorBufferPosition(position, autoscroll: false)
       textEditor.scrollToCursorPosition(center: true)
+
+  selectTask: (id) ->
+    @clearSelection()
+    @board.find(".task##{id}").addClass 'selected'
+
+  clearSelection: ->
+    @board.find('.task').removeClass 'selected'
