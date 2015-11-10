@@ -1,13 +1,13 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Show Tasks - iMDone'
+      'label': 'imdone - Show Tasks'
       'command': 'imdone-atom:tasks'
     }
   ],
   '.tree-view.full-menu': [
     {
-      'label': 'Show Tasks - iMDone'
+      'label': 'imdone - Show Tasks'
       'command': 'imdone-atom:tasks'
     }
   ]
@@ -15,7 +15,7 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'iMDone'
+      'label': 'imdone'
       'submenu': [
         {
           'label': 'Show Tasks'

@@ -42,7 +42,7 @@ module.exports = ImdoneAtom =
     previousActivePane = atom.workspace.getActivePane()
     uri = @uriForProject(projectPath)
     return unless uri
-    atom.workspace.open(uri, searchAllPanes: true).done (imdoneAtomView) ->
+    atom.workspace.open(uri, searchAllPanes: true).then (imdoneAtomView) ->
       return unless imdoneAtomView instanceof ImdoneAtomView
       previousActivePane.activate()
 

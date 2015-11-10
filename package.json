@@ -26,7 +26,7 @@
   },
   "providedServices": {
     "imdone": {
-      "description": "Extend iMDone with project and task level buttons",
+      "description": "Extend imdone with project and task level buttons",
       "versions": {
         "1.0.0": "provideService"
       }

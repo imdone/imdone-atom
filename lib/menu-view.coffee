@@ -70,7 +70,7 @@ class MenuView extends View
       @updateMenu()
 
   updateMenu: ->
-    console.log "menu update"
+    return unless @imdoneRepo
     @listsSortable.destroy() if @listsSortable
     @lists.empty()
 

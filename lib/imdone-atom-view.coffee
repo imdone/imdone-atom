@@ -149,9 +149,9 @@ class ImdoneAtomView extends ScrollView
       @addPluginTaskButtons()
 
   addPluginTaskButtons: ->
+    @board.find('.imdone-task-plugins').empty()
     return unless @hasPlugins()
     plugins = @plugins
-    @board.find('.imdone-task-plugins').empty()
     @board.find('.task').each ->
       $task = $(this)
       $taskPlugins = $task.find '.imdone-task-plugins'
