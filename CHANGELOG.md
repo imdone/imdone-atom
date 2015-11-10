@@ -1,3 +1,7 @@
+## 1.1.55
+* Only emit config.update on watched repo
+* On renameList return if old and new name are the same
+
 ## 1.1.53
 * Update readme and add padding to buttons
 
