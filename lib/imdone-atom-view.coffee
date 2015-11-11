@@ -180,6 +180,8 @@ class ImdoneAtomView extends ScrollView
           @configView.showPlugin plugin
         selectTask: (id) =>
           @selectTask id
+        emitter: =>
+          @emitter
       @plugins[Plugin.pluginName] = plugin
       if plugin instanceof Emitter
         if plugin.isReady()
@@ -352,6 +354,7 @@ class ImdoneAtomView extends ScrollView
       tasksSortables.push(Sortable.create $(this).get(0), opts)
     @filter()
     @board.show()
+    @emitter.emit 'board.update'
 
   destroy: ->
     @emitter.emit 'did-destroy', @

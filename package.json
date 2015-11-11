@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
-    "imdone-core": "1.2.29",
+    "imdone-core": "1.2.32",
     "sortablejs": "1.2.0"
   },
   "providedServices": {
