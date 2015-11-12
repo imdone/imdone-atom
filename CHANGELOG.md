@@ -1,3 +1,6 @@
+## 1.1.56
+* Add emitter for plugins and emit board.update
+
 ## 1.1.55
 * Only emit config.update on watched repo
 * On renameList return if old and new name are the same
