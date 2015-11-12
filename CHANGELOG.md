@@ -1,3 +1,6 @@
+## 1.1.57
+* Remove plugin view on plugin.removed
+
 ## 1.1.56
 * Add emitter for plugins and emit board.update
 
@@ -167,4 +170,4 @@
 
 ----
 
-- [Remember to update changelog before +publishing +package user:piascikj](#DOING:0)
+- [Remember to update changelog before +publishing +package user:piascikj](#DOING:10)

@@ -1,5 +1,6 @@
 {Emitter} = require 'atom'
 
+# #DOING:0 Write docs for creating plugins
 module.exports =
   emitter: new Emitter
   plugins: {}

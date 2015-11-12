@@ -2,7 +2,7 @@
 ----
 ### You live in the code, your tasks should too!
 
-![Create filter and move](https://cloud.githubusercontent.com/assets/233505/9454838/d3784fb2-4a8a-11e5-8503-73bf7a2028f1.gif)
+![gifrecord_2015-11-12_085528](https://cloud.githubusercontent.com/assets/233505/11121461/9899fb14-891b-11e5-8aba-a4646f8b1428.gif)
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
@@ -67,14 +67,14 @@ Roadmap
 Documentation
 ----
 - [ ] #BACKLOG:40 Add rename list gif +help
-- [ ] #BACKLOG:10 Add new list gif +help
-- [ ] #BACKLOG:20 Add hide/show list gif +help
+- [ ] #BACKLOG:20 Add new list gif +help
+- [ ] #TODO:0 Add hide/show list gif +help
 - [ ] #BACKLOG:50 Add move list gif +help
 
 Completed
 ----
 - [x] #DONE:40 Re-apply filter when board is refreshed
-- [x] #DONE:10 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
+- [x] #DONE:20 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
 - [x] #DONE:60 Add list rename +Roadmap
 - [x] #DONE:130 Add help for configuration
 - [x] #DONE:140 Add help for task syntax

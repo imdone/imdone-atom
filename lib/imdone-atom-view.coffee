@@ -145,6 +145,8 @@ class ImdoneAtomView extends ScrollView
         repo.on 'initialized', => @addPlugin(Plugin)
 
     pluginManager.emitter.on 'plugin.removed', (Plugin) =>
+      plugin = @plugins[Plugin.pluginName]
+      @configView.removePlugin plugin if plugin.getView
       delete @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
 
@@ -177,6 +179,7 @@ class ImdoneAtomView extends ScrollView
     else
       plugin = new Plugin @imdoneRepo,
         showPlugin: (plugin) =>
+          return unless plugin.getView
           @configView.showPlugin plugin
         selectTask: (id) =>
           @selectTask id
