@@ -1,3 +1,6 @@
+## 1.1.59
+* Update imdone-core.  Fix task text modification.
+
 ## 1.1.57
 * Remove plugin view on plugin.removed
 

@@ -256,7 +256,7 @@ class ImdoneAtomView extends ScrollView
       opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
       html = task.getHtml(opts)
       $$$ ->
-        @li class: 'task well', id: "#{task.id}", "data-path": task.source.path, =>
+        @li class: 'task well', id: "#{task.id}", "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
           @div class: 'imdone-task-plugins'
