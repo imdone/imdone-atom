@@ -2,6 +2,8 @@
 ----
 ### You live in the code, your tasks should too!
 
+**Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**
+
 ![gifrecord_2015-11-12_085528](https://cloud.githubusercontent.com/assets/233505/11121461/9899fb14-891b-11e5-8aba-a4646f8b1428.gif)
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
@@ -62,7 +64,6 @@ Roadmap
 ----
 - [ ] #BACKLOG:30 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #DONE:0 Provide service for plugins
 
 Documentation
 ----
@@ -73,6 +74,7 @@ Documentation
 
 Completed
 ----
+- [x] #DONE:0 Provide service for plugins
 - [x] #DONE:40 Re-apply filter when board is refreshed
 - [x] #DONE:20 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
 - [x] #DONE:60 Add list rename +Roadmap

@@ -1,3 +1,6 @@
+## 1.1.60
+* Just a readme update
+
 ## 1.1.59
 * Update imdone-core.  Fix task text modification.
 
