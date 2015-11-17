@@ -33,7 +33,7 @@ class ConfigView extends View
     @handleEvents()
 
   handleEvents: ->
-    # #DONE:10 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
+    # #DONE:20 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>

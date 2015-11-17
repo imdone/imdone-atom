@@ -2,17 +2,20 @@
 ----
 ### You live in the code, your tasks should too!
 
-**Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**
-
 ![gifrecord_2015-11-12_085528](https://cloud.githubusercontent.com/assets/233505/11121461/9899fb14-891b-11e5-8aba-a4646f8b1428.gif)
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
+**Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**
 
 Developers are creative people and the text editor is their canvas.  For decades they've used TODO style code comments to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that integrates with any web based issue tracking system.
 
 imdone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
+
+Plugin architecture
+----
+Visit the wiki page [How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins) to find out more.
 
 Install
 ----
@@ -74,10 +77,10 @@ Documentation
 
 Completed
 ----
-- [x] #DONE:0 Provide service for plugins
-- [x] #DONE:40 Re-apply filter when board is refreshed
-- [x] #DONE:20 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
-- [x] #DONE:60 Add list rename +Roadmap
-- [x] #DONE:130 Add help for configuration
-- [x] #DONE:140 Add help for task syntax
-- [x] #DONE:160 Add help for todo.txt syntax
+- [x] #DONE:10 Provide service for plugins
+- [x] #DONE:50 Re-apply filter when board is refreshed
+- [x] #DONE:30 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
+- [x] #DONE:70 Add list rename +Roadmap
+- [x] #DONE:140 Add help for configuration
+- [x] #DONE:150 Add help for task syntax
+- [x] #DONE:170 Add help for todo.txt syntax
