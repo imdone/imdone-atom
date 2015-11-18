@@ -1,4 +1,7 @@
 ## 1.2.1
+* Fix styles for light themes
+
+## 1.2.1
 * Update sortable package
 
 ## 1.2.0

@@ -9,6 +9,8 @@
 @board-list-name-width: 330px;
 @config-height: 300px;
 @task-font-size: 14px;
+// @task-background-color: @inset-panel-background-color;
+@task-background-color: @tab-background-color;
 
 .imdone-atom {
   .btn {
@@ -92,7 +94,7 @@
     position:absolute;
     top: 0;
     bottom: 0;
-    left: -200px;
+    left: -196px;
     width: @menu-width;
     z-index: 1;
     background-color: @base-background-color;
@@ -175,7 +177,7 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 24px;
+    left: 32px;
     right: 0;
     overflow: auto;
     &.shift {
@@ -192,7 +194,7 @@
         background-color: @panel-heading-background-color;
         margin-right: 10px;
         .list-name-wrapper {
-          background-color: @inset-panel-background-color;
+          background-color: @task-background-color;
           font-size: 1.5em;
           padding: .5em;
           .list-name {
@@ -216,13 +218,13 @@
           padding-left: 0;
         }
         .task {
-          background-color: @inset-panel-background-color;
+          background-color: @task-background-color;
           font-size: @task-font-size;
           white-space: normal;
           word-wrap: break-word;
           position: relative;
           cursor: move;
-          border: 2px solid @inset-panel-background-color;
+          border: 2px solid @task-background-color;
           .task-text {
             p {
               margin: 0 0 5px;
