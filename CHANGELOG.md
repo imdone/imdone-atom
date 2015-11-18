@@ -1,3 +1,6 @@
+## 1.2.1
+* Update sortable package
+
 ## 1.2.0
 * Official plugin release
 
