@@ -1,4 +1,4 @@
-## 1.2.1
+## 1.2.2
 * Fix styles for light themes
 
 ## 1.2.1
