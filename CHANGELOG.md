@@ -1,3 +1,7 @@
+## 1.2.3
+* Don't add hash to code style tasks
+* Add salesforce extensions
+
 ## 1.2.2
 * Fix styles for light themes
 
