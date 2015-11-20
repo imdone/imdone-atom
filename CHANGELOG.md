@@ -1,3 +1,6 @@
+## 1.2.4
+* Make PluginViewInterface an internal class that extends Emitter
+
 ## 1.2.3
 * Don't add hash to code style tasks
 * Add salesforce extensions

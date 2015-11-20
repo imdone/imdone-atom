@@ -11,7 +11,19 @@ require('./jq-utils')($)
 
 module.exports =
 class ImdoneAtomView extends ScrollView
+  self = this
   atom.deserializers.add(this)
+
+  class PluginViewInterface extends Emitter
+    constructor: (@imdoneView)->
+      super()
+    emitter: -> @ # CHANGED: deprecated
+    selectTask: (id) ->
+      @imdoneView.selectTask id
+    showPlugin: (plugin) ->
+        return unless plugin.getView
+        @imdoneView.configView.showPlugin plugin
+
   @deserialize: ({data}) ->
     imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)
     new ImdoneAtomView(imdoneRepo: imdoneRepo, path: data.path, uri: data.uri)
@@ -56,7 +68,7 @@ class ImdoneAtomView extends ScrollView
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
     @plugins = {}
-    @emitter = new Emitter
+
     @handleEvents()
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
@@ -68,6 +80,7 @@ class ImdoneAtomView extends ScrollView
 
   handleEvents: ->
     repo = @imdoneRepo
+    @emitter = @viewInterface = new PluginViewInterface @
 
     @imdoneRepo.on 'initialized', =>
       @onRepoUpdate()
@@ -177,14 +190,15 @@ class ImdoneAtomView extends ScrollView
     if @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
     else
-      plugin = new Plugin @imdoneRepo,
-        showPlugin: (plugin) =>
-          return unless plugin.getView
-          @configView.showPlugin plugin
-        selectTask: (id) =>
-          @selectTask id
-        emitter: =>
-          @emitter
+      plugin = new Plugin @imdoneRepo, @viewInterface
+      # plugin = new Plugin @imdoneRepo,
+      #   showPlugin: (plugin) =>
+      #     return unless plugin.getView
+      #     @configView.showPlugin plugin
+      #   selectTask: (id) =>
+      #     @selectTask id
+      #   emitter: =>
+      #     @emitter
       @plugins[Plugin.pluginName] = plugin
       if plugin instanceof Emitter
         if plugin.isReady()

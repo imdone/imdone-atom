@@ -21,6 +21,10 @@
   },
   "lists": [
     {
+      "name": "CHANGED",
+      "hidden": true
+    },
+    {
       "name": "BACKLOG",
       "hidden": true
     },
