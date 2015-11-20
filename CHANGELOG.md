@@ -1,3 +1,6 @@
+## 1.2.5
+* Fix todo.txt dates display
+
 ## 1.2.4
 * Make PluginViewInterface an internal class that extends Emitter
 
@@ -145,7 +148,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5](#DONE:90)
+* [Fix config path checking for windows git-iss:5](#DONE:100)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -192,4 +195,4 @@
 
 ----
 
-- [Remember to update changelog before +publishing +package user:piascikj](#DOING:0)
+- #DOING:0 Remember to update changelog before @piascikj +publishing +package

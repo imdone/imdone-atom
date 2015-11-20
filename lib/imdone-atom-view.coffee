@@ -36,7 +36,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Issues."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:180 Update progress bar on repo load
+        # #DONE:190 Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -73,7 +73,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:60 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:70 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -191,14 +191,6 @@ class ImdoneAtomView extends ScrollView
       @addPluginTaskButtons()
     else
       plugin = new Plugin @imdoneRepo, @viewInterface
-      # plugin = new Plugin @imdoneRepo,
-      #   showPlugin: (plugin) =>
-      #     return unless plugin.getView
-      #     @configView.showPlugin plugin
-      #   selectTask: (id) =>
-      #     @selectTask id
-      #   emitter: =>
-      #     @emitter
       @plugins[Plugin.pluginName] = plugin
       if plugin instanceof Emitter
         if plugin.isReady()
@@ -259,7 +251,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:120 Add task drag and drop support
+    # #DONE:130 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -277,7 +269,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:160 Add todo.txt stuff like chrome app!
+          # #DONE:170 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -294,6 +286,29 @@ class ImdoneAtomView extends ScrollView
                     @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
+              # DONE:0 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
+              if dateDue
+                @tr =>
+                  @td "due"
+                  @td dateDue
+                  @td =>
+                    @a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}", =>
+                      @span class:"icon icon-light-bulb"
+              if dateCreated
+                @tr =>
+                  @td "created"
+                  @td dateCreated
+                  @td =>
+                    @a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}", =>
+                      @span class:"icon icon-light-bulb"
+              if dateCompleted
+                @tr =>
+                  @td "completed"
+                  @td dateCompleted
+                  @td =>
+                    # #DONE:110 Implement #filter/*filterRegex* links
+                    @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
+                      @span class:"icon icon-light-bulb"
               for data in task.getMetaDataWithLinks(repo.getConfig())
                 do (data) =>
                   @tr =>
@@ -305,28 +320,6 @@ class ImdoneAtomView extends ScrollView
                       if data.link
                           @a href: data.link.url, title: data.link.title, =>
                             @span class:"icon icon-link-external"
-                if dateDue
-                  @tr =>
-                    @td "due"
-                    @td dateDue
-                    @td =>
-                      @a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}", =>
-                        @span class:"icon icon-light-bulb"
-                if dateCreated
-                  @tr =>
-                    @td "created"
-                    @td dateCreated
-                    @td =>
-                      @a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}", =>
-                        @span class:"icon icon-light-bulb"
-                if dateCompleted
-                  @tr =>
-                    @td "completed"
-                    @td dateCompleted
-                    @td =>
-                      # #DONE:100 Implement #filter/*filterRegex* links
-                      @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
-                        @span class:"icon icon-light-bulb"
           @div class: 'task-source', =>
             @a class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
@@ -338,7 +331,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE:130 Add delete list icon if length is 0
+              # #DONE:140 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'

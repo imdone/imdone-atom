@@ -77,10 +77,10 @@ Documentation
 
 Completed
 ----
-- [x] #DONE:10 Provide service for plugins
-- [x] #DONE:50 Re-apply filter when board is refreshed
-- [x] #DONE:30 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
-- [x] #DONE:70 Add list rename +Roadmap
-- [x] #DONE:140 Add help for configuration
-- [x] #DONE:150 Add help for task syntax
-- [x] #DONE:170 Add help for todo.txt syntax
+- [x] #DONE:20 Provide service for plugins
+- [x] #DONE:60 Re-apply filter when board is refreshed
+- [x] #DONE:40 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
+- [x] #DONE:80 Add list rename +Roadmap
+- [x] #DONE:150 Add help for configuration
+- [x] #DONE:160 Add help for task syntax
+- [x] #DONE:180 Add help for todo.txt syntax
