@@ -11,7 +11,6 @@ require('./jq-utils')($)
 
 module.exports =
 class ImdoneAtomView extends ScrollView
-  self = this
   atom.deserializers.add(this)
 
   class PluginViewInterface extends Emitter
@@ -21,8 +20,8 @@ class ImdoneAtomView extends ScrollView
     selectTask: (id) ->
       @imdoneView.selectTask id
     showPlugin: (plugin) ->
-        return unless plugin.getView
-        @imdoneView.configView.showPlugin plugin
+      return unless plugin.getView
+      @imdoneView.configView.showPlugin plugin
 
   @deserialize: ({data}) ->
     imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)

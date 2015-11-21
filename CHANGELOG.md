@@ -1,3 +1,6 @@
+## 1.2.6
+* imdone-core update for scala and sbt
+
 ## 1.2.5
 * Fix todo.txt dates display
 
