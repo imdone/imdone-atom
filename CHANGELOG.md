@@ -1,3 +1,6 @@
+## 1.2.7
+* imdone-core update for arduino ino files
+
 ## 1.2.6
 * imdone-core update for scala and sbt
 
