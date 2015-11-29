@@ -7,6 +7,7 @@ path = require 'path'
 util = require 'util'
 Sortable = require 'sortablejs'
 pluginManager = require './plugin-manager'
+fileService = require './socket-server'
 require('./jq-utils')($)
 
 module.exports =
@@ -32,7 +33,7 @@ class ImdoneAtomView extends ScrollView
   @content: (params) ->
     @div class: 'imdone-atom pane-item', =>
       @div outlet: 'loading', class: 'imdone-loading', =>
-        @h1 "Loading #{path.basename(params.path)} Issues."
+        @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
         # #DONE:190 Update progress bar on repo load
@@ -115,9 +116,9 @@ class ImdoneAtomView extends ScrollView
         file = @imdoneRepo.getFileForTask(task)
         fullPath = @imdoneRepo.getFullPath file
         paths[fullPath] = task.line
-      for path, line of paths
-        console.log path, line
-        @openPath path, line
+      for fpath, line of paths
+        console.log fpath, line
+        @openPath fpath, line
 
     @menuView.emitter.on 'list.new', => @bottomView.showNewList()
 
@@ -252,7 +253,7 @@ class ImdoneAtomView extends ScrollView
   openIgnore: () ->
     ignorePath = path.join(@imdoneRepo.path, '.imdoneignore')
     item = @
-    atom.workspace.open(ignorePath, split: 'left').done =>
+    atom.workspace.open(ignorePath, split: 'left').then =>
       item.destroy()
 
   onRepoUpdate: ->
@@ -394,9 +395,11 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-
-    atom.workspace.open(filePath, split: 'left').then =>
-      @moveCursorTo(line)
+    # DOING: send the project path issue:48
+    fileService.openFile @path, filePath, line, (success) =>
+      return if success
+      atom.workspace.open(filePath, split: 'left').then =>
+        @moveCursorTo(line) if line
 
   moveCursorTo: (lineNumber) ->
     lineNumber = parseInt(lineNumber)

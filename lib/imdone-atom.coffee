@@ -19,6 +19,14 @@ module.exports = ImdoneAtom =
     fileOpenerPort:
       type: 'integer'
       default: 9799
+    # TODO:0 This is config for globs to open with editors issue:48
+    openIn:
+      description: 'Open files in a different IDE or editor'
+      type: 'object'
+      properties:
+        intellij:
+          type: 'string'
+          default: ''
   subscriptions: null
 
   activate: (state) ->
