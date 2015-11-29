@@ -3,6 +3,7 @@ url = require 'url'
 {CompositeDisposable} = require 'atom'
 path = require 'path'
 imdoneHelper = require './imdone-helper'
+server = require './socket-server'
 
 module.exports = ImdoneAtom =
   config:
@@ -15,6 +16,9 @@ module.exports = ImdoneAtom =
     excludeVcsIgnoredPaths:
       type: 'boolean'
       default: true
+    fileOpenerPort:
+      type: 'integer'
+      default: 9799
   subscriptions: null
 
   activate: (state) ->
@@ -35,6 +39,8 @@ module.exports = ImdoneAtom =
       {protocol, host, pathname} = url.parse(uriToOpen)
       return unless protocol is 'imdone:'
       @viewForUri(uriToOpen)
+
+    @server = server.init atom.config.get('imdone-atom.fileOpenerPort')
 
     # #DONE:120 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 

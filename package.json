@@ -17,10 +17,11 @@
   "repository": "https://github.com/imdone/imdone-atom",
   "license": "MIT",
   "engines": {
-    "atom": ">=1.0.0 <2.0.0"
+    "atom": ">=1.2.4 <2.0.0"
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
+    "engine.io": "^1.5.4",
     "imdone-core": "1.2.36",
     "sortablejs": "1.4.2"
   },

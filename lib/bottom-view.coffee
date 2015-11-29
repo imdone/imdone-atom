@@ -2,7 +2,7 @@
 {Emitter} = require 'atom'
 
 module.exports =
-class ConfigView extends View
+class BottomView extends View
 
   @content: ->
     @div class:'imdone-config-container', =>
@@ -26,7 +26,7 @@ class ConfigView extends View
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
-      # #BACKLOG:10 Add config view here
+      # #BACKLOG:60 Add config view here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter

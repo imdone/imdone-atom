@@ -1,7 +1,7 @@
 {$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
 MenuView = require './menu-view'
-ConfigView = require './config-view'
+BottomView = require './bottom-view'
 imdoneHelper = require './imdone-helper'
 path = require 'path'
 util = require 'util'
@@ -21,7 +21,7 @@ class ImdoneAtomView extends ScrollView
       @imdoneView.selectTask id
     showPlugin: (plugin) ->
       return unless plugin.getView
-      @imdoneView.configView.showPlugin plugin
+      @imdoneView.bottomView.showPlugin plugin
 
   @deserialize: ({data}) ->
     imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)
@@ -53,10 +53,10 @@ class ImdoneAtomView extends ScrollView
             # @div outlet: 'spinner', =>
             #   @span class: 'loading loading-spinner-large inline-block'
         @div class:'imdone-config-wrapper', =>
-          @subview 'configView', new ConfigView(params)
+          @subview 'bottomView', new BottomView(params)
 
   getTitle: ->
-    "#{path.basename(@path)} Issues"
+    @title
 
   getIconName: ->
     "checklist"
@@ -66,7 +66,9 @@ class ImdoneAtomView extends ScrollView
 
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
+    @title = "#{path.basename(@path)} Tasks"
     @plugins = {}
+    @visibleTasks = []
 
     @handleEvents()
     @imdoneRepo.fileStats (err, files) =>
@@ -107,17 +109,27 @@ class ImdoneAtomView extends ScrollView
     @menuView.emitter.on 'filter.clear', =>
       @board.find('.task').show()
 
-    @menuView.emitter.on 'list.new', => @configView.showNewList()
+    @menuView.emitter.on 'filter.open', =>
+      paths = {}
+      for task in @visibleTasks
+        file = @imdoneRepo.getFileForTask(task)
+        fullPath = @imdoneRepo.getFullPath file
+        paths[fullPath] = task.line
+      for path, line of paths
+        console.log path, line
+        @openPath path, line
 
-    @configView.emitter.on 'config.close', =>
+    @menuView.emitter.on 'list.new', => @bottomView.showNewList()
+
+    @bottomView.emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
       @appContainer.css 'bottom', ''
       @clearSelection()
 
-    @configView.emitter.on 'config.open', =>
+    @bottomView.emitter.on 'config.open', =>
       @appContainer.addClass 'shift'
 
-    @configView.emitter.on 'resize.change', (height) =>
+    @bottomView.emitter.on 'resize.change', (height) =>
       @appContainer.css('bottom', height + 'px')
 
     @on 'click', '.source-link',  (e) =>
@@ -126,7 +138,7 @@ class ImdoneAtomView extends ScrollView
 
     @on 'click', '.list-name', (e) =>
       name = e.target.dataset.list
-      @configView.editListName(name)
+      @bottomView.editListName(name)
 
     @on 'click', '.delete-list', (e) =>
       e.stopPropagation()
@@ -158,7 +170,7 @@ class ImdoneAtomView extends ScrollView
 
     pluginManager.emitter.on 'plugin.removed', (Plugin) =>
       plugin = @plugins[Plugin.pluginName]
-      @configView.removePlugin plugin if plugin.getView
+      @bottomView.removePlugin plugin if plugin.getView
       delete @plugins[Plugin.pluginName]
       @addPluginTaskButtons()
 
@@ -179,7 +191,7 @@ class ImdoneAtomView extends ScrollView
 
   addPluginView: (plugin) ->
     return unless plugin.getView
-    @configView.addPlugin plugin
+    @bottomView.addPlugin plugin
 
   initPluginView: (plugin) ->
     @addPluginTaskButtons()
@@ -215,11 +227,17 @@ class ImdoneAtomView extends ScrollView
     @lastFilter = text
     if text == ''
       @board.find('.task').show()
+      @visibleTasks = []
+      @menuView.emitter.emit 'filter.tasks', @visibleTasks
     else
       @board.find('.task').hide()
       @board.find(util.format('.task:regex(data-path,%s)', text)).show()
+      addTask = (id) =>
+        @visibleTasks.push @imdoneRepo.getTask(id)
+        @menuView.emitter.emit 'filter.tasks', @visibleTasks
       @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each( ->
-        $(this).closest('.task').show()
+        id = $(this).closest('.task').show().attr('id')
+        addTask id
       )
 
   initImdone: () ->
@@ -240,7 +258,7 @@ class ImdoneAtomView extends ScrollView
   onRepoUpdate: ->
     @updateBoard()
     @appContainer.css 'bottom', 0
-    @configView.attr 'style', ''
+    @bottomView.attr 'style', ''
     @loading.hide()
     @mainContainer.show()
 
@@ -285,7 +303,7 @@ class ImdoneAtomView extends ScrollView
                     @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE:0 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
+              # DONE:10 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
               if dateDue
                 @tr =>
                   @td "due"
@@ -377,7 +395,7 @@ class ImdoneAtomView extends ScrollView
   openPath: (filePath, line) ->
     return unless filePath
 
-    atom.workspace.open(filePath, split: 'left').done =>
+    atom.workspace.open(filePath, split: 'left').then =>
       @moveCursorTo(line)
 
   moveCursorTo: (lineNumber) ->

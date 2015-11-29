@@ -1,4 +1,4 @@
-// A &#35;HACK:4 ble task-board in your code.
+// A HACK:4 ble task-board in your code.
 ----
 ### You live in the code, your tasks should too!
 
@@ -62,25 +62,3 @@ Using [todo.txt metadata](https://github.com/imdone/imdone-core#metadata) in you
 ![gh-issue-imdone](https://cloud.githubusercontent.com/assets/233505/9595122/72542350-502a-11e5-87b3-a4eb49428b7c.png)
 
 Look at [imdone/imdone-core#metadata](https://github.com/imdone/imdone-core#metadata) for more info.
-
-Roadmap
-----
-- [ ] #BACKLOG:30 Add configuration editor view for .imdone/config.json +Roadmap
-  - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-
-Documentation
-----
-- [ ] #BACKLOG:40 Add rename list gif +help
-- [ ] #BACKLOG:20 Add new list gif +help
-- [ ] #TODO:0 Add hide/show list gif +help
-- [ ] #BACKLOG:50 Add move list gif +help
-
-Completed
-----
-- [x] #DONE:20 Provide service for plugins
-- [x] #DONE:60 Re-apply filter when board is refreshed
-- [x] #DONE:40 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
-- [x] #DONE:80 Add list rename +Roadmap
-- [x] #DONE:150 Add help for configuration
-- [x] #DONE:160 Add help for task syntax
-- [x] #DONE:180 Add help for todo.txt syntax
