@@ -11,6 +11,9 @@ module.exports =
       socket.send JSON.stringify(imdone: 'ready')
       socket.on 'message', (msg) =>
         @onMessage socket, msg
+      socket.on 'close', () =>
+        editor = (key for key, value of @clients when value == socket)
+        delete @clients[editor] if editor
     @isListening = true
     @
 
@@ -40,4 +43,6 @@ module.exports =
     "atom"
 
   getSocket: (editor) ->
-    @clients[editor]
+    socket = @clients[editor]
+    return null unless socket && @server.clients[socket.id] == socket
+    socket
