@@ -5,7 +5,7 @@ module.exports =
 class BottomView extends View
 
   @content: ->
-    @div class:'imdone-config-container', =>
+    @div class:'imdone-config-container hidden', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
         @raw '&times;'
@@ -85,12 +85,14 @@ class BottomView extends View
     unless @isOpen()
       @emitter.emit 'config.open'
       @addClass 'open'
+      @removeClass 'hidden'
 
   hide: ->
     @find('.config-panel').hide()
     if @isOpen()
       @error.empty()
       @removeClass 'open'
+      @addClass 'hidden'
       @css 'height', ''
       @emitter.emit 'config.close'
 

@@ -6,15 +6,21 @@ module.exports =
   clients: {}
   init: (port) ->
     return @ if @isListening
-    @server = engine.listen port
-    @server.on 'connection', (socket) =>
-      socket.send JSON.stringify(imdone: 'ready')
-      socket.on 'message', (msg) =>
-        @onMessage socket, msg
-      socket.on 'close', () =>
-        editor = (key for key, value of @clients when value == socket)
-        delete @clients[editor] if editor
-    @isListening = true
+    # DOING:0 Check if something else is listening on port issue:51
+    http = require('http').createServer()
+    http.on 'error', (err) =>
+      # TODO:0 if something is listening we should connect as a client and use the server as a proxy
+      console.log err
+    http.listen port, =>
+      @server = engine.attach(http);
+      @server.on 'connection', (socket) =>
+        socket.send JSON.stringify(imdone: 'ready')
+        socket.on 'message', (msg) =>
+          @onMessage socket, msg
+        socket.on 'close', () =>
+          editor = (key for key, value of @clients when value == socket)
+          delete @clients[editor] if editor
+      @isListening = true
     @
 
   onMessage: (socket, json) ->
