@@ -1,7 +1,7 @@
 engine = require 'engine.io'
 minimatch = require 'minimatch'
 
-# DOING:0 implement socket server to handle opening files in configured client issue:48
+# DONE:30 implement socket server to handle opening files in configured client issue:48
 module.exports =
   clients: {}
   init: (port) ->
@@ -27,9 +27,8 @@ module.exports =
       console.log 'Error receiving message:', json
 
   openFile: (project, path, line, cb) ->
-    console.log "Trying to open project:#{project} path:#{path} line:#{line}"
     editor = @getEditor path
-    # TODO:10 only send open request to editors who deserve them issue:48
+    # DONE:10 only send open request to editors who deserve them issue:48
     socket = @getSocket editor
     return cb(false) unless socket
     socket.send JSON.stringify({project, path, line}), () ->

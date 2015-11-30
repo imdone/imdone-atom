@@ -36,7 +36,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:190 Update progress bar on repo load
+        # #DONE:230 Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -75,7 +75,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:70 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:110 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -269,7 +269,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:130 Add task drag and drop support
+    # #DONE:170 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -287,7 +287,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:170 Add todo.txt stuff like chrome app!
+          # #DONE:210 Add todo.txt stuff like chrome app!
           if contexts
             @div =>
               for context, i in contexts
@@ -304,7 +304,7 @@ class ImdoneAtomView extends ScrollView
                     @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE:10 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
+              # DONE:50 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
               if dateDue
                 @tr =>
                   @td "due"
@@ -324,7 +324,7 @@ class ImdoneAtomView extends ScrollView
                   @td "completed"
                   @td dateCompleted
                   @td =>
-                    # #DONE:110 Implement #filter/*filterRegex* links
+                    # #DONE:150 Implement #filter/*filterRegex* links
                     @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                       @span class:"icon icon-light-bulb"
               for data in task.getMetaDataWithLinks(repo.getConfig())
@@ -349,7 +349,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE:140 Add delete list icon if length is 0
+              # #DONE:180 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
@@ -395,7 +395,7 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-    # DOING: send the project path issue:48
+    # DONE:20 send the project path issue:48
     fileService.openFile @path, filePath, line, (success) =>
       return if success
       atom.workspace.open(filePath, split: 'left').then =>

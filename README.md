@@ -7,15 +7,15 @@
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
-**Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**
-
 Developers are creative people and the text editor is their canvas.  For decades they've used TODO style code comments to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that integrates with any web based issue tracking system.
 
 imdone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
-Plugin architecture
+Whats new!
 ----
-Visit the wiki page [How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins) to find out more.
+- **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products!**
+- **Visit the wiki page [How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins).**
+- **Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**
 
 Install
 ----

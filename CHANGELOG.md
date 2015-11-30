@@ -1,3 +1,7 @@
+## 1.3.0
+* :zap: Zap! Open files for all filtered tasks.
+* Open files in intellij
+
 ## 1.2.7
 * imdone-core update for arduino ino files
 
@@ -154,7 +158,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5](#DONE:100)
+* [Fix config path checking for windows git-iss:5](#DONE:140)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -201,4 +205,4 @@
 
 ----
 
-- #DOING:10 Remember to update changelog before @piascikj +publishing +package
+- #DOING:0 Remember to update changelog before +publishing +package @piascikj
