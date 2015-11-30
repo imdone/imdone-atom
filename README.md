@@ -13,8 +13,9 @@ imdone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 
 Whats new!
 ----
-- **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products!**
-- **Visit the wiki page [How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins).**
+- :zap: **Open all files for filtered tasks!**
+- **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
+- **[How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins) for imdone-atom**
 - **Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**
 
 Install
