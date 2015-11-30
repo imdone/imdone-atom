@@ -1,3 +1,7 @@
+## 1.3.2
+* Fix bottom view
+* Fix address in use error
+
 ## 1.3.0
 * :zap: Zap! Open files for all filtered tasks.
 * Open files in intellij
