@@ -33,7 +33,7 @@ class BottomView extends View
     @handleEvents()
 
   handleEvents: ->
-    # #DONE:70 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
+    # #DONE:90 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>

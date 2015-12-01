@@ -1,15 +1,19 @@
 engine = require 'engine.io'
 minimatch = require 'minimatch'
 
-# DONE:30 implement socket server to handle opening files in configured client issue:48
+# DONE:50 implement socket server to handle opening files in configured client issue:48
 module.exports =
   clients: {}
   init: (port) ->
     return @ if @isListening
-    # DOING:0 Check if something else is listening on port issue:51
+    # DONE:10 Check if something else is listening on port issue:51
     http = require('http').createServer()
     http.on 'error', (err) =>
-      # TODO:0 if something is listening we should connect as a client and use the server as a proxy
+      if (err.code == 'EADDRINUSE')
+        console.log 'port in use'
+        # TODO:0 First check if it's imdone listening on the port issue:52
+        # TODO:10 if imdone is listening we should connect as a client and use the server as a proxy issue:52
+        # TODO:20 if imdone is not listening we should ask for another port issue:52
       console.log err
     http.listen port, =>
       @server = engine.attach(http);
@@ -34,7 +38,7 @@ module.exports =
 
   openFile: (project, path, line, cb) ->
     editor = @getEditor path
-    # DONE:10 only send open request to editors who deserve them issue:48
+    # DONE:30 only send open request to editors who deserve them issue:48
     socket = @getSocket editor
     return cb(false) unless socket
     socket.send JSON.stringify({project, path, line}), () ->

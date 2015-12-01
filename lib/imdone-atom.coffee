@@ -16,10 +16,14 @@ module.exports = ImdoneAtom =
     excludeVcsIgnoredPaths:
       type: 'boolean'
       default: true
+    showNotifications:
+      description: 'Show notifications upon clicking task source link.'
+      type: 'boolean'
+      default: false
     fileOpenerPort:
       type: 'integer'
       default: 9799
-    # DONE:0 This is config for globs to open with editors issue:48
+    # DONE:20 This is config for globs to open with editors issue:48
     openIn:
       description: 'Open files in a different IDE or editor'
       type: 'object'
@@ -30,7 +34,7 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # #DONE:130 Add back serialization (The right way) +Roadmap @testing
+    # #DONE:150 Add back serialization (The right way) +Roadmap @testing
     atom.deserializers.deserialize(state) if (state)
     @subscriptions = new CompositeDisposable
 
@@ -50,7 +54,7 @@ module.exports = ImdoneAtom =
 
     @server = server.init atom.config.get('imdone-atom.fileOpenerPort')
 
-    # #DONE:160 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
+    # #DONE:180 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()
@@ -68,7 +72,7 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath
-      # #DONE:90 This fails for projects that start with the name of another project
+      # #DONE:110 This fails for projects that start with the name of another project
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]

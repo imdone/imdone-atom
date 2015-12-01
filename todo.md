@@ -10,9 +10,9 @@ Roadmap
 Completed
 ----
 - [x] #BACKLOG:10 Provide on-line service for installing plugins to a team
-- [x] #DONE:100 Re-apply filter when board is refreshed
-- [x] #DONE:80 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
-- [x] #DONE:120 Add list rename +Roadmap
-- [x] #DONE:190 Add help for configuration
-- [x] #DONE:200 Add help for task syntax
-- [x] #DONE:220 Add help for todo.txt syntax
+- [x] #DONE:120 Re-apply filter when board is refreshed
+- [x] #DONE:100 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
+- [x] #DONE:140 Add list rename +Roadmap
+- [x] #DONE:210 Add help for configuration
+- [x] #DONE:220 Add help for task syntax
+- [x] #DONE:240 Add help for todo.txt syntax
