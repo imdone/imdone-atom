@@ -69,7 +69,7 @@ class ImdoneAtomView extends ScrollView
     super
     @title = "#{path.basename(@path)} Tasks"
     @plugins = {}
-    @visibleTasks = []
+    @filteredTasks = []
 
     @handleEvents()
     @imdoneRepo.fileStats (err, files) =>
@@ -112,7 +112,7 @@ class ImdoneAtomView extends ScrollView
 
     @menuView.emitter.on 'filter.open', =>
       paths = {}
-      for task in @visibleTasks
+      for task in @filteredTasks
         file = @imdoneRepo.getFileForTask(task)
         fullPath = @imdoneRepo.getFullPath file
         paths[fullPath] = task.line
@@ -231,20 +231,19 @@ class ImdoneAtomView extends ScrollView
   filter: (text) ->
     text = @getFilter() unless text
     @lastFilter = text
+    @filteredTasks = []
     if text == ''
       @board.find('.task').show()
-      @visibleTasks = []
-      @menuView.emitter.emit 'filter.tasks', @visibleTasks
     else
       @board.find('.task').hide()
       @board.find(util.format('.task:regex(data-path,%s)', text)).show()
       addTask = (id) =>
-        @visibleTasks.push @imdoneRepo.getTask(id)
-        @menuView.emitter.emit 'filter.tasks', @visibleTasks
+        @filteredTasks.push @imdoneRepo.getTask(id)
       @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each( ->
         id = $(this).closest('.task').show().attr('id')
         addTask id
       )
+    @menuView.emitter.emit 'filter.tasks', @filteredTasks
 
   initImdone: () ->
     if @numFiles > 1000
