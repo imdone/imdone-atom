@@ -1,3 +1,6 @@
+## 1.3.3
+* Fixed :zap: opening too many files.
+
 ## 1.3.2
 * Fix bottom view
 * Fix address in use error
