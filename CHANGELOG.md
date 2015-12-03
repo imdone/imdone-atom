@@ -1,3 +1,6 @@
+## 1.3.4
+* Open first project if command is run with new file
+
 ## 1.3.3
 * Fixed :zap: opening too many files.
 
