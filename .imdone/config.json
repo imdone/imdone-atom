@@ -26,7 +26,7 @@
     },
     {
       "name": "BACKLOG",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "TODO",
@@ -38,7 +38,7 @@
     },
     {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     }
   ],
   "marked": {

@@ -1,3 +1,6 @@
+## 1.3.5
+* Fix scroll with keyboard arrows and scroll while dragging task
+
 ## 1.3.4
 * Open first project if command is run with new file
 

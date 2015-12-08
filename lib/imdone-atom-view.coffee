@@ -31,7 +31,7 @@ class ImdoneAtomView extends ScrollView
   serialize: -> { deserializer: 'ImdoneAtomView', data: {path: @path, uri: @uri} }
 
   @content: (params) ->
-    @div class: 'imdone-atom pane-item', =>
+    @div tabindex: -1, class: 'imdone-atom pane-item', =>
       @div outlet: 'loading', class: 'imdone-loading', =>
         @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."
@@ -49,7 +49,7 @@ class ImdoneAtomView extends ScrollView
       @div outlet:'mainContainer', class:'imdone-main-container', =>
         @div outlet: 'appContainer', class:'imdone-app-container', =>
           @subview 'menuView', new MenuView(params)
-          @div outlet: 'boardWrapper', class: 'imdone-board-wrapper', =>
+          @div outlet: 'boardWrapper', class: 'imdone-board-wrapper native-key-bindings', =>
             @div outlet: 'board', class: 'imdone-board'
             # @div outlet: 'spinner', =>
             #   @span class: 'loading loading-spinner-large inline-block'
@@ -65,6 +65,9 @@ class ImdoneAtomView extends ScrollView
   getURI: ->
     @uri
 
+  initialize: ->
+    super
+
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
     @title = "#{path.basename(@path)} Tasks"
@@ -75,7 +78,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:130 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:120 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -84,6 +87,8 @@ class ImdoneAtomView extends ScrollView
     repo = @imdoneRepo
     @emitter = @viewInterface = new PluginViewInterface @
 
+    @on 'focus', (e) =>
+      console.log e.target
     @imdoneRepo.on 'initialized', =>
       @onRepoUpdate()
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
@@ -136,7 +141,7 @@ class ImdoneAtomView extends ScrollView
     @on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
-      # DONE:0 Use setting to determine if we should show a task notification
+      # DONE:10 Use setting to determine if we should show a task notification
       if atom.config.get('imdone-atom.showNotifications')
         taskId = $(link).closest('.task').attr 'id'
         task = @imdoneRepo.getTask taskId
@@ -284,7 +289,7 @@ class ImdoneAtomView extends ScrollView
       opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
       html = task.getHtml(opts)
       $$$ ->
-        @li class: 'task well', id: "#{task.id}", "data-path": task.source.path, "data-line": task.line, =>
+        @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
           @div class: 'imdone-task-plugins'
@@ -308,7 +313,7 @@ class ImdoneAtomView extends ScrollView
                     @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE:70 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
+              # DONE:50 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
               if dateDue
                 @tr =>
                   @td "due"
@@ -343,7 +348,7 @@ class ImdoneAtomView extends ScrollView
                           @a href: data.link.url, title: data.link.title, =>
                             @span class:"icon icon-link-external"
           @div class: 'task-source', =>
-            @a class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
+            @a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
 
     getList = (list) =>
@@ -369,6 +374,7 @@ class ImdoneAtomView extends ScrollView
       group: 'tasks'
       sort: true
       ghostClass: 'imdone-ghost'
+      scroll: @boardWrapper[0]
       onEnd: (evt) ->
         id = evt.item.id
         pos = evt.newIndex
@@ -399,7 +405,7 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-    # DONE:40 send the project path issue:48
+    # DONE:80 send the project path issue:48
     fileService.openFile @path, filePath, line, (success) =>
       return if success
       atom.workspace.open(filePath, split: 'left').then =>

@@ -5,7 +5,7 @@ module.exports =
 class BottomView extends View
 
   @content: ->
-    @div class:'imdone-config-container hidden', =>
+    @div class:'imdone-config-container hidden native-key-bindings', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
         @raw '&times;'
@@ -33,7 +33,7 @@ class BottomView extends View
     @handleEvents()
 
   handleEvents: ->
-    # #DONE:90 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
+    # #DONE:70 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>

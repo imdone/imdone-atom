@@ -1,12 +1,12 @@
 engine = require 'engine.io'
 minimatch = require 'minimatch'
 
-# DONE:50 implement socket server to handle opening files in configured client issue:48
+# DONE:40 implement socket server to handle opening files in configured client issue:48
 module.exports =
   clients: {}
   init: (port) ->
     return @ if @isListening
-    # DONE:10 Check if something else is listening on port issue:51
+    # DONE:0 Check if something else is listening on port issue:51
     http = require('http').createServer()
     http.on 'error', (err) =>
       if (err.code == 'EADDRINUSE')
