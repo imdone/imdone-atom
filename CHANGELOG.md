@@ -1,3 +1,9 @@
+## 1.3.8
+* Update of imdone-core to fix undefined errors on repo.config and repo.files
+
+## 1.3.7
+* Mask board on refresh to prevent race conditions
+
 ## 1.3.6
 * Destroy sortable before removing board.  Fixes sortable errors.  #43
 

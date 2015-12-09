@@ -271,10 +271,10 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
+    @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
     @bottomView.attr 'style', ''
-    @loading.hide()
     @mainContainer.show()
 
   showMask: ->
