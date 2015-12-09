@@ -87,8 +87,6 @@ class ImdoneAtomView extends ScrollView
     repo = @imdoneRepo
     @emitter = @viewInterface = new PluginViewInterface @
 
-    @on 'focus', (e) =>
-      console.log e.target
     @imdoneRepo.on 'initialized', =>
       @onRepoUpdate()
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
@@ -273,6 +271,7 @@ class ImdoneAtomView extends ScrollView
     @mainContainer.show()
 
   updateBoard: ->
+    @destroySortables()
     @board.empty().hide()
     repo = @imdoneRepo
     lists = repo.getVisibleLists()
@@ -369,6 +368,18 @@ class ImdoneAtomView extends ScrollView
 
     @board.append elements
     @addPluginTaskButtons()
+    @makeTasksSortable()
+    @filter()
+    @board.show()
+    @emitter.emit 'board.update'
+
+  destroySortables: ->
+    if @tasksSortables
+      for sortable in @tasksSortables
+        sortable.destroy() if sortable.el
+
+  makeTasksSortable: ->
+    repo = @imdoneRepo
     opts =
       draggable: '.task'
       group: 'tasks'
@@ -383,16 +394,9 @@ class ImdoneAtomView extends ScrollView
         task = repo.getTask id
         repo.moveTasks [task], list, pos
 
-    if @tasksSortables
-      for sortable in @tasksSortables
-        sortable.destroy() if sortable.el
-
     @tasksSortables = tasksSortables = []
     @find('.tasks').each ->
       tasksSortables.push(Sortable.create $(this).get(0), opts)
-    @filter()
-    @board.show()
-    @emitter.emit 'board.update'
 
   destroy: ->
     @emitter.emit 'did-destroy', @

@@ -1,3 +1,6 @@
+## 1.3.6
+* Destroy sortable before removing board.  Fixes sortable errors.  #43
+
 ## 1.3.5
 * Fix scroll with keyboard arrows and scroll while dragging task
 
