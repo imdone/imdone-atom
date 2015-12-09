@@ -1,3 +1,6 @@
+## 1.3.10
+* Hide loading
+
 ## 1.3.8
 * Update of imdone-core to fix undefined errors on repo.config and repo.files
 
