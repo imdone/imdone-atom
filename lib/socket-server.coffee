@@ -11,9 +11,9 @@ module.exports =
     http.on 'error', (err) =>
       if (err.code == 'EADDRINUSE')
         console.log 'port in use'
-        # TODO:0 First check if it's imdone listening on the port issue:52
-        # TODO:10 if imdone is listening we should connect as a client and use the server as a proxy issue:52
-        # TODO:20 if imdone is not listening we should ask for another port issue:52
+        # TODO:10 First check if it's imdone listening on the port issue:52
+        # TODO:20 if imdone is listening we should connect as a client and use the server as a proxy issue:52
+        # TODO:0 if imdone is not listening we should ask for another port issue:52
       console.log err
     http.listen port, =>
       @server = engine.attach(http);

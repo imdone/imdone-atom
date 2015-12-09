@@ -46,6 +46,11 @@ class ImdoneAtomView extends ScrollView
         @div outlet: 'progressContainer', style: 'display: none;', =>
           @progress class:'inline-block', outlet: 'progress', max:100, value:1
       @div outlet: 'error', class: 'imdone-error'
+      @div outlet: 'mask', class: 'mask', =>
+        @div class: 'spinner-mask'
+        @div class: 'spinner-container' #, =>
+          # @div class: 'spinner', =>
+            # @span class:'loading loading-spinner-large inline-block'
       @div outlet:'mainContainer', class:'imdone-main-container', =>
         @div outlet: 'appContainer', class:'imdone-app-container', =>
           @subview 'menuView', new MenuView(params)
@@ -124,6 +129,8 @@ class ImdoneAtomView extends ScrollView
         @openPath fpath, line
 
     @menuView.emitter.on 'list.new', => @bottomView.showNewList()
+
+    @menuView.emitter.on 'repo.change', => @showMask()
 
     @bottomView.emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
@@ -270,6 +277,9 @@ class ImdoneAtomView extends ScrollView
     @loading.hide()
     @mainContainer.show()
 
+  showMask: ->
+    @mask.show()
+
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()
@@ -371,6 +381,7 @@ class ImdoneAtomView extends ScrollView
     @makeTasksSortable()
     @filter()
     @board.show()
+    @mask.hide()
     @emitter.emit 'board.update'
 
   destroySortables: ->
@@ -379,20 +390,20 @@ class ImdoneAtomView extends ScrollView
         sortable.destroy() if sortable.el
 
   makeTasksSortable: ->
-    repo = @imdoneRepo
     opts =
       draggable: '.task'
       group: 'tasks'
       sort: true
       ghostClass: 'imdone-ghost'
       scroll: @boardWrapper[0]
-      onEnd: (evt) ->
+      onEnd: (evt) =>
         id = evt.item.id
         pos = evt.newIndex
         list = evt.item.parentNode.dataset.list
-        filePath = repo.getFullPath evt.item.dataset.path
-        task = repo.getTask id
-        repo.moveTasks [task], list, pos
+        filePath = @imdoneRepo.getFullPath evt.item.dataset.path
+        task = @imdoneRepo.getTask id
+        @showMask()
+        @imdoneRepo.moveTasks [task], list, pos
 
     @tasksSortables = tasksSortables = []
     @find('.tasks').each ->

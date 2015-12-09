@@ -54,9 +54,13 @@ class MenuView extends View
   openFiltered: ->
     @emitter.emit 'filter.open'
 
+  emitRepoChange: ->
+    @emitter.emit 'repo.change'
+
   handleEvents: ->
     repo = @imdoneRepo
     @on 'click', '.toggle-list', (e) =>
+      @emitRepoChange()
       target = e.target
       name = target.dataset.list || target.parentElement.dataset.list
       if (repo.getList(name).hidden)
@@ -106,7 +110,8 @@ class MenuView extends View
       draggable: 'li'
       handle: '.reorder'
       ghostClass: 'imdone-ghost'
-      onEnd: (evt) ->
+      onEnd: (evt) =>
+        @emitRepoChange()
         name = evt.item.dataset.list
         pos = evt.newIndex
         repo.moveList name, pos
