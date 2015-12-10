@@ -22,7 +22,7 @@
   "dependencies": {
     "atom-space-pen-views": "^2.0.5",
     "engine.io": "^1.5.4",
-    "imdone-core": "1.2.38",
+    "imdone-core": "1.2.39",
     "minimatch": "^3.0.0",
     "sortablejs": "1.4.2"
   },

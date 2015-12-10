@@ -10,6 +10,7 @@ pluginManager = require './plugin-manager'
 fileService = require './socket-server'
 require('./jq-utils')($)
 
+# DOING:30 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)

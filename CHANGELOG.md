@@ -1,3 +1,6 @@
+## 1.3.11
+* Update imdone-core for perl 6 support
+
 ## 1.3.10
 * Hide loading
 
@@ -230,4 +233,4 @@
 
 ----
 
-- #DOING:0 Remember to update changelog before +publishing +package @piascikj
+- #DOING:40 Remember to update changelog before +publishing +package @piascikj
