@@ -1,3 +1,7 @@
+## 1.3.12
+* Add support for java .properties and salesforce .cmp
+* Update chokidar lib
+
 ## 1.3.11
 * Update imdone-core for perl 6 support
 

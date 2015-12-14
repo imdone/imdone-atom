@@ -272,6 +272,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
+    # DOING: This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
@@ -380,10 +381,10 @@ class ImdoneAtomView extends ScrollView
 
     @board.append elements
     @addPluginTaskButtons()
-    @makeTasksSortable()
     @filter()
     @board.show()
     @mask.hide()
+    @makeTasksSortable()
     @emitter.emit 'board.update'
 
   destroySortables: ->
