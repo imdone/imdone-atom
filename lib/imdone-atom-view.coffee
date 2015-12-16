@@ -10,7 +10,7 @@ pluginManager = require './plugin-manager'
 fileService = require './socket-server'
 require('./jq-utils')($)
 
-# DOING:30 Add keen stats for features
+# DOING:10 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
@@ -272,7 +272,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # DOING: This should be queued so two updates don't colide
+    # TODO:0 This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0

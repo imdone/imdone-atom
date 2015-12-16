@@ -37,8 +37,12 @@
       "hidden": false
     },
     {
+      "name": "READY",
+      "hidden": false
+    },
+    {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     }
   ],
   "marked": {

@@ -1,3 +1,6 @@
+## 1.3.13
+* Use proxy imdone when multiple instances are running and opening files in external editors
+
 ## 1.3.12
 * Add support for java .properties and salesforce .cmp
 * Update chokidar lib
@@ -237,4 +240,4 @@
 
 ----
 
-- #DOING:40 Remember to update changelog before +publishing +package @piascikj
+- #DOING:20 Remember to update changelog before +publishing +package @piascikj
