@@ -38,11 +38,11 @@
     },
     {
       "name": "READY",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DONE",
-      "hidden": false
+      "hidden": true
     }
   ],
   "marked": {
