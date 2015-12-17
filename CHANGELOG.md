@@ -1,3 +1,8 @@
+## 1.3.14
+* Allow `-` and `_` in code task names
+* Fix backspace issues in text fields
+* Add .cljc and .cljs extensions
+
 ## 1.3.13
 * Use proxy imdone when multiple instances are running and opening files in external editors
 

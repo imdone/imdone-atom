@@ -5,7 +5,7 @@ module.exports =
 class BottomView extends View
 
   @content: ->
-    @div class:'imdone-config-container hidden native-key-bindings', =>
+    @div class:'imdone-config-container hidden', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
         @raw '&times;'
@@ -60,17 +60,17 @@ class BottomView extends View
 
     @newListField.on 'keyup', (e) =>
       code = e.keyCode || e.which
-      if(code == 13)
-        @doNewList()
-      if(code ==27)
-        @cancelNewList()
+      switch code
+        when 13 then @doNewList()
+        when 27 then @cancelNewList()
+      true
 
     @renameListField.on 'keyup', (e) =>
       code = e.keyCode || e.which
-      if(code == 13)
-        @doListRename()
-      if(code ==27)
-        @cancelRename()
+      switch code
+        when 13 then @doListRename()
+        when 27 then @cancelRename()
+      true
 
     @imdoneRepo.on 'list.modified', (list) =>
       @hide()
