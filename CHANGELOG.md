@@ -1,3 +1,6 @@
+## 1.3.15
+* Add tasks filtered by file name to zap
+
 ## 1.3.14
 * Allow `-` and `_` in code task names
 * Fix backspace issues in text fields
