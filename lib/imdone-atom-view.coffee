@@ -247,13 +247,14 @@ class ImdoneAtomView extends ScrollView
       @board.find('.task').show()
     else
       @board.find('.task').hide()
-      @board.find(util.format('.task:regex(data-path,%s)', text)).show()
       addTask = (id) =>
         @filteredTasks.push @imdoneRepo.getTask(id)
-      @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each( ->
+      @board.find(util.format('.task:regex(data-path,%s)', text)).each ->
+        id = $(this).show().attr('id')
+        addTask id
+      @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each ->
         id = $(this).closest('.task').show().attr('id')
         addTask id
-      )
     @menuView.emitter.emit 'filter.tasks', @filteredTasks
 
   initImdone: () ->
