@@ -1,3 +1,6 @@
+## 1.3.16
+* Add the daily journal feature
+
 ## 1.3.15
 * Add tasks filtered by file name to zap
 
@@ -248,4 +251,4 @@
 
 ----
 
-- #DOING:20 Remember to update changelog before +publishing +package @piascikj
+- #DOING:30 Remember to update changelog before +publishing +package @piascikj

@@ -1,13 +1,17 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'imdone - Show Tasks'
+      'label': 'Open imdone task-board'
       'command': 'imdone-atom:tasks'
+    },
+    {
+      'label': "Today's Journal"
+      'command': 'imdone-atom:todays-journal'
     }
   ],
   '.tree-view.full-menu': [
     {
-      'label': 'imdone - Show Tasks'
+      'label': 'Open imdone task-board'
       'command': 'imdone-atom:tasks'
     }
   ]
@@ -18,8 +22,12 @@
       'label': 'imdone'
       'submenu': [
         {
-          'label': 'Show Tasks'
+          'label': 'Open imdone task-board'
           'command': 'imdone-atom:tasks'
+        },
+        {
+          'label': "Today's Journal"
+          'command': 'imdone-atom:todays-journal'
         }
       ]
     ]

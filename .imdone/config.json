@@ -22,7 +22,7 @@
   "lists": [
     {
       "name": "CHANGED",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "BACKLOG",
