@@ -43,6 +43,10 @@
     {
       "name": "DONE",
       "hidden": false
+    },
+    {
+      "name": "ARCHIVE",
+      "hidden": false
     }
   ],
   "marked": {

@@ -1,6 +1,8 @@
-engine = require 'engine.io'
+engine    = require 'engine.io'
 eioClient = require 'engine.io-client'
 minimatch = require 'minimatch'
+log       = require './log'
+
 
 # DONE:70 implement socket server to handle opening files in configured client issue:48
 module.exports =
@@ -13,7 +15,7 @@ module.exports =
       if (err.code == 'EADDRINUSE')
         console.log 'port in use'
         @tryProxy port
-      console.log err
+      log err
     http.listen port, =>
       @server = engine.attach(http);
       @server.on 'connection', (socket) =>
@@ -30,17 +32,17 @@ module.exports =
   tryProxy: (port) ->
     # DONE:0 First check if it's imdone listening on the port issue:52
     # DONE:10 if imdone is listening we should connect as a client and use the server as a proxy issue:52
-    # DOING:0 if imdone is not listening we should ask for another port issue:52
-    console.log 'Trying proxy'
+    # DOING:20 if imdone is not listening we should ask for another port issue:52
+    log 'Trying proxy'
     socket = eioClient('ws://localhost:' + port)
     socket.on 'open', =>
       socket.send JSON.stringify(hello: 'imdone')
     socket.on 'message', (json) =>
       msg = JSON.parse json
-      console.log 'Proxy success'
+      log 'Proxy success'
       @proxy = socket if msg.imdone
     socket.on 'close', =>
-      console.log 'Proxy server closed connection.  Trying to start server'
+      log 'Proxy server closed connection.  Trying to start server'
       @init port
 
   onMessage: (socket, json) ->
@@ -50,7 +52,7 @@ module.exports =
         @clients[msg.hello] = socket
       if (msg.isProxied)
         @openFile msg.project, msg.path, msg.line, () ->
-      console.log 'message received:', msg
+      log 'message received:', msg
     catch error
       console.log 'Error receiving message:', json
 

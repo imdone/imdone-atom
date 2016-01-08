@@ -1,5 +1,6 @@
 ImdoneRepo = require 'imdone-core/lib/repository'
-fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
+# fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
+fsStore = require './atom-watched-fs-store'
 path = require 'path'
 
 module.exports =

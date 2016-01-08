@@ -13,7 +13,7 @@ imdone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 
 Whats new!
 ----
-- :notebook_with_decorative_cover: Todays's Journal - Open today's journal file as configured in settings.  Great for people who like to keep plain text notes.
+- :notebook_with_decorative_cover: **Todays's Journal** - Open today's journal file as configured in settings.  Great for people who like to keep plain text notes.
 - :zap: **Open all files for filtered tasks!**
 - **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
 - **[How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins) for imdone-atom**
@@ -25,6 +25,13 @@ Install
 $ apm install imdone-atom
 ```
 or open Atom and go to Preferences > Install and search for `imdone-atom`
+
+Commands
+----
+| Command Palette               | Key Mapping  | Description              |
+|:------------------------------|:-------------|:-------------------------|
+| `Imdone Atom: Tasks`          | Alt+T        | Open task board          |
+| `Imdone Atom: Todays Journal` | Ctrl+Shift+J | Open todays journal file |
 
 Ignoring files
 ----

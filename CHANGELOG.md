@@ -1,3 +1,7 @@
+## 1.3.17
+* Changed "show board" key mapping to Alt+T to reduce likelihood of conflict with atom core
+* Use atoms own pathwatcher module in place of imdone-core/repo-watched-fs-store
+
 ## 1.3.16
 * Add the daily journal feature
 
@@ -251,4 +255,4 @@
 
 ----
 
-- #DOING:30 Remember to update changelog before +publishing +package @piascikj
+- #DOING:40 Remember to update changelog before +publishing +package @piascikj
