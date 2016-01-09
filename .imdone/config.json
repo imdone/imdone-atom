@@ -26,7 +26,7 @@
     },
     {
       "name": "BACKLOG",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "TODO",

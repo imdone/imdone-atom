@@ -32,6 +32,17 @@ class Watcher
     relPath = @repo.getRelativePath entry.getPath()
     relPath.indexOf(constants.IGNORE_FILE) > -1
 
+  isReallyChanged: (entry) ->
+    # DONE:0 Make sure the digest has changed
+    file = (file for file in entry.getParent().getEntriesSync() when entry.getPath() == file.getPath())[0]
+    watcher = @watched[entry.getPath()]
+    digest = file.getDigestSync()
+    log "#{file.getPath()}:#{digest}"
+    return true unless file && watcher
+    return false unless digest != watcher.digest
+    watcher.digest = digest
+    true
+
   fileInRepo: (entry) ->
     relPath = @repo.getRelativePath entry.getPath()
     @repo.getFile(relPath)
@@ -43,8 +54,8 @@ class Watcher
       @watchFile file for file in entries when (file.isFile() && !@shouldExclude(file.getPath()))
 
   watchFile: (entry) ->
-    @fileAdded entry unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry)
     @watchPath entry
+    @fileAdded entry unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry)
 
   watchPath: (entry) ->
     path = entry.getPath()
@@ -80,6 +91,7 @@ class Watcher
 
   fileChanged: (entry) ->
     log "fileChanged #{entry.getPath()}"
+    return unless @isReallyChanged entry
     relPath = @repo.getRelativePath entry.getPath()
     file = @repo.getFile(relPath) || relPath
     if (@isImdoneConfig(entry) || @isImdoneIgnore(entry))
@@ -92,6 +104,7 @@ class Watcher
 
   fileAdded: (entry) ->
     log "fileAdded #{entry.getPath()}"
+    return unless @isReallyChanged entry
     relPath = @repo.getRelativePath entry.getPath()
     file = new File(repoId: @repo.getId(), filePath: relPath, languages: @repo.languages)
     @repo.fileOK file, (err, stat) =>
