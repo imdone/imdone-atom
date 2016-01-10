@@ -1,3 +1,6 @@
+## 1.3.18
+* Fix `Uncaught TypeError: Cannot read property 'getDigestSync' of undefined #64`
+
 ## 1.3.17
 * Changed "show board" key mapping to Alt+T to reduce likelihood of conflict with atom core
 * Use atoms own pathwatcher module in place of imdone-core/repo-watched-fs-store
