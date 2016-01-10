@@ -36,9 +36,9 @@ class Watcher
     # DONE:0 Make sure the digest has changed
     file = (file for file in entry.getParent().getEntriesSync() when entry.getPath() == file.getPath())[0]
     watcher = @watched[entry.getPath()]
+    return true unless file && watcher
     digest = file.getDigestSync()
     log "#{file.getPath()}:#{digest}"
-    return true unless file && watcher
     return false unless digest != watcher.digest
     watcher.digest = digest
     true
