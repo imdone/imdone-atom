@@ -14,16 +14,18 @@ class HashCompositeDisposable extends CompositeDisposable
 
   add: (path, disposable) ->
     @watched[path] = {disposables:[]} unless @watched[path]
+    @remove disposable
     @watched[path].disposables.push disposable
     super disposable
 
   remove: (path) ->
+    return super(path) unless typeof path is 'string'
     return unless @watched[path] && @watched[path].disposables
     log "disposable removed for #{path}"
     super(disposable) for disposable in @watched[path].disposables
     delete @watched[path]
 
-  removeChildren: (dir) ->
+  removeDir: (dir) ->
     @remove dir
     dir += sep
     @remove path for path, watched of @watched when path.indexOf(dir) == 0
@@ -101,16 +103,23 @@ class Watcher
         @watched.add path, entry.onDidChange =>
           @dirChanged entry
       if entry.isFile()
-        @watched.add path, entry.onDidChange =>
-          @fileChanged entry
-        @watched.add path, entry.onDidRename =>
-          @fileRenamed entry
-        @watched.add path, entry.onDidDelete =>
-          @fileDeleted entry
+        try
+          @watched.add path, entry.onDidChange =>
+            @fileChanged entry
+          @watched.add path, entry.onDidRename =>
+            @fileRenamed entry
+          @watched.add path, entry.onDidDelete =>
+            @fileDeleted entry
+
+  removeDeletedEntries: (entry) ->
+    dirPath = entry.getPath() + sep
+    @fileDeleted path for path, watcher of @watched.watched when path.indexOf(dirPath) == 0 && !fs.existsSync path
 
   dirChanged: (entry) ->
     log "dirChanged #{entry.getPath()}"
     if (fs.existsSync(entry.getPath()))
+      log "*** #{entry.getPath()} exists and hasNewChildren: #{@hasNewChildren entry}"
+      @removeDeletedEntries entry
       @watchDir entry if (@hasNewChildren(entry))
       # on mkdir this fires once for the parent of the dir added
       # on touch this fires twice for the parent of the file touched
@@ -119,20 +128,7 @@ class Watcher
     else
       # dirChanged fires once per child file and dir in the deleted entry and once for the parrent entry
       log "removing children of #{entry.getPath()}"
-      @watched.removeChildren(entry.getPath())
-
-
-  dirDeleted: (entry) ->
-    log "dirDeleted #{entry.getPath()}"
-    @closeWatcher entry.getPath()
-    dirPath = entry.getPath() + sep
-    return unless @watched && @watched.watched
-    for path, watcher of @watched.watched when path.indexOf(dirPath) == 0
-      relPath = @repo.getRelativePath path
-      file = new File(filePath: relPath)
-      @repo.removeFile file
-      @repo.emitFileUpdate file
-      @closeWatcher path
+      @watched.removeDir(entry.getPath())
 
   fileChanged: (entry) ->
     return unless @isReallyChanged entry
@@ -162,11 +158,12 @@ class Watcher
     log "fileRenamed #{entry.getPath()}"
 
   fileDeleted: (entry) ->
-    log "fileDeleted #{entry.getPath()}"
-    relPath = @repo.getRelativePath entry.getPath()
+    path = if typeof entry is 'string' then entry else entry.getPath()
+    log "fileDeleted #{path}"
+    relPath = @repo.getRelativePath path
     file = new File(repoId: @repo.getId(), filePath: relPath, languages: @repo.languages)
     @repo.removeFile file
-    @closeWatcher entry.getPath()
+    @closeWatcher path
     @repo.emitFileUpdate file
 
 module.exports =  (repo) ->
