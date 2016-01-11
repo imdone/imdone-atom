@@ -1,3 +1,6 @@
+## 1.3.19
+* Remove dependency on pathwatcher
+
 ## 1.3.18
 * Fix `Uncaught TypeError: Cannot read property 'getDigestSync' of undefined #64`
 

@@ -33,7 +33,7 @@ class HashCompositeDisposable extends CompositeDisposable
   get: (path) ->
     return @watched[path]
 
-  dispose: () ->
+  dispose: ->
     @watched = {}
     super()
 
@@ -43,7 +43,9 @@ class Watcher
     @watched = new HashCompositeDisposable
     @watchDir dir
 
-  close: () -> @closeWatcher path for path, watcher of @watched.watched
+  close: ->
+    @closeWatcher path for path, watcher of @watched.watched
+    @watched.dispose()
 
   closeWatcher: (path) ->
     log "Stopped watching #{path}"
