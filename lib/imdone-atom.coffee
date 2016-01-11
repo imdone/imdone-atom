@@ -9,6 +9,10 @@ fileService = require './file-service'
 
 module.exports = ImdoneAtom =
   config:
+    showTagsInline:
+      description: 'Display inline tag and context links in task text?'
+      type: 'boolean'
+      default: false
     maxFilesPrompt:
       description: 'How many files is too many to parse without prompting?'
       type: 'integer'
