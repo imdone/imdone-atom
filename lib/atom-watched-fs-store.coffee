@@ -64,10 +64,15 @@ class Watcher
     relPath = @repo.getRelativePath entry.getPath()
     relPath.indexOf(constants.IGNORE_FILE) > -1
 
+  getWatcher: (pathOrEntry) ->
+    return unless pathOrEntry && @watched
+    path = if typeof pathOrEntry is 'string' then pathOrEntry else pathOrEntry.getPath()
+    @watched.get path
+
   isReallyChanged: (entry) ->
     # DONE:0 Make sure the digest has changedd
     file = (file for file in entry.getParent().getEntriesSync() when entry.getPath() == file.getPath())[0]
-    watcher = @watched.get entry.getPath()
+    watcher = @getWatcher entry
     return true unless file && watcher
     digest = file.getDigestSync()
     log "#{file.getPath()}:#{digest}"
@@ -76,7 +81,7 @@ class Watcher
     true
 
   isNewEntry: (entry) ->
-    return true unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry) || @watched.get entry.getPath()
+    return true unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry) || @getWatcher entry
 
   hasNewChildren: (entry) ->
     newEntries = (entry for entry in entry.getEntriesSync() when @isNewEntry(entry))
@@ -98,8 +103,8 @@ class Watcher
       @fileAdded entry
 
   watchPath: (entry) ->
-    path = entry.getPath()
-    unless @watched.get path
+    unless @getWatcher entry
+      path = entry.getPath()
       log "Watching path #{path}"
       if entry.isDirectory()
         @watched.add path, entry.onDidChange =>

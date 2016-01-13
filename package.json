@@ -23,7 +23,7 @@
     "atom-space-pen-views": "^2.0.5",
     "engine.io": "^1.5.4",
     "engine.io-client": "^1.6.4",
-    "imdone-core": "1.2.42",
+    "imdone-core": "1.2.43",
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.11.0",
