@@ -284,6 +284,11 @@ class ImdoneAtomView extends ScrollView
   showMask: ->
     @mask.show()
 
+  genFilterLink: (opts) ->
+    $$$ ->
+      @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
+        @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
+
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()
@@ -301,6 +306,19 @@ class ImdoneAtomView extends ScrollView
       dateCompleted = task.getDateCompleted()
       opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
       html = task.getHtml(opts)
+
+      if contexts && atom.config.get('imdone-atom.showTagsInline')
+        for context, i in contexts
+          do (context, i) =>
+            html = html.replace( "@#{context}", @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true )
+
+      if tags && atom.config.get('imdone-atom.showTagsInline')
+        for tag, i in tags
+          do (tag, i) =>
+            html = html.replace( "+#{tag}", @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true  )
+
+      self = @;
+
       $$$ ->
         @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
@@ -310,20 +328,18 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-text', =>
             @raw html
           # #DONE:270 Add todo.txt stuff like chrome app!
-          if contexts
+          if contexts && ! atom.config.get('imdone-atom.showTagsInline')
             @div =>
               for context, i in contexts
                 do (context, i) =>
-                  @a href:"#", title: "just show me tasks with @#{context}", class: "filter-link", "data-filter": "@#{context}", =>
-                    @span class: "task-context", context
-                    @span ", " if (i < contexts.length-1)
-          if tags
+                  @raw self.genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context"
+                  @span ", " if (i < contexts.length-1)
+          if tags && ! atom.config.get('imdone-atom.showTagsInline')
             @div =>
               for tag, i in tags
                 do (tag, i) =>
-                  @a href:"#", title: "just show me tasks with +#{tag}", class: "filter-link", "data-filter": "\\+#{tag}", =>
-                    @span class: "task-tags", tag
-                    @span ", " if (i < tags.length-1)
+                  @raw self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags"
+                  @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
               # DONE:90 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
