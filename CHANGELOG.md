@@ -1,3 +1,8 @@
+## 1.3.20
+* The @claytonrcarter release :clap:
+  * Projects can be configured to have optional priority in .imdone/config.json
+  * New configuration for keeping tag and context links inline with the task text
+
 ## 1.3.19
 * Remove dependency on pathwatcher
 

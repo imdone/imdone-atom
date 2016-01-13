@@ -8,6 +8,7 @@ util = require 'util'
 Sortable = require 'sortablejs'
 pluginManager = require './plugin-manager'
 fileService = require './file-service'
+log = require './log'
 require('./jq-utils')($)
 
 # DOING:20 Add keen stats for features
