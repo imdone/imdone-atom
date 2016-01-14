@@ -66,5 +66,6 @@
       "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
       "titleTemplate": "github issue #%s"
     }
-  }
+  },
+  "keepEmptyPriority": false
 }

@@ -1,3 +1,6 @@
+## 1.3.21
+* Enhance binary checking
+
 ## 1.3.20
 * The @claytonrcarter release :clap:
   * Projects can be configured to have optional priority in .imdone/config.json

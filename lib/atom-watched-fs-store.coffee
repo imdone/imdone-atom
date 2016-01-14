@@ -74,11 +74,15 @@ class Watcher
     file = (file for file in entry.getParent().getEntriesSync() when entry.getPath() == file.getPath())[0]
     watcher = @getWatcher entry
     return true unless file && watcher
-    digest = file.getDigestSync()
-    log "#{file.getPath()}:#{digest}"
-    return false unless digest != watcher.digest
-    watcher.digest = digest
-    true
+    try
+      digest = file.getDigestSync()
+      log "#{file.getPath()}:#{digest}"
+      return false unless digest != watcher.digest
+      watcher.digest = digest
+      true
+    catch e
+      log "Error thrown while getting digest", e
+      false
 
   isNewEntry: (entry) ->
     return true unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry) || @getWatcher entry

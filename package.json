@@ -4,9 +4,9 @@
   "version": "1.3.20",
   "description": "A hackable task-board for TODOs, FIXMEs, HACKs, etc in your code.",
   "keywords": [
-    "mvp",
-    "tasks",
     "todo",
+    "fixme",
+    "tasks",
     "productivity",
     "issues"
   ],
@@ -23,7 +23,7 @@
     "atom-space-pen-views": "^2.0.5",
     "engine.io": "^1.5.4",
     "engine.io-client": "^1.6.4",
-    "imdone-core": "1.2.43",
+    "imdone-core": "1.2.44",
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.11.0",
