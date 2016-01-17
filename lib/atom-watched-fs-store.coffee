@@ -8,7 +8,7 @@ log         = require './log'
 
 
 class HashCompositeDisposable extends CompositeDisposable
-  constructor: ->
+  constructor: (@repo)->
     @watched = {}
     super()
 
@@ -40,7 +40,7 @@ class HashCompositeDisposable extends CompositeDisposable
 class Watcher
   constructor: (@repo)->
     dir = (dir for dir in atom.project.getDirectories() when dir.getPath() is @repo.path)[0]
-    @watched = new HashCompositeDisposable
+    @watched = new HashCompositeDisposable(@repo)
     @watchDir dir
 
   close: ->
@@ -51,7 +51,14 @@ class Watcher
     log "Stopped watching #{path}"
     @watched.remove path
 
-  shouldExclude: (path) ->
+  pause: ->
+    @paused = true
+
+  resume: ->
+    @pause = false
+
+  shouldExclude: (pathOrEntry) ->
+    path = if typeof pathOrEntry is 'string' then pathOrEntry else pathOrEntry.getPath()
     relPath = @repo.getRelativePath(path);
     return false if (relPath.indexOf('.imdone') == 0)
     @repo.shouldExclude(relPath);
@@ -70,13 +77,17 @@ class Watcher
     @watched.get path
 
   isReallyChanged: (entry) ->
-    # DONE:0 Make sure the digest has changedd
+    return false if @shouldExclude(entry)
+    log "Checking if #{entry.getPath()} is really changed"
     file = (file for file in entry.getParent().getEntriesSync() when entry.getPath() == file.getPath())[0]
     watcher = @getWatcher entry
     return true unless file && watcher
     try
+      stat = fs.statSync(file.getPath())
+      if stat && stat.mtime
+        return false if watcher.mtime == stat.mtime
+        watcher.mtime = stat.mtime
       digest = file.getDigestSync()
-      log "#{file.getPath()}:#{digest}"
       return false unless digest != watcher.digest
       watcher.digest = digest
       true
@@ -85,7 +96,7 @@ class Watcher
       false
 
   isNewEntry: (entry) ->
-    return true unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry) || @getWatcher entry
+    return true unless @shouldExclude(entry) ||@fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry) || @getWatcher entry
 
   hasNewChildren: (entry) ->
     newEntries = (entry for entry in entry.getEntriesSync() when @isNewEntry(entry))
@@ -105,6 +116,10 @@ class Watcher
     @watchPath entry
     unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry)
       @fileAdded entry
+    file = entry.getPath()
+    watched = @watched.get file
+    watched.mtime = fs.statSync(file).mtime if fs.existsSync(file)
+    watched.digest = entry.getDigestSync()
 
   watchPath: (entry) ->
     unless @getWatcher entry
@@ -112,26 +127,48 @@ class Watcher
       log "Watching path #{path}"
       if entry.isDirectory()
         @watched.add path, entry.onDidChange =>
+          return if @paused
+          log "dirChanged #{entry.getPath()}"
           @dirChanged entry
       if entry.isFile()
         try
           @watched.add path, entry.onDidChange =>
-            @fileChanged entry
+            #log "fileChanged #{entry.getPath()}"
+            # @fileChanged entry
           @watched.add path, entry.onDidRename =>
-            @fileRenamed entry
+            #log "fileRenamed #{entry.getPath()}"
+            # @fileRenamed entry
           @watched.add path, entry.onDidDelete =>
-            @fileDeleted entry
+            #log "fileDeleted #{path}"
+            # @fileDeleted entry
 
   removeDeletedEntries: (entry) ->
     dirPath = entry.getPath() + sep
     @fileDeleted path for path, watcher of @watched.watched when path.indexOf(dirPath) == 0 && !fs.existsSync path
 
+  updateChangedChildren: (dir) ->
+    # DONE:0 Update changed children and return true if there were children changed
+    hasChange = false
+    for entry in dir.getEntriesSync()
+      if entry.isFile() && @isReallyChanged(entry)
+        @fileChanged entry
+        hasChange = true
+    hasChange
+
+  hasChangedChildren: (dir) ->
+    for entry in dir.getEntriesSync()
+      if entry.isFile()
+        isChanged = @isReallyChanged(entry)
+        log "#{entry.getPath()} isChanged: #{isChanged}"
+        return true if isChanged
+
   dirChanged: (entry) ->
-    log "dirChanged #{entry.getPath()}"
     if (fs.existsSync(entry.getPath()))
       log "*** #{entry.getPath()} exists and hasNewChildren: #{@hasNewChildren entry}"
-      @removeDeletedEntries entry
-      @watchDir entry if (@hasNewChildren(entry))
+      if @hasNewChildren(entry)
+        @watchDir entry
+      else if !@updateChangedChildren(entry)
+        @removeDeletedEntries(entry)
       # on mkdir this fires once for the parent of the dir added
       # on touch this fires twice for the parent of the file touched
       # on file modified this fires twice for parent of the file modified
@@ -139,10 +176,11 @@ class Watcher
     else
       # dirChanged fires once per child file and dir in the deleted entry and once for the parrent entry
       log "removing children of #{entry.getPath()}"
+      @removeDeletedEntries()
       @watched.removeDir(entry.getPath())
 
   fileChanged: (entry) ->
-    return unless @isReallyChanged entry
+    # return unless @isReallyChanged entry
     log "fileChanged #{entry.getPath()}"
     relPath = @repo.getRelativePath entry.getPath()
     file = @repo.getFile(relPath) || relPath
@@ -155,7 +193,7 @@ class Watcher
           @repo.emitFileUpdate file
 
   fileAdded: (entry) ->
-    return unless @isReallyChanged entry
+    # return unless @isReallyChanged entry
     log "fileAdded #{entry.getPath()}"
     relPath = @repo.getRelativePath entry.getPath()
     file = new File(repoId: @repo.getId(), filePath: relPath, languages: @repo.languages)
@@ -166,11 +204,9 @@ class Watcher
         @repo.emitFileUpdate file
 
   fileRenamed: (entry) ->
-    log "fileRenamed #{entry.getPath()}"
 
   fileDeleted: (entry) ->
     path = if typeof entry is 'string' then entry else entry.getPath()
-    log "fileDeleted #{path}"
     relPath = @repo.getRelativePath path
     file = new File(repoId: @repo.getId(), filePath: relPath, languages: @repo.languages)
     @repo.removeFile file
@@ -202,5 +238,11 @@ module.exports =  (repo) ->
     repo.watcher = new Watcher(repo)
     cb = (() ->) unless cb
     cb null, files
+
+  repo.pause = ->
+    repo.watcher.pause() if repo.watcher && repo.watcher.pause
+
+  repo.resume = ->
+    repo.watcher.resume() if repo.watcher && repo.watcher.resume
 
   repo

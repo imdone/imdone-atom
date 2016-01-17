@@ -11,7 +11,7 @@ fileService = require './file-service'
 log = require './log'
 require('./jq-utils')($)
 
-# DOING:20 Add keen stats for features
+# DOING:10 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
@@ -100,12 +100,14 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.on 'list.modified', =>
       console.log 'list.modified'
       @onRepoUpdate()
-    @imdoneRepo.on 'file.update', =>
-      console.log 'file.update'
+    @imdoneRepo.on 'file.update', (file) =>
+      console.log 'file.update: %s', file.getPath()
       @onRepoUpdate()
     @imdoneRepo.on 'tasks.move', =>
       console.log 'tasks.move'
       @onRepoUpdate()
+      @imdoneRepo.resume()
+
     @imdoneRepo.on 'config.update', =>
       console.log 'config.update'
       repo.refresh()
@@ -424,6 +426,7 @@ class ImdoneAtomView extends ScrollView
         filePath = @imdoneRepo.getFullPath evt.item.dataset.path
         task = @imdoneRepo.getTask id
         @showMask()
+        @imdoneRepo.pause()
         @imdoneRepo.moveTasks [task], list, pos
 
     @tasksSortables = tasksSortables = []
