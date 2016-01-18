@@ -1,3 +1,6 @@
+## 1.3.22
+* Only watch directories
+
 ## 1.3.21
 * Enhance binary checking
 
