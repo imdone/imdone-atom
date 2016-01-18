@@ -4,6 +4,7 @@ File        = require 'imdone-core/lib/file'
 constants   = require 'imdone-core/lib/constants'
 sep         = require('path').sep
 log         = require './log'
+async       = require 'async'
 {CompositeDisposable} = require 'atom'
 
 
@@ -30,6 +31,11 @@ class HashCompositeDisposable extends CompositeDisposable
     dir += sep
     @remove path for path, watched of @watched when path.indexOf(dir) == 0
 
+  removeDeletedChildren: (dir) ->
+    dir += sep
+    for path, watched of @watched when path.indexOf(dir) == 0
+      @remove path unless fs.existsSync path
+
   get: (path) ->
     return @watched[path]
 
@@ -41,6 +47,7 @@ class Watcher
   constructor: (@repo)->
     dir = (dir for dir in atom.project.getDirectories() when dir.getPath() is @repo.path)[0]
     @watched = new HashCompositeDisposable(@repo)
+    @files = {}
     @watchDir dir
 
   close: ->
@@ -55,7 +62,7 @@ class Watcher
     @paused = true
 
   resume: ->
-    @pause = false
+    @paused = false
 
   shouldExclude: (pathOrEntry) ->
     path = if typeof pathOrEntry is 'string' then pathOrEntry else pathOrEntry.getPath()
@@ -76,24 +83,36 @@ class Watcher
     path = if typeof pathOrEntry is 'string' then pathOrEntry else pathOrEntry.getPath()
     @watched.get path
 
-  isReallyChanged: (entry) ->
+  setFileStats: (entry, cb) ->
+    _path = entry.getPath()
+    watched = @files[_path]
+    watched = @files[_path] = {} unless watched
+    fs.stat _path, (err, stats) ->
+      return log err if err
+      watched.mtime  = stats.mtime
+      cb() if cb
+
+  getFileStats: (entry) ->
+    @files[entry.getPath()]
+
+  removeFile: (path) ->
+    delete @files[path]
+
+  isReallyChanged: (entry, cb) ->
     return false if @shouldExclude(entry)
     log "Checking if #{entry.getPath()} is really changed"
     file = (file for file in entry.getParent().getEntriesSync() when entry.getPath() == file.getPath())[0]
-    watcher = @getWatcher entry
+    watcher = @getFileStats entry
     return true unless file && watcher
-    try
-      stat = fs.statSync(file.getPath())
-      if stat && stat.mtime
-        return false if watcher.mtime == stat.mtime
-        watcher.mtime = stat.mtime
-      digest = file.getDigestSync()
-      return false unless digest != watcher.digest
-      watcher.digest = digest
-      true
-    catch e
-      log "Error thrown while getting digest", e
-      false
+    fs.stat file.getPath(), (err, stat) ->
+      return cb err if err
+      return cb(null, false) unless stat && stat.mtime
+      return cb(null, false) if watcher.mtime.getTime() == stat.mtime.getTime()
+      watcher.mtime = stat.mtime
+      # digest = file.getDigestSync()
+      # return false unless digest != watcher.digest
+      # watcher.digest = digest
+      cb null, true
 
   isNewEntry: (entry) ->
     return true unless @shouldExclude(entry) ||@fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry) || @getWatcher entry
@@ -108,67 +127,60 @@ class Watcher
 
   watchDir: (dir) ->
     @watchPath dir
-    entries = dir.getEntriesSync()
-    @watchDir _dir for _dir in entries when (_dir.isDirectory() && !@shouldExclude(_dir.getPath()))
-    @watchFile file for file in entries when (file.isFile() && !@shouldExclude(file.getPath()))
+    dir.getEntries (err, entries) =>
+      for entry in entries
+        if entry.isDirectory()
+          @watchDir entry if !@shouldExclude(entry.getPath())
+        else if entry.isFile()
+          @watchFile entry if !@shouldExclude(entry.getPath())
 
   watchFile: (entry) ->
-    @watchPath entry
+    @setFileStats entry
     unless @fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry)
       @fileAdded entry
-    file = entry.getPath()
-    watched = @watched.get file
-    watched.mtime = fs.statSync(file).mtime if fs.existsSync(file)
-    watched.digest = entry.getDigestSync()
 
   watchPath: (entry) ->
-    unless @getWatcher entry
+    unless @getWatcher entry || entry.isFile()
       path = entry.getPath()
       log "Watching path #{path}"
-      if entry.isDirectory()
-        @watched.add path, entry.onDidChange =>
-          return if @paused
-          log "dirChanged #{entry.getPath()}"
-          @dirChanged entry
-      if entry.isFile()
-        try
-          @watched.add path, entry.onDidChange =>
-            #log "fileChanged #{entry.getPath()}"
-            # @fileChanged entry
-          @watched.add path, entry.onDidRename =>
-            #log "fileRenamed #{entry.getPath()}"
-            # @fileRenamed entry
-          @watched.add path, entry.onDidDelete =>
-            #log "fileDeleted #{path}"
-            # @fileDeleted entry
+      @watched.add path, entry.onDidChange =>
+        return if @paused
+        log "dirChanged #{entry.getPath()}"
+        @dirChanged entry
 
   removeDeletedEntries: (entry) ->
     dirPath = entry.getPath() + sep
-    @fileDeleted path for path, watcher of @watched.watched when path.indexOf(dirPath) == 0 && !fs.existsSync path
+    for path, stats of @files when path.indexOf(dirPath) == 0
+      exists = fs.existsSync path
+      @fileDeleted path unless exists
+    @watched.removeDeletedChildren entry.getPath()
 
-  updateChangedChildren: (dir) ->
+
+  updateChangedChildren: (dir, cb) ->
     # DONE:0 Update changed children and return true if there were children changed
     hasChange = false
-    for entry in dir.getEntriesSync()
-      if entry.isFile() && @isReallyChanged(entry)
-        @fileChanged entry
-        hasChange = true
-    hasChange
-
-  hasChangedChildren: (dir) ->
-    for entry in dir.getEntriesSync()
+    # DOING:0 Change to async
+    processEntry = (entry, cb) =>
       if entry.isFile()
-        isChanged = @isReallyChanged(entry)
-        log "#{entry.getPath()} isChanged: #{isChanged}"
-        return true if isChanged
+        @isReallyChanged entry, (err, changed) =>
+          return cb err if err
+          if changed
+            @fileChanged entry
+            hasChange = true
+          cb()
+
+    dir.getEntries (err, entries) =>
+      async.each entries, processEntry, (err) =>
+        log "#{dir.getPath()} hasChange:#{hasChange}"
+        cb err, hasChange
 
   dirChanged: (entry) ->
     if (fs.existsSync(entry.getPath()))
       log "*** #{entry.getPath()} exists and hasNewChildren: #{@hasNewChildren entry}"
       if @hasNewChildren(entry)
         @watchDir entry
-      else if !@updateChangedChildren(entry)
-        @removeDeletedEntries(entry)
+      else @updateChangedChildren entry, (err, changed) =>
+        @removeDeletedEntries entry unless changed
       # on mkdir this fires once for the parent of the dir added
       # on touch this fires twice for the parent of the file touched
       # on file modified this fires twice for parent of the file modified
@@ -176,11 +188,10 @@ class Watcher
     else
       # dirChanged fires once per child file and dir in the deleted entry and once for the parrent entry
       log "removing children of #{entry.getPath()}"
-      @removeDeletedEntries()
+      @removeDeletedEntries entry
       @watched.removeDir(entry.getPath())
 
   fileChanged: (entry) ->
-    # return unless @isReallyChanged entry
     log "fileChanged #{entry.getPath()}"
     relPath = @repo.getRelativePath entry.getPath()
     file = @repo.getFile(relPath) || relPath
@@ -193,7 +204,6 @@ class Watcher
           @repo.emitFileUpdate file
 
   fileAdded: (entry) ->
-    # return unless @isReallyChanged entry
     log "fileAdded #{entry.getPath()}"
     relPath = @repo.getRelativePath entry.getPath()
     file = new File(repoId: @repo.getId(), filePath: relPath, languages: @repo.languages)
@@ -203,14 +213,12 @@ class Watcher
       @repo.readFile file, (err, file) =>
         @repo.emitFileUpdate file
 
-  fileRenamed: (entry) ->
-
-  fileDeleted: (entry) ->
-    path = if typeof entry is 'string' then entry else entry.getPath()
+  fileDeleted: (path) ->
+    log "fileDeleted #{path}"
     relPath = @repo.getRelativePath path
     file = new File(repoId: @repo.getId(), filePath: relPath, languages: @repo.languages)
+    @removeFile path
     @repo.removeFile file
-    @closeWatcher path
     @repo.emitFileUpdate file
 
 module.exports =  (repo) ->
