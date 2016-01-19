@@ -1,3 +1,6 @@
+## 1.3.23
+* Improve watcher speed with async calls
+
 ## 1.3.22
 * Only watch directories
 

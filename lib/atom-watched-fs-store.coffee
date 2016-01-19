@@ -1,4 +1,4 @@
-fs          = require 'fs'
+fs          = require 'fs-plus'
 fsStore     = require 'imdone-core/lib/mixins/repo-fs-store'
 File        = require 'imdone-core/lib/file'
 constants   = require 'imdone-core/lib/constants'
@@ -64,23 +64,28 @@ class Watcher
   resume: ->
     @paused = false
 
+  pathOrEntry: (pathOrEntry) ->
+    if typeof pathOrEntry is 'string' then pathOrEntry else pathOrEntry.getPath()
+
   shouldExclude: (pathOrEntry) ->
-    path = if typeof pathOrEntry is 'string' then pathOrEntry else pathOrEntry.getPath()
+    path = @pathOrEntry(pathOrEntry)
     relPath = @repo.getRelativePath(path);
     return false if (relPath.indexOf('.imdone') == 0)
     @repo.shouldExclude(relPath);
 
-  isImdoneConfig: (entry) ->
-    relPath = @repo.getRelativePath entry.getPath()
+  isImdoneConfig: (pathOrEntry) ->
+    path = @pathOrEntry(pathOrEntry)
+    relPath = @repo.getRelativePath path
     relPath.indexOf(constants.CONFIG_FILE) > -1
 
-  isImdoneIgnore: (entry) ->
-    relPath = @repo.getRelativePath entry.getPath()
+  isImdoneIgnore: (pathOrEntry) ->
+    path = @pathOrEntry(pathOrEntry)
+    relPath = @repo.getRelativePath path
     relPath.indexOf(constants.IGNORE_FILE) > -1
 
   getWatcher: (pathOrEntry) ->
     return unless pathOrEntry && @watched
-    path = if typeof pathOrEntry is 'string' then pathOrEntry else pathOrEntry.getPath()
+    path = @pathOrEntry(pathOrEntry)
     @watched.get path
 
   setFileStats: (entry, cb) ->
@@ -92,37 +97,45 @@ class Watcher
       watched.mtime  = stats.mtime
       cb() if cb
 
-  getFileStats: (entry) ->
-    @files[entry.getPath()]
+  getFileStats: (pathOrEntry) ->
+    path = @pathOrEntry(pathOrEntry)
+    @files[path]
 
   removeFile: (path) ->
     delete @files[path]
 
   isReallyChanged: (entry, cb) ->
     return false if @shouldExclude(entry)
+    path = entry.getPath()
     log "Checking if #{entry.getPath()} is really changed"
-    file = (file for file in entry.getParent().getEntriesSync() when entry.getPath() == file.getPath())[0]
-    watcher = @getFileStats entry
-    return true unless file && watcher
-    fs.stat file.getPath(), (err, stat) ->
-      return cb err if err
-      return cb(null, false) unless stat && stat.mtime
-      return cb(null, false) if watcher.mtime.getTime() == stat.mtime.getTime()
-      watcher.mtime = stat.mtime
-      # digest = file.getDigestSync()
-      # return false unless digest != watcher.digest
-      # watcher.digest = digest
-      cb null, true
+    fs.list entry.getParent().getPath(), (err, paths) =>
+      return cb(err) if err?
+      return cb(null, true) unless paths && paths.indexOf(path) > -1
+      watcher = @getFileStats entry
+      return cb(null, true) unless watcher
+      fs.stat path, (err, stat) ->
+        return cb err if err
+        return cb(null, false) unless stat && stat.mtime
+        return cb(null, false) if watcher.mtime.getTime() == stat.mtime.getTime()
+        watcher.mtime = stat.mtime
+        # digest = file.getDigestSync()
+        # return false unless digest != watcher.digest
+        # watcher.digest = digest
+        cb null, true
 
-  isNewEntry: (entry) ->
-    return true unless @shouldExclude(entry) ||@fileInRepo(entry) || @isImdoneConfig(entry) || @isImdoneIgnore(entry) || @getWatcher entry
+  isNewEntry: (pathOrEntry) ->
+    return true unless @shouldExclude(pathOrEntry) || @fileInRepo(pathOrEntry) || @isImdoneConfig(pathOrEntry) || @isImdoneIgnore(pathOrEntry) || @getWatcher pathOrEntry
 
-  hasNewChildren: (entry) ->
-    newEntries = (entry for entry in entry.getEntriesSync() when @isNewEntry(entry))
-    newEntries && newEntries.length > 0
+  hasNewChildren: (entry, cb) ->
+    fs.list entry.getPath(), (err, paths) =>
+      return cb(err) if error?
+      for path in paths
+        return cb(null, true) if @isNewEntry path
+      return cb(null, false)
 
-  fileInRepo: (entry) ->
-    relPath = @repo.getRelativePath entry.getPath()
+  fileInRepo: (pathOrEntry) ->
+    path = @pathOrEntry(pathOrEntry)
+    relPath = @repo.getRelativePath path
     @repo.getFile(relPath)
 
   watchDir: (dir) ->
@@ -130,9 +143,9 @@ class Watcher
     dir.getEntries (err, entries) =>
       for entry in entries
         if entry.isDirectory()
-          @watchDir entry if !@shouldExclude(entry.getPath())
+          @watchDir entry if !@shouldExclude(entry)
         else if entry.isFile()
-          @watchFile entry if !@shouldExclude(entry.getPath())
+          @watchFile entry if !@shouldExclude(entry)
 
   watchFile: (entry) ->
     @setFileStats entry
@@ -176,11 +189,12 @@ class Watcher
 
   dirChanged: (entry) ->
     if (fs.existsSync(entry.getPath()))
-      log "*** #{entry.getPath()} exists and hasNewChildren: #{@hasNewChildren entry}"
-      if @hasNewChildren(entry)
-        @watchDir entry
-      else @updateChangedChildren entry, (err, changed) =>
-        @removeDeletedEntries entry unless changed
+      @hasNewChildren entry, (err, hasNew) =>
+        log "*** #{entry.getPath()} exists and hasNewChildren: #{hasNew}"
+        if hasNew && !err
+          @watchDir entry
+        else @updateChangedChildren entry, (err, changed) =>
+          @removeDeletedEntries entry unless changed
       # on mkdir this fires once for the parent of the dir added
       # on touch this fires twice for the parent of the file touched
       # on file modified this fires twice for parent of the file modified

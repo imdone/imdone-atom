@@ -24,6 +24,7 @@
     "atom-space-pen-views": "^2.0.5",
     "engine.io": "^1.5.4",
     "engine.io-client": "^1.6.4",
+    "fs-plus": "^2.8.1",
     "imdone-core": "1.2.44",
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
