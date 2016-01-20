@@ -101,7 +101,7 @@ class ImdoneAtomView extends ScrollView
       console.log 'list.modified'
       @onRepoUpdate()
     @imdoneRepo.on 'file.update', (file) =>
-      console.log 'file.update: %s', file.getPath()
+      console.log 'file.update: %s', file && file.getPath()
       @onRepoUpdate()
     @imdoneRepo.on 'tasks.move', =>
       console.log 'tasks.move'
@@ -276,7 +276,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # DOING:0 This should be queued so two updates don't colide
+    # DOING:30 This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
