@@ -214,7 +214,7 @@
       height: 96%;
       .list {
         float: left;
-        width: @board-list-width;
+        min-width: @board-list-width;
         padding: 10px;
         background-color: @panel-heading-background-color;
         margin-right: 10px;
@@ -241,8 +241,12 @@
           min-height: 50px;
           list-style: none;
           padding-left: 0;
+          padding: -2px;
         }
         .task {
+          width: @board-list-width;
+          margin: 2px;
+          float: left;
           background-color: @task-background-color;
           font-size: @task-font-size;
           white-space: normal;

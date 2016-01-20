@@ -297,8 +297,8 @@ class ImdoneAtomView extends ScrollView
     @board.empty().hide()
     repo = @imdoneRepo
     lists = repo.getVisibleLists()
-    width = 378*lists.length + "px"
-    @board.css('width', width)
+    @board.css('width', "100%")
+    @board.css('display', "flex")
     # #DONE:230 Add task drag and drop support
 
     getTask = (task) =>
