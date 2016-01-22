@@ -1,11 +1,13 @@
-ImdoneAtomView = require './imdone-atom-view'
-url = require 'url'
+ImdoneAtomView        = require './imdone-atom-view'
+url                   = require 'url'
 {CompositeDisposable} = require 'atom'
-path = require 'path'
-moment = require 'moment'
-mkdirp = require 'mkdirp'
-imdoneHelper = require './imdone-helper'
-fileService = require './file-service'
+path                  = require 'path'
+moment                = require 'moment'
+mkdirp                = require 'mkdirp'
+imdoneHelper          = require './imdone-helper'
+fileService           = require './file-service'
+{allowUnsafeEval, allowUnsafeNewFunction} = require 'loophole'
+_                     = require 'lodash'
 
 module.exports = ImdoneAtom =
   config:
@@ -33,17 +35,21 @@ module.exports = ImdoneAtom =
       type: 'object'
       properties:
         directory:
-          description: 'Where do you want your journal files to live?'
+          description: 'Where do you want your journal files to live? (Their project directory)'
           type: 'string'
           default: "#{path.join(process.env.HOME || process.env.USERPROFILE, 'notes')}"
         fileNameTemplate:
           description: 'How do you want your journal files to be named?'
           type: 'string'
-          default: '#{date}.md'
+          default: '${date}.md'
         dateFormat:
-          description: 'How would you like your date formatted?'
+          description: 'How would you like your date variable formatted?'
           type: 'string'
           default: 'YYYY-MM-DD'
+        monthFormat:
+          description: 'How would you like your month variable formatted?'
+          type: 'string'
+          default: 'YYYY-MM'
     # DONE:50 This is config for globs to open with editors issue:48
     openIn:
       description: 'Open files in a different IDE or editor'
@@ -56,6 +62,7 @@ module.exports = ImdoneAtom =
 
   activate: (state) ->
     # #DONE:190 Add back serialization (The right way) +Roadmap @testing
+    _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
     atom.deserializers.deserialize(state) if (state)
     @subscriptions = new CompositeDisposable
 
@@ -106,17 +113,22 @@ module.exports = ImdoneAtom =
   provideService: -> require './plugin-manager'
 
   openJournalFile: ->
-    config = atom.config.get('imdone-atom.todaysJournal')
-    dir = config.directory
-    dateFormat = config.dateFormat
-    file = config.fileNameTemplate.replace '#{date}', moment().format(dateFormat)
-    filePath = path.join dir, file
-    mkdirp dir, (err) ->
-      if (err)
-        atom.notifications.addError "Can't open journal file #{filePath}"
-        return;        
-      atom.project.addPath dir
-      atom.workspace.open filePath
+    allowUnsafeNewFunction ->
+      config = atom.config.get('imdone-atom.todaysJournal')
+      dateFormat = config.dateFormat
+      monthFormat = config.monthFormat
+      context =
+        date: moment().format(dateFormat)
+        month: moment().format(monthFormat)
+      file = _.template(config.fileNameTemplate)(context)
+      dir = _.template(config.directory)(context)
+      filePath = path.join dir, file
+      mkdirp dir, (err) ->
+        if (err)
+          atom.notifications.addError "Can't open journal file #{filePath}"
+          return;
+        atom.project.addPath dir
+        atom.workspace.open filePath
 
   uriForProject: (projectPath) ->
     projectPath = projectPath || @getCurrentProject()

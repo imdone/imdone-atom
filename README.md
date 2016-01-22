@@ -28,10 +28,10 @@ or open Atom and go to Preferences > Install and search for `imdone-atom`
 
 Commands
 ----
-| Command Palette               | Key Mapping  | Description              |
-|:------------------------------|:-------------|:-------------------------|
-| `Imdone Atom: Tasks`          | Alt+T        | Open task board          |
-| `Imdone Atom: Todays Journal` | Ctrl+Shift+J | Open todays journal file |
+| Command Palette               | Key Mapping | Description              |
+|:------------------------------|:------------|:-------------------------|
+| `Imdone Atom: Tasks`          | Alt+T       | Open task board          |
+| `Imdone Atom: Todays Journal` | Alt+J       | Open todays journal file |
 
 Ignoring files
 ----

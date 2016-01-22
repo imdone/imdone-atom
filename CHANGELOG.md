@@ -1,3 +1,7 @@
+## 1.3.24
+* Add `month` variable for journal configuration templates
+* Change string replace from `#{}` to `${}`
+
 ## 1.3.23
 * Improve watcher speed with async calls
 

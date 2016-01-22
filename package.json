@@ -26,6 +26,8 @@
     "engine.io-client": "^1.6.4",
     "fs-plus": "^2.8.1",
     "imdone-core": "1.2.44",
+    "lodash": "^4.0.0",
+    "loophole": "^1.1.0",
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.11.0",
