@@ -1,3 +1,6 @@
+## 1.3.25
+* Use chokidar as default file watcher, but add setting to use an  alternate
+
 ## 1.3.24
 * Add `month` variable for journal configuration templates
 * Change string replace from `#{}` to `${}`

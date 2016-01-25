@@ -11,17 +11,22 @@ _                     = require 'lodash'
 
 module.exports = ImdoneAtom =
   config:
+    useAlternateFileWatcher:
+      description: "If your board won't update when you edit files, then try the alternate file watcher"
+      type: 'boolean'
+      default: false
     showTagsInline:
       description: 'Display inline tag and context links in task text?'
       type: 'boolean'
       default: false
     maxFilesPrompt:
-      description: 'How many files is too many to parse without prompting?'
+      description: 'How many files is too many to parse without prompting to add ignores?'
       type: 'integer'
       default: 2000
       minimum: 1000
       maximum: 10000
     excludeVcsIgnoredPaths:
+      description: 'Exclude files that are ignored by your version control system'
       type: 'boolean'
       default: true
     showNotifications:
@@ -29,8 +34,18 @@ module.exports = ImdoneAtom =
       type: 'boolean'
       default: false
     fileOpenerPort:
+      description: 'Port the file opener communicates on'
       type: 'integer'
       default: 9799
+    # DONE:50 This is config for globs to open with editors issue:48
+    openIn:
+      description: 'Open files in a different IDE or editor'
+      type: 'object'
+      properties:
+        intellij:
+          description: '[Glob pattern](https://github.com/isaacs/node-glob) for files that should open in Intellij.'
+          type: 'string'
+          default: 'Glob pattern'
     todaysJournal:
       type: 'object'
       properties:
@@ -43,21 +58,13 @@ module.exports = ImdoneAtom =
           type: 'string'
           default: '${date}.md'
         dateFormat:
-          description: 'How would you like your date variable formatted?'
+          description: 'How would you like your `date` variable formatted for use in directory or file name template?'
           type: 'string'
           default: 'YYYY-MM-DD'
         monthFormat:
-          description: 'How would you like your month variable formatted?'
+          description: 'How would you like your `month` variable formatted for use in directory or file name template?'
           type: 'string'
           default: 'YYYY-MM'
-    # DONE:50 This is config for globs to open with editors issue:48
-    openIn:
-      description: 'Open files in a different IDE or editor'
-      type: 'object'
-      properties:
-        intellij:
-          type: 'string'
-          default: ''
   subscriptions: null
 
   activate: (state) ->

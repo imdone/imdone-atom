@@ -33,6 +33,22 @@ Commands
 | `Imdone Atom: Tasks`          | Alt+T       | Open task board          |
 | `Imdone Atom: Todays Journal` | Alt+J       | Open todays journal file |
 
+Settings
+----
+| Name                               | Type    | Default     | Description                                                                                    |
+|:-----------------------------------|:--------|:------------|:-----------------------------------------------------------------------------------------------|
+| Exclude Vcs Ignored Paths          | boolean | false       | Exclude files that are ignored by your version control system                                  |
+| File Opener Port                   | integer | 9799        | Port the file opener communicates on                                                           |
+| Max Files Prompt                   | integer | 2500        | How many files is too many to parse without prompting to add ignores?                          |
+| Open in Intellij                   | string  | ''          | [Glob pattern](https://github.com/isaacs/node-glob) for files that should open in Intellij.    |
+| Show Notifications                 | boolean | false       | Show notifications upon clicking task source link.                                             |
+| Show Tags Inline                   | boolean | false       | Display inline tag and context links in task text?                                             |
+| Today's Journal Date Format        | string  | YYYY-MM-DD  | How would you like your `date` variable formatted?                                             |
+| Today's Journal Directory          | string  | $HOME/notes | Where do you want your journal files to live? (Their project directory)                        |
+| Today's Journal File Name Template | string  | ${date}.md  | How do you want your journal files to be named?                                                |
+| Today's Journal Month Format       | string  | YYYY-MM     | How would you like your `month` variable formatted for use in directory or file name template? |
+| Use Alternate File Watcher         | boolean | false       | If your board won't update when you edit files, then try the alternate file watcher            |
+
 Ignoring files
 ----
 - Configuration setting  

@@ -1,10 +1,12 @@
 ImdoneRepo = require 'imdone-core/lib/repository'
 # fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
-fsStore = require './atom-watched-fs-store'
+atomFsStore = require './atom-watched-fs-store'
+fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
 
 module.exports =
   newImdoneRepo: (pathname, uri) ->
+    fsStore = atomFsStore if atom.config.get('imdone-atom.useAlternateFileWatcher')
     imdoneRepo = fsStore(new ImdoneRepo(pathname))
     @excludeVcsIgnoresMixin(imdoneRepo)
     imdoneRepo

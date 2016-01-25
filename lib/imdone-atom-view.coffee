@@ -106,7 +106,6 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.on 'tasks.move', =>
       console.log 'tasks.move'
       @onRepoUpdate()
-      @imdoneRepo.resume()
 
     @imdoneRepo.on 'config.update', =>
       console.log 'config.update'
@@ -426,7 +425,6 @@ class ImdoneAtomView extends ScrollView
         filePath = @imdoneRepo.getFullPath evt.item.dataset.path
         task = @imdoneRepo.getTask id
         @showMask()
-        @imdoneRepo.pause()
         @imdoneRepo.moveTasks [task], list, pos
 
     @tasksSortables = tasksSortables = []
