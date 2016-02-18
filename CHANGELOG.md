@@ -1,3 +1,6 @@
+## 1.3.27
+* Fix issue with regex order for link style tasks
+
 ## 1.3.26
 * Require : in link style tasks to prevent #id hrefs from showing up as tasks
 
