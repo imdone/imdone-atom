@@ -1,3 +1,6 @@
+## 1.3.26
+* Require : in link style tasks to prevent #id hrefs from showing up as tasks
+
 ## 1.3.25
 * Use chokidar as default file watcher, but add setting to use an  alternate
 
@@ -282,4 +285,4 @@
 
 ----
 
-- #DOING:40 Remember to update changelog before +publishing +package @piascikj
+- #DOING:50 Remember to update changelog before +publishing +package @piascikj

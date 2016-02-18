@@ -22,7 +22,7 @@
   "lists": [
     {
       "name": "CHANGED",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "BACKLOG",
@@ -30,7 +30,7 @@
     },
     {
       "name": "TODO",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DOING",
@@ -42,11 +42,11 @@
     },
     {
       "name": "DONE",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "ARCHIVE",
-      "hidden": false
+      "hidden": true
     }
   ],
   "marked": {

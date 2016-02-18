@@ -11,7 +11,7 @@ fileService = require './file-service'
 log = require './log'
 require('./jq-utils')($)
 
-# DOING:10 Add keen stats for features
+# DOING:20 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
@@ -275,7 +275,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # DOING:30 This should be queued so two updates don't colide
+    # DOING:40 This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0

@@ -26,6 +26,7 @@ class MenuView extends View
           @div click: "clearFilter", class:"icon icon-x clear-filter"
         @div class:'lists-wrapper', =>
           @ul outlet: "lists", class: "lists"
+        # TODO:0 Add saved filters
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
