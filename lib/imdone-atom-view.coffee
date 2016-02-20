@@ -131,6 +131,20 @@ class ImdoneAtomView extends ScrollView
         console.log fpath, line
         @openPath fpath, line
 
+    @menuView.emitter.on 'board.zoom', =>
+      zoom = @boardWrapper.css('zoom')
+      if zoom == undefined
+        zoom = "1";
+        # body...
+      if zoom == "1"
+        zoom = "0.5";
+      else
+        zoom = "1";
+      @boardWrapper.css('zoom', zoom)
+      console.log zoom
+      console.log @boardWrapper.css('zoom')
+
+
     @menuView.emitter.on 'list.new', => @bottomView.showNewList()
 
     @menuView.emitter.on 'repo.change', => @showMask()
@@ -296,8 +310,8 @@ class ImdoneAtomView extends ScrollView
     @board.empty().hide()
     repo = @imdoneRepo
     lists = repo.getVisibleLists()
-    width = 378*lists.length + "px"
-    @board.css('width', width)
+    @board.css('width', "100%")
+    @board.css('display', "flex")
     # #DONE:230 Add task drag and drop support
 
     getTask = (task) =>

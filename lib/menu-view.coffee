@@ -17,6 +17,8 @@ class MenuView extends View
             @a href: "#", class: "icon icon-plus"
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
+          @div click: "zoomBoard", class: "imdone-toolbar-button", title: "Toggle task board zoom", =>
+            @a href: "#", class: "icon icon-eye"
           # DONE:170 Add a link to open filtered files issue:49
           @div click: "openFiltered", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open filtered files)", style: "display:none;", =>
             @a href: "#", class: "icon icon-zap"
@@ -51,6 +53,9 @@ class MenuView extends View
 
   newList: ->
     @emitter.emit 'list.new'
+
+  zoomBoard: ->
+    @emitter.emit 'board.zoom'
 
   openFiltered: ->
     @emitter.emit 'filter.open'
