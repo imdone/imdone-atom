@@ -288,4 +288,4 @@
 
 ----
 
-- #DOING:50 Remember to update changelog before +publishing +package @piascikj
+- #DOING:10 Remember to update changelog before +publishing +package @piascikj

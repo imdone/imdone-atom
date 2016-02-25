@@ -1,15 +1,18 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
+ShareTasksView = require './share-tasks-view'
 
 module.exports =
 class BottomView extends View
 
-  @content: ->
+  @content: (params) ->
     @div class:'imdone-config-container hidden', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
         @raw '&times;'
       @div outlet: 'error', class:'text-error'
+      @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
+        @subview 'shareTasksView', new ShareTasksView(params)
       @div outlet: 'renameList', class:'rename-list config-panel', =>
         @h2 =>
           @span outlet:'renameListLabel'
@@ -114,6 +117,12 @@ class BottomView extends View
     @plugins.find('.imdone-plugin').hide()
     @plugins.find(".#{plugin.constructor.pluginName}").show()
     @plugins.show()
+    @show()
+
+  showShare: () ->
+    @hide()
+    @shareTasks.show()
+    @setHeight(100)
     @show()
 
   showRename: (name) ->

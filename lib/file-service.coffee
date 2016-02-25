@@ -32,7 +32,7 @@ module.exports =
   tryProxy: (port) ->
     # DONE:10 First check if it's imdone listening on the port issue:52
     # DONE:20 if imdone is listening we should connect as a client and use the server as a proxy issue:52
-    # DOING:30 if imdone is not listening we should ask for another port issue:52
+    # DOING:0 if imdone is not listening we should ask for another port issue:52
     log 'Trying proxy'
     socket = eioClient('ws://localhost:' + port)
     socket.on 'open', =>

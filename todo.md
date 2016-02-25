@@ -6,7 +6,7 @@ Roadmap
 - [ ] #BACKLOG:50 Edit task plugin, set priority, mark as closed, edit metadata
 - [ ] #BACKLOG:0 Integrate with Waffle.io, GitHub, Jira, Pivotal
 - [ ] #BACKLOG:20 Provide on-line service for installing plugins to a teammmm
-- [ ] #TODO:0 Add configuration for autoclose task with date on moving into list
+- [ ] #TODO:40 Add configuration for autoclose task with date on moving into list
 
 Completed
 ----

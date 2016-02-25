@@ -18,6 +18,8 @@ class MenuView extends View
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           # DONE:170 Add a link to open filtered files issue:49
+          @div click: "share", class: "imdone-toolbar-button text-success", title: "Blast! (share visible tasks)", =>
+            @a href: "#", class: "icon icon-rocket"
           @div click: "openFiltered", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open filtered files)", style: "display:none;", =>
             @a href: "#", class: "icon icon-zap"
           @div class: "imdone-project-plugins"
@@ -26,7 +28,7 @@ class MenuView extends View
           @div click: "clearFilter", class:"icon icon-x clear-filter"
         @div class:'lists-wrapper', =>
           @ul outlet: "lists", class: "lists"
-        # TODO:0 Add saved filters
+        # TODO:50 Add saved filters
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
@@ -53,7 +55,11 @@ class MenuView extends View
     @emitter.emit 'list.new'
 
   openFiltered: ->
+    # TODO:10 Zap should open visible task files but prompt if there are more than 10 (configurable) +feature 
     @emitter.emit 'filter.open'
+
+  share: ->
+    @emitter.emit 'share'
 
   emitRepoChange: ->
     @emitter.emit 'repo.change'
