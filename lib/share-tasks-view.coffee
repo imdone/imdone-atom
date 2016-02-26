@@ -58,18 +58,24 @@ class ShareTasksView extends View
     self = @
     @emailEditor.on 'keydown', (e) =>
       code = e.keyCode || e.which
-      return true unless code == 9
-      self.passwordEditor.focus()
+      switch code
+        when 13 then self.login()
+        when 9 then self.passwordEditor.focus()
+        else return true
       false
 
     @passwordEditor.on 'keydown', (e) =>
       code = e.keyCode || e.which
-      return true unless code == 9
-      self.loginButton.focus()
+      switch code
+        when 13 then self.login()
+        when 9 then self.loginButton.focus()
+        else return true
       false
 
     @loginButton.on 'keydown', (e) =>
       code = e.keyCode || e.which
-      return true unless code == 9
-      self.emailEditor.focus()
+      switch code
+        when 13 then self.login()
+        when 9 then self.emailEditor.focus()
+        else return true
       false

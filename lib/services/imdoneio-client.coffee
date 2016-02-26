@@ -43,7 +43,6 @@ class ImdoneioClient
 
   loadCredentials: () ->
     credentials = atom.config.get(credKey)
-    console.log "credentials:#{credentials}"
     return false unless credentials
     parts = authUtil.fromBase64(credentials).split(':')
     @email = parts[0]
