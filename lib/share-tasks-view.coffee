@@ -7,6 +7,8 @@ module.exports =
 class ShareTasksView extends View
   @content: (params) ->
     @div class: "share-tasks-container", =>
+      @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
+        @span class:'loading loading-spinner-small inline-block'
       @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
         @div class: 'input-med', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
@@ -47,12 +49,14 @@ class ShareTasksView extends View
       passwordElement.append('<style id="password-style">.password-lines .line span.text:before {content:"' + string + '";}</style>')
 
   login: () ->
+    @loginPanel.hide()
+    @spinner.show()
     email = @emailEditor.getModel().getText()
     password = @passwordEditor.getModel().getText()
     @client.authenticate email, password, () =>
+      @spinner.hide()
       @passwordEditor.getModel().setText ''
-      if @client.isAuthenticated()
-        @loginPanel.hide()
+      @loginPanel.show() unless @client.isAuthenticated()
 
   handleEvents: () ->
     self = @
