@@ -7,21 +7,33 @@ module.exports =
 class ShareTasksView extends View
   @content: (params) ->
     @div class: "share-tasks-container", =>
-      @div outlet:'login-pane', class: 'block imdone-login-pane', =>
+      @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
         @div class: 'input-med', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
         @div class: 'input-med', =>
           @subview 'passwordEditor', new TextEditorView(mini: true, placeholderText: 'password')
         @div class:'btn-group btn-group-login', =>
           @button outlet: 'loginButton', click: 'login', title: 'WHOOSH!', class:'btn btn-primary inline-block-tight', 'LOGIN'
+        @div class:'block', =>
+          @span "or "
+          @a href:"#{Client.signUpUrl}", "sign up"
 
-  initialize: ({@imdoneRepo, @path, @uri}) ->
-    @emitter = new Emitter
+  initialize: ->
     @initPasswordField()
     @handleEvents()
+
+  constructor: ({@imdoneRepo, @path, @uri}) ->
+    super
+    @emitter = new Emitter
     @client = new Client
-    @emailEditor.focus()
-    
+
+  show: () ->
+    super
+    if @client.isAuthenticated()
+    else
+      @loginPanel.show()
+      @emailEditor.focus()
+
   initPasswordField: () ->
     # [Password fields when using EditorView subview - packages - Atom Discussion](https://discuss.atom.io/t/password-fields-when-using-editorview-subview/11061/7)
     passwordElement = $(@passwordEditor.element.rootElement)
@@ -37,7 +49,10 @@ class ShareTasksView extends View
   login: () ->
     email = @emailEditor.getModel().getText()
     password = @passwordEditor.getModel().getText()
-    @client.authenticate email, password
+    @client.authenticate email, password, () =>
+      @passwordEditor.getModel().setText ''
+      if @client.isAuthenticated()
+        @loginPanel.hide()
 
   handleEvents: () ->
     self = @

@@ -28,7 +28,7 @@ class MenuView extends View
           @div click: "clearFilter", class:"icon icon-x clear-filter"
         @div class:'lists-wrapper', =>
           @ul outlet: "lists", class: "lists"
-        # TODO:50 Add saved filters
+        # TODO:70 Add saved filters
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
@@ -55,7 +55,7 @@ class MenuView extends View
     @emitter.emit 'list.new'
 
   openFiltered: ->
-    # TODO:10 Zap should open visible task files but prompt if there are more than 10 (configurable) +feature
+    # TODO:30 Zap should open visible task files but prompt if there are more than 10 (configurable) +feature
     @emitter.emit 'filter.open'
 
   share: ->
