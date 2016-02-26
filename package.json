@@ -31,7 +31,8 @@
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.11.0",
-    "sortablejs": "1.4.2"
+    "sortablejs": "1.4.2",
+    "superagent": "^1.8.0-beta.1"
   },
   "providedServices": {
     "imdone": {

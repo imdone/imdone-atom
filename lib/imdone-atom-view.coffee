@@ -2,13 +2,13 @@
 {Emitter} = require 'atom'
 MenuView = require './menu-view'
 BottomView = require './bottom-view'
-imdoneHelper = require './imdone-helper'
+imdoneHelper = require './services/imdone-helper'
 path = require 'path'
 util = require 'util'
 Sortable = require 'sortablejs'
-pluginManager = require './plugin-manager'
-fileService = require './file-service'
-log = require './log'
+pluginManager = require './services/plugin-manager'
+fileService = require './services/file-service'
+log = require './services/log'
 require('./jq-utils')($)
 
 # TODO:30 Add keen stats for features

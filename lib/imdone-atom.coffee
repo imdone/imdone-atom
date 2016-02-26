@@ -4,8 +4,8 @@ url                   = require 'url'
 path                  = require 'path'
 moment                = require 'moment'
 mkdirp                = require 'mkdirp'
-imdoneHelper          = require './imdone-helper'
-fileService           = require './file-service'
+imdoneHelper          = require './services/imdone-helper'
+fileService           = require './services/file-service'
 {allowUnsafeEval, allowUnsafeNewFunction} = require 'loophole'
 _                     = require 'lodash'
 
@@ -117,7 +117,7 @@ module.exports = ImdoneAtom =
     else
       paths[0]
 
-  provideService: -> require './plugin-manager'
+  provideService: -> require './services/plugin-manager'
 
   openJournalFile: ->
     allowUnsafeNewFunction ->
