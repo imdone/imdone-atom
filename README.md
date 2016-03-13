@@ -1,4 +1,4 @@
-// A HACK:4 ble task-board in your code.
+A hackable task-board in your code.
 ----
 ### You live in the code, your tasks should too!
 
@@ -14,7 +14,7 @@ imdone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 Whats new!
 ----
 - :notebook_with_decorative_cover: **Todays's Journal** - Open today's journal file as configured in settings.  Great for people who like to keep plain text notes.
-- :zap: **Open all files for filtered tasks!**
+- :zap: **Open all files for visible tasks!**
 - **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
 - **[How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins) for imdone-atom**
 - **Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**

@@ -11,7 +11,7 @@ fileService = require './file-service'
 log = require './log'
 require('./jq-utils')($)
 
-# DOING:20 Add keen stats for features
+# #DOING:0 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
@@ -79,8 +79,6 @@ class ImdoneAtomView extends ScrollView
     super
     @title = "#{path.basename(@path)} Tasks"
     @plugins = {}
-    @filteredTasks = []
-
     @handleEvents()
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
@@ -121,9 +119,9 @@ class ImdoneAtomView extends ScrollView
     @menuView.emitter.on 'filter.clear', =>
       @board.find('.task').show()
 
-    @menuView.emitter.on 'filter.open', =>
+    @menuView.emitter.on 'visible.open', =>
       paths = {}
-      for task in @filteredTasks
+      for task in @visibleTasks()
         file = @imdoneRepo.getFileForTask(task)
         fullPath = @imdoneRepo.getFullPath file
         paths[fullPath] = task.line
@@ -244,20 +242,24 @@ class ImdoneAtomView extends ScrollView
   filter: (text) ->
     text = @getFilter() unless text
     @lastFilter = text
-    @filteredTasks = []
     if text == ''
       @board.find('.task').show()
     else
       @board.find('.task').hide()
-      addTask = (id) =>
-        @filteredTasks.push @imdoneRepo.getTask(id)
       @board.find(util.format('.task:regex(data-path,%s)', text)).each ->
         id = $(this).show().attr('id')
-        addTask id
       @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each ->
         id = $(this).closest('.task').show().attr('id')
-        addTask id
-    @menuView.emitter.emit 'filter.tasks', @filteredTasks
+
+  visibleTasks: ->
+    visibleTasks = []
+    addTask = (id) =>
+      visibleTasks.push @imdoneRepo.getTask(id)
+    @board.find('.task').each ->
+      return if $(this).is ':hidden'
+      addTask $(this).attr('id')
+
+    visibleTasks
 
   initImdone: () ->
     if @numFiles > 1000
@@ -275,7 +277,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # DOING:40 This should be queued so two updates don't colide
+    # TODO:10 This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
