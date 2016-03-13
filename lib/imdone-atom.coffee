@@ -68,6 +68,7 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
+    # DOING:0 Put requires in activate to speed up startup issue:77
     # #DONE:190 Add back serialization (The right way) +Roadmap @testing
     _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
     atom.deserializers.deserialize(state) if (state)

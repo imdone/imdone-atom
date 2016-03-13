@@ -31,7 +31,7 @@ class ImdoneioClient
     req = @setHeaders(request.get(baseAPIUrl))
 
     req.end (err, res) =>
-      return cb(err, res) if !res.ok
+      return cb(err, res) if err || !res.ok
       @authenticated = true
       @saveCredentials()
       cb(null, res)
