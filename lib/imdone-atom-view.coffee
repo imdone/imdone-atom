@@ -11,7 +11,7 @@ fileService = require './file-service'
 log = require './log'
 require('./jq-utils')($)
 
-# #DOING:0 Add keen stats for features
+# #DOING:10 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
