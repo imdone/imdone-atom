@@ -1,7 +1,7 @@
 request = require 'superagent'
 authUtil = require './auth-util'
-p = 'pXzjWq8ibolcE5d7BTcdmHecDGeZyE1PKv98aiYZAvo8bfwqtN5ExQ=='
-s = 'fIUYLb6fd8Rn__px_ewl6fMB6Cs='
+p = 'jU-ALYFSinNahQ8cAmFtRgHdzuhAEj9SqbS3CN5mpTRMte8VaAS7cg=='
+s = 'k_JgzTw2XCMhqS7buwaoqCxUKiE='
 baseUrl = 'http://localhost:3000' # TODO:0 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 signUpUrl = "#{baseUrl}/signup"
@@ -39,6 +39,7 @@ class ImdoneioClient
   isAuthenticated: () -> @authenticated
 
   saveCredentials: () ->
+    # TODO: Credentials should be stored in $HOME/.imdone/config.json
     atom.config.set(credKey, authUtil.toBase64("#{@email}:#{@password}"))
 
   loadCredentials: () ->

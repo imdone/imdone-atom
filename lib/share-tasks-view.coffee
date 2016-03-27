@@ -19,6 +19,7 @@ class ShareTasksView extends View
         @div class:'block', =>
           @span "or "
           @a href:"#{Client.signUpUrl}", "sign up"
+      @div outlet: 'integrationPanel', class: 'block imdone-integration-pane', style: 'display:none;'
 
   initialize: ->
     @initPasswordField()
