@@ -1,3 +1,10 @@
+## 1.3.29
+* Add c++ extensions by @eistaa
+
+## 1.3.28
+* Fix [Items disappear · Issue #79 · imdone/imdone-atom](https://github.com/imdone/imdone-atom/issues/79)
+* Make zap open visible tasks files
+
 ## 1.3.27
 * Fix issue with regex order for link style tasks
 
@@ -288,4 +295,4 @@
 
 ----
 
-- #DOING:10 Remember to update changelog before +publishing +package @piascikj
+- #TODO:60 Remember to update changelog before +publishing +package @piascikj

@@ -18,7 +18,7 @@ class MenuView extends View
           # DONE:170 Add a link to open filtered files issue:49
           @div click: "share", class: "imdone-toolbar-button text-success", title: "Whoosh! (share visible tasks)", =>
             @a href: "#", class: "icon icon-rocket"
-          @div click: "openFiltered", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open filtered files)", style: "display:none;", =>
+          @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open visible files)", =>
             @a href: "#", class: "icon icon-zap"
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
@@ -28,7 +28,7 @@ class MenuView extends View
           @div click: "clearFilter", class:"icon icon-x clear-filter"
         @div class:'lists-wrapper', =>
           @ul outlet: "lists", class: "lists"
-        # TODO:70 Add saved filters
+        # TODO:30 Add saved filters
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
@@ -54,9 +54,8 @@ class MenuView extends View
   newList: ->
     @emitter.emit 'list.new'
 
-  openFiltered: ->
-    # TODO:30 Zap should open visible task files but prompt if there are more than 10 (configurable) +feature
-    @emitter.emit 'filter.open'
+  openVisible: ->
+    @emitter.emit 'visible.open'
 
   share: ->
     @emitter.emit 'share'
@@ -85,12 +84,6 @@ class MenuView extends View
       @updateMenu()
     @imdoneRepo.on 'tasks.move', =>
       @updateMenu()
-
-    @emitter.on 'filter.tasks', (tasks) =>
-      if tasks.length > 0
-        @zap.show()
-      else
-        @zap.hide()
 
   updateMenu: ->
     return unless @imdoneRepo

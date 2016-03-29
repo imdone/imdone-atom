@@ -1,12 +1,12 @@
 Roadmap
 ----
-- [ ] #BACKLOG:60 Add configuration editor view for .imdone/config.json +Roadmap
+- [ ] #BACKLOG:90 Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #BACKLOG:40 Define the platform
-- [ ] #BACKLOG:50 Edit task plugin, set priority, mark as closed, edit metadata
-- [ ] #BACKLOG:0 Integrate with Waffle.io, GitHub, Jira, Pivotal
-- [ ] #BACKLOG:20 Provide on-line service for installing plugins to a teammmm
-- [ ] #TODO:60 Add configuration for autoclose task with date on moving into list
+- [ ] #BACKLOG:70 Define the platform
+- [ ] #BACKLOG:80 Edit task plugin, set priority, mark as closed, edit metadata
+- [ ] #BACKLOG:30 Integrate with Waffle.io, GitHub, Jira, Pivotal
+- [ ] #BACKLOG:50 Provide on-line service for installing plugins to a teammmm
+- [ ] #TODO:40 Add configuration for autoclose task with date on moving into list
 
 Completed
 ----

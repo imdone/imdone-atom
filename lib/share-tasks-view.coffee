@@ -20,19 +20,18 @@ class ShareTasksView extends View
           @span "or "
           @a href:"#{Client.signUpUrl}", "sign up"
       @div outlet: 'integrationPanel', class: 'block imdone-integration-pane', style: 'display:none;'
+      @div outlet: 'productPanel', class: 'block imdone-product-pane', style: 'display:none;'
 
-  initialize: ->
-    @initPasswordField()
-    @handleEvents()
-
-  constructor: ({@imdoneRepo, @path, @uri}) ->
-    super
+  initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
     @client = new Client
+    @initPasswordField()
+    @handleEvents()
 
   show: () ->
     super
     if @client.isAuthenticated()
+      @emitter.emit 'authentic'
     else
       @loginPanel.show()
       @emailEditor.focus()
@@ -57,7 +56,8 @@ class ShareTasksView extends View
     @client.authenticate email, password, () =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      @loginPanel.show() unless @client.isAuthenticated()
+      return @loginPanel.show() unless @client.isAuthenticated()
+      @emitter.emit 'authentic'
 
   handleEvents: () ->
     self = @
@@ -84,3 +84,17 @@ class ShareTasksView extends View
         when 9 then self.emailEditor.focus()
         else return true
       false
+
+    @emitter.on 'authentic', (e) =>
+      @showProductPanel()
+
+  showProductPanel: ->
+    @spinner.show()
+    @client.getProducts (err, products) =>
+      return if err
+      @spinner.hide()
+      @productPanel.empty().show().append (@getProduct product for product in products)
+
+  getProduct: (product) ->
+    $$ ->
+      @li "#{product.name}"
