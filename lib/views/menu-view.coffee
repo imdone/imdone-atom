@@ -16,7 +16,7 @@ class MenuView extends View
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", class: "icon icon-plus"
           # DONE:170 Add a link to open filtered files issue:49
-          @div click: "share", class: "imdone-toolbar-button text-success", title: "Whoosh! (share visible tasks)", =>
+          @div click: "openShare", class: "imdone-toolbar-button text-success", title: "Whoosh! (share visible tasks)", =>
             @a href: "#", class: "icon icon-rocket"
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open visible files)", =>
             @a href: "#", class: "icon icon-zap"
@@ -57,7 +57,7 @@ class MenuView extends View
   openVisible: ->
     @emitter.emit 'visible.open'
 
-  share: ->
+  openShare: ->
     @emitter.emit 'share'
 
   emitRepoChange: ->

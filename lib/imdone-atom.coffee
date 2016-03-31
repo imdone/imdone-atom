@@ -1,4 +1,4 @@
-ImdoneAtomView        = require './imdone-atom-view'
+ImdoneAtomView        = require './views/imdone-atom-view'
 url                   = require 'url'
 {CompositeDisposable} = require 'atom'
 path                  = require 'path'
@@ -68,7 +68,7 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # TODO:0 Put requires in activate to speed up startup issue:77
+    # TODO:20 Put requires in activate to speed up startup issue:77
     # #DONE:190 Add back serialization (The right way) +Roadmap @testing
     _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
     atom.deserializers.deserialize(state) if (state)

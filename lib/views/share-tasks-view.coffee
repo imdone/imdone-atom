@@ -1,7 +1,9 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
 util = require 'util'
-Client = require './services/imdoneio-client'
+Client = require '../services/imdoneio-client'
+ProductSelectionView = require './product-selection-view'
+ProductDetailView = require './product-detail-view'
 
 module.exports =
 class ShareTasksView extends View
@@ -20,7 +22,11 @@ class ShareTasksView extends View
           @span "or "
           @a href:"#{Client.signUpUrl}", "sign up"
       @div outlet: 'integrationPanel', class: 'block imdone-integration-pane', style: 'display:none;'
-      @div outlet: 'productPanel', class: 'block imdone-product-pane', style: 'display:none;'
+      @div outlet: 'productPanel', class: 'block imdone-product-pane row', style: 'display:none;', =>
+        @div class: 'col-md-4 product-select-wrapper', =>
+          @subview 'productSelect', new ProductSelectionView
+        @div class:'col-md-4 product-detail-wrapper', =>
+          @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
@@ -88,13 +94,13 @@ class ShareTasksView extends View
     @emitter.on 'authentic', (e) =>
       @showProductPanel()
 
+    @productSelect.emitter.on 'product.selected', (product) =>
+      console.log product
+      @productDetail.setProduct product
+
   showProductPanel: ->
-    @spinner.show()
     @client.getProducts (err, products) =>
       return if err
-      @spinner.hide()
-      @productPanel.empty().show().append (@getProduct product for product in products)
-
-  getProduct: (product) ->
-    $$ ->
-      @li "#{product.name}"
+      @productSelect.setItems products
+      @productSelect.populateList()
+      @productPanel.show()
