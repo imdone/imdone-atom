@@ -308,7 +308,7 @@ class ImdoneAtomView extends ScrollView
       dateDue = task.getDateDue()
       dateCreated = task.getDateCreated()
       dateCompleted = task.getDateCompleted()
-      opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
+      opts = $.extend {}, {stripTags: true, stripContext:true, stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
       html = task.getHtml(opts)
 
       if contexts && atom.config.get('imdone-atom.showTagsInline')
