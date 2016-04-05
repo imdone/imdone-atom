@@ -47,6 +47,10 @@
     {
       "name": "ARCHIVE",
       "hidden": true
+    },
+    {
+      "name": "NOTE",
+      "hidden": false
     }
   ],
   "marked": {

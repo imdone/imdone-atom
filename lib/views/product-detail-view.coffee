@@ -18,3 +18,6 @@ class ProductDetailView extends View
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
+      # DOING:30 This has to be configurable for dev and prod
+      @a href:product.login, "login" unless product.enabled
+      @a href:product.logout, "logout" if product.enabled

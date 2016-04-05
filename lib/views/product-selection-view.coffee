@@ -9,12 +9,16 @@ class ProductSelectionView extends SelectListView
     super
     @emitter = new Emitter
 
+  setItems: (products) ->
+    super(products)
+    @confirmed products[0]
+
   confirmed: (product) ->
     console.log 'confirmed!'
     @emitter.emit 'product.selected', product
 
   viewForItem: (product) ->
-    # DOING: Use style-guide multiple lines with icons
+    # DOING:40 Use style-guide multiple lines with icons
     icon   = if product.enabled then 'icon-cloud-upload' else 'icon-sign-in'
     text   = if product.enabled then 'text-success' else 'text-info'
 

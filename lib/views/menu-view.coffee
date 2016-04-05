@@ -3,6 +3,7 @@
 path = require 'path'
 util = require 'util'
 Sortable = require 'sortablejs'
+Client = require '../services/imdoneio-client'
 require('./jq-utils')($)
 
 module.exports =
@@ -10,6 +11,14 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
+        # DOING:0 Show logged in user and avatar here
+        @div class: "imdone-profile", outlet: "$profile"
+        @div class: "imdone-filter", =>
+          @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
+          @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
+        @div class:'lists-wrapper', outlet:'$listWrapper', =>
+          @ul outlet: "lists", class: "lists"
+        # TODO:30 Add saved filters
         @div class: "imdone-toolbar", =>
           @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
             @a href: "#", class: "icon icon-gear"
@@ -23,15 +32,11 @@ class MenuView extends View
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           @div class: "imdone-project-plugins"
-        @div class: "imdone-filter", =>
-          @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
-          @div click: "clearFilter", class:"icon icon-x clear-filter"
-        @div class:'lists-wrapper', =>
-          @ul outlet: "lists", class: "lists"
-        # TODO:30 Add saved filters
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
+    @client = Client.instance
+    @authenticated() if @client.isAuthenticated()
     @handleEvents()
 
   toggleMenu: (event, element) ->
@@ -84,6 +89,16 @@ class MenuView extends View
       @updateMenu()
     @imdoneRepo.on 'tasks.move', =>
       @updateMenu()
+    @client.on 'authenticated', => @authenticated()
+
+  authenticated: ->
+    console.log 'authenticated:', @client.user
+    user = @client.user
+    if user.profile.picture
+      @$profile.html $$ -> @img src: user.profile.picture, class:'img-circle'
+    else
+      @$profile.html $$ -> @img src: user.thumbnail, class:'img-circle'
+    @$profile.append $$ -> @div class: 'user-handle pull-right', "#{user.profile.name || user.email || user.handle}"
 
   updateMenu: ->
     return unless @imdoneRepo

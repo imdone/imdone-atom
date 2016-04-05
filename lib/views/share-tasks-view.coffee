@@ -30,7 +30,7 @@ class ShareTasksView extends View
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @emitter = new Emitter
-    @client = new Client
+    @client = Client.instance
     @initPasswordField()
     @handleEvents()
 
@@ -59,7 +59,7 @@ class ShareTasksView extends View
     @spinner.show()
     email = @emailEditor.getModel().getText()
     password = @passwordEditor.getModel().getText()
-    @client.authenticate email, password, () =>
+    @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
       return @loginPanel.show() unless @client.isAuthenticated()
