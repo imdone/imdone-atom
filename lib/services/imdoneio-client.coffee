@@ -1,14 +1,17 @@
 request = require 'superagent'
 authUtil = require './auth-util'
 {Emitter} = require 'atom'
-# TODO: The client public_key and secret should be
+Pusher = require 'pusher-js'
+# DOING: The client public_key, secret and pusherKey should be configurable
 p = 'GfBC8vMo5JpLufoQjm4236_1mVTocolClAXFsTjcM6ZQ7MAHS8pMEQ=='
 s = 'TShVzu_bjjuEUlC1ulTSvb4Qn0Y='
-baseUrl = 'http://localhost:3000' # TODO:10 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
+pusherKey = '64354707585286cfe58f'
+baseUrl = 'http://localhost:3000' # DOING:10 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
 credKey = 'imdone-atom.credentials'
+Pusher.log = (m) -> console.log(m)
 
 module.exports =
 class ImdoneioClient extends Emitter
@@ -33,25 +36,36 @@ class ImdoneioClient extends Emitter
     @_auth cb
 
   _auth: (cb) ->
-    req = @setHeaders(request.get(baseAPIUrl))
-    self = @
+    @setHeaders(request.get(baseAPIUrl)).end (err, res) =>
+      return onAuthFailure cb if err || !res.ok
+      @onAuthSuccess cb
 
-    req.end (err, res) =>
-      if err || !res.ok
-        @authenticated = false
-        delete @password
-        delete @email
-        return cb(err, res)
-      @authenticated = true
+  onAuthSuccess: (cb) ->
+    @getAccount (err, user) =>
+      return cb(err) if err
       @saveCredentials()
-      @getAccount (err, user) =>
-        return cb(err) if err
-        @user = user
-        @emit 'authenticated'
-        cb(null, profile)
+      @authenticated = true
+      @user = user
+      @emit 'authenticated'
+      @setupPusher()
+      cb(null, user)
 
+  onAuthFailure: (cb) ->
+    @authenticated = false
+    delete @password
+    delete @email
+    cb(err, res)
 
   isAuthenticated: () -> @authenticated
+
+  setupPusher: () ->
+    @pusher = new Pusher pusherKey,
+      encrypted: true
+      authEndpoint: "#{baseUrl}/pusher/auth"
+    # DOING:0 imdoneio pusher channel needs to be configurable
+    @pusherChannel = @pusher.subscribe "private-imdoneio-dev-#{@user.id}"
+    @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data.product
+    @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.linked', data.product
 
   saveCredentials: () ->
     # TODO:0 Credentials should be stored in $HOME/.imdone/config.json
@@ -65,14 +79,14 @@ class ImdoneioClient extends Emitter
       @password = parts[1]
 
   getProducts: (cb) ->
-    # READY:0 Implement getProducts
+    # READY:20 Implement getProducts
     req = @setHeaders request.get("#{baseAPIUrl}/products")
     req.end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   getAccount: (cb) ->
-    # READY:0 Implement getAccount
+    # READY:10 Implement getAccount
     req = @setHeaders request.get("#{baseAPIUrl}/account")
     req.end (err, res) =>
       return cb(err, res) if err || !res.ok

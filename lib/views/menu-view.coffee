@@ -11,7 +11,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # DOING:0 Show logged in user and avatar here
+        # READY:0 Show logged in user and avatar here
         @div class: "imdone-profile", outlet: "$profile"
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
@@ -94,11 +94,9 @@ class MenuView extends View
   authenticated: ->
     console.log 'authenticated:', @client.user
     user = @client.user
-    if user.profile.picture
-      @$profile.html $$ -> @img src: user.profile.picture, class:'img-circle'
-    else
-      @$profile.html $$ -> @img src: user.thumbnail, class:'img-circle'
-    @$profile.append $$ -> @div class: 'user-handle pull-right', "#{user.profile.name || user.email || user.handle}"
+    title = "Imdone Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
+    src = if user.profile.picture then user.profile.picture else user.thumbnail
+    @$profile.html $$ -> @img class:'img-circle', src: src, title: title
 
   updateMenu: ->
     return unless @imdoneRepo

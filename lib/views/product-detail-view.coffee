@@ -1,7 +1,6 @@
 {$, $$, $$$, View} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
 util = require 'util'
-Client = require '../services/imdoneio-client'
 
 module.exports =
 class ProductDetailView extends View
@@ -18,6 +17,6 @@ class ProductDetailView extends View
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
-      # DOING:30 This has to be configurable for dev and prod
+      # TODO: This will have to be upadted on an event sent with pusher
       @a href:product.login, "login" unless product.enabled
       @a href:product.logout, "logout" if product.enabled

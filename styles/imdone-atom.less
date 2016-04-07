@@ -132,6 +132,9 @@
     transition: left  0.2s;
     &.open {
       left: 0;
+      .imdone-profile {
+        left: -4px;
+      }
     }
     .imdone-menu-inner {
       position:absolute;
@@ -156,17 +159,14 @@
       }
     }
     .imdone-profile {
-      width: @menu-component-width;
-      height: 36px;
-      margin-bottom: 8px;
+      width: 30px;
+      height: 30px;
       position:absolute;
       bottom: 0;
+      left: 192px;
+      transition: left  0.2s;
       img {
-        height: 36px;
-      }
-      .user-handle {
-        margin-top: 8px;
-        font-size: 1.25em;
+        height: 30px;
       }
     }
     .imdone-filter {

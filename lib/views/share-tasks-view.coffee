@@ -37,7 +37,7 @@ class ShareTasksView extends View
   show: () ->
     super
     if @client.isAuthenticated()
-      @emitter.emit 'authentic'
+      @showProductPanel()
     else
       @loginPanel.show()
       @emailEditor.focus()
@@ -63,7 +63,7 @@ class ShareTasksView extends View
       @spinner.hide()
       @passwordEditor.getModel().setText ''
       return @loginPanel.show() unless @client.isAuthenticated()
-      @emitter.emit 'authentic'
+      @showProductPanel()
 
   handleEvents: () ->
     self = @
@@ -91,16 +91,15 @@ class ShareTasksView extends View
         else return true
       false
 
-    @emitter.on 'authentic', (e) =>
-      @showProductPanel()
-
     @productSelect.emitter.on 'product.selected', (product) =>
       console.log product
       @productDetail.setProduct product
+
+    @client.on 'product.linked', (product) => @productSelect.updateItem product
+    @client.on 'product.unlinked', (product) => @productSelect.updateItem product
 
   showProductPanel: ->
     @client.getProducts (err, products) =>
       return if err
       @productSelect.setItems products
-      @productSelect.populateList()
       @productPanel.show()

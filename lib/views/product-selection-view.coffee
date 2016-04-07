@@ -1,7 +1,6 @@
 {$, $$, $$$, SelectListView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
 util = require 'util'
-Client = require '../services/imdoneio-client'
 
 module.exports =
 class ProductSelectionView extends SelectListView
@@ -11,14 +10,25 @@ class ProductSelectionView extends SelectListView
 
   setItems: (products) ->
     super(products)
-    @confirmed products[0]
+    @selectProduct @getSelectedItem()
+
+  updateItem: (item) ->
+    selectedItem = @getSelectedItem()
+    for product, i in @items
+      if product.name == item.name
+        @items[i] = item
+      @selectProduct @items[i] if selectedItem.name == product.name
+    console.log @items
+    @populateList()
+
+  selectProduct: (product) ->
+    @confirmed product
 
   confirmed: (product) ->
-    console.log 'confirmed!'
+    console.log 'product selected'
     @emitter.emit 'product.selected', product
 
   viewForItem: (product) ->
-    # DOING:40 Use style-guide multiple lines with icons
     icon   = if product.enabled then 'icon-cloud-upload' else 'icon-sign-in'
     text   = if product.enabled then 'text-success' else 'text-info'
 
