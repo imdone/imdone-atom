@@ -1,13 +1,7 @@
-ImdoneAtomView        = require './views/imdone-atom-view'
 url                   = require 'url'
 {CompositeDisposable} = require 'atom'
 path                  = require 'path'
-moment                = require 'moment'
-mkdirp                = require 'mkdirp'
-imdoneHelper          = require './services/imdone-helper'
-fileService           = require './services/file-service'
-{allowUnsafeEval, allowUnsafeNewFunction} = require 'loophole'
-_                     = require 'lodash'
+_                     = null
 
 module.exports = ImdoneAtom =
   config:
@@ -70,6 +64,8 @@ module.exports = ImdoneAtom =
   activate: (state) ->
     # TODO:20 Put requires in activate to speed up startup issue:77
     # #DONE:190 Add back serialization (The right way) +Roadmap @testing
+    _ = require 'lodash'
+    fileService = require './services/file-service'
     _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
     atom.deserializers.deserialize(state) if (state)
     @subscriptions = new CompositeDisposable
@@ -121,6 +117,9 @@ module.exports = ImdoneAtom =
   provideService: -> require './services/plugin-manager'
 
   openJournalFile: ->
+    moment = require 'moment'
+    mkdirp = require 'mkdirp'
+    {allowUnsafeNewFunction} = require 'loophole'
     allowUnsafeNewFunction ->
       config = atom.config.get('imdone-atom.todaysJournal')
       dateFormat = config.dateFormat
@@ -145,6 +144,8 @@ module.exports = ImdoneAtom =
     'imdone://tasks/' + projectPath
 
   viewForUri: (uri) ->
+    imdoneHelper = require './services/imdone-helper'
+    ImdoneAtomView = require './views/imdone-atom-view'
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])

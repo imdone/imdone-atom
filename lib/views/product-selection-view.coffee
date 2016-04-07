@@ -35,8 +35,7 @@ class ProductSelectionView extends SelectListView
     $$ ->
       @li class:"integration-product", 'data-name': product.name, =>
         @div class:"pull-right icon #{icon} #{text}"
-        @div =>
-          @h4 product.name
+        @span class:'product-name', product.name
 
   getFilterKey: -> 'name'
 
