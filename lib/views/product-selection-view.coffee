@@ -13,19 +13,19 @@ class ProductSelectionView extends SelectListView
     @selectProduct @getSelectedItem()
 
   updateItem: (item) ->
-    selectedItem = @getSelectedItem()
     for product, i in @items
       if product.name == item.name
         @items[i] = item
-      @selectProduct @items[i] if selectedItem.name == product.name
-    console.log @items
+    selectedItem = @getSelectedItem()
+    itemSelector = "li[data-name=#{selectedItem.name}]"
     @populateList()
+    @selectItemView(@list.find itemSelector)
+    @confirmSelection()
 
   selectProduct: (product) ->
     @confirmed product
 
   confirmed: (product) ->
-    console.log 'product selected'
     @emitter.emit 'product.selected', product
 
   viewForItem: (product) ->
@@ -33,7 +33,7 @@ class ProductSelectionView extends SelectListView
     text   = if product.enabled then 'text-success' else 'text-info'
 
     $$ ->
-      @li class:"integration-product", =>
+      @li class:"integration-product", 'data-name': product.name, =>
         @div class:"pull-right icon #{icon} #{text}"
         @div =>
           @h4 product.name
