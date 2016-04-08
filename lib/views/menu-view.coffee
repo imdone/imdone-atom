@@ -25,8 +25,6 @@ class MenuView extends View
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", class: "icon icon-plus"
           # DONE:170 Add a link to open filtered files issue:49
-          @div click: "openShare", class: "imdone-toolbar-button text-success", title: "Whoosh! (share visible tasks)", =>
-            @a href: "#", class: "icon icon-rocket"
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open visible files)", =>
             @a href: "#", class: "icon icon-zap"
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
@@ -62,9 +60,6 @@ class MenuView extends View
   openVisible: ->
     @emitter.emit 'visible.open'
 
-  openShare: ->
-    @emitter.emit 'share'
-
   emitRepoChange: ->
     @emitter.emit 'repo.change'
 
@@ -90,13 +85,14 @@ class MenuView extends View
     @imdoneRepo.on 'tasks.move', =>
       @updateMenu()
     @client.on 'authenticated', => @authenticated()
+    @$profile.on 'click', '.share-btn', => @emitter.emit 'share'
 
   authenticated: ->
     console.log 'authenticated:', @client.user
     user = @client.user
     title = "Imdone Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
-    @$profile.html $$ -> @img class:'img-circle', src: src, title: title
+    @$profile.html $$ -> @img class:'img-circle share-btn', src: src, title: title
 
   updateMenu: ->
     return unless @imdoneRepo

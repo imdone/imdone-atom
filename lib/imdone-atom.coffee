@@ -1,7 +1,7 @@
-url                   = require 'url'
-{CompositeDisposable} = require 'atom'
-path                  = require 'path'
-_                     = null
+path                = require 'path'
+url                 = null
+CompositeDisposable = null
+_                   = null
 
 module.exports = ImdoneAtom =
   config:
@@ -65,6 +65,8 @@ module.exports = ImdoneAtom =
     # TODO:20 Put requires in activate to speed up startup issue:77
     # #DONE:190 Add back serialization (The right way) +Roadmap @testing
     _ = require 'lodash'
+    url = require 'url'
+    {CompositeDisposable} = require 'atom'
     fileService = require './services/file-service'
     _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
     atom.deserializers.deserialize(state) if (state)
