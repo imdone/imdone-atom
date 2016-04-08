@@ -1,17 +1,15 @@
 {$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
-MenuView = require './menu-view'
-BottomView = require './bottom-view'
-imdoneHelper = require '../services/imdone-helper'
-path = require 'path'
-util = require 'util'
-Sortable = require 'sortablejs'
-pluginManager = require '../services/plugin-manager'
-fileService = require '../services/file-service'
-log = require '../services/log'
-require('./jq-utils')($)
+MenuView = null
+BottomView = null
+path = null
+util = null
+Sortable = null
+pluginManager = null
+fileService = null
+log = null
 
-# TODO:50 Add keen stats for features
+# TODO:70 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
   atom.deserializers.add(this)
@@ -26,13 +24,41 @@ class ImdoneAtomView extends ScrollView
       return unless plugin.getView
       @imdoneView.bottomView.showPlugin plugin
 
+  initialize: ->
+    super
+
+  constructor: ({@imdoneRepo, @path, @uri}) ->
+    super
+    util = require 'util'
+    Sortable = require 'sortablejs'
+    pluginManager = require '../services/plugin-manager'
+    fileService = require '../services/file-service'
+    log = require '../services/log'
+    require('./jq-utils')($)
+
+    @title = "#{path.basename(@path)} Tasks"
+    @plugins = {}
+
+    @handleEvents()
+    @imdoneRepo.fileStats (err, files) =>
+      @numFiles = files.length
+      @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
+      # #DONE:160 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
+        @ignorePrompt.show()
+      else @initImdone()
+
   @deserialize: ({data}) ->
+    imdoneHelper = require '../services/imdone-helper'
     imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)
     new ImdoneAtomView(imdoneRepo: imdoneRepo, path: data.path, uri: data.uri)
 
   serialize: -> { deserializer: 'ImdoneAtomView', data: {path: @path, uri: @uri} }
 
   @content: (params) ->
+    MenuView = require './menu-view'
+    BottomView = require './bottom-view'
+    path = require 'path'
     @div tabindex: -1, class: 'imdone-atom pane-item', =>
       @div outlet: 'loading', class: 'imdone-loading', =>
         @h1 "Loading #{path.basename(params.path)} Tasks."
@@ -72,26 +98,11 @@ class ImdoneAtomView extends ScrollView
   getURI: ->
     @uri
 
-  initialize: ->
-    super
-
-  constructor: ({@imdoneRepo, @path, @uri}) ->
-    super
-    @title = "#{path.basename(@path)} Tasks"
-    @plugins = {}
-
-    @handleEvents()
-    @imdoneRepo.fileStats (err, files) =>
-      @numFiles = files.length
-      @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:160 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
-      if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
-        @ignorePrompt.show()
-      else @initImdone()
-
   handleEvents: ->
     repo = @imdoneRepo
     @emitter = @viewInterface = new PluginViewInterface @
+    @menuView.handleEvents @emitter
+    @bottomView.handleEvents @emitter
 
     @imdoneRepo.on 'initialized', =>
       @onRepoUpdate()
@@ -111,16 +122,16 @@ class ImdoneAtomView extends ScrollView
       repo.refresh()
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
-    @menuView.emitter.on 'menu.toggle', =>
+    @emitter.on 'menu.toggle', =>
       @boardWrapper.toggleClass 'shift'
 
-    @menuView.emitter.on 'filter', (text) =>
+    @emitter.on 'filter', (text) =>
       @filter text
 
-    @menuView.emitter.on 'filter.clear', =>
+    @emitter.on 'filter.clear', =>
       @board.find('.task').show()
 
-    @menuView.emitter.on 'visible.open', =>
+    @emitter.on 'visible.open', =>
       paths = {}
       for task in @visibleTasks()
         file = @imdoneRepo.getFileForTask(task)
@@ -130,21 +141,23 @@ class ImdoneAtomView extends ScrollView
         console.log fpath, line
         @openPath fpath, line
 
-    @menuView.emitter.on 'list.new', => @bottomView.showNewList()
+    # TODO:10 This belongs in bottomView +refactor
+    @emitter.on 'list.new', => @bottomView.showNewList()
 
-    @menuView.emitter.on 'share', => @bottomView.showShare()
+    # TODO:20 This belongs in bottomView +refactor
+    @emitter.on 'share', => @bottomView.showShare()
 
-    @menuView.emitter.on 'repo.change', => @showMask()
+    @emitter.on 'repo.change', => @showMask()
 
-    @bottomView.emitter.on 'config.close', =>
+    @emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
       @appContainer.css 'bottom', ''
       @clearSelection()
 
-    @bottomView.emitter.on 'config.open', =>
+    @emitter.on 'config.open', =>
       @appContainer.addClass 'shift'
 
-    @bottomView.emitter.on 'resize.change', (height) =>
+    @emitter.on 'resize.change', (height) =>
       @appContainer.css('bottom', height + 'px')
 
     @on 'click', '.source-link',  (e) =>

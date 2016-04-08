@@ -1,10 +1,9 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
-path = require 'path'
-util = require 'util'
-Sortable = require 'sortablejs'
-Client = require '../services/imdoneio-client'
-require('./jq-utils')($)
+path = null
+util = null
+Sortable = null
+Client = null
 
 module.exports =
 class MenuView extends View
@@ -12,13 +11,16 @@ class MenuView extends View
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
         # READY:0 Show logged in user and avatar here
-        @div class: "imdone-profile", outlet: "$profile"
+        @div class: "imdone-profile", outlet: "$profile", =>
+          @div outlet:'$login', class:'text-success', title:'Blast off! login and sync tasks', =>
+            @a click:'openShare', href: "#", class: 'icon icon-rocket'
+          @div outlet:'$profileImage', click:'openShare', style:'display:none;'
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
-        # TODO:30 Add saved filters
+        # TODO:50 Add saved filters
         @div class: "imdone-toolbar", =>
           @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
             @a href: "#", class: "icon icon-gear"
@@ -32,10 +34,13 @@ class MenuView extends View
           @div class: "imdone-project-plugins"
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
-    @emitter = new Emitter
+    path = require 'path'
+    util = require 'util'
+    Sortable = require 'sortablejs'
+    Client = require '../services/imdoneio-client'
+    require('./jq-utils')($)
     @client = Client.instance
     @authenticated() if @client.isAuthenticated()
-    @handleEvents()
 
   toggleMenu: (event, element) ->
     @toggleClass 'open'
@@ -63,7 +68,8 @@ class MenuView extends View
   emitRepoChange: ->
     @emitter.emit 'repo.change'
 
-  handleEvents: ->
+  handleEvents: (@emitter) ->
+    if @initialized || !@emitter then return else @initialized = true
     repo = @imdoneRepo
     @on 'click', '.toggle-list', (e) =>
       @emitRepoChange()
@@ -85,14 +91,17 @@ class MenuView extends View
     @imdoneRepo.on 'tasks.move', =>
       @updateMenu()
     @client.on 'authenticated', => @authenticated()
-    @$profile.on 'click', '.share-btn', => @emitter.emit 'share'
 
   authenticated: ->
     console.log 'authenticated:', @client.user
     user = @client.user
-    title = "Imdone Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
+    title = "Sync Tasks &#x0aImdone Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
-    @$profile.html $$ -> @img class:'img-circle share-btn', src: src, title: title
+    @$login.hide()
+    @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title).show()
+
+  openShare: ->
+    @emitter.emit 'share'
 
   updateMenu: ->
     return unless @imdoneRepo

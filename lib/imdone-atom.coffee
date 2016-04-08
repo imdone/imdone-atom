@@ -2,6 +2,7 @@ path                = require 'path'
 url                 = null
 CompositeDisposable = null
 _                   = null
+ImdoneAtomView = require './views/imdone-atom-view'
 
 module.exports = ImdoneAtom =
   config:
@@ -62,7 +63,7 @@ module.exports = ImdoneAtom =
   subscriptions: null
 
   activate: (state) ->
-    # TODO:20 Put requires in activate to speed up startup issue:77
+    # TODO:40 Put requires in activate to speed up startup issue:77
     # #DONE:190 Add back serialization (The right way) +Roadmap @testing
     _ = require 'lodash'
     url = require 'url'
@@ -147,7 +148,6 @@ module.exports = ImdoneAtom =
 
   viewForUri: (uri) ->
     imdoneHelper = require './services/imdone-helper'
-    ImdoneAtomView = require './views/imdone-atom-view'
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])

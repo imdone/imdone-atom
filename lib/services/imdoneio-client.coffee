@@ -2,14 +2,14 @@ request = require 'superagent'
 authUtil = require './auth-util'
 {Emitter} = require 'atom'
 Pusher = require 'pusher-js'
+config = require '../../config'
 # DOING: The client public_key, secret and pusherKey should be configurable
-p = 'GfBC8vMo5JpLufoQjm4236_1mVTocolClAXFsTjcM6ZQ7MAHS8pMEQ=='
-s = 'TShVzu_bjjuEUlC1ulTSvb4Qn0Y='
-pusherKey = '64354707585286cfe58f'
-baseUrl = 'http://localhost:3000' # DOING:10 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
+baseUrl = config.baseUrl # DOING:10 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
+pusherAuthUrl = "#{baseUrl}/pusher/auth"
+
 credKey = 'imdone-atom.credentials'
 Pusher.log = (m) -> console.log(m)
 
@@ -28,7 +28,7 @@ class ImdoneioClient extends Emitter
   setHeaders: (req) ->
     req.set('Date', (new Date()).getTime())
       .set('Accept', 'application/json')
-      .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, s, p));
+      .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA));
 
 
   authenticate: (@email, password, cb) ->
@@ -37,7 +37,7 @@ class ImdoneioClient extends Emitter
 
   _auth: (cb) ->
     @setHeaders(request.get(baseAPIUrl)).end (err, res) =>
-      return onAuthFailure cb if err || !res.ok
+      return @onAuthFailure err, res, cb if err || !res.ok
       @onAuthSuccess cb
 
   onAuthSuccess: (cb) ->
@@ -50,7 +50,7 @@ class ImdoneioClient extends Emitter
       @setupPusher()
       cb(null, user)
 
-  onAuthFailure: (cb) ->
+  onAuthFailure: (err, res, cb) ->
     @authenticated = false
     delete @password
     delete @email
@@ -59,9 +59,9 @@ class ImdoneioClient extends Emitter
   isAuthenticated: () -> @authenticated
 
   setupPusher: () ->
-    @pusher = new Pusher pusherKey,
+    @pusher = new Pusher config.pusherKey,
       encrypted: true
-      authEndpoint: "#{baseUrl}/pusher/auth"
+      authEndpoint: pusherAuthUrl
     # DOING:0 imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "private-imdoneio-dev-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data.product

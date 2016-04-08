@@ -4,9 +4,8 @@ util = require 'util'
 
 module.exports =
 class ProductSelectionView extends SelectListView
-  initialize: ->
-    super
-    @emitter = new Emitter
+  handleEvents: (@emitter) ->
+    if @initialized || !@emitter then return else @initialized = true
 
   setItems: (products) ->
     super(products)

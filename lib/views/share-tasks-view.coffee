@@ -65,7 +65,10 @@ class ShareTasksView extends View
       return @loginPanel.show() unless @client.isAuthenticated()
       @showProductPanel()
 
-  handleEvents: () ->
+  handleEvents: (@emitter) ->
+    if @initialized || !@emitter then return else @initialized = true
+    @productSelect.handleEvents @emitter
+
     self = @
     @emailEditor.on 'keydown', (e) =>
       code = e.keyCode || e.which

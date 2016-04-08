@@ -1,11 +1,13 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
-ShareTasksView = require './share-tasks-view'
 
 module.exports =
 class BottomView extends View
+  constructor: ({@imdoneRepo, @path, @uri}) ->
+    super
 
   @content: (params) ->
+    ShareTasksView = require './share-tasks-view'
     @div class:'imdone-config-container hidden', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
@@ -31,11 +33,10 @@ class BottomView extends View
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
       # #BACKLOG:40 Add config view here
 
-  initialize: ({@imdoneRepo, @path, @uri}) ->
-    @emitter = new Emitter
-    @handleEvents()
+  handleEvents: (@emitter)->
+    if @initialized || !@emitter then return else @initialized = true
+    @shareTasksView.handleEvents @emitter
 
-  handleEvents: ->
     # #DONE:110 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
