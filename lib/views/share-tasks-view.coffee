@@ -29,10 +29,8 @@ class ShareTasksView extends View
           @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
-    @emitter = new Emitter
     @client = Client.instance
     @initPasswordField()
-    @handleEvents()
 
   show: () ->
     super
@@ -68,6 +66,7 @@ class ShareTasksView extends View
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
     @productSelect.handleEvents @emitter
+    @productDetail.handleEvents @emitter
 
     self = @
     @emailEditor.on 'keydown', (e) =>
@@ -94,7 +93,7 @@ class ShareTasksView extends View
         else return true
       false
 
-    @productSelect.emitter.on 'product.selected', (product) =>
+    @emitter.on 'product.selected', (product) =>
       console.log product
       @productDetail.setProduct product
 

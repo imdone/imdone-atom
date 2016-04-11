@@ -7,6 +7,7 @@ util = null
 Sortable = null
 pluginManager = null
 fileService = null
+client = null
 log = null
 
 # TODO:70 Add keen stats for features
@@ -33,6 +34,7 @@ class ImdoneAtomView extends ScrollView
     Sortable = require 'sortablejs'
     pluginManager = require '../services/plugin-manager'
     fileService = require '../services/file-service'
+    client = require('../services/imdoneio-client').instance
     log = require '../services/log'
     require('./jq-utils')($)
 
@@ -148,6 +150,8 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'share', => @bottomView.showShare()
 
     @emitter.on 'repo.change', => @showMask()
+
+    @emitter.on 'sync.board', (product) => client.syncTasks @imdoneRepo, @visibleTasks(), product
 
     @emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
@@ -309,6 +313,7 @@ class ImdoneAtomView extends ScrollView
       @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
         @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
 
+  # BACKLOG: Split BoardView this apart into it's own class to simplify +refactor
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()

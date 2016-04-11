@@ -38,7 +38,7 @@
     },
     {
       "name": "READY",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DONE",
@@ -71,5 +71,8 @@
       "titleTemplate": "github issue #%s"
     }
   },
-  "keepEmptyPriority": false
+  "keepEmptyPriority": false,
+  "sync": {
+    "id": "570b38f26b654cba6082f6d1"
+  }
 }

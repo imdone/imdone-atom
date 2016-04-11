@@ -5,7 +5,8 @@ module.exports =
 class ProductDetailView extends View
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
-    @find('#sync-board').on 'click', => @emitter.emit 'sync.board', @product.name
+    @on 'click', '#sync-board', =>
+      @emitter.emit 'sync.board', @product.name
 
   @content: (params) ->
     @div outlet:'$detail', class: 'product-detail-view-content'
