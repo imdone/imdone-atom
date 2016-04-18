@@ -5,7 +5,7 @@ Pusher = require 'pusher-js'
 _ = require 'lodash'
 config = require '../../config'
 # READY:60 The client public_key, secret and pusherKey should be configurable
-PRODUCT_ID_NOT_VALID_ERR = new Error "Product ID not valid"
+PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
 baseUrl = config.baseUrl # READY:50 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
@@ -17,7 +17,7 @@ Pusher.log = (m) -> console.log(m)
 
 module.exports =
 class ImdoneioClient extends Emitter
-  @PRODUCT_ID_NOT_VALID_ERR: PRODUCT_ID_NOT_VALID_ERR
+  @PROJECT_ID_NOT_VALID_ERR: PROJECT_ID_NOT_VALID_ERR
   @baseUrl: baseUrl
   @baseAPIUrl: baseAPIUrl
   @signUpUrl: signUpUrl
@@ -102,9 +102,19 @@ class ImdoneioClient extends Emitter
     # READY:90 Implement getProject
     req = @setHeaders request.get("#{baseAPIUrl}/projects/#{projectId}")
     req.end (err, res) =>
-      return cb(PRODUCT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
+      return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
       return cb err if err
       cb null, res.body
+
+  getTasks: (projectId, taskIds, cb) ->
+    # READY:90 Implement getProject
+    return cb null, [] unless taskIds && taskIds.length > 0
+    req = @setHeaders request.get("#{baseAPIUrl}/projects/#{projectId}/tasks/#{taskIds.join(',')}")
+    req.end (err, res) =>
+      return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
+      return cb err if err
+      cb null, res.body
+
 
   createProject: (repo, cb) ->
     # READY:40 Implement createProject
@@ -128,19 +138,37 @@ class ImdoneioClient extends Emitter
     @getProject projectId, (err, project) =>
       _.set repo, 'config.sync.name', project.name
       repo.saveConfig()
-      return @createProject repo, cb if err == PRODUCT_ID_NOT_VALID_ERR
+      return @createProject repo, cb if err == PROJECT_ID_NOT_VALID_ERR
       return cb err if err
       cb null, project
 
+  createTasks: (repo, project, tasks, product, cb) ->
+    # DONE:40 Implement createTasks
+    req = @setHeaders request.post("#{baseAPIUrl}/projects/#{project.id}/tasks")
+    req.send(
+      tasks.map (task) -> {localTask: task}
+    ).end (err, res) =>
+      return cb(err, res) if err || !res.ok
+      tasks = res.body
+      @tasksDb(repo).insert tasks, (err, docs) ->
+        cb null, docs
+
+  updateTasks: (repo, project, docs, tasks, product, cb) ->
+    # DOING:40 Implement updateTasks (does a compare)
+    ids = docs.map (obj) -> obj.id
+    @getTasks project.id, ids, (err, tasks) =>
+      # DOING: Compare remote tasks with local tasks for update
+      debugger;
+
   syncTasks: (repo, tasks, product, cb) ->
+    cb = if cb then cb else () ->
     # DOING:10 Emit progress through the repo so the right board is updated issue:87
     @getOrCreateProject repo, (err, project) =>
       return cb(err) if err
-      db = @taskDb(repo)
-      #loop
-
-
-      cb() if cb
+      @tasksDb(repo).find {}, (err, docs) =>
+        return cb err if err
+        return @createTasks(repo, project, tasks, product, cb) unless docs && docs.length > 0
+        @updateTasks repo, project, docs, tasks, product, cb
 
   # collection can be an array of strings or string
   db: (collection) ->
