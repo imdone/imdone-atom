@@ -73,6 +73,7 @@
   },
   "keepEmptyPriority": false,
   "sync": {
-    "id": "570b38f26b654cba6082f6d1"
+    "id": "570b38f26b654cba6082f6d1",
+    "name": "imdone-atom"
   }
 }

@@ -8,7 +8,7 @@ Roadmap
 - [ ] #BACKLOG:50 Provide on-line service for installing plugins to a teammmm
 - [ ] #TODO:60 Add configuration for autoclose task with date on moving into list
 - [ ] #DOING:20 As a user I would like to share tasks with other services +story
-  - [ ] #DOING:10 As a user I would like to enable an integration
+  - [ ] #READY:0 As a user I would like to enable an integration
 - [ ] #BACKLOG: As a user I would like to hide a list without opening the menu
 
 Completed

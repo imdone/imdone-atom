@@ -4,9 +4,9 @@ authUtil = require './auth-util'
 Pusher = require 'pusher-js'
 _ = require 'lodash'
 config = require '../../config'
-# READY:10 The client public_key, secret and pusherKey should be configurable
+# READY:60 The client public_key, secret and pusherKey should be configurable
 PRODUCT_ID_NOT_VALID_ERR = new Error "Product ID not valid"
-baseUrl = config.baseUrl # READY:0 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
+baseUrl = config.baseUrl # READY:50 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
@@ -57,7 +57,7 @@ class ImdoneioClient extends Emitter
 
   authenticate: (@email, password, cb) ->
     @password = authUtil.sha password
-    @_auth () ->
+    @_auth cb
 
   isAuthenticated: () -> @authenticated
 
@@ -65,18 +65,18 @@ class ImdoneioClient extends Emitter
     @pusher = new Pusher config.pusherKey,
       encrypted: true
       authEndpoint: pusherAuthUrl
-    # DOING:0 imdoneio pusher channel needs to be configurable
+    # READY:20 imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data.product
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.linked', data.product
 
   saveCredentials: () ->
     # TODO:0 Credentials should be stored in $HOME/.imdone/config.json
-    @db('config').insert
+    @db().insert
       key: authUtil.toBase64("#{@email}:#{@password}")
 
   loadCredentials: (cb) ->
-    @db('config').find {}, (err, docs) =>
+    @db().find {}, (err, docs) =>
       return cb err if err || docs.length < 1
       parts = authUtil.fromBase64(docs[0].key).split(':')
       @email = parts[0]
@@ -85,29 +85,29 @@ class ImdoneioClient extends Emitter
 
 
   getProducts: (cb) ->
-    # READY:40 Implement getProducts
+    # READY:100 Implement getProducts
     req = @setHeaders request.get("#{baseAPIUrl}/products")
     req.end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   getAccount: (cb) ->
-    # READY:30 Implement getAccount
+    # READY:80 Implement getAccount
     req = @setHeaders request.get("#{baseAPIUrl}/account")
     req.end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   getProject: (projectId, cb) ->
-    # READY:30 Implement getProject
+    # READY:90 Implement getProject
     req = @setHeaders request.get("#{baseAPIUrl}/projects/#{projectId}")
     req.end (err, res) =>
       return cb(PRODUCT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
-      return cb err, res.body if res.body
-      cb err
+      return cb err if err
+      cb null, res.body
 
   createProject: (repo, cb) ->
-    # DOING: Implement createProject
+    # READY:40 Implement createProject
     req = @setHeaders request.post("#{baseAPIUrl}/projects")
     req.send(
       name: repo.getDisplayName()
@@ -116,42 +116,47 @@ class ImdoneioClient extends Emitter
       return cb(err, res) if err || !res.ok
       project = res.body
       _.set repo, 'config.sync.id', project.id
+      _.set repo, 'config.sync.name', project.name
       repo.saveConfig()
       cb(null, project)
 
 
   getOrCreateProject: (repo, cb) ->
-    # DOING: Implement getOrCreateProject
+    # READY:30 Implement getOrCreateProject
     projectId = _.get repo, 'config.sync.id'
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
+      _.set repo, 'config.sync.name', project.name
+      repo.saveConfig()
       return @createProject repo, cb if err == PRODUCT_ID_NOT_VALID_ERR
       return cb err if err
-      cb err, project
+      cb null, project
 
-  syncTasks: (repo, tasks, product) ->
-    # DOING: Emit progress through the repo so the right board is updated
+  syncTasks: (repo, tasks, product, cb) ->
+    # DOING:10 Emit progress through the repo so the right board is updated issue:87
     @getOrCreateProject repo, (err, project) =>
-      return if err
-      console.log 'config-dir path:', atom.getConfigDirPath()
-      # projectId = repo.config.io.project
-      # console.log 'repo config:', repo.config
-      # console.log 'tasks:', tasks
-      # console.log 'syncing to:', product
-      # console.log 'project:', projectId
+      return cb(err) if err
+      db = @taskDb(repo)
+      #loop
 
-      # @db().insert
-      #   project: projectId
-      #   product: product
+
+      cb() if cb
+
+  # collection can be an array of strings or string
   db: (collection) ->
-    collection = "tasks" unless collection
+    path = require 'path'
+    collection = path.join.apply @, arguments if arguments.length > 1
+    collection = "config" unless collection
     @datastore = {} unless @datastore
     return @datastore[collection] unless !@datastore[collection]
-    path = require 'path'
     DataStore = require('nedb')
     @datastore[collection] = new DataStore
       filename: path.join atom.getConfigDirPath(), 'storage', 'imdone-atom', collection
       autoload: true
     @datastore[collection]
+
+  tasksDb: (repo) ->
+    #READY:10 return the project specific task DB
+    @db 'tasks',repo.getPath().replace(/\//g, '_')
 
   @instance: new ImdoneioClient
