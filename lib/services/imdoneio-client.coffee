@@ -1,8 +1,10 @@
 request = require 'superagent'
+async = require 'async'
 authUtil = require './auth-util'
 {Emitter} = require 'atom'
 Pusher = require 'pusher-js'
 _ = require 'lodash'
+Task = require 'imdone-core/lib/task'
 config = require '../../config'
 # READY:60 The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
@@ -71,9 +73,9 @@ class ImdoneioClient extends Emitter
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.linked', data.product
 
   saveCredentials: () ->
-    # TODO:0 Credentials should be stored in $HOME/.imdone/config.json
-    @db().insert
-      key: authUtil.toBase64("#{@email}:#{@password}")
+    @db().findOne {}, (err, doc) =>
+      key = authUtil.toBase64("#{@email}:#{@password}")
+      @db().update {_id: doc._id}, {$set: { key: key }}, {upsert: true}, () ->
 
   loadCredentials: (cb) ->
     @db().find {}, (err, docs) =>
@@ -143,26 +145,27 @@ class ImdoneioClient extends Emitter
       cb null, project
 
   createTasks: (repo, project, tasks, product, cb) ->
-    # DONE:40 Implement createTasks
+    # DONE:50 Implement createTasks
     req = @setHeaders request.post("#{baseAPIUrl}/projects/#{project.id}/tasks")
-    req.send(
-      tasks.map (task) -> {localTask: task}
-    ).end (err, res) =>
+    updateRepo = (task, cb) =>
+      # DOING:20 modifyTask should update text with metadta that doesn't exists
+      repo.modifyTask new Task(task.localTask, true), true, cb
+    req.send(tasks).end (err, res) =>
       return cb(err, res) if err || !res.ok
       tasks = res.body
       @tasksDb(repo).insert tasks, (err, docs) ->
-        cb null, docs
+        async.each docs, updateRepo, cb
 
   updateTasks: (repo, project, docs, tasks, product, cb) ->
-    # DOING:40 Implement updateTasks (does a compare)
+    # DOING:50 Implement updateTasks (does a compare)
     ids = docs.map (obj) -> obj.id
     @getTasks project.id, ids, (err, tasks) =>
-      # DOING: Compare remote tasks with local tasks for update
+      # DOING:0 Compare remote tasks with local tasks for update
       debugger;
 
   syncTasks: (repo, tasks, product, cb) ->
     cb = if cb then cb else () ->
-    # DOING:10 Emit progress through the repo so the right board is updated issue:87
+    # DOING:30 Emit progress through the repo so the right board is updated issue:87
     @getOrCreateProject repo, (err, project) =>
       return cb(err) if err
       @tasksDb(repo).find {}, (err, docs) =>

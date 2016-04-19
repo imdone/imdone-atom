@@ -37,7 +37,7 @@ class BottomView extends View
     if @initialized || !@emitter then return else @initialized = true
     @shareTasksView.handleEvents @emitter
 
-    # #DONE:110 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
+    # #DONE:130 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>

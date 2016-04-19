@@ -170,7 +170,7 @@ class Watcher
 
 
   updateChangedChildren: (dir, cb) ->
-    # DONE:0 Update changed children and return true if there were children changed
+    # DONE:10 Update changed children and return true if there were children changed
     hasChange = false
     # DONE:0 Change to async
     processEntry = (entry, cb) =>

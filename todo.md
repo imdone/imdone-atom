@@ -7,16 +7,16 @@ Roadmap
 - [ ] #BACKLOG:30 Integrate with Waffle.io, GitHub, Jira, Pivotal
 - [ ] #BACKLOG:50 Provide on-line service for installing plugins to a teammmm
 - [ ] #TODO:60 Add configuration for autoclose task with date on moving into list
-- [ ] #DOING:20 As a user I would like to share tasks with other services +story
+- [ ] #DOING:40 As a user I would like to share tasks with other services +story
   - [ ] #READY:0 As a user I would like to enable an integration
 - [ ] #BACKLOG: As a user I would like to hide a list without opening the menu
 
 Completed
 ----
-- [x] #DONE:150 Re-apply filter when board is refreshed
-- [x] #DONE:130 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
-- [x] #DONE:180 Add list rename +Roadmap
-- [x] #DONE:250 Add help for configuration
-- [x] #DONE:260 Add help for task syntax
-- [x] #DONE:280 Add help for todo.txt syntax
-- [x] #DONE:60 Open all files for filtered tasks
+- [x] #DONE:170 Re-apply filter when board is refreshed
+- [x] #DONE:150 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
+- [x] #DONE:200 Add list rename +Roadmap
+- [x] #DONE:270 Add help for configuration
+- [x] #DONE:280 Add help for task syntax
+- [x] #DONE:300 Add help for todo.txt syntax
+- [x] #DONE:80 Open all files for filtered tasks

@@ -45,7 +45,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:160 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE:180 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
         @ignorePrompt.show()
       else @initImdone()
@@ -66,7 +66,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:290 Update progress bar on repo load
+        # #DONE:310 Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -167,7 +167,7 @@ class ImdoneAtomView extends ScrollView
     @on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
-      # DONE:40 Use setting to determine if we should show a task notification
+      # DONE:60 Use setting to determine if we should show a task notification
       if atom.config.get('imdone-atom.showNotifications')
         taskId = $(link).closest('.task').attr 'id'
         task = @imdoneRepo.getTask taskId
@@ -321,7 +321,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:230 Add task drag and drop support
+    # #DONE:250 Add task drag and drop support
 
     getTask = (task) =>
       contexts = task.getContext()
@@ -353,7 +353,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:270 Add todo.txt stuff like chrome app!
+          # #DONE:290 Add todo.txt stuff like chrome app!
           if contexts && ! atom.config.get('imdone-atom.showTagsInline')
             @div =>
               for context, i in contexts
@@ -368,7 +368,7 @@ class ImdoneAtomView extends ScrollView
                   @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE:90 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
+              # DONE:110 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
               if dateDue
                 @tr =>
                   @td "due"
@@ -388,7 +388,7 @@ class ImdoneAtomView extends ScrollView
                   @td "completed"
                   @td dateCompleted
                   @td =>
-                    # #DONE:210 Implement #filter/*filterRegex* links
+                    # #DONE:230 Implement #filter/*filterRegex* links
                     @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                       @span class:"icon icon-light-bulb"
               for data in task.getMetaDataWithLinks(repo.getConfig())
@@ -413,7 +413,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE:240 Add delete list icon if length is 0
+              # #DONE:260 Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
@@ -466,7 +466,7 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-    # DONE:120 send the project path issue:48
+    # DONE:140 send the project path issue:48
     fileService.openFile @path, filePath, line, (success) =>
       return if success
       atom.workspace.open(filePath, split: 'left').then =>
