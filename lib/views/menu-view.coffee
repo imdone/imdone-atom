@@ -10,7 +10,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:70 Show logged in user and avatar here
+        # READY:80 Show logged in user and avatar here
         @div class: "imdone-profile", outlet: "$profile", =>
           @div outlet:'$login', class:'text-success', title:'Blast off! login and sync tasks', =>
             @a click:'openShare', href: "#", class: 'icon icon-rocket'

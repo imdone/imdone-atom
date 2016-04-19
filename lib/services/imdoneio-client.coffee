@@ -6,9 +6,9 @@ Pusher = require 'pusher-js'
 _ = require 'lodash'
 Task = require 'imdone-core/lib/task'
 config = require '../../config'
-# READY:60 The client public_key, secret and pusherKey should be configurable
+# READY:70 The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
-baseUrl = config.baseUrl # READY:50 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
+baseUrl = config.baseUrl # READY:60 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
@@ -67,7 +67,7 @@ class ImdoneioClient extends Emitter
     @pusher = new Pusher config.pusherKey,
       encrypted: true
       authEndpoint: pusherAuthUrl
-    # READY:20 imdoneio pusher channel needs to be configurable
+    # READY:30 imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data.product
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.linked', data.product
@@ -87,21 +87,21 @@ class ImdoneioClient extends Emitter
 
 
   getProducts: (cb) ->
-    # READY:100 Implement getProducts
+    # READY:120 Implement getProducts
     req = @setHeaders request.get("#{baseAPIUrl}/products")
     req.end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   getAccount: (cb) ->
-    # READY:80 Implement getAccount
+    # READY:90 Implement getAccount
     req = @setHeaders request.get("#{baseAPIUrl}/account")
     req.end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   getProject: (projectId, cb) ->
-    # READY:90 Implement getProject
+    # READY:100 Implement getProject
     req = @setHeaders request.get("#{baseAPIUrl}/projects/#{projectId}")
     req.end (err, res) =>
       return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
@@ -109,7 +109,7 @@ class ImdoneioClient extends Emitter
       cb null, res.body
 
   getTasks: (projectId, taskIds, cb) ->
-    # READY:90 Implement getProject
+    # READY:110 Implement getProject
     return cb null, [] unless taskIds && taskIds.length > 0
     req = @setHeaders request.get("#{baseAPIUrl}/projects/#{projectId}/tasks/#{taskIds.join(',')}")
     req.end (err, res) =>
@@ -119,7 +119,7 @@ class ImdoneioClient extends Emitter
 
 
   createProject: (repo, cb) ->
-    # READY:40 Implement createProject
+    # READY:50 Implement createProject
     req = @setHeaders request.post("#{baseAPIUrl}/projects")
     req.send(
       name: repo.getDisplayName()
@@ -134,7 +134,7 @@ class ImdoneioClient extends Emitter
 
 
   getOrCreateProject: (repo, cb) ->
-    # READY:30 Implement getOrCreateProject
+    # READY:40 Implement getOrCreateProject
     projectId = _.get repo, 'config.sync.id'
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
@@ -145,27 +145,28 @@ class ImdoneioClient extends Emitter
       cb null, project
 
   createTasks: (repo, project, tasks, product, cb) ->
-    # DONE:50 Implement createTasks
+    # READY:50 Implement createTasks
     req = @setHeaders request.post("#{baseAPIUrl}/projects/#{project.id}/tasks")
     updateRepo = (task, cb) =>
-      # DOING:20 modifyTask should update text with metadta that doesn't exists
-      repo.modifyTask new Task(task.localTask, true), true, cb
+      # READY:0 modifyTask should update text with metadata that doesn't exists id:288
+      repo.modifyTask new Task(task.localTask, true), cb
     req.send(tasks).end (err, res) =>
       return cb(err, res) if err || !res.ok
       tasks = res.body
-      @tasksDb(repo).insert tasks, (err, docs) ->
-        async.each docs, updateRepo, cb
+      @tasksDb(repo).insert tasks, (err, docs) =>
+        async.eachSeries docs, updateRepo, (err) =>
+          repo.saveModifiedFiles cb
 
   updateTasks: (repo, project, docs, tasks, product, cb) ->
-    # DOING:50 Implement updateTasks (does a compare)
+    # DOING:50 Implement updateTasks (does a compare) id:291
     ids = docs.map (obj) -> obj.id
     @getTasks project.id, ids, (err, tasks) =>
-      # DOING:0 Compare remote tasks with local tasks for update
+      # DOING:0 Compare remote tasks with local tasks for update id:286
       debugger;
 
   syncTasks: (repo, tasks, product, cb) ->
     cb = if cb then cb else () ->
-    # DOING:30 Emit progress through the repo so the right board is updated issue:87
+    # DOING:30 Emit progress through the repo so the right board is updated issue:87 id:289
     @getOrCreateProject repo, (err, project) =>
       return cb(err) if err
       @tasksDb(repo).find {}, (err, docs) =>
@@ -187,7 +188,7 @@ class ImdoneioClient extends Emitter
     @datastore[collection]
 
   tasksDb: (repo) ->
-    #READY:10 return the project specific task DB
+    #READY:20 return the project specific task DB
     @db 'tasks',repo.getPath().replace(/\//g, '_')
 
   @instance: new ImdoneioClient
