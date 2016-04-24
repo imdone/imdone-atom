@@ -2,7 +2,7 @@ path                = require 'path'
 url                 = null
 CompositeDisposable = null
 _                   = null
-ImdoneAtomView = require './views/imdone-atom-view'
+ImdoneAtomView = null
 
 module.exports = ImdoneAtom =
   config:
@@ -28,16 +28,25 @@ module.exports = ImdoneAtom =
       description: 'Show notifications upon clicking task source link.'
       type: 'boolean'
       default: false
-    fileOpenerPort:
-      description: 'Port the file opener communicates on'
-      type: 'integer'
-      default: 9799
     # DONE:70 This is config for globs to open with editors issue:48
     openIn:
+      title: 'File Opener'
       description: 'Open files in a different IDE or editor'
       type: 'object'
       properties:
+        enable:
+          order: 1
+          title: 'Enable file opener'
+          type: 'boolean'
+          default: false
+        port:
+          order: 2
+          title: 'File Opener Port'
+          description: 'Port the file opener communicates on'
+          type: 'integer'
+          default: 9799
         intellij:
+          order: 3
           description: '[Glob pattern](https://github.com/isaacs/node-glob) for files that should open in Intellij.'
           type: 'string'
           default: 'Glob pattern'
@@ -68,7 +77,6 @@ module.exports = ImdoneAtom =
     _ = require 'lodash'
     url = require 'url'
     {CompositeDisposable} = require 'atom'
-    fileService = require './services/file-service'
     _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
     atom.deserializers.deserialize(state) if (state)
     @subscriptions = new CompositeDisposable
@@ -92,7 +100,7 @@ module.exports = ImdoneAtom =
       return unless protocol is 'imdone:'
       @viewForUri(uriToOpen)
 
-    @fileService = fileService.init atom.config.get('imdone-atom.fileOpenerPort')
+    @fileService = require('./services/file-service').init @getConfig().openIn.port
 
     # DONE:240 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 
@@ -148,8 +156,12 @@ module.exports = ImdoneAtom =
 
   viewForUri: (uri) ->
     imdoneHelper = require './services/imdone-helper'
+    ImdoneAtomView = require './views/imdone-atom-view'
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])
     imdoneRepo = imdoneHelper.newImdoneRepo(pathname, uri)
     new ImdoneAtomView(imdoneRepo: imdoneRepo, path: pathname, uri: uri)
+
+  getConfig: () ->
+    atom.config.get('imdone-atom')

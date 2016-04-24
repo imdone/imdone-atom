@@ -1,14 +1,19 @@
-engine    = require 'engine.io'
-eioClient = require 'engine.io-client'
-minimatch = require 'minimatch'
-log       = require './log'
+engine    = null
+eioClient = null
+minimatch = null
+log       = null
 
 
 # DONE:100 implement socket server to handle opening files in configured client issue:48
 module.exports =
   clients: {}
   init: (port) ->
+    return @ unless @getConfig().openIn.enable
     return @ if @isListening
+    engine    = require 'engine.io'
+    eioClient = require 'engine.io-client'
+    minimatch = require 'minimatch'
+    log       = require './log'
     # DONE:40 Check if something else is listening on port issue:51
     http = require('http').createServer()
     http.on 'error', (err) =>
@@ -57,10 +62,11 @@ module.exports =
       console.log 'Error receiving message:', json
 
   openFile: (project, path, line, cb) ->
+    return cb() unless @getConfig().openIn.enable
     editor = @getEditor path
     # DONE:90 only send open request to editors who deserve them issue:48
     socket = @getSocket editor
-    return cb(false) unless socket
+    return cb() unless socket
     isProxied = if @proxy then true else false
     socket.send JSON.stringify({project, path, line, isProxied}), () ->
       cb(true)
@@ -77,3 +83,6 @@ module.exports =
     socket = @clients[editor]
     return null unless socket && @server.clients[socket.id] == socket
     socket
+
+  getConfig: () ->
+    atom.config.get('imdone-atom')

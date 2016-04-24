@@ -1,3 +1,6 @@
+## 1.4.0
+* New "Enable file opener" setting to improve activation time for those who don't use file-opener [default false]
+
 ## 1.3.29
 * Add c++ extensions by @eistaa
 

@@ -1,6 +1,8 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
 util = require 'util'
+debug = require 'debug/browser'
+log = debug 'imdone-atom:share-tasks-view'
 Client = require '../services/imdoneio-client'
 ProductSelectionView = require './product-selection-view'
 ProductDetailView = require './product-detail-view'
@@ -53,6 +55,7 @@ class ShareTasksView extends View
       passwordElement.append('<style id="password-style">.password-lines .line span.text:before {content:"' + string + '";}</style>')
 
   login: () ->
+    log 'login:begin'
     @loginPanel.hide()
     @spinner.show()
     email = @emailEditor.getModel().getText()
@@ -60,7 +63,8 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:10 We need to show an error here is login fails because service can't be reached or if login fails id:287
+      # DOING:10 We need to show an error here is login fails because service can't be reached or if login fails id:326
+      log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @showProductPanel()
 
