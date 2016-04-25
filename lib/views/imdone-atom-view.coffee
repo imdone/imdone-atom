@@ -13,7 +13,6 @@ log = null
 # TODO:70 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
-  atom.deserializers.add(this)
 
   class PluginViewInterface extends Emitter
     constructor: (@imdoneView)->
@@ -50,12 +49,10 @@ class ImdoneAtomView extends ScrollView
         @ignorePrompt.show()
       else @initImdone()
 
-  @deserialize: ({data}) ->
-    imdoneHelper = require '../services/imdone-helper'
-    imdoneRepo = imdoneHelper.newImdoneRepo(data.path, data.uri)
-    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: data.path, uri: data.uri)
-
-  serialize: -> { deserializer: 'ImdoneAtomView', data: {path: @path, uri: @uri} }
+  serialize: ->
+    deserializer: 'ImdoneAtomView'
+    path: @path
+    uri: @uri
 
   @content: (params) ->
     MenuView = require './menu-view'

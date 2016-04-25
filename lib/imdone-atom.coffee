@@ -2,7 +2,8 @@ path                = require 'path'
 url                 = null
 CompositeDisposable = null
 _                   = null
-ImdoneAtomView = null
+ImdoneAtomView      = null
+imdoneHelper        = null
 
 module.exports = ImdoneAtom =
   config:
@@ -70,15 +71,22 @@ module.exports = ImdoneAtom =
           type: 'string'
           default: 'YYYY-MM'
   subscriptions: null
+  #
+  # serialize: ->
+  #   views = atom.workspace.getPaneItems().filter (view) -> view instanceof ImdoneAtomView
+  #   serialized = views.map (view) -> view.serialize()
+  #   console.log 'serializedViews:', serialized
+  #   serialized
 
   activate: (state) ->
     # TODO:40 Put requires in activate to speed up startup issue:77
     # #DONE:210 Add back serialization (The right way) +Roadmap @testing
     _ = require 'lodash'
     url = require 'url'
+    ImdoneAtomView ?= require './views/imdone-atom-view'
     {CompositeDisposable} = require 'atom'
     _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
-    atom.deserializers.deserialize(state) if (state)
+    # state.forEach (view) -> atom.deserializers.deserialize(view) if state
     @subscriptions = new CompositeDisposable
 
     @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", (evt) =>
@@ -155,13 +163,21 @@ module.exports = ImdoneAtom =
     'imdone://tasks/' + projectPath
 
   viewForUri: (uri) ->
-    imdoneHelper = require './services/imdone-helper'
-    ImdoneAtomView = require './views/imdone-atom-view'
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])
-    imdoneRepo = imdoneHelper.newImdoneRepo(pathname, uri)
-    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: pathname, uri: uri)
+    @createImdoneAtomView(path: pathname, uri: uri)
+
+  createImdoneAtomView: ({path, uri}) ->
+    ImdoneAtomView ?= require './views/imdone-atom-view'
+    imdoneHelper ?= require './services/imdone-helper'
+    imdoneRepo = imdoneHelper.newImdoneRepo(path, uri)
+    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: path, uri: uri)
 
   getConfig: () ->
     atom.config.get('imdone-atom')
+
+if parseFloat(atom.getVersion()) < 1.7
+  atom.deserializers.add
+    name: 'ImdoneAtomView'
+    deserialize: module.exports.createImdoneAtomViews.bind(module.exports)
