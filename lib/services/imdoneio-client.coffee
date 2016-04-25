@@ -2,7 +2,8 @@ request = require 'superagent'
 async = require 'async'
 authUtil = require './auth-util'
 {Emitter} = require 'atom'
-Pusher = require 'pusher-js'
+{allowUnsafeEval} = require 'loophole'
+Pusher = allowUnsafeEval -> require 'pusher-js'
 _ = require 'lodash'
 Task = require 'imdone-core/lib/task'
 config = require '../../config'
@@ -52,20 +53,18 @@ class ImdoneioClient extends Emitter
     @setHeaders request.post("#{baseAPIUrl}#{path}")
 
   _auth: (cb) ->
-    @doGet().end (err, res) =>
-      return @onAuthFailure err, res, cb if err || !res.ok
-      @onAuthSuccess cb
-
-  onAuthSuccess: (cb) ->
     @getAccount (err, user) =>
-      return cb(err) if err
-      @saveCredentials (err) =>
-        @authenticated = true
-        @user = user
-        @emit 'authenticated'
-        cb(null, user)
-        log 'onAuthSuccess'
-        @setupPusher()
+      return @onAuthFailure err, user, cb if err
+      @onAuthSuccess user, cb
+
+  onAuthSuccess: (user, cb) ->
+    @authenticated = true
+    @user = user
+    @emit 'authenticated'
+    @saveCredentials (err) =>
+      cb(null, user)
+      log 'onAuthSuccess'
+      @setupPusher()
 
   onAuthFailure: (err, res, cb) ->
     @authenticated = false
@@ -84,6 +83,7 @@ class ImdoneioClient extends Emitter
     @pusher = new Pusher config.pusherKey,
       encrypted: true
       authEndpoint: pusherAuthUrl
+      disableStats: true
     # READY:30 imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data.product
