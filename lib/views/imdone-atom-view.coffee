@@ -148,7 +148,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'repo.change', => @showMask()
 
-    @emitter.on 'sync.board', (product) => client.syncTasks @imdoneRepo, @visibleTasks(), product
+    @emitter.on 'tasks.create', (product) => client.syncTasks @imdoneRepo, @visibleTasks(), product
 
     @emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'

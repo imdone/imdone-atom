@@ -9,6 +9,7 @@ Task = require 'imdone-core/lib/task'
 config = require '../../config'
 debug = require('debug/browser')
 log = debug 'imdone-atom:client'
+gitup = require 'git-up'
 
 # READY:70 The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
@@ -113,7 +114,6 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getAccount: (cb) ->
-    # DOING:0 getAccount is slow to start, why? id:329
     log 'getAccount:start'
     @doGet("/account").end (err, res) =>
       log 'getAccount:end'
@@ -155,7 +155,6 @@ class ImdoneioClient extends Emitter
     projectId = _.get repo, 'config.sync.id'
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
-      debugger
       _.set repo, 'config.sync.name', project.name
       repo.saveConfig()
       return @createProject repo, cb if err == PROJECT_ID_NOT_VALID_ERR
@@ -174,7 +173,8 @@ class ImdoneioClient extends Emitter
           repo.saveModifiedFiles cb
 
   updateTasks: (repo, project, product, cb) ->
-    # DOING: Should we really do this for all local tasks or do we ask api for task id's and dates only?
+    # TODO:20 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.
+    # Next step would be to sync down or up any changes if rules apply
     @tasksDb(repo).find {}, (err, localTasks) =>
       localIds = localTasks.map (task) -> task.id
       @getTasks project.id, localIds, (err, cloudTasks) =>
@@ -182,18 +182,20 @@ class ImdoneioClient extends Emitter
         console.log 'localTasks', localTasks
         cloudTasks.forEach (cloudTask) =>
           localTask = _.find(localTasks, {id: cloudTask.id})
-          # DOING:0 Compare remote tasks with local tasks for update.  If local task is older pull from imdone.io id:325
+          # TODO:10 Use rules to determine if and how cloud tasks and local tasks should be synced
         cb()
 
   syncTasks: (repo, tasks, product, cb) ->
     cb = if cb then cb else () ->
-    # DOING:30 Emit progress through the repo so the right board is updated id:327
+    # TODO:0 Emit progress through the repo so the right board is updated
     @getOrCreateProject repo, (err, project) =>
       return cb(err) if err
       tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")
-      @updateTasks repo, project, product, (err) =>
-        return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
-        cb err
+      return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
+      cb()
+      # @updateTasks repo, project, product, (err) =>
+      #   return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
+      #   cb err
 
   # collection can be an array of strings or string
   db: (collection) ->
@@ -211,5 +213,18 @@ class ImdoneioClient extends Emitter
   tasksDb: (repo) ->
     #READY:20 return the project specific task DB
     @db 'tasks',repo.getPath().replace(/\//g, '_')
+
+  gitInfo: (repo, cb) ->
+    dirs = atom.project.getDirectories().filter (dir) -> dir.path == repo.path
+    dir = dirs[0] if (dirs && dirs.length > 0)
+    atom.project.repositoryForDirectory(dir).then (gitRepo) =>
+      return cb() unless gitRepo
+      data =
+        branch: gitRepo.branch
+        originURL: gitRepo.getOriginURL()
+        upstream: gitRepo.getUpstreamBranch()
+        target: gitRepo.getReferenceTarget(gitRepo.getUpstreamBranch()) if gitRepo.getUpstreamBranch()
+        parsedURL: gitup gitRepo.getOriginURL()
+      cb(data)
 
   @instance: new ImdoneioClient

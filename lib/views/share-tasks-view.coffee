@@ -63,7 +63,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:10 We need to show an error here is login fails because service can't be reached or if login fails id:326
+      # DOING:10 We need to show an error here is login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @showProductPanel()

@@ -5,8 +5,8 @@ module.exports =
 class ProductDetailView extends View
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
-    @on 'click', '#sync-board', =>
-      @emitter.emit 'sync.board', @product.name
+    @on 'click', '#create-tasks', =>
+      @emitter.emit 'tasks.create', @product.name
 
   @content: (params) ->
     @div outlet:'$detail', class: 'product-detail-view-content'
@@ -25,6 +25,6 @@ class ProductDetailView extends View
       @div class:'block', =>
         if product.enabled
           @a href:product.logout, class:'btn icon icon-log-out inline-block-tight', "unlink your #{product.name} account"
-          @button id:'sync-board', class:'btn icon icon icon-repo-sync inline-block-tight', 'sync board'
+          @button id:'create-tasks', class:'btn icon icon icon-cloud-upload inline-block-tight', "create #{product.entity}s on #{product.name}"
         else
           @a href:product.login, class:'btn icon icon-log-in inline-block-tight', "link your #{product.name} account"
