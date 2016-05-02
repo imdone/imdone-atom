@@ -6,6 +6,7 @@ log = debug 'imdone-atom:share-tasks-view'
 Client = require '../services/imdoneio-client'
 ProductSelectionView = require './product-selection-view'
 ProductDetailView = require './product-detail-view'
+ConnectorManager = require '../services/connector-manager'
 
 module.exports =
 class ShareTasksView extends View
@@ -32,6 +33,7 @@ class ShareTasksView extends View
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
+    ConnectorManager.instance.init @imdoneRepo
     @initPasswordField()
 
   show: () ->
@@ -106,7 +108,7 @@ class ShareTasksView extends View
     @client.on 'product.unlinked', (product) => @productSelect.updateItem product
 
   showProductPanel: ->
-    @client.getProducts (err, products) =>
+    ConnectorManager.instance.getConnectors (err, products) =>
       return if err
       @productSelect.setItems products
       @productPanel.show()
