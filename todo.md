@@ -10,6 +10,7 @@ Roadmap
 - [ ] #DOING:10 As a user I would like to share tasks with other services +story
   - [ ] #READY:30 As a user I would like to enable an integration
 - [ ] #BACKLOG:40 As a user I would like to hide a list without opening the menu
+- [ ] #BACKLOG:200 AAUIWLT click a button on the board to open the package configuration +story
 
 Completed
 ----

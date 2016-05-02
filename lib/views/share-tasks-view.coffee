@@ -11,7 +11,7 @@ ConnectorManager = require '../services/connector-manager'
 module.exports =
 class ShareTasksView extends View
   @content: (params) ->
-    @div class: "share-tasks-container", =>
+    @div class: "share-tasks-container config-container", =>
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
       @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
@@ -25,10 +25,10 @@ class ShareTasksView extends View
           @span "or "
           @a href:"#{Client.signUpUrl}", "sign up"
       @div outlet: 'integrationPanel', class: 'block imdone-integration-pane', style: 'display:none;'
-      @div outlet: 'productPanel', class: 'block imdone-product-pane row', style: 'display:none;', =>
+      @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style: 'display:none;', =>
         @div class: 'col-md-4 product-select-wrapper', =>
           @subview 'productSelect', new ProductSelectionView
-        @div class:'col-md-4 product-detail-wrapper', =>
+        @div class:'col-md-6 product-detail-wrapper config-container', =>
           @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri}) ->

@@ -28,6 +28,7 @@
     "fs-plus": "^2.8.1",
     "git-up": "^2.0.0",
     "imdone-core": "1.3.0",
+    "json-editor": "^0.7.25",
     "lodash": "^4.0.0",
     "loophole": "^1.1.0",
     "minimatch": "^3.0.0",

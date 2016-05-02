@@ -1,5 +1,6 @@
 {$, $$, $$$, View} = require 'atom-space-pen-views'
 util = require 'util'
+require 'json-editor'
 
 module.exports =
 class ProductDetailView extends View
@@ -9,14 +10,26 @@ class ProductDetailView extends View
       @emitter.emit 'tasks.create', @product.name
 
   @content: (params) ->
-    @div outlet:'$detail', class: 'product-detail-view-content'
+    @div class: 'product-detail-view-content config-container vertical-scroll', =>
+      @div outlet: '$detail'
+      @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
 
   setProduct: (@product)->
     @draw()
 
   draw: ->
     return unless @product && @product.name
-    @html @getDetail(@product)
+    @$detail.html @getDetail(@product)
+    return unless @product.enabled
+    options =
+      schema: @product.schemas.config
+      theme: 'bootstrap3'
+      required_by_default: true
+      disable_edit_json: true
+      disable_properties: true
+      disable_collapse: true
+
+    @configEditor = new JSONEditor @$configEditor.get(0), options
 
   getDetail: (product) ->
     $$ ->
