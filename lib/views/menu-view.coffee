@@ -10,7 +10,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:80 Show logged in user and avatar here
+        # READY:110 Show logged in user and avatar here
         @div class: "imdone-profile", outlet: "$profile", =>
           @div outlet:'$login', class:'text-success', title:'Blast off! login and sync tasks', =>
             @a click:'openShare', href: "#", class: 'icon icon-rocket'
@@ -20,7 +20,7 @@ class MenuView extends View
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
-        # TODO:50 Add saved filters
+        # BACKLOG:0 Add saved filters
         @div class: "imdone-toolbar", =>
           @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
             @a href: "#", class: "icon icon-gear"

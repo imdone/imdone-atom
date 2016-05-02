@@ -31,7 +31,7 @@ class BottomView extends View
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
-      # #BACKLOG:40 Add config view here
+      # #BACKLOG:110 Add config view here
 
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true

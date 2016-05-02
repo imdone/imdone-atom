@@ -10,7 +10,7 @@ fileService = null
 client = null
 log = null
 
-# TODO:70 Add keen stats for features
+# TODO:50 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -294,7 +294,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # BACKLOG:0 This should be queued so two updates don't colide
+    # BACKLOG:70 This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
@@ -310,7 +310,7 @@ class ImdoneAtomView extends ScrollView
       @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
         @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
 
-  # BACKLOG: Split BoardView this apart into it's own class to simplify +refactor
+  # BACKLOG:60 Split this apart into it's own class to simplify. Call it BoardView +refactor
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()
@@ -345,7 +345,7 @@ class ImdoneAtomView extends ScrollView
         @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
-          # BACKLOG: Maybe show assigned avatar on task +feature
+          # BACKLOG:50 Maybe show assigned avatar on task +feature
           @div class: 'imdone-task-plugins'
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>

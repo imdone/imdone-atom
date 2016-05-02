@@ -1,6 +1,6 @@
 ImdoneAtom = require '../lib/imdone-atom'
 
-# #BACKLOG:60 Work on tests
+# #BACKLOG:130 Work on tests
 # Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.
 #
 # To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`

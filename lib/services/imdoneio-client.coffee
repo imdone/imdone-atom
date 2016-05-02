@@ -11,9 +11,9 @@ debug = require('debug/browser')
 log = debug 'imdone-atom:client'
 gitup = require 'git-up'
 
-# READY:70 The client public_key, secret and pusherKey should be configurable
+# READY:100 The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
-baseUrl = config.baseUrl # READY:60 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
+baseUrl = config.baseUrl # READY:90 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
@@ -85,7 +85,7 @@ class ImdoneioClient extends Emitter
       encrypted: true
       authEndpoint: pusherAuthUrl
       disableStats: true
-    # READY:30 imdoneio pusher channel needs to be configurable
+    # READY:50 imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data.product
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.linked', data.product
@@ -108,7 +108,7 @@ class ImdoneioClient extends Emitter
 
 
   getProducts: (cb) ->
-    # READY:120 Implement getProducts
+    # READY:140 Implement getProducts
     @doGet("/products").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -121,14 +121,14 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getProject: (projectId, cb) ->
-    # READY:100 Implement getProject
+    # READY:120 Implement getProject
     @doGet("/projects/#{projectId}").end (err, res) =>
       return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
       return cb err if err
       cb null, res.body
 
   getTasks: (projectId, taskIds, cb) ->
-    # READY:110 Implement getProject
+    # READY:130 Implement getProject
     return cb null, [] unless taskIds && taskIds.length > 0
     @doGet("/projects/#{projectId}/tasks/#{taskIds.join(',')}").end (err, res) =>
       return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
@@ -137,7 +137,7 @@ class ImdoneioClient extends Emitter
 
 
   createProject: (repo, cb) ->
-    # READY:50 Implement createProject
+    # READY:70 Implement createProject
     @doPost("/projects").send(
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()
@@ -151,7 +151,7 @@ class ImdoneioClient extends Emitter
 
 
   getOrCreateProject: (repo, cb) ->
-    # READY:40 Implement getOrCreateProject
+    # READY:60 Implement getOrCreateProject
     projectId = _.get repo, 'config.sync.id'
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
@@ -162,8 +162,8 @@ class ImdoneioClient extends Emitter
       cb null, project
 
   createTasks: (repo, project, tasks, product, cb) ->
-    # READY:50 Implement createTasks
-    # READY:0 modifyTask should update text with metadata that doesn't exists
+    # READY:80 Implement createTasks
+    # READY:20 modifyTask should update text with metadata that doesn't exists
     updateRepo = (task, cb) => repo.modifyTask new Task(task.localTask, true), cb
     @doPost("/projects/#{project.id}/tasks").send(tasks).end (err, res) =>
       return cb(err, res) if err || !res.ok
@@ -173,7 +173,7 @@ class ImdoneioClient extends Emitter
           repo.saveModifiedFiles cb
 
   updateTasks: (repo, project, product, cb) ->
-    # TODO:20 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.
+    # BACKLOG:10 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.
     # Next step would be to sync down or up any changes if rules apply
     @tasksDb(repo).find {}, (err, localTasks) =>
       localIds = localTasks.map (task) -> task.id
@@ -182,12 +182,12 @@ class ImdoneioClient extends Emitter
         console.log 'localTasks', localTasks
         cloudTasks.forEach (cloudTask) =>
           localTask = _.find(localTasks, {id: cloudTask.id})
-          # TODO:10 Use rules to determine if and how cloud tasks and local tasks should be synced
+          # BACKLOG:20 Use rules to determine if and how cloud tasks and local tasks should be synced
         cb()
 
   syncTasks: (repo, tasks, product, cb) ->
     cb = if cb then cb else () ->
-    # TODO:0 Emit progress through the repo so the right board is updated
+    # BACKLOG:30 Emit progress through the repo so the right board is updated
     @getOrCreateProject repo, (err, project) =>
       return cb(err) if err
       tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")
@@ -211,7 +211,7 @@ class ImdoneioClient extends Emitter
     @datastore[collection]
 
   tasksDb: (repo) ->
-    #READY:20 return the project specific task DB
+    #READY:40 return the project specific task DB
     @db 'tasks',repo.getPath().replace(/\//g, '_')
 
   gitInfo: (repo, cb) ->

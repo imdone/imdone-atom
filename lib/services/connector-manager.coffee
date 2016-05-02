@@ -17,7 +17,7 @@ class ConnectorManager
     @client().getProducts (err, products) =>
       log 'products:', products
       return cb err if err
-      # DOING:0 Add connector data from .imdone/config.json
+      # READY:10 Add connector data from .imdone/config.json
       connectors = _.get @repo.getConfig(), 'connectors', []
       return cb null, products unless connectors.length > 0
       products.forEach (product) =>
