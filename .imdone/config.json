@@ -75,5 +75,18 @@
   "sync": {
     "id": "570b38f26b654cba6082f6d1",
     "name": "imdone-atom"
+  },
+  "connectors": {
+    "wunderlist": {
+      "idMetaKey": "wl",
+      "setDueDates": true,
+      "setRemindMeFromDueDate": {
+        "days": 1,
+        "hours": 0,
+        "minutes": 0
+      },
+      "listName": "list name",
+      "completedTaskListName": "DONE"
+    }
   }
 }

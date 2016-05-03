@@ -28,8 +28,16 @@ class ProductDetailView extends View
       disable_edit_json: true
       disable_properties: true
       disable_collapse: true
+      startval: @product.connector
 
+    @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
+    @emitChange()
+    @configEditor.on 'change', => @emitChange()
+
+  emitChange: ->
+    @product.connector = @configEditor.getValue()
+    @emitter.emit 'connector.change', @product
 
   getDetail: (product) ->
     $$ ->

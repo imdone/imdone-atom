@@ -28,12 +28,12 @@ class ShareTasksView extends View
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style: 'display:none;', =>
         @div class: 'col-md-4 product-select-wrapper', =>
           @subview 'productSelect', new ProductSelectionView
-        @div class:'col-md-6 product-detail-wrapper config-container', =>
+        @div class:'col-md-7 product-detail-wrapper config-container', =>
           @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
-    ConnectorManager.instance.init @imdoneRepo
+    @connectorManager = new ConnectorManager @imdoneRepo
     @initPasswordField()
 
   show: () ->
@@ -104,11 +104,14 @@ class ShareTasksView extends View
       console.log product
       @productDetail.setProduct product
 
+    @emitter.on 'connector.change', (product) =>
+      @connectorManager.saveConnector product
+
     @client.on 'product.linked', (product) => @productSelect.updateItem product
     @client.on 'product.unlinked', (product) => @productSelect.updateItem product
 
   showProductPanel: ->
-    ConnectorManager.instance.getConnectors (err, products) =>
+    @connectorManager.getConnectors (err, connectors) =>
       return if err
-      @productSelect.setItems products
+      @productSelect.setItems connectors
       @productPanel.show()
