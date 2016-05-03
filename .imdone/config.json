@@ -87,6 +87,10 @@
       },
       "listName": "list name",
       "completedTaskListName": "DONE"
+    },
+    "github": {
+      "idMetaKey": "gh",
+      "repoURL": "https://github.com/imdone/imdone-atom.git"
     }
   }
 }

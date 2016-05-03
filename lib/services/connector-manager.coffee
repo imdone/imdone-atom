@@ -1,5 +1,6 @@
 _ = require 'lodash'
-log = require('debug') 'connector-manager'
+helper = require './imdone-helper'
+log = require('debug/browser') 'imdone-atom:connector-manager'
 
 module.exports =
 class ConnectorManager
@@ -24,3 +25,9 @@ class ConnectorManager
   saveConnector: (product) ->
     _.set @repo.getConfig(), "connectors.#{product.name}", product.connector
     @repo.saveConfig()
+
+  getGitOrigin: () ->
+    repo = helper.repoForPath @repo.getPath()
+    debugger
+    return null unless repo
+    repo.getOriginURL()

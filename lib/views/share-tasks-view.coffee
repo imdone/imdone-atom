@@ -1,5 +1,6 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
+_ = require 'lodash'
 util = require 'util'
 debug = require 'debug/browser'
 log = debug 'imdone-atom:share-tasks-view'
@@ -101,6 +102,7 @@ class ShareTasksView extends View
       false
 
     @emitter.on 'product.selected', (product) =>
+      @updateConnectorForEdit product
       console.log product
       @productDetail.setProduct product
 
@@ -115,3 +117,8 @@ class ShareTasksView extends View
       return if err
       @productSelect.setItems connectors
       @productPanel.show()
+
+  updateConnectorForEdit: (product) ->
+    # DOING: This is where we get the github repo if it's not
+    return unless product.name == 'github' && !_.get(product, 'connector.repoURL')
+    _.set product, 'connector.repoURL', @connectorManager.getGitOrigin()

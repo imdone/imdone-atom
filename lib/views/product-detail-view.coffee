@@ -15,20 +15,21 @@ class ProductDetailView extends View
       @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
 
   setProduct: (@product)->
-    @draw()
-
-  draw: ->
     return unless @product && @product.name
     @$detail.html @getDetail(@product)
     return unless @product.enabled
+    @createEditor()
+
+  createEditor: ->
     options =
       schema: @product.schemas.config
+      startval: @product.connector
       theme: 'bootstrap3'
+      no_additional_properties: true
       required_by_default: true
       disable_edit_json: true
       disable_properties: true
       disable_collapse: true
-      startval: @product.connector
 
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
