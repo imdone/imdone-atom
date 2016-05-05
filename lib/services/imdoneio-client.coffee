@@ -32,9 +32,7 @@ class ImdoneioClient extends Emitter
 
   constructor: () ->
     super
-    @loadCredentials (err) =>
-      return if err
-      @_auth () ->
+    @authFromStorage()
 
   setHeaders: (req) ->
     log 'setHeaders:begin'
@@ -57,6 +55,12 @@ class ImdoneioClient extends Emitter
     @getAccount (err, user) =>
       return @onAuthFailure err, user, cb if err
       @onAuthSuccess user, cb
+
+  authFromStorage: (cb) ->
+    cb = (() ->) unless cb
+    @loadCredentials (err) =>
+      return cb err if err
+      @_auth cb
 
   onAuthSuccess: (user, cb) ->
     @authenticated = true

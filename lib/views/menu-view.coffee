@@ -40,7 +40,9 @@ class MenuView extends View
     Client = require '../services/imdoneio-client'
     require('./jq-utils')($)
     @client = Client.instance
-    @authenticated() if @client.isAuthenticated()
+    return @authenticated() if @client.isAuthenticated()
+    @client.authFromStorage
+
 
   toggleMenu: (event, element) ->
     @toggleClass 'open'

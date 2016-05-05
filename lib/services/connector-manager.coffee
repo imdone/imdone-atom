@@ -14,6 +14,7 @@ class ConnectorManager
       log 'products:', products
       return cb err if err
       # READY:10 Add connector data from .imdone/config.json
+      # DOING: connectors data should be read remotely and config.json used as a backup if error
       connectors = _.get @repo.getConfig(), 'connectors'
       return cb null, products unless connectors
       products.forEach (product) =>
@@ -25,6 +26,8 @@ class ConnectorManager
   saveConnector: (product) ->
     _.set @repo.getConfig(), "connectors.#{product.name}", product.connector
     @repo.saveConfig()
+    # DOING: connectors data should be stored remotely and config.json used as a backup
+
 
   getGitOrigin: () ->
     repo = helper.repoForPath @repo.getPath()

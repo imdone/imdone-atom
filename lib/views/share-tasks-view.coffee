@@ -119,6 +119,5 @@ class ShareTasksView extends View
       @productPanel.show()
 
   updateConnectorForEdit: (product) ->
-    # DOING: This is where we get the github repo if it's not
     return unless product.name == 'github' && !_.get(product, 'connector.repoURL')
     _.set product, 'connector.repoURL', @connectorManager.getGitOrigin()
