@@ -17,6 +17,7 @@ class ProductDetailView extends View
   setProduct: (@product)->
     return unless @product && @product.name
     @$detail.html @getDetail(@product)
+    @$configEditor.empty()
     return unless @product.enabled
     @createEditor()
 
@@ -25,7 +26,6 @@ class ProductDetailView extends View
       schema: @product.schemas.config
       startval: @product.connector
       theme: 'bootstrap3'
-      no_additional_properties: true
       required_by_default: true
       disable_edit_json: true
       disable_properties: true
@@ -37,7 +37,9 @@ class ProductDetailView extends View
     @configEditor.on 'change', => @emitChange()
 
   emitChange: ->
-    @product.connector = @configEditor.getValue()
+    @product.connector =
+      name: @product.name
+      config: @configEditor.getValue()
     @emitter.emit 'connector.change', @product
 
   getDetail: (product) ->

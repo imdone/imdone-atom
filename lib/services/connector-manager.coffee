@@ -10,27 +10,27 @@ class ConnectorManager
     require('./imdoneio-client').instance
 
   getConnectors: (cb) ->
-    @client().getProducts (err, products) =>
-      log 'products:', products
+    cb = (()->) unless cb
+    projectId = @client().getProjectId(@repo)
+    @client().getProducts projectId, cb
+
+  saveConnector: (connector, cb) ->
+    # DOING:30 Connector must have a name
+    cb = (()->) unless cb
+    return @createConnector connector, cb unless connector.id
+    @updateConnector connector, cb
+    # DOING:50 connectors data should be stored remotely and config.json used as a backup
+
+  createConnector: (connector, cb) ->
+    @client().createConnector @repo, connector, (err, doc) =>
       return cb err if err
-      # READY:10 Add connector data from .imdone/config.json
-      # DOING: connectors data should be read remotely and config.json used as a backup if error
-      connectors = _.get @repo.getConfig(), 'connectors'
-      return cb null, products unless connectors
-      products.forEach (product) =>
-        connector = connectors[product.name]
-        return unless connector
-        product.connector = connector
-      cb null, products
+      cb doc.config
 
-  saveConnector: (product) ->
-    _.set @repo.getConfig(), "connectors.#{product.name}", product.connector
-    @repo.saveConfig()
-    # DOING: connectors data should be stored remotely and config.json used as a backup
-
+  updateConnector: (connector, cb) ->
+    # DOING:40 Update the connector on imdone-io
+    cb connector
 
   getGitOrigin: () ->
     repo = helper.repoForPath @repo.getPath()
-    debugger
     return null unless repo
     repo.getOriginURL()

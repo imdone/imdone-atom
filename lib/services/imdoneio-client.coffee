@@ -9,7 +9,6 @@ Task = require 'imdone-core/lib/task'
 config = require '../../config'
 debug = require('debug/browser')
 log = debug 'imdone-atom:client'
-gitup = require 'git-up'
 
 # READY:100 The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
@@ -111,9 +110,9 @@ class ImdoneioClient extends Emitter
       cb null
 
 
-  getProducts: (cb) ->
+  getProducts: (projectId, cb) ->
     # READY:140 Implement getProducts
-    @doGet("/products").end (err, res) =>
+    @doGet("/projects/#{projectId}/products").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
@@ -139,6 +138,14 @@ class ImdoneioClient extends Emitter
       return cb err if err
       cb null, res.body
 
+  createConnector: (repo, connector, cb) ->
+    projectId = @getProjectId repo
+    return cb "project must have a sync.id to connect" unless projectId
+    # READY:70 Implement createProject
+    @doPost("/projects/#{projectId}/connectors").send(connector).end (err, res) =>
+      debugger
+      return cb(err, res) if err || !res.ok
+      cb(null, res.body)
 
   createProject: (repo, cb) ->
     # READY:70 Implement createProject
@@ -148,22 +155,31 @@ class ImdoneioClient extends Emitter
     ).end (err, res) =>
       return cb(err, res) if err || !res.ok
       project = res.body
-      _.set repo, 'config.sync.id', project.id
-      _.set repo, 'config.sync.name', project.name
+      # TODO: This should be in connectorManager
+      @setProjectId repo, project.id
+      @setProjectName repo, project.name
       repo.saveConfig()
       cb(null, project)
 
 
   getOrCreateProject: (repo, cb) ->
     # READY:60 Implement getOrCreateProject
-    projectId = _.get repo, 'config.sync.id'
+    # TODO: move this to connectorManager
+    projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
-      _.set repo, 'config.sync.name', project.name
+      return cb err if err
+      # TODO: This should be in connectorManager
+      @setProjectName repo, project.name
       repo.saveConfig()
       return @createProject repo, cb if err == PROJECT_ID_NOT_VALID_ERR
       return cb err if err
       cb null, project
+
+  getProjectId: (repo) -> _.get repo, 'config.sync.id'
+  setProjectId: (repo, id) -> _.set repo, 'config.sync.id', id
+  getProjectName: (repo) -> _.get repo, 'config.sync.name'
+  setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
 
   createTasks: (repo, project, tasks, product, cb) ->
     # READY:80 Implement createTasks
@@ -192,6 +208,7 @@ class ImdoneioClient extends Emitter
   syncTasks: (repo, tasks, product, cb) ->
     cb = if cb then cb else () ->
     # BACKLOG:30 Emit progress through the repo so the right board is updated
+    # DOING:10 getOrCreateProject should happen when we get products, if we know a product is enabled
     @getOrCreateProject repo, (err, project) =>
       return cb(err) if err
       tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")
@@ -217,18 +234,5 @@ class ImdoneioClient extends Emitter
   tasksDb: (repo) ->
     #READY:40 return the project specific task DB
     @db 'tasks',repo.getPath().replace(/\//g, '_')
-
-  gitInfo: (repo, cb) ->
-    dirs = atom.project.getDirectories().filter (dir) -> dir.path == repo.path
-    dir = dirs[0] if (dirs && dirs.length > 0)
-    atom.project.repositoryForDirectory(dir).then (gitRepo) =>
-      return cb() unless gitRepo
-      data =
-        branch: gitRepo.branch
-        originURL: gitRepo.getOriginURL()
-        upstream: gitRepo.getUpstreamBranch()
-        target: gitRepo.getReferenceTarget(gitRepo.getUpstreamBranch()) if gitRepo.getUpstreamBranch()
-        parsedURL: gitup gitRepo.getOriginURL()
-      cb(data)
 
   @instance: new ImdoneioClient

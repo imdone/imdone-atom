@@ -25,25 +25,29 @@ class ShareTasksView extends View
         @div class:'block', =>
           @span "or "
           @a href:"#{Client.signUpUrl}", "sign up"
-      @div outlet: 'integrationPanel', class: 'block imdone-integration-pane', style: 'display:none;'
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style: 'display:none;', =>
-        @div class: 'col-md-4 product-select-wrapper', =>
+        @div class: 'col-md-4 product-select-wrapper pull-left', =>
           @subview 'productSelect', new ProductSelectionView
-        @div class:'col-md-7 product-detail-wrapper config-container', =>
+        @div class:'col-md-7 product-detail-wrapper config-container pull-right', =>
           @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
-    @connectorManager = new ConnectorManager @imdoneRepo
+    @connectorManager = new ConnectorManager @imdoneRepo #TODO: we don't need this set until we're authenticated
     @initPasswordField()
 
   show: () ->
     super
-    if @client.isAuthenticated()
+    return @onAuthenticated() if @client.isAuthenticated()
+    @loginPanel.show()
+    @emailEditor.focus()
+
+  onAuthenticated: () ->
+    @client.getOrCreateProject @imdoneRepo, (err, project) =>
+      return if err
+      # DOING:0 This is where we should getOrCreateProject
+      @project = project unless err # DOING:20 we should show an error if things aren't ok
       @showProductPanel()
-    else
-      @loginPanel.show()
-      @emailEditor.focus()
 
   initPasswordField: () ->
     # [Password fields when using EditorView subview - packages - Atom Discussion](https://discuss.atom.io/t/password-fields-when-using-editorview-subview/11061/7)
@@ -66,10 +70,10 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:0 We need to show an error here is login fails because service can't be reached or if login fails
+      # DOING:60 We need to show an error here is login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
-      @showProductPanel()
+      @onAuthenticated()
 
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
@@ -107,7 +111,8 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @emitter.on 'connector.change', (product) =>
-      @connectorManager.saveConnector product
+      debugger
+      @connectorManager.saveConnector product.connector
 
     @client.on 'product.linked', (product) => @productSelect.updateItem product
     @client.on 'product.unlinked', (product) => @productSelect.updateItem product
@@ -119,5 +124,6 @@ class ShareTasksView extends View
       @productPanel.show()
 
   updateConnectorForEdit: (product) ->
+    _.set product, 'connector.name', product.name
     return unless product.name == 'github' && !_.get(product, 'connector.repoURL')
     _.set product, 'connector.repoURL', @connectorManager.getGitOrigin()

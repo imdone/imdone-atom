@@ -22,6 +22,7 @@ class MenuView extends View
           @ul outlet: "lists", class: "lists"
         # BACKLOG:0 Add saved filters
         @div class: "imdone-toolbar", =>
+          # BACKLOG: Add config opener and change the icon for tools to wrench or list `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49>
           @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
             @a href: "#", class: "icon icon-gear"
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>

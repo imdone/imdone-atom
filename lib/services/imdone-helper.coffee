@@ -3,6 +3,8 @@ ImdoneRepo = require 'imdone-core/lib/repository'
 atomFsStore = require './atom-watched-fs-store'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
+gitup = require 'git-up'
+
 
 module.exports =
   newImdoneRepo: (pathname, uri) ->
@@ -31,3 +33,15 @@ module.exports =
       if repoPath is projectPath or repoPath.indexOf(projectPath + path.sep) is 0
         return atom.project.getRepositories()[i]
     null
+
+
+  gitInfo: (repoPath, cb) ->
+    gitRepo = @repoForPath repoPath
+    return unless gitRepo
+    data =
+      branch: gitRepo.branch
+      originURL: gitRepo.getOriginURL()
+      upstream: gitRepo.getUpstreamBranch()
+      target: gitRepo.getReferenceTarget(gitRepo.getUpstreamBranch()) if gitRepo.getUpstreamBranch()
+      parsedURL: gitup gitRepo.getOriginURL()
+    data

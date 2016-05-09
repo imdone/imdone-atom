@@ -140,12 +140,6 @@ class ImdoneAtomView extends ScrollView
         console.log fpath, line
         @openPath fpath, line
 
-    # TODO:20 This belongs in bottomView +refactor
-    @emitter.on 'list.new', => @bottomView.showNewList()
-
-    # TODO:10 This belongs in bottomView +refactor
-    @emitter.on 'share', => @bottomView.showShare()
-
     @emitter.on 'repo.change', => @showMask()
 
     @emitter.on 'tasks.create', (product) => client.syncTasks @imdoneRepo, @visibleTasks(), product

@@ -3,6 +3,7 @@
     "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
+  "keepEmptyPriority": false,
   "code": {
     "include_lists": [
       "TODO",
@@ -20,10 +21,6 @@
     ]
   },
   "lists": [
-    {
-      "name": "CHANGED",
-      "hidden": true
-    },
     {
       "name": "BACKLOG",
       "hidden": true
@@ -45,12 +42,8 @@
       "hidden": true
     },
     {
-      "name": "ARCHIVE",
+      "name": "CHANGED",
       "hidden": true
-    },
-    {
-      "name": "NOTE",
-      "hidden": false
     }
   ],
   "marked": {
@@ -61,36 +54,8 @@
     "smartLists": true,
     "langPrefix": "language-"
   },
-  "meta": {
-    "user": {
-      "urlTemplate": "https://github.com/%s",
-      "titleTemplate": "github profile for %s"
-    },
-    "issue": {
-      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
-      "titleTemplate": "github issue #%s"
-    }
-  },
-  "keepEmptyPriority": false,
   "sync": {
-    "id": "570b38f26b654cba6082f6d1",
+    "id": "572eca6014f0df907e007dbe",
     "name": "imdone-atom"
-  },
-  "connectors": {
-    "wunderlist": {
-      "idMetaKey": "wl",
-      "setDueDates": true,
-      "setRemindMeFromDueDate": {
-        "days": 1,
-        "hours": 0,
-        "minutes": 0
-      },
-      "listName": "list name",
-      "completedTaskListName": "DONE"
-    },
-    "github": {
-      "idMetaKey": "gh",
-      "repoURL": "https://github.com/imdone/imdone-atom.git"
-    }
   }
 }
