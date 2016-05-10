@@ -9,7 +9,7 @@ class ConnectorManager
   client: ->
     require('./imdoneio-client').instance
 
-  getConnectors: (cb) ->
+  getProducts: (cb) ->
     cb = (()->) unless cb
     projectId = @client().getProjectId(@repo)
     @client().getProducts projectId, cb
@@ -24,11 +24,13 @@ class ConnectorManager
   createConnector: (connector, cb) ->
     @client().createConnector @repo, connector, (err, doc) =>
       return cb err if err
-      cb doc.config
+      cb null, doc
 
   updateConnector: (connector, cb) ->
     # DOING:40 Update the connector on imdone-io
-    cb connector
+    @client().updateConnector @repo, connector, (err, doc) =>
+      return cb err if err
+      cb null, doc
 
   getGitOrigin: () ->
     repo = helper.repoForPath @repo.getPath()

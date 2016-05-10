@@ -1,6 +1,8 @@
 {$, $$, $$$, View} = require 'atom-space-pen-views'
 util = require 'util'
+_ = require 'lodash'
 require 'json-editor'
+
 
 module.exports =
 class ProductDetailView extends View
@@ -15,6 +17,7 @@ class ProductDetailView extends View
       @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
 
   setProduct: (@product)->
+    debugger
     return unless @product && @product.name
     @$detail.html @getDetail(@product)
     @$configEditor.empty()
@@ -24,7 +27,7 @@ class ProductDetailView extends View
   createEditor: ->
     options =
       schema: @product.schemas.config
-      startval: @product.connector
+      startval: @product.connector.config
       theme: 'bootstrap3'
       required_by_default: true
       disable_edit_json: true
@@ -37,9 +40,12 @@ class ProductDetailView extends View
     @configEditor.on 'change', => @emitChange()
 
   emitChange: ->
-    @product.connector =
-      name: @product.name
-      config: @configEditor.getValue()
+    editorValue = @configEditor.getValue()
+    apiValue =  _.get(@product, 'connector.config')
+    debugger
+    return if _.isEqual editorValue, apiValue
+    _.set @product, 'connector.config', editorValue
+    _.set @product, 'connector.name', @product.name
     @emitter.emit 'connector.change', @product
 
   getDetail: (product) ->

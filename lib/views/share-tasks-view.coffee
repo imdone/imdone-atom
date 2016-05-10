@@ -111,19 +111,19 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @emitter.on 'connector.change', (product) =>
-      debugger
-      @connectorManager.saveConnector product.connector
+      @connectorManager.saveConnector product.connector, (err, connector) =>
+        product.connector = connector
+        @productSelect.updateItem product
 
     @client.on 'product.linked', (product) => @productSelect.updateItem product
     @client.on 'product.unlinked', (product) => @productSelect.updateItem product
 
   showProductPanel: ->
-    @connectorManager.getConnectors (err, connectors) =>
+    @connectorManager.getProducts (err, products) =>
       return if err
-      @productSelect.setItems connectors
+      @productSelect.setItems products
       @productPanel.show()
 
   updateConnectorForEdit: (product) ->
-    _.set product, 'connector.name', product.name
-    return unless product.name == 'github' && !_.get(product, 'connector.repoURL')
-    _.set product, 'connector.repoURL', @connectorManager.getGitOrigin()
+    return unless product.name == 'github' && !_.get(product, 'connector.config.repoURL')
+    _.set product, 'connector.config.repoURL', @connectorManager.getGitOrigin()

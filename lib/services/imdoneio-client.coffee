@@ -42,13 +42,13 @@ class ImdoneioClient extends Emitter
     withHeaders
 
   doGet: (path) ->
-    log 'doGet:begin'
-    withHeaders = @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
-    log 'doGet:end'
-    withHeaders
+    @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
   doPost: (path) ->
     @setHeaders request.post("#{baseAPIUrl}#{path}")
+
+  doPatch: (path) ->
+    @setHeaders request.patch("#{baseAPIUrl}#{path}")
 
   _auth: (cb) ->
     @getAccount (err, user) =>
@@ -113,6 +113,7 @@ class ImdoneioClient extends Emitter
   getProducts: (projectId, cb) ->
     # READY:140 Implement getProducts
     @doGet("/projects/#{projectId}/products").end (err, res) =>
+      debugger
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
@@ -143,7 +144,14 @@ class ImdoneioClient extends Emitter
     return cb "project must have a sync.id to connect" unless projectId
     # READY:70 Implement createProject
     @doPost("/projects/#{projectId}/connectors").send(connector).end (err, res) =>
-      debugger
+      return cb(err, res) if err || !res.ok
+      cb(null, res.body)
+
+  updateConnector: (repo, connector, cb) ->
+    projectId = @getProjectId repo
+    return cb "project must have a sync.id to connect" unless projectId
+    # READY:70 Implement createProject
+    @doPatch("/projects/#{projectId}/connectors/#{connector.id}").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
