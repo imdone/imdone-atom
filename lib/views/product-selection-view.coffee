@@ -8,7 +8,6 @@ class ProductSelectionView extends SelectListView
     if @initialized || !@emitter then return else @initialized = true
 
   setItems: (products) ->
-    debugger
     super(products)
     @selectProduct @getSelectedItem()
 

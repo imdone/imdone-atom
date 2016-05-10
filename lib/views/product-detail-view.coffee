@@ -17,7 +17,6 @@ class ProductDetailView extends View
       @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
 
   setProduct: (@product)->
-    debugger
     return unless @product && @product.name
     @$detail.html @getDetail(@product)
     @$configEditor.empty()
@@ -36,15 +35,13 @@ class ProductDetailView extends View
 
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
-    @emitChange()
     @configEditor.on 'change', => @emitChange()
 
   emitChange: ->
-    editorValue = @configEditor.getValue()
-    apiValue =  _.get(@product, 'connector.config')
-    debugger
-    return if _.isEqual editorValue, apiValue
-    _.set @product, 'connector.config', editorValue
+    editorVal = @configEditor.getValue()
+    currentVal =  _.get(@product, 'connector.config')
+    return if _.isEqual editorVal, currentVal
+    _.set @product, 'connector.config', editorVal
     _.set @product, 'connector.name', @product.name
     @emitter.emit 'connector.change', @product
 

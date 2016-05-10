@@ -113,7 +113,6 @@ class ImdoneioClient extends Emitter
   getProducts: (projectId, cb) ->
     # READY:140 Implement getProducts
     @doGet("/projects/#{projectId}/products").end (err, res) =>
-      debugger
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
