@@ -45,8 +45,8 @@ class ShareTasksView extends View
   onAuthenticated: () ->
     @client.getOrCreateProject @imdoneRepo, (err, project) =>
       return if err
-      # DOING:0 This is where we should getOrCreateProject
-      @project = project unless err # DOING:20 we should show an error if things aren't ok
+      # READY:30 This is where we should getOrCreateProject
+      @project = project unless err # DOING:0 we should show an error if things aren't ok
       @showProductPanel()
 
   initPasswordField: () ->
@@ -70,7 +70,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:60 We need to show an error here is login fails because service can't be reached or if login fails
+      # DOING:20 We need to show an error here is login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -115,8 +115,16 @@ class ShareTasksView extends View
         product.connector = connector
         @productSelect.updateItem product
 
-    @client.on 'product.linked', (product) => @productSelect.updateItem product
-    @client.on 'product.unlinked', (product) => @productSelect.updateItem product
+    @client.on 'product.linked', (product) =>
+      @connectorManager.getProducts (err, products) =>
+        return if err
+        updatedProduct = _.find products, name: product.name
+        @updateConnectorForEdit product
+        @productSelect.updateItem updatedProduct
+        @productDetail.setProduct updatedProduct
+
+    @client.on 'product.unlinked', (product) =>
+      @productSelect.updateItem product
 
   showProductPanel: ->
     @connectorManager.getProducts (err, products) =>
@@ -125,5 +133,6 @@ class ShareTasksView extends View
       @productPanel.show()
 
   updateConnectorForEdit: (product) ->
+    _.set product, 'connector', {} unless product.connector
     return unless product.name == 'github' && !_.get(product, 'connector.config.repoURL')
     _.set product, 'connector.config.repoURL', @connectorManager.getGitOrigin()

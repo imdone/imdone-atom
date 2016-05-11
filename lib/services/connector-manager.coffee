@@ -15,11 +15,9 @@ class ConnectorManager
     @client().getProducts projectId, cb
 
   saveConnector: (connector, cb) ->
-    # DOING:30 Connector must have a name
     cb = (()->) unless cb
     return @createConnector connector, cb unless connector.id
     @updateConnector connector, cb
-    # DOING:50 connectors data should be stored remotely and config.json used as a backup
 
   createConnector: (connector, cb) ->
     @client().createConnector @repo, connector, (err, doc) =>
@@ -27,7 +25,7 @@ class ConnectorManager
       cb null, doc
 
   updateConnector: (connector, cb) ->
-    # DOING:40 Update the connector on imdone-io
+    # READY:0 Update the connector on imdone-io
     @client().updateConnector @repo, connector, (err, doc) =>
       return cb err if err
       cb null, doc
