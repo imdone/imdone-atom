@@ -217,6 +217,9 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
+  addPluginProjectButtons: ->
+    # DOING: Add the plugin project buttons here
+
   addPluginView: (plugin) ->
     return unless plugin.getView
     @bottomView.addPlugin plugin

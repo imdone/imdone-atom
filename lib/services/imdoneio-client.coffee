@@ -65,6 +65,7 @@ class ImdoneioClient extends Emitter
       return cb err if err
       @_auth (err, user) =>
         @emit 'storage.auth.error' if err && err.code == "ECONNREFUSED"
+        # TODO: if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->

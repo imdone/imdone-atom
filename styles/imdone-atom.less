@@ -77,6 +77,7 @@
     background-color: @tool-panel-background-color;
     border-top: 1px solid @tool-panel-border-color;
     padding: 0 1em;
+    transition: bottom 0.2s;
     &.open {
       bottom: 0;
       z-index: 100;
@@ -100,7 +101,7 @@
     .close-button {
       position: absolute;
       top: 2px;
-      right: 8px;
+      right: 10px;
       cursor: default;
       font-size: 2em;
       font-weight: bold;
@@ -111,14 +112,17 @@
 
     .imdone-product-pane {
       margin-top: 2.5em;
-      
+
       .select-list .product-name {
         margin-left: 1em;
       }
       .select-list, .product-detail {
-        width: 40em;
+        width: 30em;
       }
       .product-detail-view-content {
+        .form-control {
+          width: 60%;
+        }
         h1 {
           margin-top: 0;
         }
@@ -149,9 +153,6 @@
     transition: left  0.2s;
     &.open {
       left: 0;
-      .imdone-profile {
-        left: -4px;
-      }
     }
     .imdone-menu-inner {
       position:absolute;
@@ -163,7 +164,7 @@
     }
     .imdone-toolbar {
       right: 6px;
-      top: 2px;
+      top: -2px;
       position: absolute;
       width: 24px;
       .imdone-toolbar-button {
@@ -174,16 +175,29 @@
         height: 24px;
         padding: 4px;
       }
-    }
-    .imdone-profile {
-      width: 30px;
-      height: 30px;
-      position:absolute;
-      bottom: 0;
-      left: 192px;
-      transition: left  0.2s;
-      img {
+      .menu-sep-space {
+        font-size: 0;
+        height: 10px;
+        line-height: 0;
+      }
+      .menu-sep-space-2x {
+        .menu-sep-space();
+        height: 20px;
+      }
+      .menu-sep-space-3x {
+        .menu-sep-space();
         height: 30px;
+      }
+      .imdone-icon {
+        margin-top: 6px;
+      }
+      .imdone-profile {
+        .profile-image {
+          margin-left: -4px;
+          .share-btn {
+            height: 24px;
+          }
+        }
       }
     }
     .imdone-filter {

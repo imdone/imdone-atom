@@ -26,9 +26,9 @@ class ShareTasksView extends View
           @span "or "
           @a href:"#{Client.signUpUrl}", "sign up"
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style: 'display:none;', =>
-        @div class: 'col-md-4 product-select-wrapper pull-left', =>
+        @div class: 'col-md-3 product-select-wrapper pull-left', =>
           @subview 'productSelect', new ProductSelectionView
-        @div class:'col-md-7 product-detail-wrapper config-container pull-right', =>
+        @div class:'col-md-9 product-detail-wrapper config-container pull-right', =>
           @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri}) ->

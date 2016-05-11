@@ -11,10 +11,6 @@ class MenuView extends View
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
         # READY:160 Show logged in user and avatar here
-        @div class: "imdone-profile", outlet: "$profile", =>
-          @div outlet:'$login', class:'text-success', title:'Blast off! login and sync tasks', =>
-            @a click:'openShare', href: "#", class: 'icon icon-rocket'
-          @div outlet:'$profileImage', click:'openShare', style:'display:none;'
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
@@ -22,9 +18,15 @@ class MenuView extends View
           @ul outlet: "lists", class: "lists"
         # BACKLOG:0 Add saved filters
         @div class: "imdone-toolbar", =>
+          @div class: "imdone-profile imdone-toolbar-button", outlet: "$profile", =>
+            @div outlet:'$login', class:'text-success imdone-icon', title:'Blast off! login and share', =>
+              # TODO: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
+              @a click:'openShare', href: "#", class: 'icon icon-rocket'
+            @div class:"profile-image", outlet:'$profileImage', click:'openShare', style:'display:none;'
+          @div class: "menu-sep-space-3x"
           # BACKLOG: Add config opener and change the icon for tools to wrench or list `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49>
-          @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "tools baby!", =>
-            @a href: "#", class: "icon icon-gear"
+          @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
+            @a href: "#", class: "icon icon-list-unordered"
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", class: "icon icon-plus"
           # DONE:190 Add a link to open filtered files issue:49
@@ -32,7 +34,9 @@ class MenuView extends View
             @a href: "#", class: "icon icon-zap"
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
+          @div class: "menu-sep-space-2x"
           @div class: "imdone-project-plugins"
+            # DOING: Add the plugin buttons here
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'
@@ -98,7 +102,7 @@ class MenuView extends View
   authenticated: ->
     console.log 'authenticated:', @client.user
     user = @client.user
-    title = "Sync Tasks &#x0aImdone Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
+    title = "Share Settings &#x0aImdone Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
     @$login.hide()
     @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title).show()
