@@ -48,7 +48,7 @@ class ProductDetailView extends View
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
-      # TODO:30 This will have to be upadted on an event sent with pusher
+      # TODO:90 This will have to be upadted on an event sent with pusher
       @div class:'block', =>
         if product.enabled
           @a href:product.logout, class:'btn icon icon-log-out inline-block-tight', "unlink your #{product.name} account"

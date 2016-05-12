@@ -33,7 +33,7 @@ class ShareTasksView extends View
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
-    @connectorManager = new ConnectorManager @imdoneRepo #TODO: we don't need this set until we're authenticated
+    @connectorManager = new ConnectorManager @imdoneRepo #TODO:60 we don't need this set until we're authenticated
     @initPasswordField()
 
   show: () ->
@@ -43,6 +43,7 @@ class ShareTasksView extends View
     @emailEditor.focus()
 
   onAuthenticated: () ->
+    @loginPanel.hide()
     @client.getOrCreateProject @imdoneRepo, (err, project) =>
       return if err
       # READY:30 This is where we should getOrCreateProject
@@ -125,6 +126,8 @@ class ShareTasksView extends View
 
     @client.on 'product.unlinked', (product) =>
       @productSelect.updateItem product
+
+    @client.on 'authenticated', => @onAuthenticated()
 
   showProductPanel: ->
     @connectorManager.getProducts (err, products) =>

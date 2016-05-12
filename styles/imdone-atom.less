@@ -13,6 +13,43 @@
 @task-background-color: @tab-background-color;
 
 .imdone-atom {
+  svg {
+    .base-fill {
+      fill: @pane-item-background-color;
+      fill-opacity:0;
+      fill-rule:nonzero;
+    }
+    .base-stroke {
+      stroke: @pane-item-background-color;
+      stroke-width:6;
+      stroke-linecap:butt;
+      stroke-linejoin:round
+    }
+
+    .visible-fill {
+      fill:@text-color;
+    }
+
+    .visible-stroke {
+      stroke:@text-color;
+      stroke-width:12;
+    }
+    &.icon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      &:hover {
+        .visible-fill {
+          fill:@text-color-selected;
+        }
+        .visible-stroke {
+          stroke:@text-color-selected;
+          stroke-width:12;
+        }
+      }
+    }
+  }
+
   .mask {
     position: absolute;
     top: 0;
@@ -194,8 +231,9 @@
       .imdone-profile {
         .profile-image {
           margin-left: -4px;
-          .share-btn {
+          img {
             height: 24px;
+            width: 24px;
           }
         }
       }

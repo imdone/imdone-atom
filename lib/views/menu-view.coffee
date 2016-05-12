@@ -21,7 +21,11 @@ class MenuView extends View
           @div class: "imdone-profile imdone-toolbar-button", outlet: "$profile", =>
             @div outlet:'$login', class:'text-success imdone-icon', title:'Blast off! login and share', =>
               # TODO: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
-              @a click:'openShare', href: "#", class: 'icon icon-rocket'
+              # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
+              # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
+              @a click:'openShare', href: "#", =>
+                @tag 'svg', class: 'icon', =>
+                  @tag 'use', "xlink:href":"#imdone-logo-icon"
             @div class:"profile-image", outlet:'$profileImage', click:'openShare', style:'display:none;'
           @div class: "menu-sep-space-3x"
           # BACKLOG: Add config opener and change the icon for tools to wrench or list `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49>

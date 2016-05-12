@@ -1,5 +1,6 @@
 {$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
+fs = require 'fs'
 MenuView = null
 BottomView = null
 path = null
@@ -10,7 +11,7 @@ fileService = null
 client = null
 log = null
 
-# TODO:50 Add keen stats for features
+# TODO:110 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -26,6 +27,11 @@ class ImdoneAtomView extends ScrollView
 
   initialize: ->
     super
+    packagePath = atom.packages.getLoadedPackage('imdone-atom').path
+    svgPath = path.join packagePath, 'images', 'icons.svg'
+    fs.readFile svgPath, (err, data) =>
+      return if err
+      @$svg.html data.toString()
 
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
@@ -59,6 +65,7 @@ class ImdoneAtomView extends ScrollView
     BottomView = require './bottom-view'
     path = require 'path'
     @div tabindex: -1, class: 'imdone-atom pane-item', =>
+      @div outlet: '$svg'
       @div outlet: 'loading', class: 'imdone-loading', =>
         @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."

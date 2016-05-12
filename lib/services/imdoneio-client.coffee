@@ -65,7 +65,7 @@ class ImdoneioClient extends Emitter
       return cb err if err
       @_auth (err, user) =>
         @emit 'storage.auth.error' if err && err.code == "ECONNREFUSED"
-        # TODO: if err.status == 404 we should show an error
+        # TODO:40 if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -169,7 +169,7 @@ class ImdoneioClient extends Emitter
     ).end (err, res) =>
       return cb(err, res) if err || !res.ok
       project = res.body
-      # TODO: This should be in connectorManager
+      # TODO:20 This should be in connectorManager
       @setProjectId repo, project.id
       @setProjectName repo, project.name
       repo.saveConfig()
@@ -178,12 +178,12 @@ class ImdoneioClient extends Emitter
 
   getOrCreateProject: (repo, cb) ->
     # READY:90 Implement getOrCreateProject
-    # TODO: move this to connectorManager
+    # TODO:50 move this to connectorManager
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
       return cb err if err
-      # TODO: This should be in connectorManager
+      # TODO:30 This should be in connectorManager
       @setProjectName repo, project.name
       repo.saveConfig()
       return @createProject repo, cb if err == PROJECT_ID_NOT_VALID_ERR
