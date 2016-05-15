@@ -65,7 +65,7 @@ class ImdoneioClient extends Emitter
       return cb err if err
       @_auth (err, user) =>
         @emit 'storage.auth.error' if err && err.code == "ECONNREFUSED"
-        # TODO:40 if err.status == 404 we should show an error
+        # TODO:60 if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -161,6 +161,20 @@ class ImdoneioClient extends Emitter
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
+  enableConnector: (repo, connector, cb) ->
+    @_connectorAction repo, connector, "enable", cb
+
+  disableConnector: (repo, connector, cb) ->
+    @_connectorAction repo, connector, "disable", cb
+
+  _connectorAction: (repo, connector, action, cb) ->
+    projectId = @getProjectId repo
+    return cb "project must have a sync.id to connect" unless projectId
+    # READY:110 Implement createProject
+    @doPost("/projects/#{projectId}/connectors/#{connector.id}/#{action}").send(connector).end (err, res) =>
+      return cb(err, res) if err || !res.ok
+      cb(null, res.body)
+
   createProject: (repo, cb) ->
     # READY:120 Implement createProject
     @doPost("/projects").send(
@@ -169,7 +183,7 @@ class ImdoneioClient extends Emitter
     ).end (err, res) =>
       return cb(err, res) if err || !res.ok
       project = res.body
-      # TODO:20 This should be in connectorManager
+      # TODO:40 This should be in connectorManager
       @setProjectId repo, project.id
       @setProjectName repo, project.name
       repo.saveConfig()
@@ -178,12 +192,12 @@ class ImdoneioClient extends Emitter
 
   getOrCreateProject: (repo, cb) ->
     # READY:90 Implement getOrCreateProject
-    # TODO:50 move this to connectorManager
+    # TODO:70 move this to connectorManager
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
       return cb err if err
-      # TODO:30 This should be in connectorManager
+      # TODO:50 This should be in connectorManager
       @setProjectName repo, project.name
       repo.saveConfig()
       return @createProject repo, cb if err == PROJECT_ID_NOT_VALID_ERR
@@ -222,7 +236,7 @@ class ImdoneioClient extends Emitter
   syncTasks: (repo, tasks, product, cb) ->
     cb = if cb then cb else () ->
     # BACKLOG:30 Emit progress through the repo so the right board is updated
-    # READY:20 getOrCreateProject should happen when we get products, if we know a product is enabled
+    # READY:20 getOrCreateProject should happen when we get products, if we know a product is linked
     @getOrCreateProject repo, (err, project) =>
       return cb(err) if err
       tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")

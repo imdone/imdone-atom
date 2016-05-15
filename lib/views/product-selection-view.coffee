@@ -21,15 +21,24 @@ class ProductSelectionView extends SelectListView
     @selectItemView(@list.find itemSelector)
     @confirmSelection()
 
-  selectProduct: (product) ->
-    @confirmed product
+  selectProduct: (product) -> @confirmed product
+
+  getProduct: (name) ->
+    _ = require 'lodash'
+    _.find @items, name: name
 
   confirmed: (product) ->
     @emitter.emit 'product.selected', product
 
   viewForItem: (product) ->
-    icon   = if product.enabled then 'icon-cloud-upload' else 'icon-sign-in'
-    text   = if product.enabled then 'text-success' else 'text-info'
+    icon = 'icon-sign-in'
+    text = 'text-info'
+    if product.isEnabled()
+      icon = 'icon-cloud-upload'
+      text = 'text-success'
+    else if product.isLinked()
+      icon = 'icon-log-out'
+      text = 'text-warning'
 
     $$ ->
       @li class:"integration-product", 'data-name': product.name, =>

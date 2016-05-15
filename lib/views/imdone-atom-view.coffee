@@ -11,7 +11,7 @@ fileService = null
 client = null
 log = null
 
-# TODO:110 Add keen stats for features
+# TODO:130 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -225,7 +225,7 @@ class ImdoneAtomView extends ScrollView
             $taskPlugins.append $button
 
   addPluginProjectButtons: ->
-    # DOING: Add the plugin project buttons here
+    # DOING:20 Add the plugin project buttons here
 
   addPluginView: (plugin) ->
     return unless plugin.getView
