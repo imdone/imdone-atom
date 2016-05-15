@@ -21,10 +21,11 @@ class ProductDetailView extends View
     require 'json-editor'
     @div class: 'product-detail-view-content config-container vertical-scroll', =>
       @div outlet: '$detail'
-      @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
-      @div outlet: '$disabledMask', class: 'mask', =>
-        @div class: 'spinner-mask'
-        @div class: 'spinner-container' #, =>
+      @div class: 'json-editor-container', =>
+        @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
+        @div outlet: '$disabledMask', class: 'mask', =>
+          @div class: 'spinner-mask'
+          @div class: 'spinner-container' #, =>
 
 
   setProduct: (@product)->
@@ -32,6 +33,7 @@ class ProductDetailView extends View
     @$detail.html @getDetail(@product)
     @$configEditor.empty()
     return unless @product.linked
+    if @product.isEnabled() then @$disabledMask.hide() else @$disabledMask.show()
     @createEditor()
 
   createEditor: ->
