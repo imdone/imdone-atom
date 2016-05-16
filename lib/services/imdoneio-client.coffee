@@ -171,7 +171,7 @@ class ImdoneioClient extends Emitter
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
     # READY:110 Implement createProject
-    @doPost("/projects/#{projectId}/connectors/#{connector.id}/#{action}").send(connector).end (err, res) =>
+    @doPost("/projects/#{projectId}/connectors/#{connector.id}/#{action}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 

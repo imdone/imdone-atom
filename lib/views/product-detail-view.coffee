@@ -19,9 +19,9 @@ class ProductDetailView extends View
 
   @content: (params) ->
     require 'json-editor'
-    @div class: 'product-detail-view-content config-container vertical-scroll', =>
+    @div class: 'product-detail-view-content config-container', =>
       @div outlet: '$detail'
-      @div class: 'json-editor-container', =>
+      @div class: 'json-editor-container vertical-scroll', =>
         @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
         @div outlet: '$disabledMask', class: 'mask', =>
           @div class: 'spinner-mask'
