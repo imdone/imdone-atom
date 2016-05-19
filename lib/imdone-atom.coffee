@@ -79,7 +79,7 @@ module.exports = ImdoneAtom =
   #   serialized
 
   activate: (state) ->
-    # READY:40 Put requires in activate to speed up startup issue:77
+    # READY:50 Put requires in activate to speed up startup issue:77
     # #DONE:210 Add back serialization (The right way) +Roadmap @testing
     _ = require 'lodash'
     url = require 'url'
@@ -172,7 +172,9 @@ module.exports = ImdoneAtom =
     ImdoneAtomView ?= require './views/imdone-atom-view'
     imdoneHelper ?= require './services/imdone-helper'
     imdoneRepo = imdoneHelper.newImdoneRepo(path, uri)
-    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: path, uri: uri)
+    ConnectorManager = require './services/connector-manager'
+    connectorManager = new ConnectorManager imdoneRepo
+    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: path, uri: uri, connectorManager: connectorManager)
 
   getConfig: () ->
     atom.config.get('imdone-atom')

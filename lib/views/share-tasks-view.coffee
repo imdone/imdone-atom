@@ -31,9 +31,8 @@ class ShareTasksView extends View
         @div class:'col-md-9 product-detail-wrapper config-container pull-right', =>
           @subview 'productDetail', new ProductDetailView
 
-  initialize: ({@imdoneRepo, @path, @uri}) ->
+  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
-    @connectorManager = new ConnectorManager @imdoneRepo #TODO:80 we don't need this set until we're authenticated
     @initPasswordField()
 
   show: () ->
@@ -46,8 +45,8 @@ class ShareTasksView extends View
     @loginPanel.hide()
     @client.getOrCreateProject @imdoneRepo, (err, project) =>
       return if err
-      # READY:30 This is where we should getOrCreateProject
-      @project = project unless err # DOING:40 we should show an error if things aren't ok
+      # READY:40 This is where we should getOrCreateProject
+      @project = project unless err # DOING:30 we should show an error if things aren't ok
       @showProductPanel()
 
   initPasswordField: () ->
@@ -71,7 +70,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:50 We need to show an error here is login fails because service can't be reached or if login fails
+      # DOING:40 We need to show an error here is login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()

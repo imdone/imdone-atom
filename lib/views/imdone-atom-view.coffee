@@ -33,7 +33,7 @@ class ImdoneAtomView extends ScrollView
       return if err
       @$svg.html data.toString()
 
-  constructor: ({@imdoneRepo, @path, @uri}) ->
+  constructor: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     super
     util = require 'util'
     Sortable = require 'sortablejs'
@@ -207,7 +207,11 @@ class ImdoneAtomView extends ScrollView
       plugin = @plugins[Plugin.pluginName]
       @bottomView.removePlugin plugin if plugin.getView
       delete @plugins[Plugin.pluginName]
-      @addPluginTaskButtons()
+      @addPluginButtons()
+
+  addPluginButtons: ->
+    @addPluginTaskButtons()
+    @addPluginProjectButtons()
 
   addPluginTaskButtons: ->
     @board.find('.imdone-task-plugins').empty()
@@ -225,29 +229,32 @@ class ImdoneAtomView extends ScrollView
             $taskPlugins.append $button
 
   addPluginProjectButtons: ->
-    # DOING:20 Add the plugin project buttons here
+    # DOING:10 Add the plugin project buttons here
 
   addPluginView: (plugin) ->
     return unless plugin.getView
     @bottomView.addPlugin plugin
 
   initPluginView: (plugin) ->
-    @addPluginTaskButtons()
+    @addPluginButtons()
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    if @plugins[Plugin.pluginName]
-      @addPluginTaskButtons()
-    else
-      plugin = new Plugin @imdoneRepo, @viewInterface
-      @plugins[Plugin.pluginName] = plugin
-      if plugin instanceof Emitter
-        if plugin.isReady()
-          @initPluginView plugin
-        else
-          plugin.on 'ready', => @initPluginView plugin
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:0 Get the connector from the connector manager
+      return if product && !product.isEnabled()
+      connector = product && product.connector
+      if @plugins[Plugin.pluginName]
+        @addPluginButtons()
       else
-        @initPluginView plugin
+        plugin = new Plugin @imdoneRepo, @viewInterface, connector
+        @plugins[Plugin.pluginName] = plugin
+        if plugin instanceof Emitter
+          if plugin.isReady()
+            @initPluginView plugin
+          else
+            plugin.on 'ready', => @initPluginView plugin
+        else
+          @initPluginView plugin
 
   hasPlugins: ->
     Object.keys(@plugins).length > 0
@@ -424,7 +431,7 @@ class ImdoneAtomView extends ScrollView
     elements = (-> getList list for list in lists)
 
     @board.append elements
-    @addPluginTaskButtons()
+    @addPluginButtons()
     @filter()
     @board.show()
     @mask.hide()
