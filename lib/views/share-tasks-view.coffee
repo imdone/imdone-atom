@@ -107,7 +107,6 @@ class ShareTasksView extends View
 
     @emitter.on 'product.selected', (product) =>
       @updateConnectorForEdit product
-      console.log product
       @productDetail.setProduct product
 
     @emitter.on 'connector.change', (product) =>

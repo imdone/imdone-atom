@@ -100,7 +100,7 @@ class ImdoneioClient extends Emitter
     # READY:90 imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data.product
-    @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.linked', data.product
+    @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.unlinked', data.product
     @pusherChannel.bind 'connector.enabled', (data) => @emit 'connector.enabled', data.connector
     @pusherChannel.bind 'connector.disabled', (data) => @emit 'connector.disabled', data.connector
     @pusherChannel.bind 'connector.changed', (data) => @emit 'connector.changed', data.connector

@@ -7,7 +7,6 @@ class ConnectorPlugin extends Emitter
   constructor: (@repo, @imdoneView, @connector) ->
     # We need some way to get the connector!
     super
-    @metaKey = @connector.config.idMetaKey
     @ready = true
     @view = new @PluginView({@repo, @connector})
     @emit 'ready'
@@ -16,12 +15,6 @@ class ConnectorPlugin extends Emitter
       @imdoneView.selectTask @task.id
 
   PluginView: require('./plugin-view')
-
-  getIssueIds: (task) ->
-    task = @task unless task
-    return null unless task
-    metaData = task.getMetaData()
-    metaData[@metaKey] if (@metaKey && metaData)
 
   # Interface ---------------------------------------------------------------------------------------------------------
   isReady: ->
@@ -32,8 +25,8 @@ class ConnectorPlugin extends Emitter
     {$, $$, $$$} = require 'atom-space-pen-views'
     return unless @repo
     task = @repo.getTask(id)
-    issueIds = @getIssueIds(task)
-    title = "Update linked github issues"
+    issueIds = @view.getIssueIds(task)
+    title = "Update linked github issues (imdone.io)"
     self = @
     $btn = $$ ->
       @a href: '#', title: title, class: "#{self.pluginName}", =>

@@ -23,6 +23,12 @@ class ConnectorPluginView extends View
 
   setTask: (@task) ->
 
+  getIssueIds: (task) ->
+    task = @task unless task
+    return null unless task
+    metaData = task.getMetaData()
+    metaData[@idMetaKey] if (@idMetaKey && metaData)
+
   handleEvents: ->
     self = @
     @findIssuesField.on 'keyup', (e) =>
@@ -33,9 +39,9 @@ class ConnectorPluginView extends View
       id = $(@).attr('data-issue-number')
       $(@).closest('li').remove();
       self.task.addMetaData self.idMetaKey, id
-      self.repo.modifyTask model.task, true, (err, result) ->
+      self.repo.modifyTask self.task, true, (err, result) ->
         console.log err, result
-        self.issues = model.getIssueIds()
+        self.issues = self.getIssueIds()
         self.showRelatedIssues()
 
     @on 'click', '.issue-remove', (e) ->
@@ -44,7 +50,7 @@ class ConnectorPluginView extends View
       self.task.removeMetaData self.idMetaKey, id
       self.repo.modifyTask self.task, true, (err, result) ->
         console.log err, result
-        self.issues = model.getIssueIds()
+        self.issues = self.getIssueIds()
         self.doFind()
 
   show: (@issues) ->
@@ -86,7 +92,7 @@ class ConnectorPluginView extends View
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true
-      @issues = @model.getIssueIds()
+      @issues = @getIssueIds()
       @showRelatedIssues()
 
   $spinner: ->

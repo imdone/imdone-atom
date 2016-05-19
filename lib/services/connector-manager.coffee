@@ -7,7 +7,15 @@ class ConnectorManager
   products: null
   constructor: (@repo) ->
     @client = require('./imdoneio-client').instance
+    @handleEvents()
     # TODO: Check for updates to products/connectors and update @products with changes
+
+  handleEvents: ->
+    @client.on 'product.linked', (data) =>
+    @client.on 'product.unlinked', (data) =>
+    @client.on 'connector.enabled', (data) =>
+    @client.on 'connector.disabled', (data) =>
+    @client.on 'connector.changed', (data) =>
 
   projectId: () -> @client.getProjectId @repo
   getProducts: (cb) ->
@@ -15,11 +23,7 @@ class ConnectorManager
     return cb(null, @products) if @products
     @client.getProducts @projectId(), (err, products) =>
       return cb(err) if err
-      for product in products
-        product.connector.defaultSearch = product.defaultSearch if product.connector
-        _.mixin product,
-          isLinked: () -> this.linked
-          isEnabled: () -> this.linked && this.connector && this.connector.enabled
+      @enhanceProduct product for product in products
       @products = products
       cb null, products
 
@@ -44,3 +48,9 @@ class ConnectorManager
     repo = helper.repoForPath @repo.getPath()
     return null unless repo
     repo.getOriginURL()
+
+  enhanceProduct: (product) ->
+    product.connector.defaultSearch = product.defaultSearch if product.connector
+    _.mixin product,
+      isLinked: () -> this.linked
+      isEnabled: () -> this.linked && this.connector && this.connector.enabled
