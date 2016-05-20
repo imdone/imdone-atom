@@ -10,7 +10,7 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @handleEvents()
-    # DOING:0 Check for updates to products/connectors and update @products with changes
+    # READY:0 Check for updates to products/connectors and update @products with changes
 
   handleEvents: ->
     @client.on 'product.linked', (product) =>
@@ -21,13 +21,13 @@ class ConnectorManager extends Emitter
       @setProduct product, (err, product) =>
         @emit 'product.unlinked', product unless err
 
-    @client.on 'connector.enabled', (connector) => @setConnector connector
-
-    @client.on 'connector.disabled', (connector) => @setConnector connector
-
-    @client.on 'connector.changed', (connector) => @setConnector connector
-
-    @client.on 'connector.created', (connector) => @setConnector connector
+    # @client.on 'connector.enabled', (connector) => @setConnector connector
+    #
+    # @client.on 'connector.disabled', (connector) => @setConnector connector
+    #
+    # @client.on 'connector.changed', (connector) => @setConnector connector
+    #
+    # @client.on 'connector.created', (connector) => @setConnector connector
 
   projectId: () -> @client.getProjectId @repo
 
@@ -50,26 +50,35 @@ class ConnectorManager extends Emitter
       return cb err  if err
       _.assign product, newProduct
       product.linked = newProduct.linked
+      _.set product, 'connector.enabled', _.get(newProduct, 'connector.enabled')
       cb null, product
 
   setConnector: (connector, cb) ->
-    @setProduct
-      name: connector.name
-      connector: connector
-    , cb
+    @getProduct connector.name, (err, product) ->
+      return cb err  if err
+      product.connector = connector
+      cb null, connector
 
   saveConnector: (connector, cb) ->
     cb = (()->) unless cb
     return @createConnector connector, cb unless connector.id
     @updateConnector connector, cb
 
-  createConnector: (connector, cb) -> @client.createConnector @repo, connector, cb
+  createConnector: (connector, cb) ->
+    @client.createConnector @repo, connector, cb
 
-  updateConnector: (connector, cb) -> @client.updateConnector @repo, connector, cb
+  updateConnector: (connector, cb) ->
+    @client.updateConnector @repo, connector, cb
 
-  enableConnector: (connector, cb) -> @client.enableConnector @repo, connector, cb
+  enableConnector: (connector, cb) ->
+    @client.enableConnector @repo, connector, (err, connector) =>
+      return cb err if err
+      @setConnector connector, cb
 
-  disableConnector: (connector, cb) -> @client.disableConnector @repo, connector, cb
+  disableConnector: (connector, cb) ->
+    @client.disableConnector @repo, connector, (err, connector) =>
+      return cb err if err
+      @setConnector connector, cb
 
   getGitOrigin: () ->
     repo = helper.repoForPath @repo.getPath()

@@ -59,8 +59,8 @@ class ProductDetailView extends View
     _.set @product, 'connector.name', @product.name
     @emitter.emit 'connector.change', @product
 
-  # READY:30 Add enable checkbox and take appropriate actions on check/uncheck +urgent
-  # READY:0 When unlinked disable all connectors (In API) +urgent
+  # READY:40 Add enable checkbox and take appropriate actions on check/uncheck +urgent
+  # READY:10 When unlinked disable all connectors (In API) +urgent
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"

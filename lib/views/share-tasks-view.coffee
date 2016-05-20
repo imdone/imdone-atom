@@ -55,8 +55,8 @@ class ShareTasksView extends View
     @loginPanel.hide()
     @client.getOrCreateProject @imdoneRepo, (err, project) =>
       return if err
-      # READY:50 This is where we should getOrCreateProject
-      @project = project unless err # DOING:30 we should show an error if things aren't ok
+      # READY:60 This is where we should getOrCreateProject
+      @project = project unless err # DOING:50 we should show an error if things aren't ok
       @showProductPanel()
 
   initPasswordField: () ->
@@ -80,7 +80,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:40 We need to show an error here if login fails because service can't be reached or if login fails
+      # DOING:60 We need to show an error here if login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -121,23 +121,24 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # DOING: Handle errors
+        # DOING:0 Handle errors
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # DOING: Handle errors
+        # DOING:10 Handle errors
         @updateConnector updatedConnector unless err
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # DOING: Handle errors
+        # DOING:20 Handle errors
         @updateConnector updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
 
   updateConnector: (connector) ->
+    # TODO: This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/)
     updatedProduct = @productSelect.getProduct connector.name
     updatedProduct.connector = connector
     @productSelect.updateItem updatedProduct
