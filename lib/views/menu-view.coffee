@@ -10,7 +10,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:180 Show logged in user and avatar here
+        # READY:190 Show logged in user and avatar here
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
@@ -40,7 +40,7 @@ class MenuView extends View
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           @div class: "menu-sep-space-2x"
           @div class: "imdone-project-plugins"
-            # DOING:0 Add the plugin project buttons
+            # DOING:10 Add the plugin project buttons
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'

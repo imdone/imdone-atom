@@ -35,6 +35,16 @@ class ShareTasksView extends View
     @client = Client.instance
     @initPasswordField()
 
+    @connectorManager.on 'product.linked', (product) =>
+      @updateConnectorForEdit product
+      @productSelect.updateItem product
+      @productDetail.setProduct product
+
+    @connectorManager.on 'product.unlinked', (product) =>
+      @updateConnectorForEdit product
+      @productSelect.updateItem product
+      @productDetail.setProduct product
+
   show: () ->
     super
     return @onAuthenticated() if @client.isAuthenticated()
@@ -45,7 +55,7 @@ class ShareTasksView extends View
     @loginPanel.hide()
     @client.getOrCreateProject @imdoneRepo, (err, project) =>
       return if err
-      # READY:40 This is where we should getOrCreateProject
+      # READY:50 This is where we should getOrCreateProject
       @project = project unless err # DOING:30 we should show an error if things aren't ok
       @showProductPanel()
 
@@ -70,7 +80,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:40 We need to show an error here is login fails because service can't be reached or if login fails
+      # DOING:40 We need to show an error here if login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -111,26 +121,18 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
+        # DOING: Handle errors
         product.connector = connector
         @productSelect.updateItem product
 
-    @client.on 'product.linked', (product) =>
-      @connectorManager.getProducts (err, products) =>
-        return if err
-        updatedProduct = _.find products, name: product.name
-        @updateConnectorForEdit product
-        @productSelect.updateItem updatedProduct
-        @productDetail.setProduct updatedProduct
-
-    @client.on 'product.unlinked', (product) =>
-      @productSelect.updateItem product
-
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
+        # DOING: Handle errors
         @updateConnector updatedConnector unless err
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
+        # DOING: Handle errors
         @updateConnector updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()

@@ -1,28 +1,41 @@
 _ = require 'lodash'
 helper = require './imdone-helper'
 log = require('debug/browser') 'imdone-atom:connector-manager'
+{Emitter} = require 'atom'
 
 module.exports =
-class ConnectorManager
+class ConnectorManager extends Emitter
   products: null
   constructor: (@repo) ->
+    super
     @client = require('./imdoneio-client').instance
     @handleEvents()
-    # TODO: Check for updates to products/connectors and update @products with changes
+    # DOING:0 Check for updates to products/connectors and update @products with changes
 
   handleEvents: ->
-    @client.on 'product.linked', (data) =>
-    @client.on 'product.unlinked', (data) =>
-    @client.on 'connector.enabled', (data) =>
-    @client.on 'connector.disabled', (data) =>
-    @client.on 'connector.changed', (data) =>
+    @client.on 'product.linked', (product) =>
+      @setProduct product, (err, product) =>
+        @emit 'product.linked', product unless err
+
+    @client.on 'product.unlinked', (product) =>
+      @setProduct product, (err, product) =>
+        @emit 'product.unlinked', product unless err
+
+    @client.on 'connector.enabled', (connector) => @setConnector connector
+
+    @client.on 'connector.disabled', (connector) => @setConnector connector
+
+    @client.on 'connector.changed', (connector) => @setConnector connector
+
+    @client.on 'connector.created', (connector) => @setConnector connector
 
   projectId: () -> @client.getProjectId @repo
+
   getProducts: (cb) ->
     cb = (()->) unless cb
     return cb(null, @products) if @products
     @client.getProducts @projectId(), (err, products) =>
-      return cb(err) if err
+      return cb err  if err
       @enhanceProduct product for product in products
       @products = products
       cb null, products
@@ -30,6 +43,20 @@ class ConnectorManager
   getProduct: (provider, cb) ->
     @getProducts (err, products) ->
       cb err, _.find products, name: provider
+
+  setProduct: (newProduct, cb) ->
+    cb = (()->) unless cb
+    @getProduct newProduct.name, (err, product) ->
+      return cb err  if err
+      _.assign product, newProduct
+      product.linked = newProduct.linked
+      cb null, product
+
+  setConnector: (connector, cb) ->
+    @setProduct
+      name: connector.name
+      connector: connector
+    , cb
 
   saveConnector: (connector, cb) ->
     cb = (()->) unless cb
