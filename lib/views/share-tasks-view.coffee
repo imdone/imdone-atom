@@ -41,6 +41,7 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
+      # DOING:10 Connector plugin should be removed
       @updateConnectorForEdit product
       @productSelect.updateItem product
       @productDetail.setProduct product
@@ -55,8 +56,8 @@ class ShareTasksView extends View
     @loginPanel.hide()
     @client.getOrCreateProject @imdoneRepo, (err, project) =>
       return if err
-      # READY:60 This is where we should getOrCreateProject
-      @project = project unless err # DOING:50 we should show an error if things aren't ok
+      # READY:80 This is where we should getOrCreateProject
+      @project = project unless err # DOING:60 we should show an error if things aren't ok
       @showProductPanel()
 
   initPasswordField: () ->
@@ -80,7 +81,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:60 We need to show an error here if login fails because service can't be reached or if login fails
+      # DOING:70 We need to show an error here if login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -121,24 +122,28 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # DOING:0 Handle errors
+        # DOING:30 Handle errors
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # DOING:10 Handle errors
-        @updateConnector updatedConnector unless err
+        # DOING:40 Handle errors
+        return if err
+        @updateConnector updatedConnector
+        @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # DOING:20 Handle errors
-        @updateConnector updatedConnector unless err
+        # DOING:50 Handle errors
+        return if err
+        @updateConnector updatedConnector
+        @emitter.emit 'connector.disabled', updatedConnector
 
     @client.on 'authenticated', => @onAuthenticated()
 
   updateConnector: (connector) ->
-    # TODO: This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/)
+    # BACKLOG:0 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/)
     updatedProduct = @productSelect.getProduct connector.name
     updatedProduct.connector = connector
     @productSelect.updateItem updatedProduct

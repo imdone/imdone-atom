@@ -11,7 +11,7 @@ fileService = null
 client = null
 log = null
 
-# TODO:130 Add keen stats for features
+# TODO:80 Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -203,11 +203,10 @@ class ImdoneAtomView extends ScrollView
       else
         repo.on 'initialized', => @addPlugin(Plugin)
 
-    pluginManager.emitter.on 'plugin.removed', (Plugin) =>
-      plugin = @plugins[Plugin.pluginName]
-      @bottomView.removePlugin plugin if plugin.getView
-      delete @plugins[Plugin.pluginName]
-      @addPluginButtons()
+    pluginManager.emitter.on 'plugin.removed', (Plugin) => @removePlugin Plugin
+
+    @emitter.on 'connector.disabled', (connector) => @removePluginByProvider connector.name
+    @emitter.on 'connector.enabled', (connector) => @addPluginByProvider connector.name
 
   addPluginButtons: ->
     @addPluginTaskButtons()
@@ -228,8 +227,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: ->
-    # DOING:40 Add the plugin project buttons here
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:20 Add the plugin project buttons here
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -240,7 +238,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:20 Get the connector from the connector manager
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:40 Get the connector from the connector manager
       return if product && !product.isEnabled()
       connector = product && product.connector
       if @plugins[Plugin.pluginName]
@@ -255,6 +253,16 @@ class ImdoneAtomView extends ScrollView
             plugin.on 'ready', => @initPluginView plugin
         else
           @initPluginView plugin
+
+  addPluginByProvider: (provider) -> @addPlugin pluginManager.getByProvider(provider)
+
+  removePlugin: (Plugin) ->
+    plugin = @plugins[Plugin.pluginName]
+    @bottomView.removePlugin plugin if plugin.getView
+    delete @plugins[Plugin.pluginName]
+    @addPluginButtons()
+
+  removePluginByProvider: (provider) -> @removePlugin pluginManager.getByProvider(provider)
 
   hasPlugins: ->
     Object.keys(@plugins).length > 0
@@ -305,7 +313,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # BACKLOG:70 This should be queued so two updates don't colide
+    # BACKLOG:120 This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
@@ -321,7 +329,7 @@ class ImdoneAtomView extends ScrollView
       @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
         @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
 
-  # BACKLOG:60 Split this apart into it's own class to simplify. Call it BoardView +refactor
+  # BACKLOG:110 Split this apart into it's own class to simplify. Call it BoardView +refactor
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()
@@ -356,7 +364,7 @@ class ImdoneAtomView extends ScrollView
         @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
-          # BACKLOG:50 Maybe show assigned avatar on task +feature
+          # BACKLOG:100 Maybe show assigned avatar on task +feature
           @div class: 'imdone-task-plugins'
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>

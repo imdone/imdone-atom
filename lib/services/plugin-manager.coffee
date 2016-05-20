@@ -1,4 +1,5 @@
 {Emitter} = require 'atom'
+_ = require 'lodash'
 
 # #DONE:120 Write docs for creating plugins issue:42
 module.exports = PluginManager =
@@ -20,8 +21,9 @@ module.exports = PluginManager =
     delete @plugins[pluginName]
     @emitter.emit 'plugin.removed', Plugin
 
-  getAll: ->
-    (val for key, val of @plugins)
+  getAll: -> (val for key, val of @plugins)
+
+  getByProvider: (provider) -> _.find @getAll(), provider: provider
 
   init: ->
     for plugin in @defaultPlugins

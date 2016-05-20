@@ -63,11 +63,11 @@ class ConnectorPluginView extends View
     return unless @issues
     @relatedIssues.html @$spinner()
     async.map @issues, (number, cb) =>
-      # READY:30 Replace service.getIssue with client.getIssue
+      # READY:50 Replace service.getIssue with client.getIssue
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>
-      # #TODO:30 Check error for 404/Not Found
+      # #TODO:20 Check error for 404/Not Found
       if err
         console.log "error:", err
       else
@@ -88,7 +88,7 @@ class ConnectorPluginView extends View
         @searchResult.html 'No issues found'
 
   newIssue: ->
-    # TODO:0 Also add the task list as a label
+    # BACKLOG:50 Also add the task list as a label when creating an issue on github +waffle
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true

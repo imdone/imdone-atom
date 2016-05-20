@@ -31,7 +31,7 @@ class BottomView extends View
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
-      # #BACKLOG:110 Add config view here
+      # #BACKLOG:160 Add config view here
 
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
@@ -82,10 +82,10 @@ class BottomView extends View
     @closeButton.on 'click', =>
       @hide()
 
-    # TODO:100 This belongs in bottomView +refactor
+    # TODO:50 This belongs in bottomView +refactor
     @emitter.on 'list.new', => @showNewList()
 
-    # TODO:90 This belongs in bottomView +refactor
+    # TODO:40 This belongs in bottomView +refactor
     @emitter.on 'share', => @showShare()
 
 
