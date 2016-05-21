@@ -7,8 +7,8 @@ Roadmap
 - [ ] #BACKLOG:150 Integrate with Waffle.io, GitHub, Jira, Pivotal
 - [ ] #BACKLOG:170 Provide on-line service for installing plugins to a teammmm
 - [ ] #TODO:70 Add configuration for autoclose task with date on moving into list
-- [ ] #DOING:100 As a user I would like to share tasks with other services +story
-  - [ ] #READY:110 As a user I would like to enable an integration
+- [ ] #DOING:90 As a user I would like to share tasks with other services +story
+  - [ ] #READY:120 As a user I would like to enable an integration
 - [ ] #BACKLOG:90 As a user I would like to hide a list without opening the menu
 - [ ] #BACKLOG:220 AAUIWLT click a button on the board to open the package configuration +story
 

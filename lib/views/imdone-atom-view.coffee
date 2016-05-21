@@ -231,7 +231,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:40 Add the plugin project buttons here
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:30 Add the plugin project buttons here
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -242,7 +242,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:40 Get the connector from the connector manager
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:50 Get the connector from the connector manager
       return if product && !product.isEnabled()
       connector = product && product.connector
       if @plugins[Plugin.pluginName]

@@ -10,7 +10,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:220 Show logged in user and avatar here
+        # READY:230 Show logged in user and avatar here
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'

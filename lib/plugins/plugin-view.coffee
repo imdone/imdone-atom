@@ -67,7 +67,7 @@ class ConnectorPluginView extends View
     return unless @issues
     @relatedIssues.html @$spinner()
     async.map @issues, (number, cb) =>
-      # READY:50 Replace service.getIssue with client.getIssue
+      # READY:60 Replace service.getIssue with client.getIssue
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>

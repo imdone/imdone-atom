@@ -10,7 +10,7 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @handleEvents()
-    # READY:20 Check for updates to products/connectors and update @products with changes
+    # READY:30 Check for updates to products/connectors and update @products with changes
 
   handleEvents: ->
     @client.on 'product.linked', (product) =>
