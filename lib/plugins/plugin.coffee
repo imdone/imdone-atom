@@ -1,21 +1,23 @@
 {Emitter} = require 'atom'
 module.exports =
 class ConnectorPlugin extends Emitter
+  @PluginView: require('./plugin-view')
   @pluginName: "github-connector-plugin"
   @provider: "github"
+  @title: "Update linked github issues (imdone.io)"
+  @icon: "octoface"
+
   ready: false
   constructor: (@repo, @imdoneView, @connector) ->
     # We need some way to get the connector!
     super
     @ready = true
-    @view = new @PluginView({@repo, @connector})
+    @view = new @constructor.PluginView({@repo, @connector})
     @emit 'ready'
     @imdoneView.on 'board.update', =>
       return unless @view && @view.is ':visible'
       @imdoneView.selectTask @task.id
-
-  PluginView: require('./plugin-view')
-
+      
   # Interface ---------------------------------------------------------------------------------------------------------
   isReady: ->
     @ready
@@ -26,11 +28,12 @@ class ConnectorPlugin extends Emitter
     return unless @repo
     task = @repo.getTask(id)
     issueIds = @view.getIssueIds(task)
-    title = "Update linked github issues (imdone.io)"
-    self = @
+    title = @constructor.title
+    pluginName = @constructor.pluginName
+    icon = @constructor.icon
     $btn = $$ ->
-      @a href: '#', title: title, class: "#{self.pluginName}", =>
-        @span class:"icon icon-octoface text-success"
+      @a href: '#', title: title, class: "#{pluginName}", =>
+        @span class:"icon icon-#{icon}"
     $btn.on 'click', (e) =>
       $(e.target).find('.task')
       @task = task

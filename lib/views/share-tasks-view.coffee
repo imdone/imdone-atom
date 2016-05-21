@@ -41,7 +41,7 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # DOING:10 Connector plugin should be removed
+      # DOING:30 Connector plugin should be removed
       @updateConnectorForEdit product
       @productSelect.updateItem product
       @productDetail.setProduct product
@@ -57,7 +57,7 @@ class ShareTasksView extends View
     @client.getOrCreateProject @imdoneRepo, (err, project) =>
       return if err
       # READY:80 This is where we should getOrCreateProject
-      @project = project unless err # DOING:60 we should show an error if things aren't ok
+      @project = project unless err # DOING:80 we should show an error if things aren't ok
       @showProductPanel()
 
   initPasswordField: () ->
@@ -81,7 +81,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:70 We need to show an error here if login fails because service can't be reached or if login fails
+      # DOING:90 We need to show an error here if login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -122,20 +122,20 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # DOING:30 Handle errors
+        # DOING:50 Handle errors
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # DOING:40 Handle errors
+        # DOING:60 Handle errors
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # DOING:50 Handle errors
+        # DOING:70 Handle errors
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.disabled', updatedConnector
