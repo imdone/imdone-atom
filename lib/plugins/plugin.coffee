@@ -17,7 +17,9 @@ class ConnectorPlugin extends Emitter
     @imdoneView.on 'board.update', =>
       return unless @view && @view.is ':visible'
       @imdoneView.selectTask @task.id
-      
+
+  setConnector: (@connector) -> @view.setConnector @connector
+
   # Interface ---------------------------------------------------------------------------------------------------------
   isReady: ->
     @ready
@@ -27,7 +29,6 @@ class ConnectorPlugin extends Emitter
     {$, $$, $$$} = require 'atom-space-pen-views'
     return unless @repo
     task = @repo.getTask(id)
-    issueIds = @view.getIssueIds(task)
     title = @constructor.title
     pluginName = @constructor.pluginName
     icon = @constructor.icon
@@ -40,4 +41,4 @@ class ConnectorPlugin extends Emitter
       @imdoneView.showPlugin @
       @imdoneView.selectTask id
       @view.setTask task
-      @view.show issueIds
+      @view.show @view.getIssueIds(task)

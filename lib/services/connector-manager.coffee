@@ -54,9 +54,10 @@ class ConnectorManager extends Emitter
       cb null, product
 
   setConnector: (connector, cb) ->
-    @getProduct connector.name, (err, product) ->
+    @getProduct connector.name, (err, product) =>
       return cb err  if err
       product.connector = connector
+      @enhanceProduct  product
       cb null, connector
 
   saveConnector: (connector, cb) ->
@@ -68,7 +69,9 @@ class ConnectorManager extends Emitter
     @client.createConnector @repo, connector, cb
 
   updateConnector: (connector, cb) ->
-    @client.updateConnector @repo, connector, cb
+    @client.updateConnector @repo, connector, (err, connector) =>
+      return cb err if err
+      @setConnector connector, cb
 
   enableConnector: (connector, cb) ->
     @client.enableConnector @repo, connector, (err, connector) =>

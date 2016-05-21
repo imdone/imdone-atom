@@ -17,13 +17,15 @@ class ConnectorPluginView extends View
 
   constructor: ({@repo, @connector}) ->
     super
-    @idMetaKey = @connector.config.idMetaKey;
     @client = require('../services/imdoneio-client').instance
     @handleEvents()
 
   setTask: (@task) ->
 
+  setConnector: (@connector) ->
+
   getIssueIds: (task) ->
+    @idMetaKey = @connector.config.idMetaKey;
     task = @task unless task
     return null unless task
     metaData = task.getMetaData()

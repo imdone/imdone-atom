@@ -207,6 +207,10 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'connector.disabled', (connector) => @removePluginByProvider connector.name
     @emitter.on 'connector.enabled', (connector) => @addPluginByProvider connector.name
+    @emitter.on 'connector.change', (product) =>
+      for name, plugin of @plugins
+        plugin.setConnector product.connector if plugin.constructor.provider == product.name
+
 
   addPluginButtons: ->
     @addPluginTaskButtons()
