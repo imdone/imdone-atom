@@ -144,14 +144,6 @@ class ImdoneioClient extends Emitter
       return cb err if err
       cb null, res.body
 
-  getTasks: (projectId, taskIds, cb) ->
-    # READY:250 Implement getProject
-    return cb null, [] unless taskIds && taskIds.length > 0
-    @doGet("/projects/#{projectId}/tasks/#{taskIds.join(',')}").end (err, res) =>
-      return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
-      return cb err if err
-      cb null, res.body
-
   getIssue: (connector, number, cb) ->
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
@@ -215,6 +207,7 @@ class ImdoneioClient extends Emitter
   getOrCreateProject: (repo, cb) ->
     # READY:150 Implement getOrCreateProject
     # BACKLOG:40 move this to connectorManager
+    # DOING: Make sure this works 
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
@@ -241,6 +234,15 @@ class ImdoneioClient extends Emitter
       @tasksDb(repo).insert tasks, (err, docs) =>
         async.eachSeries docs, updateRepo, (err) =>
           repo.saveModifiedFiles cb
+
+
+  getTasks: (projectId, taskIds, cb) ->
+    # READY:250 Implement getProject
+    return cb null, [] unless taskIds && taskIds.length > 0
+    @doGet("/projects/#{projectId}/tasks/#{taskIds.join(',')}").end (err, res) =>
+      return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
+      return cb err if err
+      cb null, res.body
 
   updateTasks: (repo, project, product, cb) ->
     # BACKLOG:60 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.

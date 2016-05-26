@@ -128,7 +128,7 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # DOING:40 Handle errors
+        # DOING:40 Handle errors by unauthenticating if needed and show login with error
         product.connector = connector
         @productSelect.updateItem product
 

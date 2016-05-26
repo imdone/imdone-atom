@@ -1,12 +1,15 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 async = require 'async'
+_ = require 'lodash'
+
 module.exports =
 class ConnectorPluginView extends View
   @content: (params)->
+    defaultSearch = _.get params, 'connector.defaultSerach' || ''
     @div class:"imdoneio-plugin-view", =>
       @div outlet:'findIssues', class: 'block find-issues', =>
         @div class: 'input-med', =>
-          @subview 'findIssuesField', new TextEditorView(mini: true, placeholderText: params.connector.defaultSearch)
+          @subview 'findIssuesField', new TextEditorView(mini: true, placeholderText: defaultSearch)
         @div class:'btn-group btn-group-find', =>
           @button click: 'doFind', class:'btn btn-primary inline-block-tight', =>
             @span class:'icon icon-mark-github', 'Find Issues'
