@@ -1,19 +1,33 @@
 _ = require 'lodash'
+async = require 'async'
 helper = require './imdone-helper'
 log = require('debug/browser') 'imdone-atom:connector-manager'
+Task = require 'imdone-core/lib/task'
 {Emitter} = require 'atom'
+
+syncTasks = (client, repo) ->
+  (tasks) ->
+    tasks = [tasks] unless _.isArray tasks
+    client.syncTasks repo, tasks, (err, tasks) ->
+      return if err # DOING:0 Do something with this error id:414
+      async.eachSeries tasks,
+        (task, cb) -> repo.modifyTask(new Task(task, true), cb)
+        (err) -> repo.saveModifiedFiles ()->
 
 module.exports =
 class ConnectorManager extends Emitter
   products: null
+
   constructor: (@repo) ->
     super
     @client = require('./imdoneio-client').instance
+    @syncTasks = syncTasks @client, @repo
     @handleEvents()
-    # READY:30 Check for updates to products/connectors and update @products with changes
+    @onAuthenticated() if @client.isAuthenticated
+    # READY:30 Check for updates to products/connectors and update @products with changes id:415
 
   handleEvents: ->
-    # DOING: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth
+    # DOING:0 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -23,6 +37,7 @@ class ConnectorManager extends Emitter
       @setProduct product, (err, product) =>
         @emit 'product.unlinked', product unless err
 
+    @client.on 'authenticated', => @onAuthenticated()
     # @client.on 'connector.enabled', (connector) => @setConnector connector
     #
     # @client.on 'connector.disabled', (connector) => @setConnector connector
@@ -30,6 +45,25 @@ class ConnectorManager extends Emitter
     # @client.on 'connector.changed', (connector) => @setConnector connector
     #
     # @client.on 'connector.created', (connector) => @setConnector connector
+
+  onRepoInit: () ->
+    return if @project
+    @client.getOrCreateProject @repo, (err, project) =>
+      return if err
+      @project = project
+      @syncTasks @repo.getTasks()
+      @addTaskListeners()
+      @emit 'project.found', project
+
+  onAuthenticated: () ->
+    @onRepoInit() if @repo.initialized
+    @repo.on 'initialized', => @onRepoInit()
+
+  addTaskListeners: ->
+    @repo.removeListener 'task.modified', @syncTasks
+    @repo.removeListener 'task.found', @syncTasks
+    @repo.on 'task.modified', @syncTasks
+    @repo.on 'task.found', @syncTasks
 
   projectId: () -> @client.getProjectId @repo
 

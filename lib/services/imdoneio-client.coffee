@@ -11,9 +11,9 @@ debug = require('debug/browser')
 pluginManager = require './plugin-manager'
 log = debug 'imdone-atom:client'
 
-# READY:220 The client public_key, secret and pusherKey should be configurable
+# READY:220 The client public_key, secret and pusherKey should be configurable id:420
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
-baseUrl = config.baseUrl # READY:210 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
+baseUrl = config.baseUrl # READY:210 This should be set to localhost if process.env.IMDONE_ENV = /dev/i id:450
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
@@ -66,7 +66,7 @@ class ImdoneioClient extends Emitter
       return cb err if err
       @_auth (err, user) =>
         @emit 'storage.auth.error' if err && err.code == "ECONNREFUSED"
-        # TODO:30 if err.status == 404 we should show an error
+        # TODO:30 if err.status == 404 we should show an error id:451
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -197,7 +197,7 @@ class ImdoneioClient extends Emitter
     ).end (err, res) =>
       return cb(err, res) if err || !res.ok
       project = res.body
-      # BACKLOG:30 This should be in connectorManager
+      # BACKLOG:30 This should be in connectorManager id:430
       @setProjectId repo, project.id
       @setProjectName repo, project.name
       repo.saveConfig()
@@ -207,7 +207,8 @@ class ImdoneioClient extends Emitter
   getOrCreateProject: (repo, cb) ->
     # READY:150 Implement getOrCreateProject
     # BACKLOG:40 move this to connectorManager
-    # DOING: Make sure this works 
+    # DOING:20 Make sure this works
+    return cb() unless repo && repo.config
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>
@@ -224,51 +225,58 @@ class ImdoneioClient extends Emitter
   setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
 
   # This Section for later use ----------------------------------------------------------------------------------------
-  createTasks: (repo, project, tasks, product, cb) ->
-    # READY:200 Implement createTasks
-    # READY:110 modifyTask should update text with metadata that doesn't exists
-    updateRepo = (task, cb) => repo.modifyTask new Task(task.localTask, true), cb
-    @doPost("/projects/#{project.id}/tasks").send(tasks).end (err, res) =>
+  # createTasks: (repo, project, tasks, product, cb) ->
+  #   # READY:200 Implement createTasks
+  #   # READY:110 modifyTask should update text with metadata that doesn't exists
+  #   updateRepo = (task, cb) => repo.modifyTask new Task(task.localTask, true), cb
+  #   @doPost("/projects/#{project.id}/tasks").send(tasks).end (err, res) =>
+  #     return cb(err, res) if err || !res.ok
+  #     tasks = res.body
+  #     @tasksDb(repo).insert tasks, (err, docs) =>
+  #       async.eachSeries docs, updateRepo, (err) =>
+  #         repo.saveModifiedFiles cb
+
+  syncTasks: (repo, tasks, cb) ->
+    projectId = @getProjectId repo
+    @doPost("/projects/#{projectId}/tasks").send(tasks).end (err, res) =>
       return cb(err, res) if err || !res.ok
       tasks = res.body
-      @tasksDb(repo).insert tasks, (err, docs) =>
-        async.eachSeries docs, updateRepo, (err) =>
-          repo.saveModifiedFiles cb
+      cb null, tasks
 
 
-  getTasks: (projectId, taskIds, cb) ->
-    # READY:250 Implement getProject
-    return cb null, [] unless taskIds && taskIds.length > 0
-    @doGet("/projects/#{projectId}/tasks/#{taskIds.join(',')}").end (err, res) =>
-      return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
-      return cb err if err
-      cb null, res.body
-
-  updateTasks: (repo, project, product, cb) ->
-    # BACKLOG:60 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.
-    # Next step would be to sync down or up any changes if rules apply
-    @tasksDb(repo).find {}, (err, localTasks) =>
-      localIds = localTasks.map (task) -> task.id
-      @getTasks project.id, localIds, (err, cloudTasks) =>
-        console.log 'cloudTasks', cloudTasks
-        console.log 'localTasks', localTasks
-        cloudTasks.forEach (cloudTask) =>
-          localTask = _.find(localTasks, {id: cloudTask.id})
-          # BACKLOG:70 Use rules to determine if and how cloud tasks and local tasks should be synced
-        cb()
-
-  syncTasks: (repo, tasks, product, cb) ->
-    cb = if cb then cb else () ->
-    # BACKLOG:80 Emit progress through the repo so the right board is updated
-    # READY:80 getOrCreateProject should happen when we get products, if we know a product is linked
-    @getOrCreateProject repo, (err, project) =>
-      return cb(err) if err
-      tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")
-      return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
-      cb()
-      # @updateTasks repo, project, product, (err) =>
-      #   return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
-      #   cb err
+  # getTasks: (projectId, taskIds, cb) ->
+  #   # READY:250 Implement getProject
+  #   return cb null, [] unless taskIds && taskIds.length > 0
+  #   @doGet("/projects/#{projectId}/tasks/#{taskIds.join(',')}").end (err, res) =>
+  #     return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
+  #     return cb err if err
+  #     cb null, res.body
+  #
+  # updateTasks: (repo, project, product, cb) ->
+  #   # BACKLOG:60 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.
+  #   # Next step would be to sync down or up any changes if rules apply
+  #   @tasksDb(repo).find {}, (err, localTasks) =>
+  #     localIds = localTasks.map (task) -> task.id
+  #     @getTasks project.id, localIds, (err, cloudTasks) =>
+  #       console.log 'cloudTasks', cloudTasks
+  #       console.log 'localTasks', localTasks
+  #       cloudTasks.forEach (cloudTask) =>
+  #         localTask = _.find(localTasks, {id: cloudTask.id})
+  #         # BACKLOG:70 Use rules to determine if and how cloud tasks and local tasks should be synced
+  #       cb()
+  #
+  # syncTasks: (repo, tasks, product, cb) ->
+  #   cb = if cb then cb else () ->
+  #   # BACKLOG:80 Emit progress through the repo so the right board is updated
+  #   # READY:80 getOrCreateProject should happen when we get products, if we know a product is linked
+  #   @getOrCreateProject repo, (err, project) =>
+  #     return cb(err) if err
+  #     tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")
+  #     return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
+  #     cb()
+  #     # @updateTasks repo, project, product, (err) =>
+  #     #   return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
+  #     #   cb err
 
   # collection can be an array of strings or string
   db: (collection) ->
@@ -284,7 +292,7 @@ class ImdoneioClient extends Emitter
     @datastore[collection]
 
   tasksDb: (repo) ->
-    #READY:130 return the project specific task DB
+    #READY:130 return the project specific task DB id:508
     @db 'tasks',repo.getPath().replace(/\//g, '_')
 
   @instance: new ImdoneioClient

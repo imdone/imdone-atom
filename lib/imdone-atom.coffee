@@ -128,7 +128,7 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath && active.getPath()
-      # DONE:160 This fails for projects that start with the name of another project
+      # DONE:160 This fails for projects that start with the name of another project id:477
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]

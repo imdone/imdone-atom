@@ -5,8 +5,8 @@ module.exports =
 class ProductDetailView extends View
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
-    @on 'click', '#create-tasks', =>
-      @emitter.emit 'tasks.create', @product.name
+    # @on 'click', '#create-tasks', =>
+    #   @emitter.emit 'tasks.create', @product.name
 
     @on 'click', '.enable-btn', =>
       return if @product.isEnabled()
@@ -65,7 +65,7 @@ class ProductDetailView extends View
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
-      # TODO:60 This will have to be upadted on an event sent with pusher
+      # TODO:60 This will have to be upadted on an event sent with pusher id:541
       @div class:'block', =>
         if product.isLinked()
           @div class:'btn-group', =>

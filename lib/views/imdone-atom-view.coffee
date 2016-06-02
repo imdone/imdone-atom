@@ -113,12 +113,15 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.on 'initialized', =>
       @onRepoUpdate()
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
+
     @imdoneRepo.on 'list.modified', =>
       console.log 'list.modified'
       @onRepoUpdate()
+
     @imdoneRepo.on 'file.update', (file) =>
       console.log 'file.update: %s', file && file.getPath()
       @onRepoUpdate()
+
     @imdoneRepo.on 'tasks.move', =>
       console.log 'tasks.move'
       @onRepoUpdate()
@@ -126,6 +129,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.on 'config.update', =>
       console.log 'config.update'
       repo.refresh()
+
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
     @emitter.on 'menu.toggle', =>
@@ -149,7 +153,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'repo.change', => @showMask()
 
-    @emitter.on 'tasks.create', (product) => client.syncTasks @imdoneRepo, @visibleTasks(), product
+    # @emitter.on 'tasks.create', (product) => client.syncTasks @imdoneRepo, @visibleTasks(), product
 
     @emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
@@ -231,7 +235,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:30 Add the plugin project buttons here
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:50 Add the plugin project buttons here
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -333,7 +337,7 @@ class ImdoneAtomView extends ScrollView
       @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
         @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
 
-  # BACKLOG:110 Split this apart into it's own class to simplify. Call it BoardView +refactor
+  # BACKLOG:0 Split this apart into it's own class to simplify. Call it BoardView +refactor
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()
@@ -343,6 +347,7 @@ class ImdoneAtomView extends ScrollView
     @board.css('width', width)
     # #DONE:250 Add task drag and drop support
 
+    # BACKLOG:0.1 We can display data from imdone.io in a card summary/details
     getTask = (task) =>
       contexts = task.getContext()
       tags = task.getTags()
@@ -486,7 +491,7 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-    # DONE:140 send the project path issue:48
+    # DONE:140 send the project path issue:48 id:530
     fileService.openFile @path, filePath, line, (success) =>
       return if success
       atom.workspace.open(filePath, split: 'left').then =>

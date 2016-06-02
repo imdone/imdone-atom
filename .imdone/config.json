@@ -39,7 +39,7 @@
     },
     {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "CHANGED",
@@ -55,7 +55,7 @@
     "langPrefix": "language-"
   },
   "sync": {
-    "id": "5731fcfb345a4d1f18fdb9e8",
+    "id": "574ef1e451a8c69472756b59",
     "name": "imdone-atom"
   }
 }

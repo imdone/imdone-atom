@@ -40,7 +40,7 @@ class MenuView extends View
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           @div class: "menu-sep-space-2x"
           @div class: "imdone-project-plugins"
-          # DOING:20 Add the plugin project buttons
+          # DOING:40 Add the plugin project buttons id:536
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'

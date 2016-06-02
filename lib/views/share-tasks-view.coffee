@@ -41,11 +41,14 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # READY:0 Connector plugin should be removed
+      # READY:0 Connector plugin should be removed id:542
       @updateConnectorAfterDisable(product.connector)
       @updateConnectorForEdit product
       @productSelect.updateItem product
       @productDetail.setProduct product
+
+    @connectorManager.on 'project.found', (project) => @projectFound project
+    @projectFound @connectorManager.project if @connectorManager.project
 
   updateConnectorAfterDisable: (connector) ->
     return unless connector
@@ -60,11 +63,9 @@ class ShareTasksView extends View
 
   onAuthenticated: () ->
     @loginPanel.hide()
-    @client.getOrCreateProject @imdoneRepo, (err, project) =>
-      return if err
-      # READY:90 This is where we should getOrCreateProject
-      @project = project unless err # DOING:70 we should show an error if things aren't ok
-      @showProductPanel()
+
+  projectFound: (@project) ->
+    @showProductPanel()
 
   initPasswordField: () ->
     # [Password fields when using EditorView subview - packages - Atom Discussion](https://discuss.atom.io/t/password-fields-when-using-editorview-subview/11061/7)
@@ -87,7 +88,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:80 We need to show an error here if login fails because service can't be reached or if login fails
+      # DOING:100 We need to show an error here if login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -128,26 +129,26 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # DOING:40 Handle errors by unauthenticating if needed and show login with error
+        # DOING:60 Handle errors by unauthenticating if needed and show login with error
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # DOING:50 Handle errors
+        # DOING:70 Handle errors
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # DOING:60 Handle errors
+        # DOING:80 Handle errors
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
 
   updateConnector: (connector) ->
-    # BACKLOG:0 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/)
+    # BACKLOG:0.2 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/)
     updatedProduct = @productSelect.getProduct connector.name
     updatedProduct.connector = connector
     @productSelect.updateItem updatedProduct

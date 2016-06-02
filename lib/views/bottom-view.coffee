@@ -85,7 +85,7 @@ class BottomView extends View
     # TODO:50 This belongs in bottomView +refactor
     @emitter.on 'list.new', => @showNewList()
 
-    # TODO:40 This belongs in bottomView +refactor
+    # TODO:40 This belongs in bottomView +refactor id:513
     @emitter.on 'share', => @showShare()
 
 
