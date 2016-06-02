@@ -97,7 +97,7 @@ class ImdoneioClient extends Emitter
       encrypted: true
       authEndpoint: pusherAuthUrl
       disableStats: true
-    # READY:140 imdoneio pusher channel needs to be configurable
+    # READY:140 imdoneio pusher channel needs to be configurable id:584
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.unlinked', data
@@ -125,7 +125,7 @@ class ImdoneioClient extends Emitter
 
   # API methods -------------------------------------------------------------------------------------------------------
   getProducts: (projectId, cb) ->
-    # READY:260 Implement getProducts
+    # READY:260 Implement getProducts id:585
     @doGet("/projects/#{projectId}/products").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -138,7 +138,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getProject: (projectId, cb) ->
-    # READY:240 Implement getProject
+    # READY:240 Implement getProject id:586
     @doGet("/projects/#{projectId}").end (err, res) =>
       return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
       return cb err if err
@@ -162,7 +162,7 @@ class ImdoneioClient extends Emitter
   createConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:160 Implement createProject
+    # READY:160 Implement createProject id:587
     @doPost("/projects/#{projectId}/connectors").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -170,7 +170,7 @@ class ImdoneioClient extends Emitter
   updateConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:170 Implement createProject
+    # READY:170 Implement createProject id:588
     @doPatch("/projects/#{projectId}/connectors/#{connector.id}").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -184,13 +184,13 @@ class ImdoneioClient extends Emitter
   _connectorAction: (repo, connector, action, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:180 Implement createProject
+    # READY:180 Implement createProject id:589
     @doPost("/projects/#{projectId}/connectors/#{connector.id}/#{action}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   createProject: (repo, cb) ->
-    # READY:190 Implement createProject
+    # READY:190 Implement createProject id:590
     @doPost("/projects").send(
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()
@@ -205,9 +205,9 @@ class ImdoneioClient extends Emitter
 
 
   getOrCreateProject: (repo, cb) ->
-    # READY:150 Implement getOrCreateProject
-    # BACKLOG:40 move this to connectorManager
-    # DOING:20 Make sure this works
+    # READY:150 Implement getOrCreateProject id:591
+    # BACKLOG:40 move this to connectorManager id:592
+    # DOING:20 Make sure this works id:593
     return cb() unless repo && repo.config
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
@@ -226,8 +226,8 @@ class ImdoneioClient extends Emitter
 
   # This Section for later use ----------------------------------------------------------------------------------------
   # createTasks: (repo, project, tasks, product, cb) ->
-  #   # READY:200 Implement createTasks
-  #   # READY:110 modifyTask should update text with metadata that doesn't exists
+  #   # READY:200 Implement createTasks id:594
+  #   # READY:110 modifyTask should update text with metadata that doesn't exists id:595
   #   updateRepo = (task, cb) => repo.modifyTask new Task(task.localTask, true), cb
   #   @doPost("/projects/#{project.id}/tasks").send(tasks).end (err, res) =>
   #     return cb(err, res) if err || !res.ok
@@ -245,7 +245,7 @@ class ImdoneioClient extends Emitter
 
 
   # getTasks: (projectId, taskIds, cb) ->
-  #   # READY:250 Implement getProject
+  #   # READY:250 Implement getProject id:596
   #   return cb null, [] unless taskIds && taskIds.length > 0
   #   @doGet("/projects/#{projectId}/tasks/#{taskIds.join(',')}").end (err, res) =>
   #     return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
@@ -253,7 +253,7 @@ class ImdoneioClient extends Emitter
   #     cb null, res.body
   #
   # updateTasks: (repo, project, product, cb) ->
-  #   # BACKLOG:60 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.
+  #   # BACKLOG:60 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules. id:597
   #   # Next step would be to sync down or up any changes if rules apply
   #   @tasksDb(repo).find {}, (err, localTasks) =>
   #     localIds = localTasks.map (task) -> task.id
@@ -262,13 +262,13 @@ class ImdoneioClient extends Emitter
   #       console.log 'localTasks', localTasks
   #       cloudTasks.forEach (cloudTask) =>
   #         localTask = _.find(localTasks, {id: cloudTask.id})
-  #         # BACKLOG:70 Use rules to determine if and how cloud tasks and local tasks should be synced
+  #         # BACKLOG:70 Use rules to determine if and how cloud tasks and local tasks should be synced id:598
   #       cb()
   #
   # syncTasks: (repo, tasks, product, cb) ->
   #   cb = if cb then cb else () ->
-  #   # BACKLOG:80 Emit progress through the repo so the right board is updated
-  #   # READY:80 getOrCreateProject should happen when we get products, if we know a product is linked
+  #   # BACKLOG:80 Emit progress through the repo so the right board is updated id:599
+  #   # READY:80 getOrCreateProject should happen when we get products, if we know a product is linked id:600
   #   @getOrCreateProject repo, (err, project) =>
   #     return cb(err) if err
   #     tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")

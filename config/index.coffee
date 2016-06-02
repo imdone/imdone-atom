@@ -1,14 +1,14 @@
 dev =
-  imdoneKeyA: 'W6BYGwi1Plfy7b8BbduAzK2fQ0nIJ1y23ToIDT_8-QZm20AcXBWUCQ=='
-  imdoneKeyB: 'i3QJvKQesKwFdSxlwoQOW_B5UZw='
+  imdoneKeyA: 'BcbpJqNyYvAI5FhR-dt5AbdcpXKV8gj0vv0RHjb1qGCXoymcckb8hQ=='
+  imdoneKeyB: 'EUyEtV2d-ZSgvvWKGlCiOVvAmlc='
   pusherKey:  '64354707585286cfe58f'
   pusherChannelPrefix: 'private-imdoneio-dev'
   baseUrl:    'http://localhost:3000'
 
-# TODO:10 Change these prior to release
+# TODO:10 Change these prior to release id:568
 prod =
-  imdoneKeyA: 'W6BYGwi1Plfy7b8BbduAzK2fQ0nIJ1y23ToIDT_8-QZm20AcXBWUCQ=='
-  imdoneKeyB: 'i3QJvKQesKwFdSxlwoQOW_B5UZw='
+  imdoneKeyA: 'BcbpJqNyYvAI5FhR-dt5AbdcpXKV8gj0vv0RHjb1qGCXoymcckb8hQ=='
+  imdoneKeyB: 'EUyEtV2d-ZSgvvWKGlCiOVvAmlc='
   pusherKey:  '64354707585286cfe58f'
   baseUrl:    'http://imdone.io'
   pusherChannelPrefix: 'private-imdoneio-dev'

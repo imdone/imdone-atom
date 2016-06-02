@@ -170,9 +170,9 @@ class Watcher
 
 
   updateChangedChildren: (dir, cb) ->
-    # DONE:10 Update changed children and return true if there were children changed
+    # DONE:10 Update changed children and return true if there were children changed id:576
     hasChange = false
-    # DONE:0 Change to async
+    # DONE:0 Change to async id:577
     processEntry = (entry, cb) =>
       if entry.isFile()
         @isReallyChanged entry, (err, changed) =>

@@ -27,7 +27,7 @@ class ConnectorManager extends Emitter
     # READY:30 Check for updates to products/connectors and update @products with changes id:415
 
   handleEvents: ->
-    # DOING:0 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
+    # DONE:310 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -47,7 +47,7 @@ class ConnectorManager extends Emitter
     # @client.on 'connector.created', (connector) => @setConnector connector
 
   onRepoInit: () ->
-    return if @project
+    return if @project || @initialized
     @client.getOrCreateProject @repo, (err, project) =>
       return if err
       @project = project
@@ -56,13 +56,12 @@ class ConnectorManager extends Emitter
       @emit 'project.found', project
 
   onAuthenticated: () ->
+    console.log('authenticated');
     @onRepoInit() if @repo.initialized
     @repo.on 'initialized', => @onRepoInit()
 
   addTaskListeners: ->
-    @repo.removeListener 'task.modified', @syncTasks
     @repo.removeListener 'task.found', @syncTasks
-    @repo.on 'task.modified', @syncTasks
     @repo.on 'task.found', @syncTasks
 
   projectId: () -> @client.getProjectId @repo
