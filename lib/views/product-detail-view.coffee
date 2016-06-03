@@ -65,7 +65,7 @@ class ProductDetailView extends View
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
-      # TODO:60 This will have to be upadted on an event sent with pusher id:541
+      # TODO:110 This will have to be upadted on an event sent with pusher id:541
       @div class:'block', =>
         if product.isLinked()
           @div class:'btn-group', =>

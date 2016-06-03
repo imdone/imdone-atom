@@ -182,7 +182,7 @@ class Watcher
             hasChange = true
           cb()
 
-    # BACKLOG:130 Use fs.list id:484
+    # BACKLOG:150 Use fs.list id:484
     dir.getEntries (err, entries) =>
       async.each entries, processEntry, (err) =>
         log "#{dir.getPath()} hasChange:#{hasChange}"

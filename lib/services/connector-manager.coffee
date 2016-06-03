@@ -8,10 +8,15 @@ Task = require 'imdone-core/lib/task'
 syncTasks = (client, repo) ->
   (tasks) ->
     tasks = [tasks] unless _.isArray tasks
+    console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, tasks) ->
-      return if err # DOING:0 Do something with this error id:414
+      return if err # TODO:60 Do something with this error id:414
       async.eachSeries tasks,
-        (task, cb) -> repo.modifyTask(new Task(task, true), cb)
+        # DOING:10 We have to be able to match on meta.id for updates. id:1958
+        # DOING:0 Test this with a new project to make sure we get the ids id:1959
+        (task, cb) ->
+          console.log "received task from imdone-io", task
+          repo.modifyTask(new Task(task), cb)
         (err) -> repo.saveModifiedFiles ()->
 
 module.exports =
@@ -22,12 +27,14 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @syncTasks = syncTasks @client, @repo
+    @onTasksMove = () => @syncTasks @repo.getTasks()
+    @onFileUpdate = (file) => @syncTasks file.getTasks()
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
     # READY:30 Check for updates to products/connectors and update @products with changes id:415
 
   handleEvents: ->
-    # DONE:310 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
+    # DONE:260 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -54,15 +61,22 @@ class ConnectorManager extends Emitter
       @syncTasks @repo.getTasks()
       @addTaskListeners()
       @emit 'project.found', project
+      @initialized = true
 
   onAuthenticated: () ->
-    console.log('authenticated');
+    log('authenticated');
     @onRepoInit() if @repo.initialized
     @repo.on 'initialized', => @onRepoInit()
 
   addTaskListeners: ->
-    @repo.removeListener 'task.found', @syncTasks
-    @repo.on 'task.found', @syncTasks
+    @repo.removeListener 'tasks.move', @onTasksMove
+    @repo.on 'tasks.move', @onTasksMove
+
+    @repo.removeListener 'file.update', @onFileUpdate
+    @repo.on 'file.update', @onFileUpdate
+
+    # @repo.removeListener 'task.found', @syncTasks
+    # @repo.on 'task.found', @syncTasks
 
   projectId: () -> @client.getProjectId @repo
 

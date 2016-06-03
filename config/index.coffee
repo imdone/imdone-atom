@@ -5,7 +5,7 @@ dev =
   pusherChannelPrefix: 'private-imdoneio-dev'
   baseUrl:    'http://localhost:3000'
 
-# TODO:10 Change these prior to release id:568
+# TODO:70 Change these prior to release id:568
 prod =
   imdoneKeyA: 'BcbpJqNyYvAI5FhR-dt5AbdcpXKV8gj0vv0RHjb1qGCXoymcckb8hQ=='
   imdoneKeyB: 'EUyEtV2d-ZSgvvWKGlCiOVvAmlc='

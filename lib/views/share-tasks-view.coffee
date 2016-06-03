@@ -88,7 +88,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # DOING:80 We need to show an error here if login fails because service can't be reached or if login fails id:629
+      # TODO:10 We need to show an error here if login fails because service can't be reached or if login fails id:629
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -129,26 +129,26 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # DOING:50 Handle errors by unauthenticating if needed and show login with error id:630
+        # TODO:40 Handle errors by unauthenticating if needed and show login with error id:630
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # DOING:60 Handle errors id:631
+        # TODO:30 Handle errors id:631
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # DOING:70 Handle errors id:632
+        # TODO:20 Handle errors id:632
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
 
   updateConnector: (connector) ->
-    # BACKLOG:0.2 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/) id:633
+    # BACKLOG:30 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/) id:633
     updatedProduct = @productSelect.getProduct connector.name
     updatedProduct.connector = connector
     @productSelect.updateItem updatedProduct
