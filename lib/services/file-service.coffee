@@ -4,7 +4,7 @@ minimatch = null
 log       = null
 
 
-# DONE:90 implement socket server to handle opening files in configured client issue:48 id:578
+# DONE:100 implement socket server to handle opening files in configured client issue:48 id:578
 module.exports =
   clients: {}
   init: (port) ->
@@ -14,7 +14,7 @@ module.exports =
     eioClient = require 'engine.io-client'
     minimatch = require 'minimatch'
     log       = require './log'
-    # DONE:40 Check if something else is listening on port issue:51 id:579
+    # DONE:50 Check if something else is listening on port issue:51 id:579
     http = require('http').createServer()
     http.on 'error', (err) =>
       if (err.code == 'EADDRINUSE')
@@ -35,8 +35,8 @@ module.exports =
     @
 
   tryProxy: (port) ->
-    # DONE:20 First check if it's imdone listening on the port issue:52 id:580
-    # DONE:30 if imdone is listening we should connect as a client and use the server as a proxy issue:52 id:581
+    # DONE:30 First check if it's imdone listening on the port issue:52 id:580
+    # DONE:40 if imdone is listening we should connect as a client and use the server as a proxy issue:52 id:581
     # BACKLOG:160 if imdone is not listening we should ask for another port issue:52 id:582
     log 'Trying proxy'
     socket = eioClient('ws://localhost:' + port)
@@ -64,7 +64,7 @@ module.exports =
   openFile: (project, path, line, cb) ->
     return cb() unless @getConfig().openIn.enable
     editor = @getEditor path
-    # DONE:80 only send open request to editors who deserve them issue:48 id:583
+    # DONE:90 only send open request to editors who deserve them issue:48 id:583
     socket = @getSocket editor
     return cb() unless socket
     isProxied = if @proxy then true else false

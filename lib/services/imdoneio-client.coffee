@@ -207,7 +207,7 @@ class ImdoneioClient extends Emitter
   getOrCreateProject: (repo, cb) ->
     # READY:150 Implement getOrCreateProject id:591
     # BACKLOG:40 move this to connectorManager id:592
-    # DOING:40 Make sure this works id:593 githubClosed:true
+    # DONE:330 Make sure this works id:593 githubClosed:true
     return cb() unless repo && repo.config
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId

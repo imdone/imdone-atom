@@ -33,14 +33,14 @@ class MenuView extends View
             @a href: "#", class: "icon icon-list-unordered"
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", class: "icon icon-plus"
-          # DONE:220 Add a link to open filtered files issue:49 id:624
+          # DONE:230 Add a link to open filtered files issue:49 id:624
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open visible files)", =>
             @a href: "#", class: "icon icon-zap"
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           @div class: "menu-sep-space-2x"
           @div class: "imdone-project-plugins"
-          # DOING:20 Add the plugin project buttons id:536
+          # DOING:10 Add the plugin project buttons id:1962
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'
@@ -100,7 +100,7 @@ class MenuView extends View
       @updateMenu()
     @imdoneRepo.on 'file.update', =>
       @updateMenu()
-    @imdoneRepo.on 'tasks.move', =>
+    @imdoneRepo.on 'tasks.moved', =>
       @updateMenu()
     @client.on 'authenticated', => @authenticated()
 

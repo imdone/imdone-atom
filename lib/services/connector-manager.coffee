@@ -5,19 +5,24 @@ log = require('debug/browser') 'imdone-atom:connector-manager'
 Task = require 'imdone-core/lib/task'
 {Emitter} = require 'atom'
 
-syncTasks = (client, repo) ->
+syncTasks = (client, repo, cm) ->
   (tasks) ->
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, tasks) ->
       return if err # TODO:60 Do something with this error id:414
       async.eachSeries tasks,
-        # DOING:10 We have to be able to match on meta.id for updates. id:1958
+        # READY:10 We have to be able to match on meta.id for updates. id:1958 githubClosed:true
         # DOING:0 Test this with a new project to make sure we get the ids id:1959
+        # DOING:0 We need a way to run tests on imdone-io without destroying the client id:1963
         (task, cb) ->
           console.log "received task from imdone-io", task
-          repo.modifyTask(new Task(task), cb)
-        (err) -> repo.saveModifiedFiles ()->
+          taskToModify = _.assign(repo.getTask(task.id), task);
+          repo.modifyTask(taskToModify, cb)
+        (err) ->
+          repo.saveModifiedFiles (err, files)->
+            # DONE:0 Refresh the board id:1961
+            cm.emit 'tasks.updated' unless err
 
 module.exports =
 class ConnectorManager extends Emitter
@@ -26,7 +31,7 @@ class ConnectorManager extends Emitter
   constructor: (@repo) ->
     super
     @client = require('./imdoneio-client').instance
-    @syncTasks = syncTasks @client, @repo
+    @syncTasks = syncTasks @client, @repo, @
     @onTasksMove = () => @syncTasks @repo.getTasks()
     @onFileUpdate = (file) => @syncTasks file.getTasks()
     @handleEvents()
@@ -34,7 +39,7 @@ class ConnectorManager extends Emitter
     # READY:30 Check for updates to products/connectors and update @products with changes id:415
 
   handleEvents: ->
-    # DONE:260 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
+    # DONE:270 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -69,8 +74,8 @@ class ConnectorManager extends Emitter
     @repo.on 'initialized', => @onRepoInit()
 
   addTaskListeners: ->
-    @repo.removeListener 'tasks.move', @onTasksMove
-    @repo.on 'tasks.move', @onTasksMove
+    @repo.removeListener 'tasks.moved', @onTasksMove
+    @repo.on 'tasks.moved', @onTasksMove
 
     @repo.removeListener 'file.update', @onFileUpdate
     @repo.on 'file.update', @onFileUpdate

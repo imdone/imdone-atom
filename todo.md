@@ -14,10 +14,10 @@ Roadmap
 
 Completed
 ----
-- [x] #DONE:150 Re-apply filter when board is refreshed id:645
-- [x] #DONE:130 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement id:646
-- [x] #DONE:170 Add list rename +Roadmap id:647
-- [x] #DONE:230 Add help for configuration id:648
-- [x] #DONE:240 Add help for task syntax id:649
-- [x] #DONE:250 Add help for todo.txt syntax id:650
-- [x] #DONE:70 Open all files for filtered tasks id:651
+- [x] #DONE:160 Re-apply filter when board is refreshed id:645
+- [x] #DONE:140 Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement id:646
+- [x] #DONE:180 Add list rename +Roadmap id:647
+- [x] #DONE:240 Add help for configuration id:648
+- [x] #DONE:250 Add help for task syntax id:649
+- [x] #DONE:260 Add help for todo.txt syntax id:650
+- [x] #DONE:80 Open all files for filtered tasks id:651
