@@ -27,7 +27,7 @@
     },
     {
       "name": "TODO",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DOING",
@@ -35,11 +35,11 @@
     },
     {
       "name": "READY",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DONE",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "CHANGED",

@@ -11,7 +11,7 @@ fileService = null
 client = null
 log = null
 
-# TODO:80 Add keen stats for features id:604
+# TODO:90 Add keen stats for features id:604
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -238,7 +238,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:20 Add the plugin project buttons here id:609
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:10 Add the plugin project buttons here id:609
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -249,7 +249,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:50 Get the connector from the connector manager id:610
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:100 Get the connector from the connector manager id:610
       return if product && !product.isEnabled()
       connector = product && product.connector
       if @plugins[Plugin.pluginName]

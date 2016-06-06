@@ -41,7 +41,7 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # READY:0 Connector plugin should be removed id:542
+      # READY:40 Connector plugin should be removed id:542
       @updateConnectorAfterDisable(product.connector)
       @updateConnectorForEdit product
       @productSelect.updateItem product
@@ -129,7 +129,7 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # TODO:40 Handle errors by unauthenticating if needed and show login with error id:630
+        # TODO:50 Handle errors by unauthenticating if needed and show login with error id:630
         product.connector = connector
         @productSelect.updateItem product
 

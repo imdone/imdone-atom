@@ -10,18 +10,35 @@ syncTasks = (client, repo, cm) ->
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, tasks) ->
-      return if err # TODO:60 Do something with this error id:414
+      return if err # TODO:70 Do something with this error id:414
+      console.log "received tasks from imdone-io", tasks
       async.eachSeries tasks,
-        # READY:10 We have to be able to match on meta.id for updates. id:1958 githubClosed:true
-        # DOING:0 Test this with a new project to make sure we get the ids id:1959
-        # DOING:0 We need a way to run tests on imdone-io without destroying the client id:1963
+        # READY:60 We have to be able to match on meta.id for updates. id:1967
+        # READY:10 Test this with a new project to make sure we get the ids id:1959 githubClosed:true
+        # READY:0 We need a way to run tests on imdone-io without destroying the client id:1963 githubClosed:true
         (task, cb) ->
-          console.log "received task from imdone-io", task
           taskToModify = _.assign(repo.getTask(task.id), task);
+          # READY:30 If there's no match then this won't work.  Make sure this is a Task id:1968 githubClosed:true
+          taskToModify = new Task(taskToModify) unless Task.isTask(taskToModify)
           repo.modifyTask(taskToModify, cb)
         (err) ->
           repo.saveModifiedFiles (err, files)->
             # DONE:0 Refresh the board id:1961
+            cm.emit 'tasks.updated' unless err
+
+syncFile = (client, repo, cm) ->
+  (file) ->
+    console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
+    client.syncTasks repo, file.getTasks(), (err, tasks) ->
+      return if err # TODO:70 Do something with this error id:414
+      console.log "received tasks from imdone-io for: %s", tasks
+      async.eachSeries tasks,
+        (task, cb) ->
+          taskToModify = _.assign(repo.getTask(task.id), task);
+          taskToModify = new Task(taskToModify) unless Task.isTask(taskToModify)
+          repo.modifyTask(taskToModify, cb)
+        (err) ->
+          repo.writeFile file, (err, file)->
             cm.emit 'tasks.updated' unless err
 
 module.exports =
@@ -32,11 +49,12 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @syncTasks = syncTasks @client, @repo, @
+    @syncFile = syncFile @client, @repo, @
     @onTasksMove = () => @syncTasks @repo.getTasks()
-    @onFileUpdate = (file) => @syncTasks file.getTasks()
+    @onFileUpdate = (file) => @syncFile file # READY:20 We need a syncTasks for file so we only save the file that's been modified id:1970 githubClosed:true
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
-    # READY:30 Check for updates to products/connectors and update @products with changes id:415
+    # READY:80 Check for updates to products/connectors and update @products with changes id:415
 
   handleEvents: ->
     # DONE:270 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416

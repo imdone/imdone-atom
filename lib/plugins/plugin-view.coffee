@@ -53,7 +53,7 @@ class ConnectorPluginView extends View
       id = $(@).attr('data-issue-number')
       $(@).closest('li').remove();
       self.task.removeMetaData self.idMetaKey, id
-      # TODO:50 add or update task using imdoneio-client id:573
+      # TODO:60 add or update task using imdoneio-client id:573
       self.repo.modifyTask self.task, true, (err, result) ->
         console.log err, result
         self.issues = self.getIssueIds()
@@ -69,11 +69,11 @@ class ConnectorPluginView extends View
     return unless @issues
     @relatedIssues.html @$spinner()
     async.map @issues, (number, cb) =>
-      # READY:60 Replace service.getIssue with client.getIssue id:574
+      # READY:110 Replace service.getIssue with client.getIssue id:574
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>
-      # #TODO:80 Check error for 404/Not Found id:575
+      # #TODO:100 Check error for 404/Not Found id:575
       if err
         console.log "error:", err
       else
