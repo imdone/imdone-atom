@@ -5,7 +5,7 @@ class ConnectorPlugin extends Emitter
   @pluginName: "github-connector-plugin"
   @provider: "github"
   @title: "Update linked github issues (imdone.io)"
-  @icon: "octoface"
+  @icon: "mark-github"
 
   ready: false
   constructor: (@repo, @imdoneView, @connector) ->

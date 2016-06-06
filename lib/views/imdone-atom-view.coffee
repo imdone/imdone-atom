@@ -110,6 +110,10 @@ class ImdoneAtomView extends ScrollView
     @menuView.handleEvents @emitter
     @bottomView.handleEvents @emitter
 
+    @connectorManager.on 'tasks.syncing', => @showMask()
+
+    @connectorManager.on 'sync.error', => @showMask()
+
     @connectorManager.on 'tasks.updated', =>
       @onRepoUpdate()
 

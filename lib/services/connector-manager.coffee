@@ -7,6 +7,7 @@ Task = require 'imdone-core/lib/task'
 
 syncTasks = (client, repo, cm) ->
   (tasks) ->
+    cm.emit 'tasks.syncing'
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, tasks) ->
@@ -14,30 +15,32 @@ syncTasks = (client, repo, cm) ->
       console.log "received tasks from imdone-io", tasks
       async.eachSeries tasks,
         # READY:60 We have to be able to match on meta.id for updates. id:1967
-        # READY:10 Test this with a new project to make sure we get the ids id:1959 githubClosed:true
-        # READY:0 We need a way to run tests on imdone-io without destroying the client id:1963 githubClosed:true
+        # READY:10 Test this with a new project to make sure we get the ids id:1959
+        # READY:0 We need a way to run tests on imdone-io without destroying the client id:1963
         (task, cb) ->
-          taskToModify = _.assign(repo.getTask(task.id), task);
-          # READY:30 If there's no match then this won't work.  Make sure this is a Task id:1968 githubClosed:true
-          taskToModify = new Task(taskToModify) unless Task.isTask(taskToModify)
-          repo.modifyTask(taskToModify, cb)
+          taskToModify = _.assign repo.getTask(task.id), task
+          return cb "Task not found" unless Task.isTask taskToModify
+          repo.modifyTask taskToModify, cb
         (err) ->
+          return cm.emit 'sync.error', err if err
           repo.saveModifiedFiles (err, files)->
             # DONE:0 Refresh the board id:1961
             cm.emit 'tasks.updated' unless err
 
 syncFile = (client, repo, cm) ->
   (file) ->
+    cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
       return if err # TODO:70 Do something with this error id:414
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
-          taskToModify = _.assign(repo.getTask(task.id), task);
-          taskToModify = new Task(taskToModify) unless Task.isTask(taskToModify)
-          repo.modifyTask(taskToModify, cb)
+          taskToModify = _.assign repo.getTask(task.id), task
+          return cb "Task not found" unless Task.isTask taskToModify
+          repo.modifyTask taskToModify, cb
         (err) ->
+          return cm.emit 'sync.error', err if err
           repo.writeFile file, (err, file)->
             cm.emit 'tasks.updated' unless err
 
@@ -51,7 +54,7 @@ class ConnectorManager extends Emitter
     @syncTasks = syncTasks @client, @repo, @
     @syncFile = syncFile @client, @repo, @
     @onTasksMove = () => @syncTasks @repo.getTasks()
-    @onFileUpdate = (file) => @syncFile file # READY:20 We need a syncTasks for file so we only save the file that's been modified id:1970 githubClosed:true
+    @onFileUpdate = (file) => @syncFile file # READY:20 We need a syncTasks for file so we only save the file that's been modified id:1970
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
     # READY:80 Check for updates to products/connectors and update @products with changes id:415
@@ -79,7 +82,8 @@ class ConnectorManager extends Emitter
   onRepoInit: () ->
     return if @project || @initialized
     @client.getOrCreateProject @repo, (err, project) =>
-      return if err
+      # TODO: Do something with this error
+      return if err || @project || @initialized
       @project = project
       @syncTasks @repo.getTasks()
       @addTaskListeners()
