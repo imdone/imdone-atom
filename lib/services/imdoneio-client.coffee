@@ -13,6 +13,7 @@ log = debug 'imdone-atom:client'
 
 # READY:260 The client public_key, secret and pusherKey should be configurable id:420
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
+NO_RESPONSE_ERR = new Error "No response from imdone.io"
 baseUrl = config.baseUrl # READY:250 This should be set to localhost if process.env.IMDONE_ENV = /dev/i id:450
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
@@ -29,14 +30,18 @@ class ImdoneioClient extends Emitter
   @baseAPIUrl: baseAPIUrl
   @signUpUrl: signUpUrl
   authenticated: false
+  connectionAccepted: false
 
   constructor: () ->
     super
-    @on 'storage.auth.error', =>
-      setTimeout =>
-        @authFromStorage()
-      , 2000
-    @authFromStorage()
+    test = () => @connectionAccepted
+    async.until test,
+      (cb) =>
+        setTimeout () =>
+          @authFromStorage (err) =>
+            return cb err if err && @connectionAccepted
+            cb()
+        , 2000
 
   setHeaders: (req) ->
     log 'setHeaders:begin'
@@ -65,7 +70,8 @@ class ImdoneioClient extends Emitter
     @loadCredentials (err) =>
       return cb err if err
       @_auth (err, user) =>
-        @emit 'storage.auth.error' if err && err.code == "ECONNREFUSED"
+        @connectionAccepted = true unless err && err.code == "ECONNREFUSED"
+        console.error "Authentication err:", err if err
         # TODO:40 if err.status == 404 we should show an error id:451
         cb err, user
 
@@ -140,6 +146,7 @@ class ImdoneioClient extends Emitter
   getProject: (projectId, cb) ->
     # READY:280 Implement getProject id:586
     @doGet("/projects/#{projectId}").end (err, res) =>
+      return cb(NO_RESPONSE_ERR) unless res
       return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
       return cb err if err
       cb null, res.body
@@ -195,7 +202,6 @@ class ImdoneioClient extends Emitter
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()
     ).end (err, res) =>
-      debugger
       return cb(err, res) if err || !res.ok
       project = res.body
       # BACKLOG:30 This should be in connectorManager id:430

@@ -102,6 +102,10 @@ class ConnectorManager extends Emitter
     @repo.removeListener 'file.update', @onFileUpdate
     @repo.on 'file.update', @onFileUpdate
 
+    @repo.removeListener 'file.saved', @onFileUpdate
+    @repo.on 'file.saved', @onFileUpdate
+
+
     # @repo.removeListener 'task.found', @syncTasks
     # @repo.on 'task.found', @syncTasks
 
