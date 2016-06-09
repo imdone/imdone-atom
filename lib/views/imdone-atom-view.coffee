@@ -11,7 +11,7 @@ fileService = null
 client = null
 log = null
 
-# TODO:90 Add keen stats for features id:604
+# TODO:140 Add keen stats for features id:604
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -110,7 +110,7 @@ class ImdoneAtomView extends ScrollView
     @menuView.handleEvents @emitter
     @bottomView.handleEvents @emitter
 
-    @connectorManager.on 'tasks.syncing', => @showMask()
+    @connectorManager.on 'tasks.syncing', => @showMask() # DOING:0 mask isn't always hiding correctly id:1975
 
     @connectorManager.on 'sync.error', => @showMask()
 
@@ -242,7 +242,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:10 Add the plugin project buttons here id:609
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO:0 Add the plugin project buttons here id:609
 
   addPluginView: (plugin) ->
     return unless plugin.getView

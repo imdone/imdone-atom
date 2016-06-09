@@ -72,7 +72,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         @connectionAccepted = true unless err && err.code == "ECONNREFUSED"
         console.error "Authentication err:", err if err
-        # TODO:40 if err.status == 404 we should show an error id:451
+        # TODO:80 if err.status == 404 we should show an error id:451
         cb err, user
 
   onAuthSuccess: (user, cb) ->

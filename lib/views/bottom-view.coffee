@@ -82,10 +82,10 @@ class BottomView extends View
     @closeButton.on 'click', =>
       @hide()
 
-    # TODO:120 This belongs in bottomView +refactor id:603
+    # TODO:180 This belongs in bottomView +refactor id:603
     @emitter.on 'list.new', => @showNewList()
 
-    # TODO:110 This belongs in bottomView +refactor id:513
+    # TODO:160 This belongs in bottomView +refactor id:513
     @emitter.on 'share', => @showShare()
 
 

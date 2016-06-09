@@ -11,7 +11,7 @@ syncTasks = (client, repo, cm) ->
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, tasks) ->
-      return if err # TODO:70 Do something with this error id:414
+      return if err # TODO:110 Do something with this error id:414
       console.log "received tasks from imdone-io", tasks
       async.eachSeries tasks,
         # READY:60 We have to be able to match on meta.id for updates. id:1967
@@ -32,7 +32,7 @@ syncFile = (client, repo, cm) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO:70 Do something with this error id:414
+      return if err # TODO:120 Do something with this error id:414
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -71,18 +71,11 @@ class ConnectorManager extends Emitter
         @emit 'product.unlinked', product unless err
 
     @client.on 'authenticated', => @onAuthenticated()
-    # @client.on 'connector.enabled', (connector) => @setConnector connector
-    #
-    # @client.on 'connector.disabled', (connector) => @setConnector connector
-    #
-    # @client.on 'connector.changed', (connector) => @setConnector connector
-    #
-    # @client.on 'connector.created', (connector) => @setConnector connector
 
   onRepoInit: () ->
     return if @project || @initialized
     @client.getOrCreateProject @repo, (err, project) =>
-      # TODO: Do something with this error
+      # TODO:30 Do something with this error id:1971
       return if err || @project || @initialized
       @project = project
       @syncTasks @repo.getTasks()
@@ -105,17 +98,13 @@ class ConnectorManager extends Emitter
     @repo.removeListener 'file.saved', @onFileUpdate
     @repo.on 'file.saved', @onFileUpdate
 
-
-    # @repo.removeListener 'task.found', @syncTasks
-    # @repo.on 'task.found', @syncTasks
-
   projectId: () -> @client.getProjectId @repo
 
   getProducts: (cb) ->
     cb = (()->) unless cb
     return cb(null, @products) if @products
     @client.getProducts @projectId(), (err, products) =>
-      return cb err  if err
+      return cb err if err
       @enhanceProduct product for product in products
       @products = products
       cb null, products

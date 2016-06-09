@@ -88,7 +88,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO:10 We need to show an error here if login fails because service can't be reached or if login fails id:629
+      # TODO:50 We need to show an error here if login fails because service can't be reached or if login fails id:629
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -129,20 +129,20 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # TODO:50 Handle errors by unauthenticating if needed and show login with error id:630
+        # TODO:90 Handle errors by unauthenticating if needed and show login with error id:630
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # TODO:30 Handle errors id:631
+        # TODO:70 Handle errors id:631
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # TODO:20 Handle errors id:632
+        # TODO:60 Handle errors id:632
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
@@ -163,4 +163,4 @@ class ShareTasksView extends View
   updateConnectorForEdit: (product) ->
     _.set product, 'connector', {} unless product.connector
     return unless product.name == 'github' && !_.get(product, 'connector.config.repoURL')
-    _.set product, 'connector.config.repoURL', @connectorManager.getGitOrigin()
+    _.set product, 'connector.config.repoURL', @connectorManager.getGitOrigin() || ''
