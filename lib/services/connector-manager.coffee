@@ -88,6 +88,8 @@ class ConnectorManager extends Emitter
     @onRepoInit() if @repo.initialized
     @repo.on 'initialized', => @onRepoInit()
 
+  isAuthenticated: () -> @client.isAuthenticated
+
   addTaskListeners: ->
     @repo.removeListener 'tasks.moved', @onTasksMove
     @repo.on 'tasks.moved', @onTasksMove

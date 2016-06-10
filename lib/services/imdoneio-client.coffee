@@ -151,6 +151,11 @@ class ImdoneioClient extends Emitter
       return cb err if err
       cb null, res.body
 
+  updateProject: (project, cb) ->
+    @doPatch("/projects/#{project.id}").send(project).end (err, res) =>
+      return cb(err, res) if err || !res.ok
+      cb(null, res.body)
+
   getIssue: (connector, number, cb) ->
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
@@ -231,6 +236,36 @@ class ImdoneioClient extends Emitter
   getProjectName: (repo) -> _.get repo, 'config.sync.name'
   setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
 
+  syncTasks: (repo, tasks, cb) ->
+    projectId = @getProjectId repo
+    @doPost("/projects/#{projectId}/tasks").send(tasks).end (err, res) =>
+      return cb(err, res) if err || !res.ok
+      tasks = res.body
+      cb null, tasks
+
+  # collection can be an array of strings or string
+  db: (collection) ->
+    path = require 'path'
+    collection = path.join.apply @, arguments if arguments.length > 1
+    collection = "config" unless collection
+    @datastore = {} unless @datastore
+    return @datastore[collection] unless !@datastore[collection]
+    DataStore = require('nedb')
+    @datastore[collection] = new DataStore
+      filename: path.join atom.getConfigDirPath(), 'storage', 'imdone-atom', collection
+      autoload: true
+    @datastore[collection]
+
+  tasksDb: (repo) ->
+    #READY:170 return the project specific task DB id:508
+    @db 'tasks',repo.getPath().replace(/\//g, '_')
+
+  listsDb: (repo) ->
+    #READY:170 return the project specific task DB id:508
+    @db 'lists',repo.getPath().replace(/\//g, '_')
+
+  @instance: new ImdoneioClient
+
   # This Section for later use ----------------------------------------------------------------------------------------
   # createTasks: (repo, project, tasks, product, cb) ->
   #   # READY:240 Implement createTasks id:594
@@ -242,14 +277,6 @@ class ImdoneioClient extends Emitter
   #     @tasksDb(repo).insert tasks, (err, docs) =>
   #       async.eachSeries docs, updateRepo, (err) =>
   #         repo.saveModifiedFiles cb
-
-  syncTasks: (repo, tasks, cb) ->
-    projectId = @getProjectId repo
-    @doPost("/projects/#{projectId}/tasks").send(tasks).end (err, res) =>
-      return cb(err, res) if err || !res.ok
-      tasks = res.body
-      cb null, tasks
-
 
   # getTasks: (projectId, taskIds, cb) ->
   #   # READY:290 Implement getProject id:596
@@ -284,22 +311,3 @@ class ImdoneioClient extends Emitter
   #     # @updateTasks repo, project, product, (err) =>
   #     #   return @createTasks repo, project, tasksToCreate, product, cb if tasksToCreate
   #     #   cb err
-
-  # collection can be an array of strings or string
-  db: (collection) ->
-    path = require 'path'
-    collection = path.join.apply @, arguments if arguments.length > 1
-    collection = "config" unless collection
-    @datastore = {} unless @datastore
-    return @datastore[collection] unless !@datastore[collection]
-    DataStore = require('nedb')
-    @datastore[collection] = new DataStore
-      filename: path.join atom.getConfigDirPath(), 'storage', 'imdone-atom', collection
-      autoload: true
-    @datastore[collection]
-
-  tasksDb: (repo) ->
-    #READY:170 return the project specific task DB id:508
-    @db 'tasks',repo.getPath().replace(/\//g, '_')
-
-  @instance: new ImdoneioClient

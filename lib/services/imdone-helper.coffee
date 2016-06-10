@@ -7,11 +7,14 @@ gitup = require 'git-up'
 
 
 module.exports =
-  newImdoneRepo: (pathname, uri) ->
-    fsStore = atomFsStore if atom.config.get('imdone-atom.useAlternateFileWatcher')
-    imdoneRepo = fsStore(new ImdoneRepo(pathname))
+  createRepo: (pathname, uri) ->
+    imdoneRepo = @fsStore(new ImdoneRepo(pathname))
     @excludeVcsIgnoresMixin(imdoneRepo)
-    imdoneRepo
+    require('./imdoneio-store') imdoneRepo
+
+  fsStore: (repo) ->
+    fsStore = atomFsStore if atom.config.get('imdone-atom.useAlternateFileWatcher')
+    fsStore(repo)
 
   excludeVcsIgnoresMixin: (imdoneRepo) ->
     keyPath = 'imdone-atom.excludeVcsIgnoredPaths'
