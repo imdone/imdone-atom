@@ -7,75 +7,95 @@ module.exports =  (repo) ->
   _getTasksInList = repo.getTasksInList.bind repo
   _getTasksByList = repo.getTasksByList.bind repo
   _init = repo.init.bind repo
-  _moveTasks = repo.moveTasks.bind repo
+  _refresh = repo.refresh.bind repo
+  _setTaskPriority = repo.setTaskPriority.bind repo
 
   isEnabled = () ->
     _ = require 'lodash'
-    _.get(repo, 'config.useImdoneioForPriority') && connectorManager.isAuthenticated()
+    repo.usingImdoneioForPriority()# && connectorManager.isAuthenticated()
 
-  tasksToIds = (tasks) -> (_.get(task, 'meta.id') for task in tasks)
+  getTaskId = (task) -> _.get task, 'meta.id[0]'
+
+  tasksToIds = (tasks) -> (getTaskId task for task in tasks)
 
   getSorts = () -> _.get repo, "config.sync.sort"
 
+  getListSort = (list) -> _.get getSorts(), list
+
+  getTaskPositionInList = (task, list) -> getListSort(list).indexOf getTaskId task
+
   setListSort = (obj, save) ->
-    _.set repo, "config.sync.sort.#{obj.name}", obj.tasks
+    setIdsForList obj.name, obj.ids
     repo.saveConfig() if save
 
   populateSort = () ->
+    return if getSorts()
     # Populate the config.sync.sort from existing sort
-    setListSort(name: list, tasks: tasksToIds(tasks)) for list, tasks of _getTasksByList()
+    setListSort(name: list.name, ids: tasksToIds(list.tasks)) for list in _getTasksByList()
     repo.saveConfig()
-
-  addSyncSortToTasks = (tasks) ->
-    task.sync_sort = index for task, index in tasks
-
-  applySortsToTasks = () ->
-    populateSort() unless getSorts()
-    # Now set the synced_sort on each task
-    sorts = getSorts()
-    addSyncSortToTasks tasks for list, tasks of _getTasksByList()
 
   updateSortStore = (tasksByList, cb) ->
     async.eachSeries tasksByList,
       (hash, cb) ->
-        arrayOfIds  = (_.get(task,'meta.id[0]') for task in hash.tasks)
-        sort = name: hash.list, tasks:arrayOfIds
-        setListSort sort
+        arrayOfIds  = tasksToIds hash.tasks
+        setListSort name: hash.list, tasks:arrayOfIds
         cb()
       (err) ->
         repo.saveConfig() unless err
         cb err, tasksByList
 
+  idsForList = (name) -> _.get repo, "config.sync.sort.#{name}"
+
+  setIdsForList = (name, ids) -> _.set repo, "config.sync.sort.#{name}", ids
+
+  sortBySyncId = (name, tasks) ->
+    ids = idsForList name
+    return tasks unless ids
+    _.sortBy tasks, (task) -> ids.indexOf getTaskId task
+
+  repo.setTaskPriority = (task, index, cb) ->
+    return _setTaskPriority task, index, cb unless isEnabled()
+
+    if task.oldList
+      getListSort(task.oldList).splice getTaskPositionInList(task, task.oldList), 1
+    else
+      getListSort(task.list).splice getTaskPositionInList(task, task.list), 1
+
+    getListSort(task.list).splice index, 0, getTaskId(task)
+
+    cb()
+
   repo.getTasksInList = (name, offset, limit) ->
     tasksInList = _getTasksInList  name, offset, limit
     return tasksInList unless isEnabled()
-    # DOING: Change sort order to db driven/imdone.io sort
-    sorts = _.get repo, "imdoneio.sorts.#{name}"
-    # DOING: Add the imdoneio_sort to the tasks, then sort
-    tasksInList
+    sortBySyncId name, tasksInList
 
   repo.getTasksByList = () ->
     tasksByList = _getTasksByList()
     return tasksByList unless isEnabled()
-    # DOING: Change sort order to db driven/imdone.io sort
-    sorts = _.get repo, 'imdoneio.sorts'
-    # DOING: Add the imdoneio_sort to the tasks, then sort
-    tasksByList
+    (sortBySyncId list.name, list.tasks for list in tasksByList)
 
   repo.init = (cb) ->
     cb ?= ()->
     repo.loadConfig (err) ->
-      debugger
       return cb err if err
-      return _init cb unless repo.config.useImdoneioForPriority
-      applySortsToTasks()
-      _init cb
+      return _init cb unless isEnabled()
+      _init (err, files) ->
+        return cb err if err
+        populateSort()
+        cb null, files
 
-  repo.moveTasks = (tasks, newList, newPos, cb) ->
+  repo.refresh = (cb) ->
     cb ?= ()->
-    _moveTasks tasks, newList, newPos,
-      (err, tasksByList) ->
-        return updateSortStore tasksByList, cb if isEnabled()
-        cb err, tasksByList
+    repo.loadConfig (err, config) ->
+      return cb err if err
+      repo.config = config
+      return _refresh cb unless isEnabled()
+      populateSort()
+      _refresh (err, files) ->
+        return cb err if err
+        cb null, files
+
+  repo.on 'tasks.moved', (tasks) -> repo.saveConfig()
 
   connectorManager: connectorManager, repo: repo

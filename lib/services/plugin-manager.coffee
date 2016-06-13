@@ -1,7 +1,7 @@
 {Emitter} = require 'atom'
 _ = require 'lodash'
 
-# #DONE:110 Write docs for creating plugins issue:42 id:509
+# #DONE: Write docs for creating plugins issue:42 id:509
 module.exports = PluginManager =
   emitter: new Emitter
   defaultPlugins: require '../plugins'

@@ -11,12 +11,12 @@ syncTasks = (client, repo, cm) ->
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, tasks) ->
-      return if err # TODO:110 Do something with this error id:414
+      return if err # TODO: Do something with this error id:414
       console.log "received tasks from imdone-io", tasks
       async.eachSeries tasks,
-        # READY:60 We have to be able to match on meta.id for updates. id:1967
-        # READY:10 Test this with a new project to make sure we get the ids id:1959
-        # READY:0 We need a way to run tests on imdone-io without destroying the client id:1963
+        # READY: We have to be able to match on meta.id for updates. id:1967
+        # READY: Test this with a new project to make sure we get the ids id:1959
+        # READY: We need a way to run tests on imdone-io without destroying the client id:1963
         (task, cb) ->
           taskToModify = _.assign repo.getTask(task.id), task
           return cb "Task not found" unless Task.isTask taskToModify
@@ -24,7 +24,7 @@ syncTasks = (client, repo, cm) ->
         (err) ->
           return cm.emit 'sync.error', err if err
           repo.saveModifiedFiles (err, files)->
-            # DONE:0 Refresh the board id:1961
+            # DONE: Refresh the board id:1961
             cm.emit 'tasks.updated' unless err
 
 syncFile = (client, repo, cm) ->
@@ -54,13 +54,13 @@ class ConnectorManager extends Emitter
     @syncTasks = syncTasks @client, @repo, @
     @syncFile = syncFile @client, @repo, @
     @onTasksMove = () => @syncTasks @repo.getTasks()
-    @onFileUpdate = (file) => @syncFile file # READY:20 We need a syncTasks for file so we only save the file that's been modified id:1970
+    @onFileUpdate = (file) => @syncFile file # READY: We need a syncTasks for file so we only save the file that's been modified id:1970
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
-    # READY:80 Check for updates to products/connectors and update @products with changes id:415
+    # READY: Check for updates to products/connectors and update @products with changes id:415
 
   handleEvents: ->
-    # DONE:270 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
+    # DONE: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -75,7 +75,7 @@ class ConnectorManager extends Emitter
   onRepoInit: () ->
     return if @project || @initialized
     @client.getOrCreateProject @repo, (err, project) =>
-      # TODO:30 Do something with this error id:1971
+      # TODO: Do something with this error id:1971
       return if err || @project || @initialized
       @project = project
       @syncTasks @repo.getTasks()

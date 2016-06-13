@@ -254,7 +254,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5 id:567](#DONE:200)
+* [Fix config path checking for windows git-iss:5 id:567](#DONE:)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -301,4 +301,4 @@
 
 ----
 
-- #TODO:200 Remember to update changelog before +publishing +package @piascikj id:566
+- #TODO: Remember to update changelog before +publishing +package @piascikj id:566

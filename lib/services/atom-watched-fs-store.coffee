@@ -170,9 +170,9 @@ class Watcher
 
 
   updateChangedChildren: (dir, cb) ->
-    # DONE:20 Update changed children and return true if there were children changed id:576
+    # DONE: Update changed children and return true if there were children changed id:576
     hasChange = false
-    # DONE:10 Change to async id:577
+    # DONE: Change to async id:577
     processEntry = (entry, cb) =>
       if entry.isFile()
         @isReallyChanged entry, (err, changed) =>
@@ -182,7 +182,7 @@ class Watcher
             hasChange = true
           cb()
 
-    # BACKLOG:150 Use fs.list id:484
+    # BACKLOG: Use fs.list id:484
     dir.getEntries (err, entries) =>
       async.each entries, processEntry, (err) =>
         log "#{dir.getPath()} hasChange:#{hasChange}"
