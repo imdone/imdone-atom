@@ -2,13 +2,33 @@ module.exports =  (repo) ->
   ConnectorManager = require './connector-manager'
   connectorManager = new ConnectorManager repo
   imdoneioClient = require('./imdoneio-client').instance
+  fs = require 'fs'
   async = require 'async'
+  path = require 'path'
+  CONFIG_DIR = require('imdone-core/lib/constants').CONFIG_DIR
+  SORT_FILE = repo.getFullPath path.join(CONFIG_DIR, 'sort.json')
 
   _getTasksInList = repo.getTasksInList.bind repo
   _getTasksByList = repo.getTasksByList.bind repo
   _init = repo.init.bind repo
   _refresh = repo.refresh.bind repo
   _setTaskPriority = repo.setTaskPriority.bind repo
+
+
+  loadSortFile = (cb) ->
+    fs.exists SORT_FILE, (exists) ->
+      return cb() unless exists
+      fs.readFile SORT_FILE, (err, data) ->
+        return cb err if err
+        try
+          _.set repo, 'sync.sort', JSON.parse(data.toString());
+        catch e
+        cb()
+
+  saveSortFile = (cb) ->
+    cb ?= ()->
+    sort = _.get repo, 'sync.sort'
+    fs.writeFile SORT_FILE, JSON.stringify(sort), cb
 
   isEnabled = () ->
     _ = require 'lodash'
@@ -18,7 +38,7 @@ module.exports =  (repo) ->
 
   tasksToIds = (tasks) -> (getTaskId task for task in tasks)
 
-  getSorts = () -> _.get repo, "config.sync.sort"
+  getSorts = () -> _.get repo, "sync.sort"
 
   getListSort = (list) -> _.get getSorts(), list
 
@@ -26,30 +46,21 @@ module.exports =  (repo) ->
 
   setListSort = (obj, save) ->
     setIdsForList obj.name, obj.ids
-    repo.saveConfig() if save
+    repo.saveSortFile() if save
 
-  populateSort = () ->
-    return if getSorts()
-    # Populate the config.sync.sort from existing sort
-    setListSort(name: list.name, ids: tasksToIds(list.tasks)) for list in _getTasksByList()
-    repo.saveConfig()
+  populateSort = (cb) ->
+    fs.exists SORT_FILE, (exists) ->
+      return cb() if exists
+      # Populate the config.sync.sort from existing sort
+      setListSort(name: list.name, ids: tasksToIds(list.tasks)) for list in _getTasksByList()
+      saveSortFile cb
 
-  updateSortStore = (tasksByList, cb) ->
-    async.eachSeries tasksByList,
-      (hash, cb) ->
-        arrayOfIds  = tasksToIds hash.tasks
-        setListSort name: hash.list, tasks:arrayOfIds
-        cb()
-      (err) ->
-        repo.saveConfig() unless err
-        cb err, tasksByList
+  getIdsForList = (name) -> _.get repo, "sync.sort.#{name}"
 
-  idsForList = (name) -> _.get repo, "config.sync.sort.#{name}"
-
-  setIdsForList = (name, ids) -> _.set repo, "config.sync.sort.#{name}", ids
+  setIdsForList = (name, ids) -> _.set repo, "sync.sort.#{name}", ids
 
   sortBySyncId = (name, tasks) ->
-    ids = idsForList name
+    ids = getIdsForList name
     return tasks unless ids
     _.sortBy tasks, (task) -> ids.indexOf getTaskId task
 
@@ -77,13 +88,18 @@ module.exports =  (repo) ->
 
   repo.init = (cb) ->
     cb ?= ()->
-    repo.loadConfig (err) ->
+    fns = [
+      (cb) -> repo.loadConfig cb
+      (cb) -> loadSortFile cb
+    ]
+    async.parallel fns, (err, results) ->
       return cb err if err
+      repo.config = results[0]
       return _init cb unless isEnabled()
       _init (err, files) ->
         return cb err if err
-        populateSort()
-        cb null, files
+        populateSort (err) ->
+          cb null, files
 
   repo.refresh = (cb) ->
     cb ?= ()->
@@ -91,11 +107,11 @@ module.exports =  (repo) ->
       return cb err if err
       repo.config = config
       return _refresh cb unless isEnabled()
-      populateSort()
-      _refresh (err, files) ->
-        return cb err if err
-        cb null, files
+      populateSort (err) ->
+        _refresh (err, files) ->
+          return cb err if err
+          cb null, files
 
-  repo.on 'tasks.moved', (tasks) -> repo.saveConfig()
+  repo.on 'tasks.moved', (tasks) -> saveSortFile()
 
   connectorManager: connectorManager, repo: repo
