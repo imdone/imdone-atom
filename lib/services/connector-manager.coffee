@@ -32,7 +32,7 @@ syncFile = (client, repo, cm) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO:120 Do something with this error id:414
+      return if err # TODO: Do something with this error id:414
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -101,6 +101,13 @@ class ConnectorManager extends Emitter
     @repo.on 'file.saved', @onFileUpdate
 
   projectId: () -> @client.getProjectId @repo
+
+  updateTaskOrder: (order, cb) ->
+    return cb() unless @project
+    @project.taskOrder = order
+    @client.updateProject @project, (err, project) =>
+      return cb(err) if err
+      cb null, project.taskOrder
 
   getProducts: (cb) ->
     cb = (()->) unless cb

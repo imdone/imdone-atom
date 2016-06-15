@@ -1,8 +1,12 @@
+## 2.0.0
+* Integrations with http://imdone.io
+* Save priority by imdone.io id in .imdone/sort.js
+* 
+
 ## 1.4.0
 * Fix serialization
 * New "Enable file opener" setting to improve activation time for those who don't use file-opener [default false]
 * Add new languages
-* 
 
 ## 1.3.29
 * Add c++ extensions by @eistaa

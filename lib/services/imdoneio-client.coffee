@@ -31,6 +31,7 @@ class ImdoneioClient extends Emitter
   @signUpUrl: signUpUrl
   authenticated: false
   connectionAccepted: false
+  authRetryCount: 0
 
   constructor: () ->
     super
@@ -77,6 +78,7 @@ class ImdoneioClient extends Emitter
 
   onAuthSuccess: (user, cb) ->
     @authenticated = true
+    @authRetryCount = 0
     @user = user
     @emit 'authenticated'
     pluginManager.init()
@@ -86,7 +88,9 @@ class ImdoneioClient extends Emitter
       @handlePushEvents()
 
   onAuthFailure: (err, res, cb) ->
+    @emit 'authentication-failed', @authRetryCount
     @authenticated = false
+    @authRetryCount++
     delete @password
     delete @email
     cb(err, res)
@@ -219,7 +223,7 @@ class ImdoneioClient extends Emitter
   getOrCreateProject: (repo, cb) ->
     # READY: Implement getOrCreateProject id:591
     # BACKLOG: move this to connectorManager id:592
-    # DONE:330 Make sure this works id:593 github_closed:true id:1965
+    # DONE: Make sure this works id:593 github_closed:true id:1965
     return cb() unless repo && repo.config
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId

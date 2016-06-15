@@ -22,28 +22,28 @@
   },
   "lists": [
     {
-      "name": "TODO",
-      "hidden": false
-    },
-    {
-      "name": "DONE",
-      "hidden": false
-    },
-    {
-      "name": "READY",
-      "hidden": false
-    },
-    {
       "name": "BACKLOG",
-      "hidden": false
+      "hidden": true
     },
     {
-      "name": "CHANGED",
+      "name": "TODO",
       "hidden": false
     },
     {
       "name": "DOING",
       "hidden": false
+    },
+    {
+      "name": "READY",
+      "hidden": true
+    },
+    {
+      "name": "DONE",
+      "hidden": true
+    },
+    {
+      "name": "CHANGED",
+      "hidden": true
     }
   ],
   "marked": {

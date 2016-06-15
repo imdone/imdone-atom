@@ -20,7 +20,7 @@ class MenuView extends View
         @div class: "imdone-toolbar", =>
           @div class: "imdone-profile imdone-toolbar-button", outlet: "$profile", =>
             @div outlet:'$login', class:'text-success imdone-icon', title:'Blast off! login and share', =>
-              # TODO: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:622
+              # DONE: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:622
               # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
               # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
               @a click:'openShare', href: "#", =>
@@ -40,7 +40,7 @@ class MenuView extends View
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           @div class: "menu-sep-space-2x"
           @div class: "imdone-project-plugins"
-          # TODO: Add the plugin project buttons id:1962
+          # BACKLOG: Add the plugin project buttons id:1962
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'

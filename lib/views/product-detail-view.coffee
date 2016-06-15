@@ -47,7 +47,7 @@ class ProductDetailView extends View
       disable_properties: true
       disable_collapse: true
 
-    # DOING: Add provider configurations before creating editor id:1972
+    # TODO: Add provider configurations before creating editor id:1972
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
     @configEditor.on 'change', => @emitChange()

@@ -11,7 +11,7 @@ fileService = null
 client = null
 log = null
 
-# TODO: Add keen stats for features id:604
+# BACKLOG: Add keen stats for features id:604
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -39,7 +39,7 @@ class ImdoneAtomView extends ScrollView
     Sortable = require 'sortablejs'
     pluginManager = require '../services/plugin-manager'
     fileService = require '../services/file-service'
-    client = require('../services/imdoneio-client').instance
+    @client = require('../services/imdoneio-client').instance
     log = require '../services/log'
     require('./jq-utils')($)
 
@@ -110,9 +110,11 @@ class ImdoneAtomView extends ScrollView
     @menuView.handleEvents @emitter
     @bottomView.handleEvents @emitter
 
+    @client.on 'authentication-failed', (retries) -> @mask.hide() if retries
+
     @connectorManager.on 'tasks.syncing', => @showMask() # DOING: mask isn't always hiding correctly id:1975
 
-    @connectorManager.on 'sync.error', => @showMask()
+    @connectorManager.on 'sync.error', => @mask.hide()
 
     @connectorManager.on 'tasks.updated', =>
       @onRepoUpdate()
@@ -242,7 +244,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO: Add the plugin project buttons here id:609
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # BACKLOG: Add the plugin project buttons here id:609
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -335,6 +337,7 @@ class ImdoneAtomView extends ScrollView
     @bottomView.attr 'style', ''
     @loading.hide()
     @mainContainer.show()
+    @mask.hide()
 
   showMask: ->
     @mask.show()
@@ -458,7 +461,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @mask.hide()
+    @mask.hide() # DOING: hide mask on event from connectorManager who will retry after emitting id:2
     @makeTasksSortable()
     @emitter.emit 'board.update'
 
