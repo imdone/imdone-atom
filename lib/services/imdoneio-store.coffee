@@ -52,37 +52,30 @@ module.exports =  (repo) ->
 
   getListSort = (list) -> _.get getSorts(), list
 
-  getTaskPositionInList = (task) -> getListSort(task.list).indexOf getTaskId task
-
-  setListSort = (obj, save) ->
-    setIdsForList obj.name, obj.ids
+  setListSort = (name, ids, save) ->
+    _.set repo, "sync.sort.#{name}", ids
     saveSort() if save
 
   populateSort = (cb) ->
     fs.exists SORT_FILE, (exists) ->
       return cb() if exists
       # Populate the config.sync.sort from existing sort
-      setListSort(name: list.name, ids: tasksToIds(list.tasks)) for list in _getTasksByList()
+      setListSort list.name, tasksToIds(list.tasks) for list in _getTasksByList()
       saveSort cb
 
   getIdsForList = (name) -> _.get repo, "sync.sort.#{name}"
-
-  moveIdForTask = (task, pos) ->
-    taskId = getTaskId task
-    list = task.list
-    idsWithoutTask = _.without getIdsForList(list), getTaskId task
-    idsWithoutTask.splice pos, 0, taskId
-    setListSort(name: list, ids: idsWithoutTask)
-
-  setIdsForList = (name, ids) -> _.set repo, "sync.sort.#{name}", ids
 
   sortBySyncId = (name, tasks) ->
     ids = getIdsForList name
     return tasks unless ids
     _.sortBy tasks, (task) -> ids.indexOf getTaskId task
 
-  repo.setTaskPriority = (task, index, cb) ->
-    moveIdForTask task, index
+  repo.setTaskPriority = (task, pos, cb) ->
+    taskId = getTaskId task
+    list = task.list
+    idsWithoutTask = _.without getIdsForList(list), getTaskId task
+    idsWithoutTask.splice pos, 0, taskId
+    setListSort list, idsWithoutTask
     cb()
 
   repo.moveTasks = (tasks, newList, newPos, cb) ->

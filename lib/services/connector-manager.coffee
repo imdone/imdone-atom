@@ -53,7 +53,7 @@ class ConnectorManager extends Emitter
     @client = require('./imdoneio-client').instance
     @syncTasks = syncTasks @client, @repo, @
     @syncFile = syncFile @client, @repo, @
-    @onTasksMove = () => @syncTasks @repo.getTasks()
+    @onTasksMove = () => @syncTasks @repo.getTasks() # TODO: Consider only sending the tasks that moved and updating sort id:4
     @onFileUpdate = (file) => @syncFile file # READY: We need a syncTasks for file so we only save the file that's been modified id:1970
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
