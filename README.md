@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/imdone/imdone-atom.png?label=ready&title=Ready)](https://waffle.io/imdone/imdone-atom)
 A hackable task-board in your code.
 ----
 ### You live in the code, your tasks should too!
