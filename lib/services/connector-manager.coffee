@@ -5,45 +5,6 @@ log = require('debug/browser') 'imdone-atom:connector-manager'
 Task = require 'imdone-core/lib/task'
 {Emitter} = require 'atom'
 
-syncTasks = (client, repo, cm) ->
-  (tasks) ->
-    cm.emit 'tasks.syncing'
-    tasks = [tasks] unless _.isArray tasks
-    console.log "sending tasks to imdone-io", tasks
-    client.syncTasks repo, tasks, (err, tasks) ->
-      return if err # TODO: Do something with this error id:414
-      console.log "received tasks from imdone-io", tasks
-      async.eachSeries tasks,
-        # READY: We have to be able to match on meta.id for updates. id:1967
-        # READY: Test this with a new project to make sure we get the ids id:1959
-        # READY: We need a way to run tests on imdone-io without destroying the client id:1963
-        (task, cb) ->
-          taskToModify = _.assign repo.getTask(task.id), task
-          return cb "Task not found" unless Task.isTask taskToModify
-          repo.modifyTask taskToModify, cb
-        (err) ->
-          return cm.emit 'sync.error', err if err
-          repo.saveModifiedFiles (err, files)->
-            # DONE: Refresh the board id:1961
-            cm.emit 'tasks.updated' unless err
-
-syncFile = (client, repo, cm) ->
-  (file) ->
-    cm.emit 'tasks.syncing'
-    console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
-    client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO: Do something with this error id:414
-      console.log "received tasks from imdone-io for: %s", tasks
-      async.eachSeries tasks,
-        (task, cb) ->
-          taskToModify = _.assign repo.getTask(task.id), task
-          return cb "Task not found" unless Task.isTask taskToModify
-          repo.modifyTask taskToModify, cb
-        (err) ->
-          return cm.emit 'sync.error', err if err
-          repo.writeFile file, (err, file)->
-            cm.emit 'tasks.updated' unless err
-
 module.exports =
 class ConnectorManager extends Emitter
   products: null
@@ -51,10 +12,6 @@ class ConnectorManager extends Emitter
   constructor: (@repo) ->
     super
     @client = require('./imdoneio-client').instance
-    @syncTasks = syncTasks @client, @repo, @
-    @syncFile = syncFile @client, @repo, @
-    @onTasksMove = () => @syncTasks @repo.getTasks() # TODO: Consider only sending the tasks that moved and updating sort id:4
-    @onFileUpdate = (file) => @syncFile file # READY: We need a syncTasks for file so we only save the file that's been modified id:1970
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
     # READY: Check for updates to products/connectors and update @products with changes id:415
@@ -73,15 +30,16 @@ class ConnectorManager extends Emitter
     @client.on 'authenticated', => @onAuthenticated()
 
   onRepoInit: () ->
+    # DOING: This has to be moved to imdoneio-store id:11
     return if @project || @initialized
     @client.getOrCreateProject @repo, (err, project) =>
       # TODO: Do something with this error id:1971
       return if err || @project || @initialized
       @project = project
-      @syncTasks @repo.getTasks()
-      @addTaskListeners()
-      @emit 'project.found', project
-      @initialized = true
+      @repo.syncTasks @repo.getTasks(), (err, done) =>
+        @emit 'project.found', project
+        @initialized = true
+        done err
 
   onAuthenticated: () ->
     log('authenticated');
@@ -89,16 +47,6 @@ class ConnectorManager extends Emitter
     @repo.on 'initialized', => @onRepoInit()
 
   isAuthenticated: () -> @client.isAuthenticated
-
-  addTaskListeners: ->
-    @repo.removeListener 'tasks.moved', @onTasksMove
-    @repo.on 'tasks.moved', @onTasksMove
-
-    @repo.removeListener 'file.update', @onFileUpdate
-    @repo.on 'file.update', @onFileUpdate
-
-    @repo.removeListener 'file.saved', @onFileUpdate
-    @repo.on 'file.saved', @onFileUpdate
 
   projectId: () -> @client.getProjectId @repo
 

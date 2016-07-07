@@ -1,7 +1,8 @@
 module.exports =  (repo) ->
   ConnectorManager = require './connector-manager'
-  connectorManager = new ConnectorManager repo
-  imdoneioClient = require('./imdoneio-client').instance
+  connectorManager = cm = new ConnectorManager repo
+  imdoneioClient = client = require('./imdoneio-client').instance
+  Task = require 'imdone-core/lib/task'
   fs = require 'fs'
   _ = require 'lodash'
   async = require 'async'
@@ -15,7 +16,49 @@ module.exports =  (repo) ->
   _refresh = repo.refresh.bind repo
   _setTaskPriority = repo.setTaskPriority.bind repo
   _moveTasks = repo.moveTasks.bind repo
+  _emitFileUpdate = repo.emitFileUpdate.bind repo
 
+
+  syncDone = (err) -> cm.emit 'tasks.updated' unless err
+
+  repo.syncTasks = syncTasks = (tasks, cb) ->
+    cm.emit 'tasks.syncing'
+    tasks = [tasks] unless _.isArray tasks
+    console.log "sending tasks to imdone-io", tasks
+    client.syncTasks repo, tasks, (err, tasks) ->
+      return if err # TODO: Do something with this error id:414
+      console.log "received tasks from imdone-io", tasks
+      async.eachSeries tasks,
+        # READY: We have to be able to match on meta.id for updates. id:1967
+        # READY: Test this with a new project to make sure we get the ids id:1959
+        # READY: We need a way to run tests on imdone-io without destroying the client id:1963
+        (task, cb) ->
+          taskToModify = _.assign repo.getTask(task.id), task
+          return cb "Task not found" unless Task.isTask taskToModify
+          repo.modifyTask taskToModify, cb
+        (err) ->
+          return cm.emit 'sync.error', err if err
+          repo.saveModifiedFiles (err, files)->
+            # DONE: Refresh the board id:1961
+            return syncDone err unless cb
+            cb err, syncDone
+
+  syncFile = (file, cb) ->
+    cm.emit 'tasks.syncing'
+    console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
+    client.syncTasks repo, file.getTasks(), (err, tasks) ->
+      return if err # TODO: Do something with this error id:414
+      console.log "received tasks from imdone-io for: %s", tasks
+      async.eachSeries tasks,
+        (task, cb) ->
+          taskToModify = _.assign repo.getTask(task.id), task
+          return cb "Task not found" unless Task.isTask taskToModify
+          repo.modifyTask taskToModify, cb
+        (err) ->
+          return cm.emit 'sync.error', err if err
+          repo.writeFile file, (err, file)->
+            return syncDone err unless cb
+            cb err, syncDone
 
   loadSort = (cb) ->
     loadSortFile cb
@@ -32,17 +75,23 @@ module.exports =  (repo) ->
         cb()
 
   saveSort = (cb) ->
-    saveSortFile cb
-    # DOING: also save to imdone.io in parallel id:1
+    fns = [
+      (cb) -> saveSortFile cb
+      (cb) -> saveSortCloud cb
+    ]
+    async.parallel fns, (err) ->
+
+    # DOING: also save to imdone.io in parallel id:1 gh:102
+  saveSortCloud = (cb) ->
+    cb ?= ()->
+    sort = _.get repo, 'sync.sort'
 
   saveSortFile = (cb) ->
     cb ?= ()->
     sort = _.get repo, 'sync.sort'
     fs.writeFile SORT_FILE, JSON.stringify(sort), cb
 
-  isEnabled = () ->
-    _ = require 'lodash'
-    repo.usingImdoneioForPriority()# && connectorManager.isAuthenticated()
+  sortEnabled = () -> repo.usingImdoneioForPriority()
 
   getTaskId = (task) -> _.get task, 'meta.id[0]'
 
@@ -71,6 +120,7 @@ module.exports =  (repo) ->
     _.sortBy tasks, (task) -> ids.indexOf getTaskId task
 
   repo.setTaskPriority = (task, pos, cb) ->
+    return _setTaskPriority task, pos, cb unless sortEnabled()
     taskId = getTaskId task
     list = task.list
     idsWithoutTask = _.without getIdsForList(list), getTaskId task
@@ -82,18 +132,29 @@ module.exports =  (repo) ->
     cb ?= ()->
     _moveTasks tasks, newList, newPos, (err, tasksByList) ->
       return cb err if err
-      return cb null, tasksByList unless isEnabled()
-      saveSort (err) -> cb err, tasksByList
+      return cb null, tasksByList unless sortEnabled()
+      syncTasks repo.getTasks(), (err, done) ->
+        saveSort (err) ->
+          done err
+          cb err, tasksByList
 
   repo.getTasksInList = (name, offset, limit) ->
     tasksInList = _getTasksInList  name, offset, limit
-    return tasksInList unless isEnabled()
+    return tasksInList unless sortEnabled()
     sortBySyncId name, tasksInList
 
   repo.getTasksByList = () ->
     tasksByList = _getTasksByList()
-    return tasksByList unless isEnabled()
+    return tasksByList unless sortEnabled()
     ({name: list.name, tasks: sortBySyncId(list.name, list.tasks)} for list in tasksByList)
+
+  repo.emitFileUpdate = (file) ->
+    return _emitFileUpdate file unless client.isAuthenticated()
+    if repo.shouldEmitFileUpdate file
+      syncFile file, (err, done) ->
+        _emitFileUpdate file
+        done err
+
 
   repo.init = (cb) ->
     cb ?= ()->
@@ -104,18 +165,21 @@ module.exports =  (repo) ->
     async.parallel fns, (err, results) ->
       return cb err if err
       repo.config = results[0]
-      return _init cb unless isEnabled()
-      _init (err, files) ->
-        return cb err if err
-        populateSort (err) ->
-          cb null, files
+      # DOING: Try an auth from storage id:12
+      client.authFromStorage (err, user) ->
+        cm.onRepoInit()
+        return _init cb unless sortEnabled()
+        _init (err, files) ->
+          return cb err if err
+          populateSort (err) ->
+            cb null, files
 
   repo.refresh = (cb) ->
     cb ?= ()->
     repo.loadConfig (err, config) ->
       return cb err if err
       repo.config = config
-      return _refresh cb unless isEnabled()
+      return _refresh cb unless sortEnabled()
       populateSort (err) ->
         _refresh (err, files) ->
           return cb err if err

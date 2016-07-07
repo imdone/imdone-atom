@@ -39,8 +39,8 @@ class ProductDetailView extends View
 
   createEditor: ->
     options =
-      schema: @product.schemas.config # DOING: Rule schemas to be set by GET /projects/ :projectId/products id:1973 +rules
-      startval: @product.connector.config # DOING: Rule values to be set by GET /projects/ :projectId/products id:1974 +rules
+      schema: @product.schemas.config # TODO: Rule schemas to be set by GET /projects/ :projectId/products id:1973 +rules-workflow
+      startval: @product.connector.config # TODO: Rule values to be set by GET /projects/ :projectId/products id:1974 +rules
       theme: 'bootstrap3'
       required_by_default: true
       disable_edit_json: true

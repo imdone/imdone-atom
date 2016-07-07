@@ -35,11 +35,11 @@
     },
     {
       "name": "READY",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "CHANGED",

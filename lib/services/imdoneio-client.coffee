@@ -52,6 +52,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
+  # TODO: If we get a forbidden error, then emit auth failure id:5
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -161,6 +162,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
+    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github id:7 gh:116
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)

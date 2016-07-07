@@ -110,13 +110,13 @@ class ImdoneAtomView extends ScrollView
     @menuView.handleEvents @emitter
     @bottomView.handleEvents @emitter
 
-    @client.on 'authentication-failed', (retries) -> @mask.hide() if retries
+    @client.on 'authentication-failed', (retries) => @hideMask() if retries
 
-    @connectorManager.on 'tasks.syncing', => @showMask() # DOING: mask isn't always hiding correctly id:1975
+    @connectorManager.on 'tasks.syncing', => @showMask() # DOING: mask isn't always hiding correctly id:1975 gh:105
 
-    @connectorManager.on 'sync.error', => @mask.hide()
+    @connectorManager.on 'sync.error', => @hideMask()
 
-    @connectorManager.on 'tasks.updated', =>
+    @connectorManager.on 'tasks.updated', => # DOING: If syncing don't fire onRepoUpdate.  Wait until done syncing. id:6 gh:105
       @onRepoUpdate()
 
     @imdoneRepo.on 'initialized', =>
@@ -161,8 +161,6 @@ class ImdoneAtomView extends ScrollView
         @openPath fpath, line
 
     @emitter.on 'repo.change', => @showMask()
-
-    # @emitter.on 'tasks.create', (product) => client.syncTasks @imdoneRepo, @visibleTasks(), product
 
     @emitter.on 'config.close', =>
       @appContainer.removeClass 'shift'
@@ -337,10 +335,11 @@ class ImdoneAtomView extends ScrollView
     @bottomView.attr 'style', ''
     @loading.hide()
     @mainContainer.show()
-    @mask.hide()
+    @hideMask()
 
-  showMask: ->
-    @mask.show()
+  showMask: -> @mask.show()
+
+  hideMask: -> @mask.hide() if @mask
 
   genFilterLink: (opts) ->
     $$$ ->
@@ -461,7 +460,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @mask.hide() # DOING: hide mask on event from connectorManager who will retry after emitting id:2
+    @hideMask() # TODO: hide mask on event from connectorManager who will retry after emitting id:2 githubClosed:true
     @makeTasksSortable()
     @emitter.emit 'board.update'
 
