@@ -55,8 +55,7 @@
     "langPrefix": "language-"
   },
   "sync": {
-    "id": "575edc1d8ec9b7573706f959",
-    "name": "imdone-atom",
-    "useImdoneioForPriority": true
+    "id": "5784f80e10c587b23178609a",
+    "name": "imdone-atom"
   }
 }

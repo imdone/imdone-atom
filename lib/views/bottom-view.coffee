@@ -31,13 +31,13 @@ class BottomView extends View
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
-      # #BACKLOG: Add config view here id:601
+      # #BACKLOG: Add config view here id:58
 
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
     @shareTasksView.handleEvents @emitter
 
-    # #DONE: Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:602
+    # #DONE: Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:59
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
@@ -82,10 +82,10 @@ class BottomView extends View
     @closeButton.on 'click', =>
       @hide()
 
-    # DONE: This belongs in bottomView +refactor id:603
+    # DONE: This belongs in bottomView +refactor id:60
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE: This belongs in bottomView +refactor id:513
+    # DONE: This belongs in bottomView +refactor id:61
     @emitter.on 'share', => @showShare()
 
 

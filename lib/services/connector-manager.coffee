@@ -14,10 +14,10 @@ class ConnectorManager extends Emitter
     @client = require('./imdoneio-client').instance
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
-    # READY: Check for updates to products/connectors and update @products with changes id:415
+    # READY: Check for updates to products/connectors and update @products with changes id:12
 
   handleEvents: ->
-    # DONE: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:416
+    # DONE: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:13
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -30,10 +30,10 @@ class ConnectorManager extends Emitter
     @client.on 'authenticated', => @onAuthenticated()
 
   onRepoInit: () ->
-    # DOING: This has to be moved to imdoneio-store id:11
+    # DOING: This should be moved to imdoneio-store id:14
     return if @project || @initialized
     @client.getOrCreateProject @repo, (err, project) =>
-      # TODO: Do something with this error id:1971
+      # TODO: Do something with this error id:15
       return if err || @project || @initialized
       @project = project
       @repo.syncTasks @repo.getTasks(), (err, done) =>
@@ -60,6 +60,7 @@ class ConnectorManager extends Emitter
   getProducts: (cb) ->
     cb = (()->) unless cb
     return cb(null, @products) if @products
+    return cb("No project found") unless @projectId()
     @client.getProducts @projectId(), (err, products) =>
       return cb err if err
       @enhanceProduct product for product in products

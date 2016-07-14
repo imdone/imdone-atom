@@ -53,7 +53,7 @@ class ConnectorPluginView extends View
       id = $(@).attr('data-issue-number')
       $(@).closest('li').remove();
       self.task.removeMetaData self.idMetaKey, id
-      # DONE: add or update task using imdoneio-client id:573
+      # DONE: add or update task using imdoneio-client id:5
       self.repo.modifyTask self.task, true, (err, result) ->
         console.log err, result
         self.issues = self.getIssueIds()
@@ -69,11 +69,11 @@ class ConnectorPluginView extends View
     return unless @issues
     @relatedIssues.html @$spinner()
     async.map @issues, (number, cb) =>
-      # READY: Replace service.getIssue with client.getIssue id:574
+      # READY: Replace service.getIssue with client.getIssue id:6
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>
-      # #TODO: Check error for 404/Not Found id:575
+      # #TODO: Check error for 404/Not Found id:7
       if err
         console.log "error:", err
       else
@@ -94,7 +94,7 @@ class ConnectorPluginView extends View
         @searchResult.html 'No issues found'
 
   newIssue: ->
-    # BACKLOG: Also add the task list as a label when creating an issue on github +waffle id:481
+    # BACKLOG: Also add the task list as a label when creating an issue on github +waffle id:8
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true
