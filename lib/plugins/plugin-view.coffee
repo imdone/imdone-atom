@@ -18,7 +18,7 @@ class ConnectorPluginView extends View
         @div outlet: 'searchResult', class: 'issue-list search-result'
         @div outlet: 'relatedIssues', class: 'issue-list related-issues'
 
-  constructor: ({@repo, @connector}) ->
+  constructor: ({@repo, @imdoneView, @connector}) ->
     super
     @client = require('../services/imdoneio-client').instance
     @handleEvents()
@@ -34,7 +34,7 @@ class ConnectorPluginView extends View
     metaData = task.getMetaData()
     metaData[@idMetaKey] if (@idMetaKey && metaData)
 
-  handleEvents: ->
+  handleEvents: ()->
     self = @
     @findIssuesField.on 'keyup', (e) =>
       code = e.keyCode || e.which
@@ -48,6 +48,7 @@ class ConnectorPluginView extends View
         console.log err, result
         self.issues = self.getIssueIds()
         self.showRelatedIssues()
+        self.imdoneView.emit "task.modified", self.task
 
     @on 'click', '.issue-remove', (e) ->
       id = $(@).attr('data-issue-number')
@@ -58,6 +59,7 @@ class ConnectorPluginView extends View
         console.log err, result
         self.issues = self.getIssueIds()
         self.doFind()
+        self.imdoneView.emit "task.modified", self.task
 
   show: (@issues) ->
     @findIssuesField.focus()

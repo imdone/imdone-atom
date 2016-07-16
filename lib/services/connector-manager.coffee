@@ -31,9 +31,11 @@ class ConnectorManager extends Emitter
 
   onRepoInit: () ->
     # DOING: This should be moved to imdoneio-store id:14
-    return if @project || @initialized
+    return if @project || @initialized || @initializing
+    @initializing = true
     @client.getOrCreateProject @repo, (err, project) =>
       # TODO: Do something with this error id:15
+      @initializing = false
       return if err || @project || @initialized
       @project = project
       @repo.syncTasks @repo.getTasks(), (err, done) =>

@@ -12,7 +12,7 @@ class ConnectorPlugin extends Emitter
     # We need some way to get the connector!
     super
     @ready = true
-    @view = new @constructor.PluginView({@repo, @connector})
+    @view = new @constructor.PluginView({@repo, @imdoneView, @connector})
     @emit 'ready'
     @imdoneView.on 'board.update', =>
       return unless @view && @view.is ':visible'

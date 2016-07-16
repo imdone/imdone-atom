@@ -144,6 +144,9 @@ class ImdoneAtomView extends ScrollView
 
     @imdoneRepo.on 'error', (err) => console.log('error:', err)
 
+    @emitter.on 'task.modified', (task) =>
+      @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
+
     @emitter.on 'menu.toggle', =>
       @boardWrapper.toggleClass 'shift'
 
@@ -340,9 +343,13 @@ class ImdoneAtomView extends ScrollView
     @mainContainer.show()
     @hideMask()
 
-  showMask: -> @mask.show()
+  showMask: ->
+    @menuView.showSpinner()
+    @mask.show()
 
-  hideMask: -> @mask.hide() if @mask
+  hideMask: ->
+    @menuView.hideSpinner()
+    @mask.hide() if @mask
 
   genFilterLink: (opts) ->
     $$$ ->
