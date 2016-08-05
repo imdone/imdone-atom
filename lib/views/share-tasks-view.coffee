@@ -15,6 +15,7 @@ class ShareTasksView extends View
     @div class: "share-tasks-container config-container", =>
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
+      # TODO:0 login should be it's own view id:124
       @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
         @div class: 'input-med', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
@@ -27,8 +28,9 @@ class ShareTasksView extends View
           @a href:"#{Client.signUpUrl}", "sign up"
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style: 'display:none;', =>
         @div class: 'col-md-3 product-select-wrapper pull-left', =>
+          @h1 'Integrations'
           @subview 'productSelect', new ProductSelectionView
-        @div class:'col-md-9 product-detail-wrapper config-container pull-right', =>
+        @div class:'col-md-8 product-detail-wrapper config-container pull-right', =>
           @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
@@ -41,7 +43,7 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # READY: Connector plugin should be removed id:96
+      # READY:0 Connector plugin should be removed id:99
       @updateConnectorAfterDisable(product.connector)
       @updateConnectorForEdit product
       @productSelect.updateItem product
@@ -62,7 +64,12 @@ class ShareTasksView extends View
     @emailEditor.focus()
 
   onAuthenticated: () ->
+    @projectFound @connectorManager.project if @connectorManager.project
     @loginPanel.hide()
+
+  onUnauthenticated: () ->
+    @productPanel.hide()
+    @loginPanel.show()
 
   projectFound: (@project) ->
     @showProductPanel()
@@ -88,7 +95,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO: We need to show an error here if login fails because service can't be reached or if login fails id:97
+      # TODO:160 We need to show an error here if login fails because service can't be reached or if login fails id:100
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -129,26 +136,27 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # TODO: Handle errors by unauthenticating if needed and show login with error id:98
+        # TODO:70 Handle errors by unauthenticating if needed and show login with error id:101
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # TODO: Handle errors id:99
+        # TODO:80 Handle errors id:102
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # TODO: Handle errors id:100
+        # TODO:90 Handle errors id:103
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
+    @client.on 'unauthenticated', => @onUnauthenticated()
 
   updateConnector: (connector) ->
-    # BACKLOG: This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/) id:101
+    # BACKLOG:0 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/) id:104
     updatedProduct = @productSelect.getProduct connector.name
     updatedProduct.connector = connector
     @productSelect.updateItem updatedProduct

@@ -4,13 +4,14 @@
 // for a full listing of what's available.
 @import "ui-variables";
 @import "imdone-plugins";
+@import "bootstrap-tokenfield.css";
 
 @menu-component-width: 178px;
 @menu-width: 232px;
 @board-list-width: 362px;
 @board-list-name-width: 330px;
 @config-height: 300px;
-@task-font-size: 14px;
+@task-font-size: 1.3em;
 // @task-background-color: @inset-panel-background-color;
 @task-background-color: @tab-background-color;
 
@@ -152,7 +153,9 @@
 
     .imdone-product-pane {
       margin-top: 2.5em;
-
+      h1 {
+        margin-top: 0;
+      }
       .select-list .product-name {
         margin-left: 1em;
       }
@@ -162,9 +165,6 @@
       .product-detail-view-content {
         .form-control {
           width: 60%;
-        }
-        h1 {
-          margin-top: 0;
         }
       }
     }
@@ -394,7 +394,7 @@
 
   .well {
     padding: 10px;
-    margin-bottom: @task-font-size;
+    margin-bottom: 14px;
   }
 
   .config-panel {

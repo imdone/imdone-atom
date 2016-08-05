@@ -14,10 +14,10 @@ class ConnectorManager extends Emitter
     @client = require('./imdoneio-client').instance
     @handleEvents()
     @onAuthenticated() if @client.isAuthenticated
-    # READY: Check for updates to products/connectors and update @products with changes id:12
+    # READY:0 Check for updates to products/connectors and update @products with changes id:15
 
   handleEvents: ->
-    # DONE: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:13
+    # DONE:0 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:16
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -30,11 +30,11 @@ class ConnectorManager extends Emitter
     @client.on 'authenticated', => @onAuthenticated()
 
   onRepoInit: () ->
-    # DOING: This should be moved to imdoneio-store id:14
+    # DOING:0 This should be moved to imdoneio-store id:17
     return if @project || @initialized || @initializing
     @initializing = true
     @client.getOrCreateProject @repo, (err, project) =>
-      # TODO: Do something with this error id:15
+      # TODO:40 Do something with this error id:18
       @initializing = false
       return if err || @project || @initialized
       @project = project

@@ -2,9 +2,9 @@ engine    = null
 eioClient = null
 minimatch = null
 log       = null
+configHelper = require './imdone-config'
 
-
-# DONE: implement socket server to handle opening files in configured client issue:48 id:16
+# DONE:0 implement socket server to handle opening files in configured client issue:48 id:19
 module.exports =
   clients: {}
   init: (port) ->
@@ -14,7 +14,7 @@ module.exports =
     eioClient = require 'engine.io-client'
     minimatch = require 'minimatch'
     log       = require './log'
-    # DONE: Check if something else is listening on port issue:51 id:17
+    # DONE:0 Check if something else is listening on port issue:51 id:20
     http = require('http').createServer()
     http.on 'error', (err) =>
       if (err.code == 'EADDRINUSE')
@@ -35,9 +35,9 @@ module.exports =
     @
 
   tryProxy: (port) ->
-    # DONE: First check if it's imdone listening on the port issue:52 id:18
-    # DONE: if imdone is listening we should connect as a client and use the server as a proxy issue:52 id:19
-    # BACKLOG: if imdone is not listening we should ask for another port issue:52 id:20
+    # DONE:0 First check if it's imdone listening on the port issue:52 id:21
+    # DONE:0 if imdone is listening we should connect as a client and use the server as a proxy issue:52 id:22
+    # BACKLOG:0 if imdone is not listening we should ask for another port issue:52 id:23
     log 'Trying proxy'
     socket = eioClient('ws://localhost:' + port)
     socket.on 'open', =>
@@ -64,7 +64,7 @@ module.exports =
   openFile: (project, path, line, cb) ->
     return cb() unless @getConfig().openIn.enable
     editor = @getEditor path
-    # DONE: only send open request to editors who deserve them issue:48 id:21
+    # DONE:0 only send open request to editors who deserve them issue:48 id:24
     socket = @getSocket editor
     return cb() unless socket
     isProxied = if @proxy then true else false
@@ -72,7 +72,7 @@ module.exports =
       cb(true)
 
   getEditor: (path) ->
-    openIn = atom.config.get('imdone-atom.openIn')
+    openIn = @getConfig().openIn
     for editor, pattern of openIn
       if pattern
         return editor if minimatch(path, pattern, {matchBase: true})
@@ -84,5 +84,4 @@ module.exports =
     return null unless socket && @server.clients[socket.id] == socket
     socket
 
-  getConfig: () ->
-    atom.config.get('imdone-atom')
+  getConfig: () -> configHelper.getSettings()

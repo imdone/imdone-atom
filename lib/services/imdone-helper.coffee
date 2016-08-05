@@ -4,7 +4,7 @@ atomFsStore = require './atom-watched-fs-store'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
 gitup = require 'git-up'
-
+configHelper = require './imdone-config'
 
 module.exports =
   createRepo: (pathname, uri) ->
@@ -13,11 +13,10 @@ module.exports =
     require('./imdoneio-store') imdoneRepo
 
   fsStore: (repo) ->
-    fsStore = atomFsStore if atom.config.get('imdone-atom.useAlternateFileWatcher')
+    fsStore = atomFsStore if configHelper.getSettings().useAlternateFileWatcher
     fsStore(repo)
 
   excludeVcsIgnoresMixin: (imdoneRepo) ->
-    keyPath = 'imdone-atom.excludeVcsIgnoredPaths'
     repoPath = imdoneRepo.getPath()
     vcsRepo = @repoForPath repoPath
     return unless vcsRepo
@@ -26,8 +25,8 @@ module.exports =
       return true if vcsRepo.isPathIgnored(relPath)
       _shouldExclude.call imdoneRepo, relPath
 
-    imdoneRepo.shouldExclude = shouldExclude if atom.config.get(keyPath)
-    atom.config.observe keyPath, (exclude) ->
+    imdoneRepo.shouldExclude = shouldExclude if configHelper.getSettings().excludeVcsIgnoredPaths
+    atom.config.observe "excludeVcsIgnoredPaths", (exclude) ->
       imdoneRepo.shouldExclude = if exclude then shouldExclude else _shouldExclude
       imdoneRepo.refresh() if imdoneRepo.initialized
 

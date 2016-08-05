@@ -3,7 +3,7 @@
     "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
-  "keepEmptyPriority": true,
+  "keepEmptyPriority": false,
   "code": {
     "include_lists": [
       "TODO",
@@ -23,7 +23,7 @@
   "lists": [
     {
       "name": "BACKLOG",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "TODO",
@@ -35,11 +35,11 @@
     },
     {
       "name": "READY",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DONE",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "CHANGED",
@@ -55,7 +55,7 @@
     "langPrefix": "language-"
   },
   "sync": {
-    "id": "5784f80e10c587b23178609a",
+    "id": "579b97575d04328709ba2cb7",
     "name": "imdone-atom"
   }
 }

@@ -10,15 +10,16 @@ pluginManager = null
 fileService = null
 client = null
 log = null
+config = require '../services/imdone-config'
 
-# BACKLOG: Add keen stats for features id:62
+# BACKLOG:0 Add keen stats for features id:65
 module.exports =
 class ImdoneAtomView extends ScrollView
 
   class PluginViewInterface extends Emitter
     constructor: (@imdoneView)->
       super()
-    emitter: -> @ # CHANGED: deprecated id:63
+    emitter: -> @ # CHANGED:0 deprecated id:66
     selectTask: (id) ->
       @imdoneView.selectTask id
     showPlugin: (plugin) ->
@@ -27,8 +28,7 @@ class ImdoneAtomView extends ScrollView
 
   initialize: ->
     super
-    packagePath = atom.packages.getLoadedPackage('imdone-atom').path
-    svgPath = path.join packagePath, 'images', 'icons.svg'
+    svgPath = path.join config.getPackagePath(), 'images', 'icons.svg'
     fs.readFile svgPath, (err, data) =>
       return if err
       @$svg.html data.toString()
@@ -50,8 +50,8 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE: If over 2000 files, ask user to add excludes in `.imdoneignore` +feature id:64
-      if @numFiles > atom.config.get('imdone-atom.maxFilesPrompt')
+      # #DONE:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature id:67
+      if @numFiles > config.getSettings().maxFilesPrompt
         @ignorePrompt.show()
       else @initImdone()
 
@@ -70,7 +70,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE: Update progress bar on repo load id:65
+        # #DONE:0 Update progress bar on repo load id:68
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -115,11 +115,11 @@ class ImdoneAtomView extends ScrollView
       console.log "auth-failed" if status == "failed"
 
 
-    @connectorManager.on 'tasks.syncing', => @showMask() # READY: mask isn't always hiding correctly gh:105 id:66
+    @connectorManager.on 'tasks.syncing', => @showMask() # READY:0 mask isn't always hiding correctly gh:105 id:69
 
     @connectorManager.on 'sync.error', => @hideMask()
 
-    @connectorManager.on 'tasks.updated', => # READY: If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:67
+    @connectorManager.on 'tasks.updated', => # READY:0 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:70
       @onRepoUpdate()
 
     @imdoneRepo.on 'initialized', =>
@@ -182,8 +182,8 @@ class ImdoneAtomView extends ScrollView
     @on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
-      # DONE: Use setting to determine if we should show a task notification id:68
-      if atom.config.get('imdone-atom.showNotifications')
+      # DONE:0 Use setting to determine if we should show a task notification id:71
+      if config.getSettings().showNotifications
         taskId = $(link).closest('.task').attr 'id'
         task = @imdoneRepo.getTask taskId
         atom.notifications.addInfo task.list, detail: task.text, dismissable: true, icon: 'check'
@@ -248,7 +248,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # BACKLOG: Add the plugin project buttons here id:69
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # BACKLOG:0 Add the plugin project buttons here id:72
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -259,7 +259,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY: Get the connector from the connector manager id:70
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:0 Get the connector from the connector manager id:73
       return if err || (product && !product.isEnabled())
       connector = product && product.connector
       if @plugins[Plugin.pluginName]
@@ -334,7 +334,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # BACKLOG: This should be queued so two updates don't colide id:71
+    # BACKLOG:0 This should be queued so two updates don't colide id:74
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
@@ -356,7 +356,7 @@ class ImdoneAtomView extends ScrollView
       @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
         @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
 
-  # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:72
+  # BACKLOG:0 Split this apart into it's own class to simplify. Call it BoardView +refactor id:75
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()
@@ -364,9 +364,9 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE: Add task drag and drop support id:73
+    # #DONE:0 Add task drag and drop support id:76
 
-    # BACKLOG: We can display data from imdone.io in a card summary/details id:74
+    # BACKLOG:0 We can display data from imdone.io in a card summary/details id:77
     getTask = (task) =>
       contexts = task.getContext()
       tags = task.getTags()
@@ -375,13 +375,14 @@ class ImdoneAtomView extends ScrollView
       dateCompleted = task.getDateCompleted()
       opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
       html = task.getHtml(opts)
+      showTagsInline = config.getSettings().showTagsInline
 
-      if contexts && atom.config.get('imdone-atom.showTagsInline')
+      if contexts && showTagsInline
         for context, i in contexts
           do (context, i) =>
             html = html.replace( "@#{context}", @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true )
 
-      if tags && atom.config.get('imdone-atom.showTagsInline')
+      if tags && showTagsInline
         for tag, i in tags
           do (tag, i) =>
             html = html.replace( "+#{tag}", @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true  )
@@ -392,19 +393,19 @@ class ImdoneAtomView extends ScrollView
         @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
-          # BACKLOG: Maybe show assigned avatar on task +feature id:75
+          # BACKLOG:0 Maybe show assigned avatar on task +feature id:78
           @div class: 'imdone-task-plugins'
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE: Add todo.txt stuff like chrome app! id:76
-          if contexts && ! atom.config.get('imdone-atom.showTagsInline')
+          # #DONE:0 Add todo.txt stuff like chrome app! id:79
+          if contexts && !showTagsInline
             @div =>
               for context, i in contexts
                 do (context, i) =>
                   @raw self.genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context"
                   @span ", " if (i < contexts.length-1)
-          if tags && ! atom.config.get('imdone-atom.showTagsInline')
+          if tags && !showTagsInline
             @div =>
               for tag, i in tags
                 do (tag, i) =>
@@ -412,7 +413,7 @@ class ImdoneAtomView extends ScrollView
                   @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE: x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45 id:77
+              # DONE:0 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45 id:80
               if dateDue
                 @tr =>
                   @td "due"
@@ -432,7 +433,7 @@ class ImdoneAtomView extends ScrollView
                   @td "completed"
                   @td dateCompleted
                   @td =>
-                    # #DONE: Implement #filter/*filterRegex* links id:78
+                    # #DONE:0 Implement #filter/*filterRegex* links id:81
                     @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                       @span class:"icon icon-light-bulb"
               for data in task.getMetaDataWithLinks(repo.getConfig())
@@ -457,7 +458,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE: Add delete list icon if length is 0 id:79
+              # #DONE:0 Add delete list icon if length is 0 id:82
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
@@ -470,7 +471,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() # TODO: hide mask on event from connectorManager who will retry after emitting githubClosed:true id:80
+    @hideMask() # TODO:180 hide mask on event from connectorManager who will retry after emitting githubClosed:true id:83
     @makeTasksSortable()
     @emitter.emit 'board.update'
 
@@ -510,7 +511,7 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-    # DONE: send the project path issue:48 id:81
+    # DONE:0 send the project path issue:48 id:84
     fileService.openFile @path, filePath, line, (success) =>
       return if success
       atom.workspace.open(filePath, split: 'left').then =>

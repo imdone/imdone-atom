@@ -8,11 +8,14 @@ class BottomView extends View
 
   @content: (params) ->
     ShareTasksView = require './share-tasks-view'
+    TeamSettingsView = require './team-settings-view'
     @div class:'imdone-config-container hidden', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
         @raw '&times;'
       @div outlet: 'error', class:'text-error'
+      @div outlet: 'teamSettings', class:'team-settings config-panel', =>
+        @subview 'teamSettingsView', new TeamSettingsView(params)
       @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
         @subview 'shareTasksView', new ShareTasksView(params)
       @div outlet: 'renameList', class:'rename-list config-panel', =>
@@ -31,13 +34,13 @@ class BottomView extends View
           @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
-      # #BACKLOG: Add config view here id:58
 
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
     @shareTasksView.handleEvents @emitter
+    @teamSettingsView.handleEvents @emitter
 
-    # #DONE: Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:59
+    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:62
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
@@ -82,12 +85,13 @@ class BottomView extends View
     @closeButton.on 'click', =>
       @hide()
 
-    # DONE: This belongs in bottomView +refactor id:60
+    # DONE:0 This belongs in bottomView +refactor id:63
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE: This belongs in bottomView +refactor id:61
+    # DONE:0 This belongs in bottomView +refactor id:64
     @emitter.on 'share', => @showShare()
 
+    @emitter.on 'project.team-settings', => @showTeamSettings()
 
   isOpen: ->
     @hasClass 'open'
@@ -130,6 +134,12 @@ class BottomView extends View
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
+    @setHeight(500)
+    @show()
+
+  showTeamSettings: () ->
+    @hide()
+    @teamSettings.show () => @teamSettingsView.show()
     @setHeight(500)
     @show()
 

@@ -10,37 +10,43 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY: Show logged in user and avatar here id:82
+        # READY:0 Show logged in user and avatar here id:85
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
-        # BACKLOG: Save my favorite filters +story id:83
+        # BACKLOG:0 Save my favorite filters +story id:86
         @div class: "imdone-toolbar", =>
-          @div class: "imdone-profile imdone-toolbar-button", outlet: "$profile", =>
-            @div outlet:'$login', class:'text-success imdone-icon', title:'Blast off! login and share', =>
-              # DONE: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:84
-              # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
-              # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
-              @a click:'openShare', href: "#", =>
-                @tag 'svg', class: 'icon', =>
-                  @tag 'use', "xlink:href":"#imdone-logo-icon"
-            @div class:"profile-image", outlet:'$profileImage', click:'openShare', style:'display:none;'
-          @div class: "menu-sep-space-3x"
-          # BACKLOG: Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:85
+          @div outlet:'$login', class:'text-success imdone-icon', title:'login to imdone.io', =>
+            # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:87
+            # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
+            # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
+            @a click:'openShare', href: "#", =>
+              @tag 'svg', class: 'icon', =>
+                @tag 'use', "xlink:href":"#imdone-logo-icon"
+          @div outlet: "$imdoneioButtons", style: "display:none;", =>
+            @div click: "logOff", class: "imdone-profile imdone-toolbar-button", =>
+              @div class:"profile-image", outlet:'$profileImage'
+            @div class: "menu-sep-space"
+            @div click: "openTeamSettings", class: "imdone-toolbar-button", title:"Team Settings", =>
+              @a href: "#", class: "icon icon-organization"
+            @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
+              @a href: "#", class: "icon icon-plug"
+          @div class: "menu-sep-space-2x"
+          # BACKLOG:0 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:88
           @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
             @a href: "#", class: "icon icon-list-unordered"
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", class: "icon icon-plus"
-          # DONE: Add a link to open filtered files issue:49 id:86
+          # DONE:0 Add a link to open filtered files issue:49 id:89
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open visible files)", =>
             @a href: "#", class: "icon icon-zap"
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           @div class: "menu-sep-space-2x"
           @div class: "imdone-project-plugins"
-          # BACKLOG: Add the plugin project buttons id:87
+          # BACKLOG:0 Add the plugin project buttons id:90
           @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
             @span class: 'loading loading-spinner-tiny inline-block'
 
@@ -109,17 +115,29 @@ class MenuView extends View
     @imdoneRepo.on 'tasks.moved', =>
       @updateMenu()
     @client.on 'authenticated', => @authenticated()
+    @client.on 'unauthenticated', => @unauthenticated()
 
   authenticated: ->
     console.log 'authenticated:', @client.user
     user = @client.user
-    title = "Share Settings &#x0aImdone Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
+    title = "Sign out &#x0aimdone.io Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
     @$login.hide()
     @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title).show()
+    @$imdoneioButtons.show()
 
-  openShare: ->
-    @emitter.emit 'share'
+  unauthenticated: ->
+    @$profileImage.hide()
+    @$imdoneioButtons.hide()
+    @$login.show()
+
+  openShare: -> @emitter.emit 'share'
+
+  openSettings: -> @emitter.emit 'project.settings'
+
+  openTeamSettings: -> @emitter.emit 'project.team-settings'
+
+  logOff: -> @client.logoff()
 
   updateMenu: ->
     return unless @imdoneRepo
