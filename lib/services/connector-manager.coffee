@@ -30,11 +30,11 @@ class ConnectorManager extends Emitter
     @client.on 'authenticated', => @onAuthenticated()
 
   onRepoInit: () ->
-    # DOING:0 This should be moved to imdoneio-store id:17
+    # DOING:280 This should be moved to imdoneio-store id:17
     return if @project || @initialized || @initializing
     @initializing = true
     @client.getOrCreateProject @repo, (err, project) =>
-      # TODO:40 Do something with this error id:18
+      # TODO:330 Do something with this error id:18
       @initializing = false
       return if err || @project || @initialized
       @project = project

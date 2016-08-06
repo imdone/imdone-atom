@@ -8,11 +8,10 @@ util = null
 Sortable = null
 pluginManager = null
 fileService = null
-client = null
 log = null
 config = require '../services/imdone-config'
 
-# BACKLOG:0 Add keen stats for features id:65
+# BACKLOG:40 Add keen stats for features id:65
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -248,7 +247,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # BACKLOG:0 Add the plugin project buttons here id:72
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # BACKLOG:50 Add the plugin project buttons here id:72
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -334,7 +333,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # BACKLOG:0 This should be queued so two updates don't colide id:74
+    # BACKLOG:200 This should be queued so two updates don't colide id:74
     @showMask()
     @updateBoard()
     @appContainer.css 'bottom', 0
@@ -356,7 +355,7 @@ class ImdoneAtomView extends ScrollView
       @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
         @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
 
-  # BACKLOG:0 Split this apart into it's own class to simplify. Call it BoardView +refactor id:75
+  # BACKLOG:180 Split this apart into it's own class to simplify. Call it BoardView +refactor id:75
   updateBoard: ->
     @destroySortables()
     @board.empty().hide()
@@ -366,7 +365,7 @@ class ImdoneAtomView extends ScrollView
     @board.css('width', width)
     # #DONE:0 Add task drag and drop support id:76
 
-    # BACKLOG:0 We can display data from imdone.io in a card summary/details id:77
+    # BACKLOG:240 We can display data from imdone.io in a card summary/details id:77
     getTask = (task) =>
       contexts = task.getContext()
       tags = task.getTags()
@@ -393,7 +392,7 @@ class ImdoneAtomView extends ScrollView
         @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
-          # BACKLOG:0 Maybe show assigned avatar on task +feature id:78
+          # BACKLOG:130 Maybe show assigned avatar on task +feature id:78
           @div class: 'imdone-task-plugins'
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
@@ -471,7 +470,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() # TODO:180 hide mask on event from connectorManager who will retry after emitting githubClosed:true id:83
+    @hideMask() # TODO:470 hide mask on event from connectorManager who will retry after emitting githubClosed:true id:83
     @makeTasksSortable()
     @emitter.emit 'board.update'
 

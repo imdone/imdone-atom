@@ -53,7 +53,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO:100 If we get a forbidden error, then emit auth failure id:27
+  # TODO:390 If we get a forbidden error, then emit auth failure id:27
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -86,7 +86,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         console.error "Authentication err:", err if err
         @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO:190 if err.status == 404 we should show an error id:28
+        # TODO:480 if err.status == 404 we should show an error id:28
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -186,7 +186,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO:150 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:33
+    # TODO:440 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:33
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -239,14 +239,14 @@ class ImdoneioClient extends Emitter
     ).end (err, res) =>
       return cb(err, res) if err || !res.ok
       project = res.body
-      # BACKLOG:0 This should be in connectorManager id:38
+      # BACKLOG:190 This should be in connectorManager id:38
       @setProjectId repo, project.id
       @setProjectName repo, project.name
       repo.saveConfig (err) => cb err, project
 
   getOrCreateProject: (repo, cb) ->
     # READY:0 Implement getOrCreateProject id:39
-    # BACKLOG:0 move this to connectorManager id:40
+    # BACKLOG:270 move this to connectorManager id:40
     # DONE:0 Make sure this works github_closed:true id:41
     return cb() unless repo && repo.config
     projectId = @getProjectId repo
@@ -315,7 +315,7 @@ class ImdoneioClient extends Emitter
   #     cb null, res.body
   #
   # updateTasks: (repo, project, product, cb) ->
-  #   # BACKLOG:0 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules. id:47
+  #   # BACKLOG:170 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules. id:47
   #   # Next step would be to sync down or up any changes if rules apply
   #   @tasksDb(repo).find {}, (err, localTasks) =>
   #     localIds = localTasks.map (task) -> task.id
@@ -324,12 +324,12 @@ class ImdoneioClient extends Emitter
   #       console.log 'localTasks', localTasks
   #       cloudTasks.forEach (cloudTask) =>
   #         localTask = _.find(localTasks, {id: cloudTask.id})
-  #         # BACKLOG:0 Use rules to determine if and how cloud tasks and local tasks should be synced id:48
+  #         # BACKLOG:230 Use rules to determine if and how cloud tasks and local tasks should be synced id:48
   #       cb()
   #
   # syncTasks: (repo, tasks, product, cb) ->
   #   cb = if cb then cb else () ->
-  #   # BACKLOG:0 Emit progress through the repo so the right board is updated id:49
+  #   # BACKLOG:110 Emit progress through the repo so the right board is updated id:49
   #   # READY:0 getOrCreateProject should happen when we get products, if we know a product is linked id:50
   #   @getOrCreateProject repo, (err, project) =>
   #     return cb(err) if err

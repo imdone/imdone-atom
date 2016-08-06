@@ -1,16 +1,16 @@
 Roadmap
 ----
-- [ ] #BACKLOG:0 Add configuration editor view for .imdone/config.json +Roadmap id:106
+- [ ] #BACKLOG:20 Add configuration editor view for .imdone/config.json +Roadmap id:106
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
-- [ ] #BACKLOG:0 Define the platform id:107
-- [ ] #BACKLOG:0 Edit task plugin, set priority, mark as closed, edit metadata id:108
-- [ ] #BACKLOG:0 Integrate with Waffle.io, GitHub, Jira, Pivotal id:109
-- [ ] #BACKLOG:0 Provide on-line service for installing plugins to a team id:110
-- [ ] #BACKLOG:0 Add configuration for autoclose task with date on moving into list id:111
-- [ ] #TODO:0 As a user I would like to share tasks with other services +story id:112
+- [ ] #BACKLOG:90 Define the platform id:107
+- [ ] #BACKLOG:100 Edit task plugin, set priority, mark as closed, edit metadata id:108
+- [ ] #BACKLOG:120 Integrate with Waffle.io, GitHub, Jira, Pivotal id:109
+- [ ] #BACKLOG:150 Provide on-line service for installing plugins to a team id:110
+- [ ] #BACKLOG:30 Add configuration for autoclose task with date on moving into list id:111
+- [ ] #TODO:280 As a user I would like to share tasks with other services +story id:112
   - [ ] #READY:0 As a user I would like to enable an integration id:113
-- [ ] #BACKLOG:0 As a user I would like to hide a list without opening the menu id:114
-- [ ] #BACKLOG:0 AAUIWLT click a button on the board to open the package configuration +story id:115
+- [ ] #BACKLOG:80 As a user I would like to hide a list without opening the menu id:114
+- [ ] #BACKLOG:0 AAUIWLT click a button on the board to open the package configuration +story id:115 githubClosed:true
 
 Completed
 ----

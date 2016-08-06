@@ -5,6 +5,8 @@ module.exports =
 class BottomView extends View
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
+    @client = require('../services/imdoneio-client').instance
+
 
   @content: (params) ->
     ShareTasksView = require './share-tasks-view'
@@ -79,11 +81,11 @@ class BottomView extends View
         when 27 then @cancelRename()
       true
 
-    @imdoneRepo.on 'list.modified', (list) =>
-      @hide()
+    @imdoneRepo.on 'list.modified', (list) => @hide()
 
-    @closeButton.on 'click', =>
-      @hide()
+    @closeButton.on 'click', => @hide()
+
+    @client.on 'unauthenticated', => @hide()
 
     # DONE:0 This belongs in bottomView +refactor id:63
     @emitter.on 'list.new', => @showNewList()
