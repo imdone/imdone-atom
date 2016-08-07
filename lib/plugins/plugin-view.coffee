@@ -71,11 +71,11 @@ class ConnectorPluginView extends View
     return unless @issues
     @relatedIssues.html @$spinner()
     async.map @issues, (number, cb) =>
-      # READY:210 Replace service.getIssue with client.getIssue id:9
+      # READY:230 Replace service.getIssue with client.getIssue id:9
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>
-      # #TODO:80 Check error for 404/Not Found id:10
+      # #TODO:70 Check error for 404/Not Found id:10
       if err
         console.log "error:", err
       else

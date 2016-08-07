@@ -26,15 +26,16 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
-    client.syncTasks repo, tasks, (err, tasks) ->
-      return if err # TODO:100 Do something with this error id:51
-      console.log "received tasks from imdone-io", tasks
-      async.eachSeries tasks,
-        # READY:270 We have to be able to match on meta.id for updates. id:52
-        # READY:230 Test this with a new project to make sure we get the ids id:53
-        # READY:280 We need a way to run tests on imdone-io without destroying the client id:54
+    client.syncTasks repo, tasks, (err, ioTasks) ->
+      return if err # TODO:90 Do something with this error id:51
+      console.log "received tasks from imdone-io:", ioTasks
+      async.eachSeries ioTasks,
+        # READY:290 We have to be able to match on meta.id for updates. id:52
+        # READY:250 Test this with a new project to make sure we get the ids id:53
+        # READY:300 We need a way to run tests on imdone-io without destroying the client id:54
         (task, cb) ->
-          taskToModify = _.assign repo.getTask(task.id), task
+          currentTask = repo.getTask task.id
+          taskToModify = _.assign currentTask, task
           return cb "Task not found" unless Task.isTask taskToModify
           repo.modifyTask taskToModify, cb
         (err) ->
@@ -48,7 +49,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO:110 Do something with this error id:56
+      return if err # TODO:100 Do something with this error id:56
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -63,7 +64,7 @@ module.exports =  (repo) ->
 
   loadSort = (cb) ->
     loadSortFile cb
-    # TODO:230 also get from imdone.io in parallel? or just to start trying id:57
+    # TODO:210 also get from imdone.io in parallel? or just to start trying id:57
 
   loadSortFile = (cb) ->
     fs.exists SORT_FILE, (exists) ->
@@ -133,11 +134,12 @@ module.exports =  (repo) ->
 
   repo.moveTasks = (tasks, newList, newPos, cb) ->
     cb ?= ()->
-    _moveTasks tasks, newList, newPos, (err, tasksByList) ->
+    _moveTasks tasks, newList, newPos, true, (err, tasksByList) ->
       return cb err if err
       if client.isAuthenticated()
-        # DOING:360 Only sync what we move!!! +important id:125
-        syncTasks repo.getTasks(), (err, done) ->
+        # DOING:10 Only sync what we move!!! +important id:125
+        syncTasks tasks, (err, done) ->
+          repo.emit 'tasks.moved', tasks
           return cb null, tasksByList unless sortEnabled()
           saveSort (err) ->
             done err
@@ -173,7 +175,7 @@ module.exports =  (repo) ->
     async.parallel fns, (err, results) ->
       return cb err if err
       repo.config = results[0]
-      # READY:260 Try an auth from storage id:59
+      # READY:280 Try an auth from storage id:59
       client.authFromStorage (err, user) ->
         if sortEnabled()
           _init (err, files) ->

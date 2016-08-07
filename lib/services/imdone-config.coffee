@@ -1,4 +1,4 @@
-# READY:10 This should manage access to all config settings id:123 githubClosed:true
+# READY:30 This should manage access to all config settings id:123 githubClosed:true
 pkg = require '../../package.json'
 
 module.exports =

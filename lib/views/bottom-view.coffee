@@ -142,7 +142,7 @@ class BottomView extends View
     @plugins.show()
     @show()
 
-  # TODO:0 DRY these show... methods up id:126
+  # TODO:20 DRY these show... methods up id:126
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
