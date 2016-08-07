@@ -29,6 +29,6 @@ module.exports = PluginManager =
     for plugin in @defaultPlugins
       PluginManager.addPlugin plugin
 
-  destroy: ->
+  removeDefaultPlugins: ->
     for plugin in @defaultPlugins
       PluginManager.removePlugin plugin

@@ -30,11 +30,12 @@ class ConnectorManager extends Emitter
     @client.on 'authenticated', => @onAuthenticated()
 
   onRepoInit: () ->
-    # DOING:280 This should be moved to imdoneio-store id:17
+    # TODO:320 This should be moved to imdoneio-store id:17 githubClosed:true
     return if @project || @initialized || @initializing
+    return unless @isAuthenticated()
     @initializing = true
     @client.getOrCreateProject @repo, (err, project) =>
-      # TODO:330 Do something with this error id:18
+      # TODO:340 Do something with this error id:18
       @initializing = false
       return if err || @project || @initialized
       @project = project
@@ -48,7 +49,7 @@ class ConnectorManager extends Emitter
     @onRepoInit() if @repo.initialized
     @repo.on 'initialized', => @onRepoInit()
 
-  isAuthenticated: () -> @client.isAuthenticated
+  isAuthenticated: () -> @client.isAuthenticated()
 
   projectId: () -> @client.getProjectId @repo
 
@@ -61,8 +62,9 @@ class ConnectorManager extends Emitter
 
   getProducts: (cb) ->
     cb = (()->) unless cb
-    return cb(null, @products) if @products
-    return cb("No project found") unless @projectId()
+    return cb "unauthenticated" unless @isAuthenticated()
+    return cb null, @products if @products
+    return cb "No project found" unless @projectId()
     @client.getProducts @projectId(), (err, products) =>
       return cb err if err
       @enhanceProduct product for product in products

@@ -1,4 +1,4 @@
-# DOING:290 This should manage access to all config settings id:123
+# DOING:230 This should manage access to all config settings id:123
 pkg = require '../../package.json'
 
 module.exports =

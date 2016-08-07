@@ -95,7 +95,7 @@ class ShareTasksView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO:450 We need to show an error here if login fails because service can't be reached or if login fails id:100
+      # TODO:460 We need to show an error here if login fails because service can't be reached or if login fails id:100
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -136,20 +136,20 @@ class ShareTasksView extends View
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # TODO:360 Handle errors by unauthenticating if needed and show login with error id:101
+        # TODO:370 Handle errors by unauthenticating if needed and show login with error id:101
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # TODO:370 Handle errors id:102
+        # TODO:380 Handle errors id:102
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # TODO:380 Handle errors id:103
+        # TODO:390 Handle errors id:103
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()

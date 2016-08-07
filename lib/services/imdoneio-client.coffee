@@ -53,7 +53,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO:390 If we get a forbidden error, then emit auth failure id:27
+  # TODO:400 If we get a forbidden error, then emit auth failure id:27
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -70,7 +70,6 @@ class ImdoneioClient extends Emitter
 
   logoff: ->
     @removeCredentials (err) =>
-      debugger
       return if err
       @authenticated = false
       delete @password
@@ -86,7 +85,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         console.error "Authentication err:", err if err
         @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO:480 if err.status == 404 we should show an error id:28
+        # TODO:490 if err.status == 404 we should show an error id:28
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -146,7 +145,8 @@ class ImdoneioClient extends Emitter
 
   loadCredentials: (cb) ->
     @db().findOne {}, (err, doc) =>
-      return cb err if err || !doc
+      return cb err if err
+      return cb "No user found" unless doc
       parts = authUtil.fromBase64(doc.key).split(':')
       @email = parts[0]
       @password = parts[1]
@@ -186,7 +186,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO:440 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:33
+    # TODO:450 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:33
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -248,7 +248,7 @@ class ImdoneioClient extends Emitter
     # READY:0 Implement getOrCreateProject id:39
     # BACKLOG:270 move this to connectorManager id:40
     # DONE:0 Make sure this works github_closed:true id:41
-    return cb() unless repo && repo.config
+    return cb() unless repo && repo.config && @isAuthenticated()
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
     @getProject projectId, (err, project) =>

@@ -39,8 +39,8 @@ class ProductDetailView extends View
 
   createEditor: ->
     options =
-      schema: @product.schemas.config # TODO:410 Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow id:93
-      startval: @product.connector.config # TODO:420 Rule values to be set by GET /projects/ :projectId/products +rules id:94
+      schema: @product.schemas.config # TODO:420 Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow id:93
+      startval: @product.connector.config # TODO:430 Rule values to be set by GET /projects/ :projectId/products +rules id:94
       theme: 'bootstrap3'
       required_by_default: true
       disable_edit_json: true
@@ -66,7 +66,7 @@ class ProductDetailView extends View
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
-      # TODO:430 This will have to be upadted on an event sent with pusher id:98
+      # TODO:440 This will have to be upadted on an event sent with pusher id:98
       @div class:'block', =>
         if product.isLinked()
           @div class:'btn-group', =>

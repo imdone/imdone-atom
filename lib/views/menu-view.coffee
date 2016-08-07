@@ -25,14 +25,8 @@ class MenuView extends View
             @a click:'openShare', href: "#", =>
               @tag 'svg', class: 'icon', =>
                 @tag 'use', "xlink:href":"#imdone-logo-icon"
-          @div outlet: "$imdoneioButtons", style: "display:none;", =>
-            @div click: "logOff", class: "imdone-profile imdone-toolbar-button", =>
-              @div class:"profile-image", outlet:'$profileImage'
-            @div class: "menu-sep-space"
-            @div click: "openTeamSettings", class: "imdone-toolbar-button", title:"Team Settings", =>
-              @a href: "#", class: "icon icon-organization"
-            @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
-              @a href: "#", class: "icon icon-plug"
+          @div outlet: '$logOff', click: "logOff", class: "imdone-profile imdone-toolbar-button", =>
+            @div class:"profile-image", outlet:'$profileImage'
           @div class: "menu-sep-space-2x"
           # BACKLOG:140 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:88
           @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
@@ -45,6 +39,12 @@ class MenuView extends View
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
             @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
           @div class: "menu-sep-space-2x"
+          @div outlet: "$imdoneioButtons", style: "display:none;", =>
+            @div class: "menu-sep-space"
+            @div click: "openTeamSettings", class: "imdone-toolbar-button", title:"Team Settings", =>
+              @a href: "#", class: "icon icon-organization"
+            @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
+              @a href: "#", class: "icon icon-plug"
           @div class: "imdone-project-plugins"
           # BACKLOG:60 Add the plugin project buttons id:90
           @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
@@ -123,11 +123,12 @@ class MenuView extends View
     title = "Sign out &#x0aimdone.io Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
     @$login.hide()
-    @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title).show()
+    @$logOff.show();
+    @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title)
     @$imdoneioButtons.show()
 
   unauthenticated: ->
-    @$profileImage.hide()
+    @$logOff.hide()
     @$imdoneioButtons.hide()
     @$login.show()
 
@@ -137,7 +138,9 @@ class MenuView extends View
 
   openTeamSettings: -> @emitter.emit 'project.team-settings'
 
-  logOff: -> @client.logoff()
+  logOff: ->
+    @client.logoff()
+    @emitter.emit "logoff"
 
   updateMenu: ->
     return unless @imdoneRepo

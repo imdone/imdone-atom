@@ -227,6 +227,8 @@ class ImdoneAtomView extends ScrollView
       for name, plugin of @plugins
         plugin.setConnector product.connector if plugin.constructor.provider == product.name
 
+    @emitter.on 'logoff', => pluginManager.removeDefaultPlugins()
+
 
   addPluginButtons: ->
     @addPluginTaskButtons()
@@ -470,7 +472,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() # TODO:470 hide mask on event from connectorManager who will retry after emitting githubClosed:true id:83
+    @hideMask() # TODO:480 hide mask on event from connectorManager who will retry after emitting githubClosed:true id:83
     @makeTasksSortable()
     @emitter.emit 'board.update'
 

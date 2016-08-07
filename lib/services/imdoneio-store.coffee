@@ -22,11 +22,12 @@ module.exports =  (repo) ->
   syncDone = (err) -> cm.emit 'tasks.updated' unless err
 
   repo.syncTasks = syncTasks = (tasks, cb) ->
+    cb("unauthenticated", ()->) unless client.isAuthenticated()
     cm.emit 'tasks.syncing'
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, tasks) ->
-      return if err # TODO:340 Do something with this error id:51
+      return if err # TODO:350 Do something with this error id:51
       console.log "received tasks from imdone-io", tasks
       async.eachSeries tasks,
         # READY:0 We have to be able to match on meta.id for updates. id:52
@@ -47,7 +48,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO:350 Do something with this error id:56
+      return if err # TODO:360 Do something with this error id:56
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -62,7 +63,7 @@ module.exports =  (repo) ->
 
   loadSort = (cb) ->
     loadSortFile cb
-    # TODO:460 also get from imdone.io in parallel? or just to start trying id:57
+    # TODO:470 also get from imdone.io in parallel? or just to start trying id:57
 
   loadSortFile = (cb) ->
     fs.exists SORT_FILE, (exists) ->
@@ -134,12 +135,16 @@ module.exports =  (repo) ->
     cb ?= ()->
     _moveTasks tasks, newList, newPos, (err, tasksByList) ->
       return cb err if err
-      # DOING:0 Only sync what we move!!! +important id:125
-      syncTasks repo.getTasks(), (err, done) ->
+      if client.isAuthenticated()
+        # DOING:220 Only sync what we move!!! +important id:125
+        syncTasks repo.getTasks(), (err, done) ->
+          return cb null, tasksByList unless sortEnabled()
+          saveSort (err) ->
+            done err
+            cb err, tasksByList
+      else
         return cb null, tasksByList unless sortEnabled()
-        saveSort (err) ->
-          done err
-          cb err, tasksByList
+        saveSort (err) -> cb err, tasksByList
 
   repo.getTasksInList = (name, offset, limit) ->
     tasksInList = _getTasksInList  name, offset, limit
