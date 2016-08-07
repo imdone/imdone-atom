@@ -9,6 +9,7 @@ class BottomView extends View
 
 
   @content: (params) ->
+    LoginView = require './login-view'
     ShareTasksView = require './share-tasks-view'
     TeamSettingsView = require './team-settings-view'
     @div class:'imdone-config-container hidden', =>
@@ -17,9 +18,11 @@ class BottomView extends View
         @raw '&times;'
       @div outlet: 'error', class:'text-error'
       @div outlet: 'teamSettings', class:'team-settings config-panel', =>
-        @subview 'teamSettingsView', new TeamSettingsView(params)
+        @subview 'teamSettingsView', new TeamSettingsView params
       @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
-        @subview 'shareTasksView', new ShareTasksView(params)
+        @subview 'shareTasksView', new ShareTasksView params
+      @div outlet: '$login', class: 'Login config-panel', =>
+        @subview 'loginView', new LoginView params
       @div outlet: 'renameList', class:'rename-list config-panel', =>
         @h2 =>
           @span outlet:'renameListLabel'
@@ -39,6 +42,7 @@ class BottomView extends View
 
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
+    @loginView.handleEvents @emitter
     @shareTasksView.handleEvents @emitter
     @teamSettingsView.handleEvents @emitter
 
@@ -69,16 +73,17 @@ class BottomView extends View
 
     @newListField.on 'keyup', (e) =>
       code = e.keyCode || e.which
-      switch code
-        when 13 then @doNewList()
-        when 27 then @cancelNewList()
+      @doNewList() if code == 13
       true
 
     @renameListField.on 'keyup', (e) =>
       code = e.keyCode || e.which
-      switch code
-        when 13 then @doListRename()
-        when 27 then @cancelRename()
+      @doListRename() if code == 13
+      true
+
+    @on 'keyup', (e) =>
+      code = e.keyCode || e.which
+      @hide() if code == 27
       true
 
     @imdoneRepo.on 'list.modified', (list) => @hide()
@@ -87,11 +92,15 @@ class BottomView extends View
 
     @client.on 'unauthenticated', => @hide()
 
+    @emitter.on 'authenticated', => @hide()
+
     # DONE:0 This belongs in bottomView +refactor id:63
     @emitter.on 'list.new', => @showNewList()
 
     # DONE:0 This belongs in bottomView +refactor id:64
     @emitter.on 'share', => @showShare()
+
+    @emitter.on 'login', => @showLogin()
 
     @emitter.on 'project.team-settings', => @showTeamSettings()
 
@@ -133,9 +142,16 @@ class BottomView extends View
     @plugins.show()
     @show()
 
+  # TODO:0 DRY these show... methods up id:126
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
+    @setHeight(500)
+    @show()
+
+  showLogin: () ->
+    @hide()
+    @$login.show () => @loginView.show()
     @setHeight(500)
     @show()
 
@@ -162,9 +178,6 @@ class BottomView extends View
   editListName: (name) ->
     @showRename name
 
-  cancelRename: ->
-    @hide()
-
   doListRename: ->
     return unless @listOk @getRenameList()
     @imdoneRepo.renameList @listToRename, @getRenameList()
@@ -183,9 +196,6 @@ class BottomView extends View
 
   addList: ->
     @showNewList()
-
-  cancelNewList: ->
-    @hide()
 
   doNewList: ->
     return unless @listOk @getNewList()

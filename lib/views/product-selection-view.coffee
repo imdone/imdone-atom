@@ -5,11 +5,13 @@ util = require 'util'
 module.exports =
 class ProductSelectionView extends SelectListView
   handleEvents: (@emitter) ->
-    if @initialized || !@emitter then return else @initialized = true
+    return if @initialized || !@emitter
+    @initialized = true
 
   setItems: (products) ->
     super(products)
     @selectProduct @getSelectedItem()
+    @focusFilterEditor()
 
   updateItem: (item) ->
     for product, i in @items

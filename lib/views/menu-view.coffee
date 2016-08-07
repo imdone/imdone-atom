@@ -10,7 +10,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:0 Show logged in user and avatar here id:85
+        # READY:220 Show logged in user and avatar here id:85
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
@@ -22,7 +22,7 @@ class MenuView extends View
             # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:87
             # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
             # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
-            @a click:'openShare', href: "#", =>
+            @a click:'openLogin', href: "#", =>
               @tag 'svg', class: 'icon', =>
                 @tag 'use', "xlink:href":"#imdone-logo-icon"
           @div outlet: '$logOff', click: "logOff", class: "imdone-profile imdone-toolbar-button", =>
@@ -133,6 +133,8 @@ class MenuView extends View
     @$login.show()
 
   openShare: -> @emitter.emit 'share'
+
+  openLogin: -> @emitter.emit 'login'
 
   openSettings: -> @emitter.emit 'project.settings'
 

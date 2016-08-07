@@ -114,11 +114,11 @@ class ImdoneAtomView extends ScrollView
       console.log "auth-failed" if status == "failed"
 
 
-    @connectorManager.on 'tasks.syncing', => @showMask() # READY:0 mask isn't always hiding correctly gh:105 id:69
+    @connectorManager.on 'tasks.syncing', => @showMask() # READY:320 mask isn't always hiding correctly gh:105 id:69
 
     @connectorManager.on 'sync.error', => @hideMask()
 
-    @connectorManager.on 'tasks.updated', => # READY:0 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:70
+    @connectorManager.on 'tasks.updated', => # READY:100 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:70
       @onRepoUpdate()
 
     @imdoneRepo.on 'initialized', =>
@@ -249,7 +249,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # BACKLOG:50 Add the plugin project buttons here id:72
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:50 Add the plugin project buttons here id:72 githubClosed:true
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -260,7 +260,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:0 Get the connector from the connector manager id:73
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:90 Get the connector from the connector manager id:73
       return if err || (product && !product.isEnabled())
       connector = product && product.connector
       if @plugins[Plugin.pluginName]
@@ -472,7 +472,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() # TODO:480 hide mask on event from connectorManager who will retry after emitting githubClosed:true id:83
+    @hideMask() # TODO:240 hide mask on event from connectorManager who will retry after emitting githubClosed:true id:83
     @makeTasksSortable()
     @emitter.emit 'board.update'
 

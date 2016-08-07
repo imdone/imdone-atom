@@ -15,18 +15,7 @@ class ShareTasksView extends View
     @div class: "share-tasks-container config-container", =>
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      # TODO:290 login should be it's own view id:124
-      @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
-        @div class: 'input-med', =>
-          @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
-        @div class: 'input-med', =>
-          @subview 'passwordEditor', new TextEditorView(mini: true, placeholderText: 'password')
-        @div class:'btn-group btn-group-login', =>
-          @button outlet: 'loginButton', click: 'login', title: 'WHOOSH!', class:'btn btn-primary inline-block-tight', 'LOGIN'
-        @div class:'block', =>
-          @span "or "
-          @a href:"#{Client.signUpUrl}", "sign up"
-      @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style: 'display:none;', =>
+      @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', =>
         @div class: 'col-md-3 product-select-wrapper pull-left', =>
           @h1 'Integrations'
           @subview 'productSelect', new ProductSelectionView
@@ -35,7 +24,6 @@ class ShareTasksView extends View
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
-    @initPasswordField()
 
     @connectorManager.on 'product.linked', (product) =>
       @updateConnectorForEdit product
@@ -43,14 +31,14 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # READY:0 Connector plugin should be removed id:99
+      # READY:80 Connector plugin should be removed id:99
       @updateConnectorAfterDisable(product.connector)
       @updateConnectorForEdit product
       @productSelect.updateItem product
       @productDetail.setProduct product
 
-    @connectorManager.on 'project.found', (project) => @projectFound project
-    @projectFound @connectorManager.project if @connectorManager.project
+    @connectorManager.on 'project.found', (project) => @showProductPanel project
+    @showProductPanel @connectorManager.project if @connectorManager.project
 
   updateConnectorAfterDisable: (connector) ->
     return unless connector
@@ -59,46 +47,9 @@ class ShareTasksView extends View
 
   show: () ->
     super
-    return @onAuthenticated() if @client.isAuthenticated()
-    @loginPanel.show()
-    @emailEditor.focus()
+    @onAuthenticated() if @client.isAuthenticated()
 
-  onAuthenticated: () ->
-    @projectFound @connectorManager.project if @connectorManager.project
-    @loginPanel.hide()
-
-  onUnauthenticated: () ->
-    @productPanel.hide()
-    @loginPanel.show()
-
-  projectFound: (@project) ->
-    @showProductPanel()
-
-  initPasswordField: () ->
-    # [Password fields when using EditorView subview - packages - Atom Discussion](https://discuss.atom.io/t/password-fields-when-using-editorview-subview/11061/7)
-    passwordElement = $(@passwordEditor.element.rootElement)
-    passwordElement.find('div.lines').addClass('password-lines')
-    @passwordEditor.getModel().onDidChange =>
-      string = @passwordEditor.getModel().getText().split('').map(->
-        '*'
-      ).join ''
-
-      passwordElement.find('#password-style').remove()
-      passwordElement.append('<style id="password-style">.password-lines .line span.text:before {content:"' + string + '";}</style>')
-
-  login: () ->
-    log 'login:begin'
-    @loginPanel.hide()
-    @spinner.show()
-    email = @emailEditor.getModel().getText()
-    password = @passwordEditor.getModel().getText()
-    @client.authenticate email, password, (err, profile) =>
-      @spinner.hide()
-      @passwordEditor.getModel().setText ''
-      # TODO:460 We need to show an error here if login fails because service can't be reached or if login fails id:100
-      log 'login:end'
-      return @loginPanel.show() unless @client.isAuthenticated()
-      @onAuthenticated()
+  onAuthenticated: () ->  @showProductPanel @connectorManager.project if @connectorManager.project
 
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
@@ -106,54 +57,29 @@ class ShareTasksView extends View
     @productDetail.handleEvents @emitter
 
     self = @
-    @emailEditor.on 'keydown', (e) =>
-      code = e.keyCode || e.which
-      switch code
-        when 13 then self.login()
-        when 9 then self.passwordEditor.focus()
-        else return true
-      false
-
-    @passwordEditor.on 'keydown', (e) =>
-      code = e.keyCode || e.which
-      switch code
-        when 13 then self.login()
-        when 9 then self.loginButton.focus()
-        else return true
-      false
-
-    @loginButton.on 'keydown', (e) =>
-      code = e.keyCode || e.which
-      switch code
-        when 13 then self.login()
-        when 9 then self.emailEditor.focus()
-        else return true
-      false
-
     @emitter.on 'product.selected', (product) =>
       @updateConnectorForEdit product
       @productDetail.setProduct product
 
     @emitter.on 'connector.change', (product) =>
       @connectorManager.saveConnector product.connector, (err, connector) =>
-        # TODO:370 Handle errors by unauthenticating if needed and show login with error id:101
+        # TODO:120 Handle errors by unauthenticating if needed and show login with error id:101
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # TODO:380 Handle errors id:102
+        # TODO:130 Handle errors id:102
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # TODO:390 Handle errors id:103
+        # TODO:140 Handle errors id:103
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
-    @client.on 'unauthenticated', => @onUnauthenticated()
 
   updateConnector: (connector) ->
     # BACKLOG:210 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/) id:104
@@ -162,7 +88,7 @@ class ShareTasksView extends View
     @productSelect.updateItem updatedProduct
     @productDetail.setProduct updatedProduct
 
-  showProductPanel: ->
+  showProductPanel: (@project)->
     @connectorManager.getProducts (err, products) =>
       return if err
       @productSelect.setItems products
