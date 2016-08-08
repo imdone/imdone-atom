@@ -53,9 +53,5 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
-  },
-  "sync": {
-    "id": "579b97575d04328709ba2cb7",
-    "name": "imdone-atom"
   }
 }

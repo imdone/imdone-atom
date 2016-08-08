@@ -30,7 +30,7 @@ module.exports = ImdoneAtom =
       description: 'Show notifications upon clicking task source link.'
       type: 'boolean'
       default: false
-    # DONE:0 This is config for globs to open with editors issue:48 id:3
+    # DONE:0 This is config for globs to open with editors issue:48
     openIn:
       title: 'File Opener'
       description: 'Open files in a different IDE or editor'
@@ -80,8 +80,8 @@ module.exports = ImdoneAtom =
   #   serialized
 
   activate: (state) ->
-    # READY:220 Put requires in activate to speed up startup issue:77 id:4
-    # #DONE:0 Add back serialization (The right way) +Roadmap @testing id:5
+    # READY:220 Put requires in activate to speed up startup issue:77
+    # #DONE:0 Add back serialization (The right way) +Roadmap @testing
     _ = require 'lodash'
     url = require 'url'
     ImdoneAtomView ?= require './views/imdone-atom-view'
@@ -111,7 +111,7 @@ module.exports = ImdoneAtom =
 
     @fileService = require('./services/file-service').init configHelper.getSettings().openIn.port
 
-    # DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21 id:6
+    # DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
 
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()
@@ -129,7 +129,7 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath && active.getPath()
-      # DONE:0 This fails for projects that start with the name of another project id:7
+      # DONE:0 This fails for projects that start with the name of another project
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]

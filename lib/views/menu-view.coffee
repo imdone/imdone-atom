@@ -10,16 +10,16 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:240 Show logged in user and avatar here id:85
+        # READY:240 Show logged in user and avatar here
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
-        # BACKLOG:160 Save my favorite filters +story id:86
+        # BACKLOG:160 Save my favorite filters +story
         @div class: "imdone-toolbar", =>
           @div outlet:'$login', class:'text-success imdone-icon', title:'login to imdone.io', =>
-            # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:87
+            # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
             # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
             # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
             @a click:'openLogin', href: "#", =>
@@ -28,12 +28,12 @@ class MenuView extends View
           @div outlet: '$logOff', click: "logOff", class: "imdone-profile imdone-toolbar-button", =>
             @div class:"profile-image", outlet:'$profileImage'
           @div class: "menu-sep-space-2x"
-          # BACKLOG:140 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:88
+          # BACKLOG:140 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49>
           @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
             @a href: "#", class: "icon icon-list-unordered"
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", class: "icon icon-plus"
-          # DONE:0 Add a link to open filtered files issue:49 id:89
+          # DONE:0 Add a link to open filtered files issue:49
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open visible files)", =>
             @a href: "#", class: "icon icon-zap"
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
@@ -46,7 +46,7 @@ class MenuView extends View
             @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
               @a href: "#", class: "icon icon-plug"
           @div class: "imdone-project-plugins"
-          # BACKLOG:60 Add the plugin project buttons id:90
+          # BACKLOG:60 Add the plugin project buttons
           @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
             @span class: 'loading loading-spinner-tiny inline-block'
 

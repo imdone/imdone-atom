@@ -11,10 +11,10 @@ debug = require('debug/browser')
 pluginManager = require './plugin-manager'
 log = debug 'imdone-atom:client'
 
-# READY:260 The client public_key, secret and pusherKey should be configurable id:25
+# READY:260 The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
 NO_RESPONSE_ERR = new Error "No response from imdone.io"
-baseUrl = config.baseUrl # READY:270 This should be set to localhost if process.env.IMDONE_ENV = /dev/i id:26
+baseUrl = config.baseUrl # READY:270 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
@@ -53,7 +53,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO:140 If we get a forbidden error, then emit auth failure id:27
+  # TODO:140 If we get a forbidden error, then emit auth failure
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -85,7 +85,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         console.error "Authentication err:", err if err
         @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO:230 if err.status == 404 we should show an error id:28
+        # TODO:230 if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -101,7 +101,7 @@ class ImdoneioClient extends Emitter
       @handlePushEvents()
 
   onAuthFailure: (err, res, cb) ->
-    # READY:50 Add imdone_status to the Error id:29
+    # READY:50 Add imdone_status to the Error
     status = err.imdone_status = if err && (err.code == 'ECONNREFUSED' || _.get(err, 'response.err.status') == 404) then 'unavailable' else 'failed'
     @connectionAccepted = true unless status == "unavailable"
     @authenticated = false
@@ -125,7 +125,7 @@ class ImdoneioClient extends Emitter
       encrypted: true
       authEndpoint: pusherAuthUrl
       disableStats: true
-    # READY:330 imdoneio pusher channel needs to be configurable id:30
+    # READY:330 imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.unlinked', data
@@ -159,7 +159,7 @@ class ImdoneioClient extends Emitter
     @doPost("/projects/")
 
   getProducts: (projectId, cb) ->
-    # READY:190 Implement getProducts id:31
+    # READY:190 Implement getProducts
     @doGet("/projects/#{projectId}/products").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -172,7 +172,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getProject: (projectId, cb) ->
-    # READY:200 Implement getProject id:32
+    # READY:200 Implement getProject
     @doGet("/projects/#{projectId}").end (err, res) =>
       return cb(NO_RESPONSE_ERR) unless res
       return cb(PROJECT_ID_NOT_VALID_ERR) if err && err.status == 404
@@ -186,7 +186,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO:190 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:33
+    # TODO:190 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -204,7 +204,7 @@ class ImdoneioClient extends Emitter
   createConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:130 Implement createProject id:34
+    # READY:130 Implement createProject
     @doPost("/projects/#{projectId}/connectors").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -212,7 +212,7 @@ class ImdoneioClient extends Emitter
   updateConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:140 Implement createProject id:35
+    # READY:140 Implement createProject
     @doPatch("/projects/#{projectId}/connectors/#{connector.id}").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -226,28 +226,28 @@ class ImdoneioClient extends Emitter
   _connectorAction: (repo, connector, action, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:150 Implement createProject id:36
+    # READY:150 Implement createProject
     @doPost("/projects/#{projectId}/connectors/#{connector.id}/#{action}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   createProject: (repo, cb) ->
-    # READY:160 Implement createProject id:37
+    # READY:160 Implement createProject
     @doPost("/projects").send(
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()
     ).end (err, res) =>
       return cb(err, res) if err || !res.ok
       project = res.body
-      # BACKLOG:190 This should be in connectorManager id:38
+      # BACKLOG:190 This should be in connectorManager
       @setProjectId repo, project.id
       @setProjectName repo, project.name
       repo.saveConfig (err) => cb err, project
 
   getOrCreateProject: (repo, cb) ->
-    # READY:180 Implement getOrCreateProject id:39
-    # BACKLOG:270 move this to connectorManager id:40
-    # DONE:0 Make sure this works github_closed:true id:41
+    # READY:180 Implement getOrCreateProject
+    # BACKLOG:270 move this to connectorManager
+    # DONE:0 Make sure this works github_closed:true
     return cb() unless repo && repo.config && @isAuthenticated()
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
@@ -285,19 +285,19 @@ class ImdoneioClient extends Emitter
     @datastore[collection]
 
   tasksDb: (repo) ->
-    #READY:360 return the project specific task DB id:42
+    #READY:360 return the project specific task DB
     @db 'tasks',repo.getPath().replace(/\//g, '_')
 
   listsDb: (repo) ->
-    #READY:370 return the project specific task DB id:43
+    #READY:370 return the project specific task DB
     @db 'lists',repo.getPath().replace(/\//g, '_')
 
   @instance: new ImdoneioClient
 
   # This Section for later use ----------------------------------------------------------------------------------------
   # createTasks: (repo, project, tasks, product, cb) ->
-  #   # READY:170 Implement createTasks id:44
-  #   # READY:350 modifyTask should update text with metadata that doesn't exists id:45
+  #   # READY:170 Implement createTasks
+  #   # READY:350 modifyTask should update text with metadata that doesn't exists
   #   updateRepo = (task, cb) => repo.modifyTask new Task(task.localTask, true), cb
   #   @doPost("/projects/#{project.id}/tasks").send(tasks).end (err, res) =>
   #     return cb(err, res) if err || !res.ok
@@ -307,7 +307,7 @@ class ImdoneioClient extends Emitter
   #         repo.saveModifiedFiles cb
 
   # getTasks: (projectId, taskIds, cb) ->
-  #   # READY:210 Implement getProject id:46
+  #   # READY:210 Implement getProject
   #   return cb null, [] unless taskIds && taskIds.length > 0
   #   @doGet("/projects/#{projectId}/tasks/#{taskIds.join(',')}").end (err, res) =>
   #     return cb(PROJECT_ID_NOT_VALID_ERR) if res.body && res.body.kind == "ObjectId" && res.body.name == "CastError"
@@ -315,7 +315,7 @@ class ImdoneioClient extends Emitter
   #     cb null, res.body
   #
   # updateTasks: (repo, project, product, cb) ->
-  #   # BACKLOG:170 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules. id:47
+  #   # BACKLOG:170 Should we really do this for all local tasks or do we ask api for task id's, dates and text checksum?  We can compare them before running rules.
   #   # Next step would be to sync down or up any changes if rules apply
   #   @tasksDb(repo).find {}, (err, localTasks) =>
   #     localIds = localTasks.map (task) -> task.id
@@ -324,13 +324,13 @@ class ImdoneioClient extends Emitter
   #       console.log 'localTasks', localTasks
   #       cloudTasks.forEach (cloudTask) =>
   #         localTask = _.find(localTasks, {id: cloudTask.id})
-  #         # BACKLOG:230 Use rules to determine if and how cloud tasks and local tasks should be synced id:48
+  #         # BACKLOG:230 Use rules to determine if and how cloud tasks and local tasks should be synced
   #       cb()
   #
   # syncTasks: (repo, tasks, product, cb) ->
   #   cb = if cb then cb else () ->
-  #   # BACKLOG:110 Emit progress through the repo so the right board is updated id:49
-  #   # READY:320 getOrCreateProject should happen when we get products, if we know a product is linked id:50
+  #   # BACKLOG:110 Emit progress through the repo so the right board is updated
+  #   # READY:320 getOrCreateProject should happen when we get products, if we know a product is linked
   #   @getOrCreateProject repo, (err, project) =>
   #     return cb(err) if err
   #     tasksToCreate = tasks.filter (task) -> !_.get(task, "meta.id")

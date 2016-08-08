@@ -23,7 +23,7 @@ class TeamSettingsView extends View
           @label for: 'project-admins', title:"Don't be a SPOF!", 'Convert a teammate to admin'
           @input type:'text', class:'form-control', id:'project-admins', placeholder:'Start typing a teammates name'
       @div outlet: 'configPanel', class: 'block imdone-project-config-pane row config-container col-md-6', =>
-        # BACKLOG:10 Add config view here id:61
+        # BACKLOG:10 Add config view here
         # @h1 "Configuration (.imdone/config.json)"
 
 

@@ -46,7 +46,7 @@ class BottomView extends View
     @shareTasksView.handleEvents @emitter
     @teamSettingsView.handleEvents @emitter
 
-    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:62
+    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
@@ -94,10 +94,10 @@ class BottomView extends View
 
     @emitter.on 'authenticated', => @hide()
 
-    # DONE:0 This belongs in bottomView +refactor id:63
+    # DONE:0 This belongs in bottomView +refactor
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE:0 This belongs in bottomView +refactor id:64
+    # DONE:0 This belongs in bottomView +refactor
     @emitter.on 'share', => @showShare()
 
     @emitter.on 'login', => @showLogin()
@@ -142,7 +142,7 @@ class BottomView extends View
     @plugins.show()
     @show()
 
-  # TODO:20 DRY these show... methods up id:126
+  # TODO:20 DRY these show... methods up
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
