@@ -5,6 +5,13 @@ dev =
   pusherChannelPrefix: 'private-imdoneio-dev'
   baseUrl:    'http://localhost:3000'
 
+beta =
+  imdoneKeyA: 'jvMFNRWuyXX86zwcIXjEuNB_UCo4r5RWlm7UfpklxrV5bQg9ou7SOw=='
+  imdoneKeyB: '7sBRnEWu21vfnv6N0_xoPhdbEIU='
+  pusherKey:  '0a4f9a6c45def222ab08'
+  pusherChannelPrefix: 'private-imdoneio-beta'
+  baseUrl:    'http://beta.imdone.io'
+
 # TODO:50 Change these prior to release id:2
 prod =
   imdoneKeyA: 'BcbpJqNyYvAI5FhR-dt5AbdcpXKV8gj0vv0RHjb1qGCXoymcckb8hQ=='
@@ -13,4 +20,7 @@ prod =
   baseUrl:    'http://imdone.io'
   pusherChannelPrefix: 'private-imdoneio-dev'
 
-module.exports = if /dev/i.test process.env.IMDONE_ENV then dev else prod
+module.exports =
+  if /dev/i.test process.env.IMDONE_ENV then dev
+  else if /beta/i.test process.env.IMDONE_ENV then beta
+  else prod

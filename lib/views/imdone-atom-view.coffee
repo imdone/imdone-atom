@@ -280,7 +280,7 @@ class ImdoneAtomView extends ScrollView
 
   removePlugin: (Plugin) ->
     plugin = @plugins[Plugin.pluginName]
-    @bottomView.removePlugin plugin if plugin.getView
+    @bottomView.removePlugin plugin if plugin && plugin.getView
     delete @plugins[Plugin.pluginName]
     @addPluginButtons()
 
