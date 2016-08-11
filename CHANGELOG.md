@@ -1,7 +1,6 @@
 ## 2.0.0
 * Integrations with http://imdone.io
-* Save priority by imdone.io id in .imdone/sort.js
-* 
+* Save priority by imdone.io in local db and on imdone.io
 
 ## 1.4.0
 * Fix serialization
@@ -258,7 +257,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5](#DONE:0)
+* [Fix config path checking for windows git-iss:5 id:1](#DONE:0)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -305,4 +304,4 @@
 
 ----
 
-- #TODO:150 Remember to update changelog before +publishing +package @piascikj
+- #TODO:150 Remember to update changelog before +publishing +package @piascikj id:0

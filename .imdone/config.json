@@ -38,11 +38,11 @@
       "hidden": false
     },
     {
-      "name": "DONE",
+      "name": "CHANGED",
       "hidden": true
     },
     {
-      "name": "CHANGED",
+      "name": "DONE",
       "hidden": true
     }
   ],
@@ -53,5 +53,9 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
+  },
+  "sync": {
+    "id": "57a9e429e0e79ae814cba091",
+    "name": "imdone-atom"
   }
 }

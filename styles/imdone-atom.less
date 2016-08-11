@@ -41,12 +41,16 @@
       display: inline-block;
       width: 18px;
       height: 18px;
+      margin-top:.3em;
+      margin-left:.25em;
       &:hover {
+        fill:white;
         .visible-fill {
-          fill:@text-color-selected;
+          fill:white;
         }
         .visible-stroke {
-          stroke:@text-color-selected;
+          fill:white;
+          stroke:white;
           stroke-width:12;
         }
       }
@@ -232,6 +236,7 @@
         margin-top: 6px;
       }
       .imdone-profile {
+        margin-bottom: .9em;
         .profile-image {
           margin-left: -4px;
           img {
