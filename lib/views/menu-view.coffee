@@ -4,6 +4,8 @@ path = null
 util = null
 Sortable = null
 Client = null
+menuOpenClass = "icon-chevron-left"
+menuClosedClass = "icon-chevron-right"
 
 module.exports =
 class MenuView extends View
@@ -21,10 +23,10 @@ class MenuView extends View
           # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:91
           # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
           # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
-          @div class: "menu-sep-space-2x"
           # BACKLOG:140 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:92
-          @div click: "toggleMenu", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
-            @a href: "#", class: "icon icon-list-unordered"
+          @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
+            @a href: "#", class: "icon #{menuClosedClass}"
+          @div class: "menu-sep-space-2x"
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", class: "icon icon-plus"
           # DONE:0 Add a link to open filtered files issue:49 id:93
@@ -42,8 +44,6 @@ class MenuView extends View
           @div click:'openProjectSettings', outlet:'$projectSettings', class:'imdone-toolbar-button', title:'Project Settings', style: "display:none;", =>
             @a href: "#", class:"icon icon-settings"
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
-            @div click: "openTeamSettings", class: "imdone-toolbar-button", title:"Team Settings", =>
-              @a href: "#", class: "icon icon-organization"
             @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
               @a href: "#", class: "icon icon-plug"
           @div class: "imdone-project-plugins"
@@ -69,6 +69,12 @@ class MenuView extends View
 
   toggleMenu: (event, element) ->
     @toggleClass 'open'
+
+    $link = @$menuButton.find 'a'
+    $link.removeClass "#{menuOpenClass} #{menuClosedClass}"
+    $link.addClass menuOpenClass if @hasClass 'open'
+    $link.addClass menuClosedClass unless @hasClass 'open'
+
     @emitter.emit 'menu.toggle'
 
   getFilterEditor: ->
@@ -140,8 +146,6 @@ class MenuView extends View
   openLogin: -> @emitter.emit 'login'
 
   openProjectSettings: -> @emitter.emit 'project.settings'
-
-  openTeamSettings: -> @emitter.emit 'project.team-settings'
 
   logOff: ->
     @client.logoff()

@@ -11,14 +11,14 @@ class BottomView extends View
   @content: (params) ->
     LoginView = require './login-view'
     ShareTasksView = require './share-tasks-view'
-    TeamSettingsView = require './team-settings-view'
+    ProjectSettingsView = require './project-settings-view'
     @div class:'imdone-config-container hidden', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
         @raw '&times;'
       @div outlet: 'error', class:'text-error'
-      @div outlet: 'teamSettings', class:'team-settings config-panel', =>
-        @subview 'teamSettingsView', new TeamSettingsView params
+      @div outlet: 'projectSettings', class:'project-settings config-panel', =>
+        @subview 'projectSettingsView', new ProjectSettingsView params
       @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
         @subview 'shareTasksView', new ShareTasksView params
       @div outlet: '$login', class: 'Login config-panel', =>
@@ -44,7 +44,7 @@ class BottomView extends View
     if @initialized || !@emitter then return else @initialized = true
     @loginView.handleEvents @emitter
     @shareTasksView.handleEvents @emitter
-    @teamSettingsView.handleEvents @emitter
+    @projectSettingsView.handleEvents @emitter
 
     # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:63
     startY = startHeight = null
@@ -102,7 +102,7 @@ class BottomView extends View
 
     @emitter.on 'login', => @showLogin()
 
-    @emitter.on 'project.team-settings', => @showTeamSettings()
+    @emitter.on 'project.settings', => @showProjectSettings()
 
   isOpen: ->
     @hasClass 'open'
@@ -155,9 +155,9 @@ class BottomView extends View
     @setHeight(500)
     @show()
 
-  showTeamSettings: () ->
+  showProjectSettings: () ->
     @hide()
-    @teamSettings.show () => @teamSettingsView.show()
+    @projectSettings.show () => @projectSettingsView.show()
     @setHeight(500)
     @show()
 
