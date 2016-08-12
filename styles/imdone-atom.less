@@ -37,24 +37,6 @@
       stroke:@text-color;
       stroke-width:12;
     }
-    &.icon {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      margin-top:.3em;
-      margin-left:.25em;
-      &:hover {
-        fill:white;
-        .visible-fill {
-          fill:white;
-        }
-        .visible-stroke {
-          fill:white;
-          stroke:white;
-          stroke-width:12;
-        }
-      }
-    }
   }
 
   .mask {
@@ -204,17 +186,65 @@
       margin: 1.5em 0 1em 1em;
     }
     .imdone-toolbar {
-      right: 6px;
-      top: 2px;
+      left: 192px;
+      bottom: 2px;
       position: absolute;
-      width: 24px;
+      transition: left  0.2s;
+      &.open {
+        left: -4px;
+        width: @menu-width;
+        .imdone-toolbar-button {
+          .tool-text {
+            visibility: visible;
+            transition: visibility 0.2s, opacity 0.2s linear;
+            opacity: 1;
+          }
+        }
+      }
       .imdone-toolbar-button {
         cursor: pointer;
-        text-align: center;
+        text-align: left;
         border: none;
         background-color: inherit;
         height: 24px;
+        min-width: 24px;
         padding: 4px;
+
+        .icon {
+          width: 36px;
+          text-align: center;
+
+          svg {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-bottom: -4px;
+            margin-right: 2px;
+            &:hover {
+              fill:white;
+              .visible-fill {
+                fill:white;
+              }
+              .visible-stroke {
+                fill:white;
+                stroke:white;
+                stroke-width:12;
+              }
+            }
+          }
+        }
+
+        a {
+          .tool-text {
+            margin-left: 2px;
+          }
+        }
+
+        .tool-text {
+          visibility: hidden;
+          opacity: 0;
+          transition: visibility 0s, opacity 0s linear;
+        }
       }
       .menu-sep-space {
         font-size: 0;
@@ -236,6 +266,7 @@
         margin-bottom: .9em;
         .profile-image {
           margin-left: -4px;
+          margin-right: 4px;
           img {
             height: 24px;
             width: 24px;

@@ -11,12 +11,12 @@ module.exports =
 class ProjectSettingsView extends View
   @content: (params) ->
     @div class: "config-container", =>
-      @div outlet: 'settingsPanel', class: 'block imdone-team-settings-pane row config-container col-md-6', =>
-        @h1 "Project Settings"
+      @div class: 'block imdone-team-settings-pane config-container', =>
         @div class:'block' , =>
           @button class:'btn btn-lg btn-success', "Use imdone.io with this project"
-        @div =>
-          @h1 "Team"
+        @div outlet: 'settingsPanel', =>
+          @h1 "Project Settings"
+          @h2 "Project Team"
           @div class: 'form-group native-key-bindings', =>
             @label for: 'project-invites', title:"Make it a party", 'Invite people to the team (or revoke an invite)'
             @input outlet:'projectInvites', type:'email', class:'form-control', id:'project-invites', placeholder:'Invite by email'

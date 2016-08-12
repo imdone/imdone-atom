@@ -19,7 +19,7 @@ class MenuView extends View
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
         # BACKLOG:160 Save my favorite filters +story id:90
-        @div class: "imdone-toolbar", =>
+        @div outlet: '$toolbar', class: "imdone-toolbar", =>
           # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:91
           # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
           # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
@@ -28,25 +28,37 @@ class MenuView extends View
             @a href: "#", class: "icon #{menuClosedClass}"
           @div class: "menu-sep-space-2x"
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
-            @a href: "#", class: "icon icon-plus"
+            @a href: "#", =>
+              @i class: "icon icon-plus toolbar-icon"
+              @span class:'tool-text', 'Add a new list'
           # DONE:0 Add a link to open filtered files issue:49 id:93
-          @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button text-success", title: "Zap! (open visible files)", =>
-            @a href: "#", class: "icon icon-zap"
+          @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button", title: "Zap! (open visible files)", =>
+            @a href: "#", =>
+              @i class: "icon icon-zap toolbar-icon"
+              @span class:'tool-text', 'Open files for visible tasks'
           @div class: "imdone-help imdone-toolbar-button", title: "Help, please!", =>
-            @a href: "https://github.com/imdone/imdone-core#task-formats", class: "icon icon-question"
+            @a href: "https://github.com/imdone/imdone-core#task-formats", =>
+              @i class: "icon icon-question toolbar-icon"
+              @span class:'tool-text', 'Help'
           @div class: "menu-sep-space-2x"
-          @div outlet:'$login', class:'text-success imdone-icon', title:'login to imdone.io', =>
-            @a click:'openLogin', href: "#", =>
-              @tag 'svg', class: 'icon', =>
-                @tag 'use', "xlink:href":"#imdone-logo-icon"
-          @div outlet: '$logOff', click: "logOff", class: "imdone-profile imdone-toolbar-button", =>
-            @div class:"profile-image", outlet:'$profileImage'
           @div click:'openProjectSettings', outlet:'$projectSettings', class:'imdone-toolbar-button', title:'Project Settings', style: "display:none;", =>
-            @a href: "#", class:"icon icon-settings"
+            @a href: "#", =>
+              @i class:"icon icon-settings toolbar-icon"
+              @span class:'tool-text', 'Project Settings'
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
             @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
-              @a href: "#", class: "icon icon-plug"
+              @a href: "#", =>
+                @i class: "icon icon-plug toolbar-icon"
+                @span class:'tool-text', 'Project Integrations'
           @div class: "imdone-project-plugins"
+          @div outlet:'$login', class:'text-success imdone-icon imdone-toolbar-button', title:'login to imdone.io', =>
+            @a click:'openLogin', href: "#", =>
+              @i class:'icon', =>
+                @tag 'svg', => @tag 'use', "xlink:href":"#imdone-logo-icon"
+              @span class:'tool-text', 'Login'
+          @div outlet: '$logOff', click: "logOff", class: "imdone-profile imdone-toolbar-button", =>
+            @i class:"profile-image icon", outlet:'$profileImage'
+            @span class:'tool-text', 'Sign out'
           # BACKLOG:60 Add the plugin project buttons id:94
           @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
             @span class: 'loading loading-spinner-tiny inline-block'
@@ -69,11 +81,12 @@ class MenuView extends View
 
   toggleMenu: (event, element) ->
     @toggleClass 'open'
-
+    @$toolbar.toggleClass 'open'
+    isOpening = @hasClass 'open'
     $link = @$menuButton.find 'a'
     $link.removeClass "#{menuOpenClass} #{menuClosedClass}"
-    $link.addClass menuOpenClass if @hasClass 'open'
-    $link.addClass menuClosedClass unless @hasClass 'open'
+    $link.addClass menuOpenClass if isOpening
+    $link.addClass menuClosedClass unless isOpening
 
     @emitter.emit 'menu.toggle'
 
