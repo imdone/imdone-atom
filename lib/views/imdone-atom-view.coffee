@@ -90,8 +90,8 @@ class ImdoneAtomView extends ScrollView
           @div outlet: 'boardWrapper', class: 'imdone-board-wrapper native-key-bindings', =>
             # @div outlet: 'messages', "HAHAH"
             @div outlet: 'board', class: 'imdone-board'
-        @div class:'imdone-config-wrapper', =>
-          @subview 'bottomView', new BottomView(params)
+          @div outlet: 'configWrapper', class:'imdone-config-wrapper', =>
+            @subview 'bottomView', new BottomView(params)
 
   getTitle: ->
     @title
@@ -167,15 +167,15 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'repo.change', => @showMask()
 
     @emitter.on 'config.close', =>
-      @appContainer.removeClass 'shift'
-      @appContainer.css 'bottom', ''
+      @boardWrapper.removeClass 'shift-bottom'
+      @boardWrapper.css 'bottom', ''
       @clearSelection()
 
     @emitter.on 'config.open', =>
-      @appContainer.addClass 'shift'
+      @boardWrapper.addClass 'shift-bottom'
 
     @emitter.on 'resize.change', (height) =>
-      @appContainer.css('bottom', height + 'px')
+      @boardWrapper.css('bottom', height + 'px')
 
     @on 'click', '.source-link',  (e) =>
       link = e.target
@@ -337,7 +337,7 @@ class ImdoneAtomView extends ScrollView
     # BACKLOG:200 This should be queued so two updates don't colide id:76
     @showMask()
     @updateBoard()
-    @appContainer.css 'bottom', 0
+    @boardWrapper.css 'bottom', 0
     @bottomView.attr 'style', ''
     @loading.hide()
     @mainContainer.show()

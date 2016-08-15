@@ -104,6 +104,8 @@ class BottomView extends View
 
     @emitter.on 'project.settings', => @showProjectSettings()
 
+    @emitter.on 'menu.toggle', => @toggleClass 'shift'
+
   isOpen: ->
     @hasClass 'open'
 
