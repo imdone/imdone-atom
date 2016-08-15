@@ -13,8 +13,7 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @handleEvents()
-    @onAuthenticated() if @client.isAuthenticated
-    # READY:70 Check for updates to products/connectors and update @products with changes id:15
+    # READY:60 Check for updates to products/connectors and update @products with changes id:15
 
   handleEvents: ->
     # DONE:0 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:16
@@ -27,42 +26,11 @@ class ConnectorManager extends Emitter
       @setProduct product, (err, product) =>
         @emit 'product.unlinked', product unless err
 
-    @client.on 'authenticated', => @onAuthenticated()
-
-  onRepoInit: () ->
-    # TODO:60 This should be moved to imdoneio-store id:17
-    return if @project || @initialized || @initializing
-    return unless @isAuthenticated()
-    @initializing = true
-    @client.getOrCreateProject @repo, (err, project) =>
-      # TODO:80 Do something with this error id:18
-      @initializing = false
-      return if err || @project || @initialized
-      @project = project
-      @repo.syncTasks @repo.getTasks(), (err, done) =>
-        @emit 'project.found', project
-        @initialized = true
-        done err
-
-  onAuthenticated: () ->
-    log('authenticated');
-    @onRepoInit() if @repo.initialized
-    @repo.on 'initialized', => @onRepoInit()
-
-  isAuthenticated: () -> @client.isAuthenticated()
-
   projectId: () -> @client.getProjectId @repo
-
-  updateTaskOrder: (order, cb) ->
-    return cb() unless @project
-    @project.taskOrder = order
-    @client.updateProject @project, (err, project) =>
-      return cb(err) if err
-      cb null, project.taskOrder
 
   getProducts: (cb) ->
     cb = (()->) unless cb
-    return cb "unauthenticated" unless @isAuthenticated()
+    return cb "unauthenticated" unless @client.isAuthenticated()
     return cb null, @products if @products
     return cb "No project found" unless @projectId()
     @client.getProducts @projectId(), (err, products) =>

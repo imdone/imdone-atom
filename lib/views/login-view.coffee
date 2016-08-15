@@ -12,7 +12,7 @@ class LoginView extends View
     @div class: "login-container config-container", =>
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      # READY:20 login should be it's own view id:87
+      # READY:10 login should be it's own view id:87
       @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
         @div class: 'input-med', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')

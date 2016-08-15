@@ -31,14 +31,14 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # READY:100 Connector plugin should be removed id:103
+      # READY:90 Connector plugin should be removed id:103
       @updateConnectorAfterDisable(product.connector)
       @updateConnectorForEdit product
       @productSelect.updateItem product
       @productDetail.setProduct product
 
-    @connectorManager.on 'project.found', (project) => @showProductPanel project
-    @showProductPanel @connectorManager.project if @connectorManager.project
+    @imdoneRepo.on 'project.found', (project) => @showProductPanel project
+    @showProductPanel @imdoneRepo.project if @imdoneRepo.project
 
   updateConnectorAfterDisable: (connector) ->
     return unless connector
@@ -49,7 +49,7 @@ class ShareTasksView extends View
     super
     @onAuthenticated() if @client.isAuthenticated()
 
-  onAuthenticated: () ->  @showProductPanel @connectorManager.project if @connectorManager.project
+  onAuthenticated: () ->  @showProductPanel @imdoneRepo.project if @imdoneRepo.project
 
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true

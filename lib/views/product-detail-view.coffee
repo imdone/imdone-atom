@@ -10,12 +10,12 @@ class ProductDetailView extends View
 
     @on 'click', '.enable-btn', =>
       return if @product.isEnabled()
-      # READY:80 Connector plugin should be added id:95
+      # READY:70 Connector plugin should be added id:95
       @emitter.emit 'connector.enable', @product.connector
 
     @on 'click', '.disable-btn', =>
       return unless @product.isEnabled()
-      # READY:90 Connector plugin should be removed id:96
+      # READY:80 Connector plugin should be removed id:96
       @emitter.emit 'connector.disable', @product.connector
 
   @content: (params) ->
@@ -61,8 +61,8 @@ class ProductDetailView extends View
     _.set @product, 'connector.name', @product.name
     @emitter.emit 'connector.change', @product
 
-  # READY:40 Add enable checkbox and take appropriate actions on check/uncheck +urgent id:100
-  # READY:310 When unlinked disable all connectors (In API) +urgent id:101
+  # READY:30 Add enable checkbox and take appropriate actions on check/uncheck +urgent id:100
+  # READY:300 When unlinked disable all connectors (In API) +urgent id:101
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"

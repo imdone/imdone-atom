@@ -12,10 +12,11 @@ class ProjectSettingsView extends View
   @content: (params) ->
     @div class: "config-container", =>
       @div class: 'block imdone-team-settings-pane config-container', =>
-        @div class:'block' , =>
+        @div outlet:'disabledProject', class:'block' , =>
           @button class:'btn btn-lg btn-success', "Use imdone.io with this project"
-        @div outlet: 'settingsPanel', =>
+        @div outlet: 'settingsPanel', style:'display:none;', =>
           @h1 "Project Settings"
+
           @h2 "Project Team"
           @div class: 'form-group native-key-bindings', =>
             @label for: 'project-invites', title:"Make it a party", 'Invite people to the team (or revoke an invite)'

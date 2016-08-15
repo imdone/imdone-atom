@@ -29,14 +29,14 @@ class BottomView extends View
         @div class: 'block', =>
           @div class: 'input-small', =>
             @subview 'renameListField', new TextEditorView(mini: true)
-          @button click: 'cancelRename', class:'inline-block-tight btn', 'Forget it'
+          @button click: 'hide', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doListRename', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'newList', class:'new-list config-panel', =>
         @h2 'New List'
         @div class: 'block', =>
           @div class: 'input-small', =>
             @subview 'newListField', new TextEditorView(mini: true)
-          @button click: 'cancelNewList', class:'inline-block-tight btn', 'Forget it'
+          @button click: 'hide', class:'inline-block-tight btn', 'Forget it'
           @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
       @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
 

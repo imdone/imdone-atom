@@ -19,10 +19,32 @@ module.exports =  (repo) ->
   _emitFileUpdate = repo.emitFileUpdate.bind repo
 
 
-  syncDone = (err) -> cm.emit 'tasks.updated' unless err
+  repo.getProjectId = () -> _.get repo, 'config.sync.id'
+  repo.setProjectId = (id) -> _.set repo, 'config.sync.id', id
+  repo.getProjectName = () -> _.get repo, 'config.sync.name'
+  repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
+  checkForIIOProject = () ->
+    # TODO:60 This should be moved to imdoneio-store id:17
+    return if repo.project
+    return unless client.isAuthenticated()
+    client.getProject repo.getProjectId(), (err, project) =>
+      # TODO:80 Do something with this error id:18
+      return if err
+      return unless project
+      repo.project = project
+      repo.setProjectName project.name
+      repo.syncTasks repo.getTasks(), (err, done) =>
+        repo.emit 'project.found', project
+        done err
+
+  checkForIIOProject() if client.isAuthenticated()
+  client.on 'authenticated', => checkForIIOProject()
+
+  syncDone = (err) -> cm.emit 'tasks.updated' unless err
   repo.syncTasks = syncTasks = (tasks, cb) ->
     cb("unauthenticated", ()->) unless client.isAuthenticated()
+    cb("not enabled") unless repo.getProjectId()
     cm.emit 'tasks.syncing'
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
@@ -30,9 +52,9 @@ module.exports =  (repo) ->
       return if err # TODO:90 Do something with this error id:52
       console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
-        # READY:290 We have to be able to match on meta.id for updates. id:53
-        # READY:250 Test this with a new project to make sure we get the ids id:54
-        # READY:300 We need a way to run tests on imdone-io without destroying the client id:55
+        # READY:280 We have to be able to match on meta.id for updates. id:53
+        # READY:240 Test this with a new project to make sure we get the ids id:54
+        # READY:290 We need a way to run tests on imdone-io without destroying the client id:55
         (task, cb) ->
           currentTask = repo.getTask task.id
           taskToModify = _.assign currentTask, task
@@ -87,8 +109,12 @@ module.exports =  (repo) ->
 
   saveSortCloud = (cb) ->
     cb ?= ()->
+    return cb() unless project
     sort = _.get repo, 'sync.sort'
-    cm.updateTaskOrder sort, cb
+    project.taskOrder = sort
+    client.updateProject project, (err, theProject) =>
+      return cb(err) if err
+      cb null, theProject.taskOrder
 
   saveSortFile = (cb) ->
     cb ?= ()->
@@ -137,7 +163,7 @@ module.exports =  (repo) ->
     _moveTasks tasks, newList, newPos, true, (err, tasksByList) ->
       return cb err if err
       if client.isAuthenticated()
-        # DOING:10 Only sync what we move!!! +important id:60
+        # READY:0 Only sync what we move!!! +important id:60
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks
           return cb null, tasksByList unless sortEnabled()
@@ -175,18 +201,18 @@ module.exports =  (repo) ->
     async.parallel fns, (err, results) ->
       return cb err if err
       repo.config = results[0]
-      # READY:280 Try an auth from storage id:61
+      # READY:270 Try an auth from storage id:61
       client.authFromStorage (err, user) ->
         if sortEnabled()
           _init (err, files) ->
             return cb err if err
-            cm.onRepoInit()
+            checkForIIOProject()
             populateSort (err) ->
               cb null, files
         else
           _init (err, files) ->
             return cb err if err
-            cm.onRepoInit()
+            checkForIIOProject()
             cb null, files
   repo.refresh = (cb) ->
     cb ?= ()->

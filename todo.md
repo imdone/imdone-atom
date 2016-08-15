@@ -8,7 +8,7 @@ Roadmap
 - [ ] #BACKLOG:150 Provide on-line service for installing plugins to a team id:114
 - [ ] #BACKLOG:30 Add configuration for autoclose task with date on moving into list id:115
 - [ ] #TODO:30 As a user I would like to share tasks with other services +story id:116
-  - [ ] #READY:60 As a user I would like to enable an integration id:117
+  - [ ] #READY:50 As a user I would like to enable an integration id:117
 - [ ] #BACKLOG:80 As a user I would like to hide a list without opening the menu id:118
 - [ ] #BACKLOG:0 AAUIWLT click a button on the board to open the package configuration +story id:119
 

@@ -113,11 +113,11 @@ class ImdoneAtomView extends ScrollView
       console.log "auth-failed" if status == "failed"
 
 
-    @connectorManager.on 'tasks.syncing', => @showMask() # READY:340 mask isn't always hiding correctly gh:105 id:71
+    @connectorManager.on 'tasks.syncing', => @showMask() # READY:330 mask isn't always hiding correctly gh:105 id:71
 
     @connectorManager.on 'sync.error', => @hideMask()
 
-    @connectorManager.on 'tasks.updated', => # READY:120 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:72
+    @connectorManager.on 'tasks.updated', => # READY:110 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:72
       @onRepoUpdate()
 
     @imdoneRepo.on 'initialized', =>
@@ -248,7 +248,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:0 Add the plugin project buttons here id:74
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DOING:370 Add the plugin project buttons here id:74
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -259,7 +259,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:110 Get the connector from the connector manager id:75
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:100 Get the connector from the connector manager id:75
       return if err || (product && !product.isEnabled())
       connector = product && product.connector
       if @plugins[Plugin.pluginName]

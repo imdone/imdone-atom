@@ -80,7 +80,7 @@ module.exports = ImdoneAtom =
   #   serialized
 
   activate: (state) ->
-    # READY:220 Put requires in activate to speed up startup issue:77 id:4
+    # READY:210 Put requires in activate to speed up startup issue:77 id:4
     # #DONE:0 Add back serialization (The right way) +Roadmap @testing id:5
     _ = require 'lodash'
     url = require 'url'
