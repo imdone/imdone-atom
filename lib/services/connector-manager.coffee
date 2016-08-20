@@ -13,10 +13,10 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @handleEvents()
-    # READY:60 Check for updates to products/connectors and update @products with changes id:15
+    # READY:70 Check for updates to products/connectors and update @products with changes
 
   handleEvents: ->
-    # DONE:0 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story id:16
+    # DONE:0 Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>

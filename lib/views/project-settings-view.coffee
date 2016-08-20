@@ -13,7 +13,7 @@ class ProjectSettingsView extends View
     @div class: "config-container", =>
       @div class: 'block imdone-team-settings-pane config-container', =>
         @div outlet:'disabledProject', class:'block' , =>
-          @button class:'btn btn-lg btn-success', "Use imdone.io with this project"
+          @button click:'enableProject', class:'btn btn-lg btn-success', "Use imdone.io with this project"
         @div outlet: 'settingsPanel', style:'display:none;', =>
           @h1 "Project Settings"
 
@@ -28,7 +28,7 @@ class ProjectSettingsView extends View
             @label for: 'project-admins', title:"Don't be a SPOF!", 'Convert a teammate to admin'
             @input type:'text', class:'form-control', id:'project-admins', placeholder:'Start typing a teammates name'
 
-          # BACKLOG:10 Add config view here id:108
+          # READY:0 Add config view here githubClosed:true
           # @h1 "Configuration (.imdone/config.json)"
 
 
@@ -38,6 +38,11 @@ class ProjectSettingsView extends View
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
+    @projectInvites.tokenfield minWidth: 120, inputType: 'email'
+
+  handleEvents: (@emitter) ->
+    if @initialized || !@emitter then return else @initialized = true
+
     @projectInvites.on 'tokenfield:createtoken', (e) ->
       currentTokens = (token.value for token in $(@).tokenfield "getTokens")
       email = e.attrs.value
@@ -50,7 +55,12 @@ class ProjectSettingsView extends View
     @projectInvites.on 'tokenfield:removedtoken', (e) ->
       console.log "Token removed! Token value was: #{e.attrs.value}"
 
-    @projectInvites.tokenfield minWidth: 120, inputType: 'email'
+    @imdoneRepo.on 'project.found', (project) =>
+      @settingsPanel.show()
+      @disabledProject.hide()
 
-  handleEvents: (@emitter) ->
-    if @initialized || !@emitter then return else @initialized = true
+  enableProject: (e) ->
+    @client.createProject @imdoneRepo, (err, project) =>
+      return if err
+      return unless project
+      @imdoneRepo.checkForIIOProject()

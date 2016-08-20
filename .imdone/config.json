@@ -23,7 +23,7 @@
   "lists": [
     {
       "name": "BACKLOG",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "TODO",
@@ -35,7 +35,7 @@
     },
     {
       "name": "READY",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "CHANGED",
@@ -53,9 +53,5 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
-  },
-  "sync": {
-    "id": "57a9e429e0e79ae814cba091",
-    "name": "imdone-atom"
   }
 }

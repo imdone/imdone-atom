@@ -12,7 +12,7 @@ class BottomView extends View
     LoginView = require './login-view'
     ShareTasksView = require './share-tasks-view'
     ProjectSettingsView = require './project-settings-view'
-    @div class:'imdone-config-container hidden', =>
+    @div class:'imdone-config-container', =>
       @div outlet: 'resizer', class:'split-handle-y'
       @div outlet: 'closeButton', class:'close-button', =>
         @raw '&times;'
@@ -46,7 +46,7 @@ class BottomView extends View
     @shareTasksView.handleEvents @emitter
     @projectSettingsView.handleEvents @emitter
 
-    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:63
+    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
@@ -94,10 +94,10 @@ class BottomView extends View
 
     @emitter.on 'authenticated', => @hide()
 
-    # DONE:0 This belongs in bottomView +refactor id:64
+    # DONE:0 This belongs in bottomView +refactor
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE:0 This belongs in bottomView +refactor id:65
+    # DONE:0 This belongs in bottomView +refactor
     @emitter.on 'share', => @showShare()
 
     @emitter.on 'login', => @showLogin()
@@ -113,14 +113,14 @@ class BottomView extends View
     unless @isOpen()
       @emitter.emit 'config.open'
       @addClass 'open'
-      @removeClass 'hidden'
+      # @removeClass 'hidden'
 
   hide: ->
     @find('.config-panel').hide()
     if @isOpen()
       @error.empty()
       @removeClass 'open'
-      @addClass 'hidden'
+      # @addClass 'hidden'
       @css 'height', ''
       @emitter.emit 'config.close'
 
@@ -144,7 +144,7 @@ class BottomView extends View
     @plugins.show()
     @show()
 
-  # TODO:20 DRY these show... methods up id:66
+  # TODO:0 DRY these show... methods up
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
