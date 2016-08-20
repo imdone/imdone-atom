@@ -1,3 +1,6 @@
+## 1.3.30
+* replace `_.template` with `String.replace` for journal.  Fixes #53
+
 ## 1.3.29
 * Add c++ extensions by @eistaa
 
