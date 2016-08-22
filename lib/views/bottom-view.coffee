@@ -12,33 +12,35 @@ class BottomView extends View
     LoginView = require './login-view'
     ShareTasksView = require './share-tasks-view'
     ProjectSettingsView = require './project-settings-view'
-    @div class:'imdone-config-container', =>
-      @div outlet: 'resizer', class:'split-handle-y'
-      @div outlet: 'closeButton', class:'close-button', =>
-        @raw '&times;'
-      @div outlet: 'error', class:'text-error'
-      @div outlet: 'projectSettings', class:'project-settings config-panel', =>
-        @subview 'projectSettingsView', new ProjectSettingsView params
-      @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
-        @subview 'shareTasksView', new ShareTasksView params
-      @div outlet: '$login', class: 'Login config-panel', =>
-        @subview 'loginView', new LoginView params
-      @div outlet: 'renameList', class:'rename-list config-panel', =>
-        @h2 =>
-          @span outlet:'renameListLabel'
-        @div class: 'block', =>
-          @div class: 'input-small', =>
-            @subview 'renameListField', new TextEditorView(mini: true)
-          @button click: 'hide', class:'inline-block-tight btn', 'Forget it'
-          @button click: 'doListRename', class:'inline-block-tight btn btn-primary', 'Looks good'
-      @div outlet: 'newList', class:'new-list config-panel', =>
-        @h2 'New List'
-        @div class: 'block', =>
-          @div class: 'input-small', =>
-            @subview 'newListField', new TextEditorView(mini: true)
-          @button click: 'hide', class:'inline-block-tight btn', 'Forget it'
-          @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
-      @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
+    @div class:'imdone-bottom-view', =>
+      @div class:'bottom-view-header', =>
+        @div outlet: 'resizer', class:'split-handle-y'
+        @div outlet: 'closeButton', class:'close-button', =>
+          @raw '&times;'
+        @div outlet: 'error', class:'text-error'
+      @div class:'bottom-view-main', =>
+        @div outlet: 'projectSettings', class:'project-settings config-panel', =>
+          @subview 'projectSettingsView', new ProjectSettingsView params
+        @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
+          @subview 'shareTasksView', new ShareTasksView params
+        @div outlet: '$login', class: 'Login config-panel', =>
+          @subview 'loginView', new LoginView params
+        @div outlet: 'renameList', class:'rename-list config-panel', =>
+          @h2 =>
+            @span outlet:'renameListLabel'
+          @div class: 'block', =>
+            @div class: 'input-small', =>
+              @subview 'renameListField', new TextEditorView(mini: true)
+            @button click: 'hide', class:'inline-block-tight btn', 'Forget it'
+            @button click: 'doListRename', class:'inline-block-tight btn btn-primary', 'Looks good'
+        @div outlet: 'newList', class:'new-list config-panel', =>
+          @h2 'New List'
+          @div class: 'block', =>
+            @div class: 'input-small', =>
+              @subview 'newListField', new TextEditorView(mini: true)
+            @button click: 'hide', class:'inline-block-tight btn', 'Forget it'
+            @button click: 'doNewList', class:'inline-block-tight btn btn-primary', 'Looks good'
+        @div outlet: 'plugins', class:'imdone-plugins-container config-panel'
 
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
@@ -103,6 +105,8 @@ class BottomView extends View
     @emitter.on 'login', => @showLogin()
 
     @emitter.on 'project.settings', => @showProjectSettings()
+
+    @imdoneRepo.on 'project.removed', => @hide()
 
     @emitter.on 'menu.toggle', => @toggleClass 'shift'
 

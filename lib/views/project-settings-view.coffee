@@ -30,6 +30,8 @@ class ProjectSettingsView extends View
 
           # READY:0 Add config view here githubClosed:true
           # @h1 "Configuration (.imdone/config.json)"
+        @div outlet:'enabledProject', class:'block' , style:'display:none;', =>
+          @button click:'disableProject', class:'btn btn-small btn-error pull-right', "Stop using imdone.io with this project"
 
 
   show: ->
@@ -58,9 +60,19 @@ class ProjectSettingsView extends View
     @imdoneRepo.on 'project.found', (project) =>
       @settingsPanel.show()
       @disabledProject.hide()
+      @enabledProject.show()
+
+    @imdoneRepo.on 'project.removed', (project) =>
+      @settingsPanel.hide()
+      @enabledProject.hide()
+      @disabledProject.show()  
 
   enableProject: (e) ->
     @client.createProject @imdoneRepo, (err, project) =>
       return if err
       return unless project
       @imdoneRepo.checkForIIOProject()
+
+  disableProject: (e) ->
+    # DOING: implement disableProject
+    @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"

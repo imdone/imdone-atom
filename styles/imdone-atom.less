@@ -88,11 +88,12 @@
     display: none;
   }
 
-  .imdone-config-container {
+  .imdone-bottom-view {
     background-color: @base-background-color;
     position: absolute;
     bottom: -@config-height;
     right: 0;
+    left: 42px;
     height: @config-height;
     // background-color: @tool-panel-background-color;
     border-top: 1px solid @tool-panel-border-color;
@@ -103,12 +104,24 @@
       z-index: 100;
       display: block;
     }
-    left: 42px;
-    overflow: auto;
     &.shift {
       left: (@menu-width + 10);
     }
-
+    .bottom-view-header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 40px;
+    }
+    .bottom-view-main {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: auto;
+    }
     .input-small {
       width: 200px;
       float: left;
@@ -116,9 +129,10 @@
     }
     .config-panel {
       display: none;
-      height: 100%;
+      height: 95%;
       .config-container {
         height: 100%;
+        margin-right: 1em;
       }
       .vertical-scroll {
         overflow-y: auto;
@@ -128,10 +142,12 @@
     .close-button {
       position: absolute;
       top: 2px;
-      right: 10px;
-      cursor: default;
+      right: .2em;
+      cursor: pointer;
       font-size: 2em;
       font-weight: bold;
+      width: 1.5em;
+      text-align: center;
       &:hover {
         color: white;
       }

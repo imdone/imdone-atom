@@ -117,7 +117,7 @@ class ImdoneAtomView extends ScrollView
 
     @connectorManager.on 'sync.error', => @hideMask()
 
-    @connectorManager.on 'tasks.updated', => # READY:120 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105
+    @imdoneRepo.on 'tasks.updated', => # READY:120 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105
       @onRepoUpdate()
 
     @imdoneRepo.on 'initialized', =>

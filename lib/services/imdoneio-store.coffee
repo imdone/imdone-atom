@@ -45,7 +45,7 @@ module.exports =  (repo) ->
   checkForIIOProject() if client.isAuthenticated()
   client.on 'authenticated', => checkForIIOProject()
 
-  syncDone = (err) -> cm.emit 'tasks.updated' unless err
+  syncDone = (err) -> repo.emit 'tasks.updated' unless err
   repo.syncTasks = syncTasks = (tasks, cb) ->
     return cb("unauthenticated", ()->) unless client.isAuthenticated()
     return cb("not enabled") unless repo.getProjectId()
@@ -165,10 +165,11 @@ module.exports =  (repo) ->
     cb()
 
   repo.moveTasks = (tasks, newList, newPos, cb) ->
+    authenticated = client.isAuthenticated()
     cb ?= ()->
-    _moveTasks tasks, newList, newPos, true, (err, tasksByList) ->
+    _moveTasks tasks, newList, newPos, authenticated, (err, tasksByList) ->
       return cb err if err
-      if client.isAuthenticated() && repo.project
+      if authenticated && repo.project
         # READY:10 Only sync what we move!!! +important
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks
@@ -230,5 +231,23 @@ module.exports =  (repo) ->
         _refresh (err, files) ->
           return cb err if err
           cb null, files
+
+  repo.disableProject = () ->
+    projectId = repo.getProjectId()
+    delete repo.config.sync
+    repo.saveConfig (err) =>
+      return if err
+      async.eachSeries repo.getTasks(),
+        (task, cb) ->
+          currentTask = repo.getTask task.id
+          taskToModify = _.assign currentTask, task
+          return cb "Task not found" unless Task.isTask taskToModify
+          delete taskToModify.meta.id
+          repo.modifyTask taskToModify, cb
+        (err) ->
+          repo.saveModifiedFiles (err, files) ->
+            return if err
+            repo.emit 'tasks.updated'
+            repo.emit 'project.removed'
 
   connectorManager: connectorManager, repo: repo

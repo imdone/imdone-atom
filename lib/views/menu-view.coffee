@@ -128,16 +128,12 @@ class MenuView extends View
     @getFilterEditor().onDidStopChanging () =>
       @emitter.emit 'filter', @getFilter()
 
-    @imdoneRepo.on 'initialized', =>
-      @updateMenu()
-    @imdoneRepo.on 'list.modified', =>
-      @updateMenu()
-    @imdoneRepo.on 'file.update', =>
-      @updateMenu()
-    @imdoneRepo.on 'tasks.moved', =>
-      @updateMenu()
-    @imdoneRepo.on 'project.found', =>
-      @$imdoneioButtons.show()
+    @imdoneRepo.on 'initialized', => @updateMenu()
+    @imdoneRepo.on 'list.modified', => @updateMenu()
+    @imdoneRepo.on 'file.update', => @updateMenu()
+    @imdoneRepo.on 'tasks.moved', => @updateMenu()
+    @imdoneRepo.on 'project.found', => @$imdoneioButtons.show()
+    @imdoneRepo.on 'project.removed', => @$imdoneioButtons.hide()
 
     @client.on 'authenticated', => @authenticated()
     @client.on 'unauthenticated', => @unauthenticated()
