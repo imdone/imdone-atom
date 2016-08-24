@@ -24,6 +24,25 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
+  repo.disableProject = () ->
+    projectId = repo.getProjectId()
+    delete repo.config.sync
+    delete repo.project
+    repo.saveConfig (err) =>
+      return if err
+      async.eachSeries repo.getTasks(),
+        (task, cb) ->
+          currentTask = repo.getTask task.id
+          taskToModify = _.assign currentTask, task
+          return cb "Task not found" unless Task.isTask taskToModify
+          delete taskToModify.meta.id
+          repo.modifyTask taskToModify, cb
+        (err) ->
+          repo.saveModifiedFiles (err, files) ->
+            return if err
+            repo.emit 'tasks.updated'
+            repo.emit 'project.removed'
+
   repo.checkForIIOProject = checkForIIOProject = () ->
     # READY:60 This should be moved to imdoneio-store
     return if repo.project
@@ -231,23 +250,5 @@ module.exports =  (repo) ->
         _refresh (err, files) ->
           return cb err if err
           cb null, files
-
-  repo.disableProject = () ->
-    projectId = repo.getProjectId()
-    delete repo.config.sync
-    repo.saveConfig (err) =>
-      return if err
-      async.eachSeries repo.getTasks(),
-        (task, cb) ->
-          currentTask = repo.getTask task.id
-          taskToModify = _.assign currentTask, task
-          return cb "Task not found" unless Task.isTask taskToModify
-          delete taskToModify.meta.id
-          repo.modifyTask taskToModify, cb
-        (err) ->
-          repo.saveModifiedFiles (err, files) ->
-            return if err
-            repo.emit 'tasks.updated'
-            repo.emit 'project.removed'
 
   connectorManager: connectorManager, repo: repo
