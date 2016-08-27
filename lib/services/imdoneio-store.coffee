@@ -134,10 +134,10 @@ module.exports =  (repo) ->
 
   saveSortCloud = (cb) ->
     cb ?= ()->
-    return cb() unless project
+    return cb() unless repo.project
     sort = _.get repo, 'sync.sort'
-    project.taskOrder = sort
-    client.updateProject project, (err, theProject) =>
+    repo.project.taskOrder = sort
+    client.updateProject repo.project, (err, theProject) =>
       return cb(err) if err
       cb null, theProject.taskOrder
 
