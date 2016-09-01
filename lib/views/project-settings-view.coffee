@@ -65,7 +65,7 @@ class ProjectSettingsView extends View
     @imdoneRepo.on 'project.removed', (project) =>
       @settingsPanel.hide()
       @enabledProject.hide()
-      @disabledProject.show()  
+      @disabledProject.show()
 
   enableProject: (e) ->
     @client.createProject @imdoneRepo, (err, project) =>
@@ -74,5 +74,5 @@ class ProjectSettingsView extends View
       @imdoneRepo.checkForIIOProject()
 
   disableProject: (e) ->
-    # DOING: implement disableProject
+    # DOING:0 implement disableProject
     @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"

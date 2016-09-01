@@ -413,7 +413,7 @@ class ImdoneAtomView extends ScrollView
                   @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE:0 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj due:2015-11-20 issue:45
+              # DONE:0 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj issue:45
               if dateDue
                 @tr =>
                   @td "due"

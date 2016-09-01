@@ -24,6 +24,7 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
+  # DOING:0 Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back.
   repo.disableProject = () ->
     projectId = repo.getProjectId()
     delete repo.config.sync

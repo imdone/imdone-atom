@@ -111,7 +111,7 @@ module.exports = ImdoneAtom =
 
     @fileService = require('./services/file-service').init configHelper.getSettings().openIn.port
 
-    # DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
+    # DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428)
 
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()
@@ -174,8 +174,3 @@ module.exports = ImdoneAtom =
     imdoneHelper ?= require './services/imdone-helper'
     {connectorManager, repo} = imdoneHelper.createRepo path, uri
     new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri, connectorManager: connectorManager)
-
-if parseFloat(atom.getVersion()) < 1.7
-  atom.deserializers.add
-    name: 'ImdoneAtomView'
-    deserialize: module.exports.createImdoneAtomViews.bind(module.exports)

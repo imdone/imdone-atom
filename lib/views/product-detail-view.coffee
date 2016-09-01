@@ -24,17 +24,13 @@ class ProductDetailView extends View
       @div outlet: '$detail'
       @div class: 'json-editor-container vertical-scroll', =>
         @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
-        @div outlet: '$disabledMask', class: 'mask', =>
-          @div class: 'spinner-mask'
-          @div class: 'spinner-container' #, =>
-
 
   setProduct: (@product)->
     return unless @product && @product.name
     @$detail.html @getDetail(@product)
     @$configEditor.empty()
     return unless @product.linked
-    if @product.isEnabled() then @$disabledMask.hide() else @$disabledMask.show()
+    if @product.isEnabled() then @$configEditor.show() else @$configEditor.hide()
     @createEditor()
 
   createEditor: ->

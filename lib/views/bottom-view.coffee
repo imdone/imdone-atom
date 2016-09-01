@@ -174,7 +174,7 @@ class BottomView extends View
     @renameListField.getModel().setText name
     @renameListField.getModel().selectAll()
     @renameList.show()
-    @setHeight(100)
+    @setHeight(200)
     @show()
     @renameListField.focus()
 
@@ -193,7 +193,7 @@ class BottomView extends View
     @hide()
     @newListField.getModel().setText ''
     @newList.show()
-    @setHeight(100)
+    @setHeight(200)
     @show()
     @newListField.focus()
 

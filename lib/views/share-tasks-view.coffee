@@ -19,7 +19,7 @@ class ShareTasksView extends View
         @div class: 'col-md-3 product-select-wrapper pull-left', =>
           @h1 'Integrations'
           @subview 'productSelect', new ProductSelectionView
-        @div class:'col-md-8 product-detail-wrapper config-container pull-right', =>
+        @div class:'col-md-8 product-detail-wrapper config-container', =>
           @subview 'productDetail', new ProductDetailView
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
