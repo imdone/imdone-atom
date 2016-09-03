@@ -227,6 +227,7 @@ class ImdoneAtomView extends ScrollView
         plugin.setConnector product.connector if plugin.constructor.provider == product.name
 
     @emitter.on 'logoff', => pluginManager.removeDefaultPlugins()
+    @imdoneRepo.on 'project.removed', => pluginManager.removeDefaultPlugins()
 
 
   addPluginButtons: ->
