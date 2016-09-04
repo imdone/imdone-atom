@@ -1,3 +1,6 @@
+## 1.3.31
+* Add yaml and crystal file extensions
+
 ## 1.3.30
 * replace `_.template` with `String.replace` for journal.  Fixes #53
 
