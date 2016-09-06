@@ -53,7 +53,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO:110 If we get a forbidden error, then emit auth failure
+  # TODO:140 If we get a forbidden error, then emit auth failure
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -85,7 +85,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         console.error "Authentication err:", err if err
         @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO:200 if err.status == 404 we should show an error
+        # TODO:230 if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -186,7 +186,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO:160 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116
+    # TODO:190 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -233,6 +233,7 @@ class ImdoneioClient extends Emitter
 
   createProject: (repo, cb) ->
     # READY:160 Implement createProject
+    # DOING: This should throw an error if TOO_MANY_PROJECTS_ERROR
     @doPost("/projects").send(
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()

@@ -24,7 +24,7 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
-  # DOING:0 Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back.
+  # TODO:0 Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back.
   repo.disableProject = () ->
     projectId = repo.getProjectId()
     delete repo.config.sync
@@ -50,7 +50,7 @@ module.exports =  (repo) ->
     return unless client.isAuthenticated()
     return unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
-      # TODO:50 Do something with this error
+      # TODO:80 Do something with this error
       return if err
       unless project
         # Check account for plan type
@@ -73,7 +73,7 @@ module.exports =  (repo) ->
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, ioTasks) ->
-      return if err # TODO:60 Do something with this error
+      return if err # TODO:90 Do something with this error
       console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
         # READY:270 We have to be able to match on meta.id for updates.
@@ -97,7 +97,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO:70 Do something with this error
+      return if err # TODO:100 Do something with this error
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -112,7 +112,7 @@ module.exports =  (repo) ->
 
   loadSort = (cb) ->
     loadSortFile cb
-    # TODO:180 also get from imdone.io in parallel? or just to start trying
+    # TODO:210 also get from imdone.io in parallel? or just to start trying
 
   loadSortFile = (cb) ->
     fs.exists SORT_FILE, (exists) ->

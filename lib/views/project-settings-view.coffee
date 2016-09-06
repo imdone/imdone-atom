@@ -69,6 +69,9 @@ class ProjectSettingsView extends View
 
   enableProject: (e) ->
     @client.createProject @imdoneRepo, (err, project) =>
+      # DONE: If err=TOO_MANY_PROJECTS_ERROR then show a message!!!
+      if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
+        @emitter.emit 'error', $ "<p>You'll have to upgrade or disable/remove projects before adding another.</p>"
       return if err
       return unless project
       @imdoneRepo.checkForIIOProject()

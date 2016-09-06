@@ -8,6 +8,7 @@ Let's say you create a TODO like this...
 // TODO: Add listener for task.modified event
 ```
 
+- #TODO:30 Finish the readme for Beta.
 
 
 ----
