@@ -25,6 +25,8 @@ module.exports =  (repo) ->
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
   # TODO:0 Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back.
+  repo.isImdoneIOProject = () -> client.isAuthenticated() && repo.project && !repo.project.disabled
+
   repo.disableProject = () ->
     projectId = repo.getProjectId()
     delete repo.config.sync
@@ -58,6 +60,7 @@ module.exports =  (repo) ->
       else
         repo.project = project
         repo.setProjectName project.name
+        return unless repo.isImdoneIOProject()
         repo.syncTasks repo.getTasks(), (err, done) =>
           repo.emit 'project.found', project
           done err
@@ -138,6 +141,7 @@ module.exports =  (repo) ->
     return cb() unless repo.project
     sort = _.get repo, 'sync.sort'
     repo.project.taskOrder = sort
+    # DOING This should call client.updateTaskOrder
     client.updateProject repo.project, (err, theProject) =>
       return cb(err) if err
       cb null, theProject.taskOrder
@@ -185,11 +189,11 @@ module.exports =  (repo) ->
     cb()
 
   repo.moveTasks = (tasks, newList, newPos, cb) ->
-    authenticated = client.isAuthenticated()
+    shouldSync  = repo.isImdoneIOProject()
     cb ?= ()->
-    _moveTasks tasks, newList, newPos, authenticated, (err, tasksByList) ->
+    _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
       return cb err if err
-      if authenticated && repo.project
+      if shouldSync # DOING:0 Make sure the project is available
         # READY:10 Only sync what we move!!! +important
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks

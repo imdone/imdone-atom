@@ -93,11 +93,9 @@ class ImdoneAtomView extends ScrollView
           @div outlet: 'configWrapper', class:'imdone-config-wrapper', =>
             @subview 'bottomView', new BottomView(params)
 
-  getTitle: ->
-    @title
+  getTitle: -> @title
 
-  getIconName: ->
-    "checklist"
+  getIconName: -> "checklist"
 
   getURI: ->
     @uri

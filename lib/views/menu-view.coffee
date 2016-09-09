@@ -50,7 +50,7 @@ class MenuView extends View
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
             @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
               @a href: "#", =>
-                @i class: "icon icon-plug toolbar-icon"
+                @i class: "icon icon-imdone-share2 toolbar-icon"
                 @span class:'tool-text', 'Project Integrations'
           @div class: "imdone-project-plugins"
           @div outlet:'$login', class:'imdone-icon imdone-toolbar-button', title:'login to imdone.io', =>

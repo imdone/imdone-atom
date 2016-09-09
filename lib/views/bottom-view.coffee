@@ -17,7 +17,7 @@ class BottomView extends View
         @div outlet: 'resizer', class:'split-handle-y'
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
-        # DOING: Set up a messaging area
+        # DOING:10 Set up a messaging area
         @div outlet: 'error', class:'alert alert-error'
       @div class:'bottom-view-main', =>
         @div outlet: 'projectSettings', class:'project-settings config-panel', =>

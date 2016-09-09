@@ -71,11 +71,21 @@ class ProjectSettingsView extends View
     @client.createProject @imdoneRepo, (err, project) =>
       # DONE: If err=TOO_MANY_PROJECTS_ERROR then show a message!!!
       if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
-        @emitter.emit 'error', $ "<p>You'll have to upgrade or disable/remove projects before adding another.</p>"
+        @emitter.emit 'error', @$tooManyProjectsMsg()
       return if err
       return unless project
       @imdoneRepo.checkForIIOProject()
 
+  $tooManyProjectsMsg: ->
+    projectUrl = Client.projectsUrl
+    $$ ->
+      @p =>
+        @span "You'll have to "
+        @a href:"#{Client.plansUrl}", "upgrade"
+        @span " or "
+        @a href:"#{Client.projectsUrl}", "disable/remove projects"
+        @span " before adding another."
+
   disableProject: (e) ->
-    # DOING:0 implement disableProject
+    # DOING:30 implement disableProject
     @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"

@@ -18,6 +18,8 @@ baseUrl = config.baseUrl # READY:250 This should be set to localhost if process.
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
+projectsUrl = "#{baseUrl}/account/projects"
+plansUrl = "#{baseUrl}/plans"
 pusherAuthUrl = "#{baseUrl}/pusher/auth"
 
 credKey = 'imdone-atom.credentials'
@@ -29,6 +31,8 @@ class ImdoneioClient extends Emitter
   @baseUrl: baseUrl
   @baseAPIUrl: baseAPIUrl
   @signUpUrl: signUpUrl
+  @projectsUrl: projectsUrl
+  @plansUrl: plansUrl
   authenticated: false
   connectionAccepted: false
   authRetryCount: 0
@@ -233,16 +237,16 @@ class ImdoneioClient extends Emitter
 
   createProject: (repo, cb) ->
     # READY:160 Implement createProject
-    # DOING: This should throw an error if TOO_MANY_PROJECTS_ERROR
+    # DOING:20 This should throw an error if TOO_MANY_PROJECTS_ERROR
     @doPost("/projects").send(
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()
     ).end (err, res) =>
       return cb(err, res) if err || !res.ok
       project = res.body
-      # BACKLOG:150 This should be in connectorManager
       @setProjectId repo, project.id
       @setProjectName repo, project.name
+      @setSortConfig repo
       repo.saveConfig (err) => cb err, project
 
   getOrCreateProject: (repo, cb) ->
@@ -258,10 +262,11 @@ class ImdoneioClient extends Emitter
       @setProjectName repo, project.name
       repo.saveConfig (err) -> cb err, project
 
-  getProjectId: (repo) ->
-    _.get repo, 'config.sync.id'
-  setProjectId: (repo, id) ->
-    _.set repo, 'config.sync.id', id
+  getProjectId: (repo) ->  _.get repo, 'config.sync.id'
+  setProjectId: (repo, id) -> _.set repo, 'config.sync.id', id
+  setSortConfig: (repo) ->
+    _.set repo, 'config.sync.useImdoneioForPriority', true
+    _.set repo, 'config.keepEmptyPriority', false
   getProjectName: (repo) -> _.get repo, 'config.sync.name'
   setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
 
