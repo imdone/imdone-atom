@@ -99,9 +99,11 @@ class ConnectorPluginView extends View
     # BACKLOG:50 Also add the task list as a label when creating an issue on github +waffle
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
-      @repo.modifyTask @task, true
-      @issues = @getIssueIds()
-      @showRelatedIssues()
+      @repo.modifyTask @task, true, (err, result) =>
+        console.log err, result
+        @issues = @getIssueIds()
+        @imdoneView.emit "task.modified", @task
+        @showRelatedIssues()
 
   $spinner: ->
     $$ ->
