@@ -42,6 +42,8 @@ class ProductDetailView extends View
       disable_edit_json: true
       disable_properties: true
       disable_collapse: true
+      disable_array_delete_last_row: true
+      disable_array_delete_all_rows: true
 
     # TODO:50 Add provider configurations before creating editor
     @configEditor.destroy() if @configEditor
@@ -54,7 +56,7 @@ class ProductDetailView extends View
     currentVal =  _.get(@product, 'connector.config')
     return if _.isEqual editorVal, currentVal
     _.set @product, 'connector.config', editorVal
-    _.set @product, 'connector.name', @product.name
+    _.set @product, 'connector.name', @product.name unless _.get @product, "connector.name"
     @emitter.emit 'connector.change', @product
 
   # READY:40 Add enable checkbox and take appropriate actions on check/uncheck +urgent

@@ -17,18 +17,7 @@ class ProjectSettingsView extends View
         @div outlet: 'settingsPanel', style:'display:none;', =>
           @h1 "Project Settings"
 
-          @h2 "Project Team"
-          @div class: 'form-group native-key-bindings', =>
-            @label for: 'project-invites', title:"Make it a party", 'Invite people to the team (or revoke an invite)'
-            @input outlet:'projectInvites', type:'email', class:'form-control', id:'project-invites', placeholder:'Invite by email'
-          @div class: 'form-group', =>
-            @label for: 'project-members', title:'They must have moved on.', 'Remove teammates'
-            @input type:'email', class:'form-control', id:'project-members'
-          @div class: 'form-group', =>
-            @label for: 'project-admins', title:"Don't be a SPOF!", 'Convert a teammate to admin'
-            @input type:'text', class:'form-control', id:'project-admins', placeholder:'Start typing a teammates name'
-
-          # READY:0 Add config view here githubClosed:true
+          # READY:0 Add config view here
           # @h1 "Configuration (.imdone/config.json)"
         @div outlet:'enabledProject', class:'block' , style:'display:none;', =>
           @button click:'disableProject', class:'btn btn-small btn-error pull-right', "Stop using imdone.io with this project"
@@ -36,26 +25,12 @@ class ProjectSettingsView extends View
 
   show: ->
     super()
-    @projectInvites.siblings('input.token-input').focus()
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
-    @projectInvites.tokenfield minWidth: 120, inputType: 'email'
 
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
-
-    @projectInvites.on 'tokenfield:createtoken', (e) ->
-      currentTokens = (token.value for token in $(@).tokenfield "getTokens")
-      email = e.attrs.value
-      return e.preventDefault() if email in currentTokens or not /\S+@\S+\.\S+/.test email
-
-    @projectInvites.on 'tokenfield:createdtoken', (e) ->
-
-    @projectInvites.on 'tokenfield:edittoken', (e) ->
-
-    @projectInvites.on 'tokenfield:removedtoken', (e) ->
-      console.log "Token removed! Token value was: #{e.attrs.value}"
 
     @imdoneRepo.on 'project.found', (project) =>
       @settingsPanel.show()

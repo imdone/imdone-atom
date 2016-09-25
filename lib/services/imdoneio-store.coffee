@@ -141,7 +141,7 @@ module.exports =  (repo) ->
     return cb() unless repo.project
     sort = _.get repo, 'sync.sort'
     repo.project.taskOrder = sort
-    # DOING This should call client.updateTaskOrder
+    # DOING This should call client.updateTaskOrder, but we should also listen for pusher messages on project update
     client.updateProject repo.project, (err, theProject) =>
       return cb(err) if err
       cb null, theProject.taskOrder
