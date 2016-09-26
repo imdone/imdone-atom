@@ -119,8 +119,8 @@ class ImdoneAtomView extends ScrollView
       @onRepoUpdate()
 
     @imdoneRepo.on 'initialized', =>
-      @onRepoUpdate()
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
+      @onRepoUpdate()
 
     @imdoneRepo.on 'list.modified', =>
       console.log 'list.modified'

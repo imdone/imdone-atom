@@ -53,12 +53,5 @@
     "pedantic": false,
     "smartLists": true,
     "langPrefix": "language-"
-  },
-  "meta": {
-    "gh": {
-      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
-      "titleTemplate": "View github issue %s",
-      "icon": "icon-octoface"
-    }
   }
 }
