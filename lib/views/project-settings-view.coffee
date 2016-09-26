@@ -17,7 +17,7 @@ class ProjectSettingsView extends View
         @div outlet: 'settingsPanel', style:'display:none;', =>
           @h1 "Project Settings"
 
-          # READY:0 Add config view here
+          # READY: Add config view here
           # @h1 "Configuration (.imdone/config.json)"
         @div outlet:'enabledProject', class:'block' , style:'display:none;', =>
           @button click:'disableProject', class:'btn btn-small btn-error pull-right', "Stop using imdone.io with this project"
@@ -62,5 +62,5 @@ class ProjectSettingsView extends View
         @span " before adding another."
 
   disableProject: (e) ->
-    # DOING:30 implement disableProject
+    # DOING:60 implement disableProject
     @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"

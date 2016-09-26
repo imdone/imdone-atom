@@ -10,19 +10,19 @@ class ProductDetailView extends View
 
     @on 'click', '.enable-btn', =>
       return if @product.isEnabled()
-      # READY:80 Connector plugin should be added
+      # READY: Connector plugin should be added
       @emitter.emit 'connector.enable', @product.connector
 
     @on 'click', '.disable-btn', =>
       return unless @product.isEnabled()
-      # READY:90 Connector plugin should be removed
+      # READY: Connector plugin should be removed
       @emitter.emit 'connector.disable', @product.connector
 
   @content: (params) ->
     require 'json-editor'
     @div class: 'product-detail-view-content config-container', =>
       @div outlet: '$detail'
-      @div class: 'json-editor-container vertical-scroll', =>
+      @div class: 'json-editor-container', =>
         @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
 
   setProduct: (@product)->
@@ -45,7 +45,7 @@ class ProductDetailView extends View
       disable_array_delete_last_row: true
       disable_array_delete_all_rows: true
 
-    # TODO:50 Add provider configurations before creating editor
+    # TODO:10 Add provider configurations before creating editor
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
     @configEditor.on 'change', => @emitChange()
@@ -59,8 +59,8 @@ class ProductDetailView extends View
     _.set @product, 'connector.name', @product.name unless _.get @product, "connector.name"
     @emitter.emit 'connector.change', @product
 
-  # READY:40 Add enable checkbox and take appropriate actions on check/uncheck +urgent
-  # READY:290 When unlinked disable all connectors (In API) +urgent
+  # READY: Add enable checkbox and take appropriate actions on check/uncheck +urgent
+  # READY: When unlinked disable all connectors (In API) +urgent
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"

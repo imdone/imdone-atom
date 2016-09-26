@@ -12,7 +12,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:220 Show logged in user and avatar here
+        # READY: Show logged in user and avatar here
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
@@ -22,7 +22,7 @@ class MenuView extends View
         @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           @a href: "#", class: "icon #{menuClosedClass}"
         @div outlet: '$toolbar', class: "imdone-toolbar", =>
-          # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
+          # DONE: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
           # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
           # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
           # BACKLOG:110 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49>
@@ -33,7 +33,7 @@ class MenuView extends View
             @a href: "#", =>
               @i class: "icon icon-plus toolbar-icon"
               @span class:'tool-text', 'Add a new list'
-          # DONE:0 Add a link to open filtered files issue:49
+          # DONE: Add a link to open filtered files issue:49
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button", title: "Zap! (open visible files)", =>
             @a href: "#", =>
               @i class: "icon icon-zap toolbar-icon"

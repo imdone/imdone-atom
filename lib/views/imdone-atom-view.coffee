@@ -18,7 +18,7 @@ class ImdoneAtomView extends ScrollView
   class PluginViewInterface extends Emitter
     constructor: (@imdoneView)->
       super()
-    emitter: -> @ # CHANGED:0 deprecated
+    emitter: -> @ # CHANGED: deprecated
     selectTask: (id) ->
       @imdoneView.selectTask id
     showPlugin: (plugin) ->
@@ -49,7 +49,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
+      # #DONE: If over 2000 files, ask user to add excludes in `.imdoneignore` +feature
       if @numFiles > config.getSettings().maxFilesPrompt
         @ignorePrompt.show()
       else @initImdone()
@@ -69,7 +69,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:0 Update progress bar on repo load
+        # #DONE: Update progress bar on repo load
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -111,11 +111,11 @@ class ImdoneAtomView extends ScrollView
       console.log "auth-failed" if status == "failed"
 
 
-    @connectorManager.on 'tasks.syncing', => @showMask() # READY:310 mask isn't always hiding correctly gh:105
+    @connectorManager.on 'tasks.syncing', => @showMask() # READY: mask isn't always hiding correctly gh:105
 
     @connectorManager.on 'sync.error', => @hideMask()
 
-    @imdoneRepo.on 'tasks.updated', => # READY:120 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105
+    @imdoneRepo.on 'tasks.updated', => # READY: If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105
       @onRepoUpdate()
 
     @imdoneRepo.on 'initialized', =>
@@ -178,7 +178,7 @@ class ImdoneAtomView extends ScrollView
     @on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
-      # DONE:0 Use setting to determine if we should show a task notification
+      # DONE: Use setting to determine if we should show a task notification
       if config.getSettings().showNotifications
         taskId = $(link).closest('.task').attr 'id'
         task = @imdoneRepo.getTask taskId
@@ -247,7 +247,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO:10 Add the plugin project buttons here
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO:0 Add the plugin project buttons here
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -258,7 +258,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:110 Get the connector from the connector manager
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY: Get the connector from the connector manager
       return if err || (product && !product.isEnabled())
       connector = product && product.connector
       if @plugins[Plugin.pluginName]
@@ -333,7 +333,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: ->
-    # BACKLOG:160 This should be queued so two updates don't colide
+    # BACKLOG:150 This should be queued so two updates don't colide
     @showMask()
     @updateBoard()
     @boardWrapper.css 'bottom', 0
@@ -363,9 +363,9 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:0 Add task drag and drop support
+    # #DONE: Add task drag and drop support
 
-    # BACKLOG:190 We can display data from imdone.io in a card summary/details
+    # BACKLOG:180 We can display data from imdone.io in a card summary/details
     getTask = (task) =>
       contexts = task.getContext()
       tags = task.getTags()
@@ -397,7 +397,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:0 Add todo.txt stuff like chrome app!
+          # #DONE: Add todo.txt stuff like chrome app!
           if contexts && !showTagsInline
             @div =>
               for context, i in contexts
@@ -412,7 +412,7 @@ class ImdoneAtomView extends ScrollView
                   @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE:0 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj issue:45
+              # DONE: x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj issue:45
               if dateDue
                 @tr =>
                   @td "due"
@@ -432,7 +432,7 @@ class ImdoneAtomView extends ScrollView
                   @td "completed"
                   @td dateCompleted
                   @td =>
-                    # #DONE:0 Implement #filter/*filterRegex* links
+                    # #DONE: Implement #filter/*filterRegex* links
                     @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                       @span class:"icon icon-light-bulb"
               for data in task.getMetaDataWithLinks(repo.getConfig())
@@ -441,11 +441,11 @@ class ImdoneAtomView extends ScrollView
                     @td data.key
                     @td data.value
                     @td =>
+                      if data.link
+                        @a href: data.link.url, title: data.link.title, =>
+                          @span class:"icon #{data.link.icon || 'icon-link-external'}"
                       @a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}", =>
                         @span class:"icon icon-light-bulb"
-                      if data.link
-                          @a href: data.link.url, title: data.link.title, =>
-                            @span class:"icon icon-link-external"
           @div class: 'task-source', =>
             @a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
             'data-line': task.line, "#{task.source.path + ':' + task.line}"
@@ -457,7 +457,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE:0 Add delete list icon if length is 0
+              # #DONE: Add delete list icon if length is 0
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
@@ -510,7 +510,7 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-    # DONE:0 send the project path issue:48
+    # DONE: send the project path issue:48
     fileService.openFile @path, filePath, line, (success) =>
       return if success
       atom.workspace.open(filePath, split: 'left').then =>

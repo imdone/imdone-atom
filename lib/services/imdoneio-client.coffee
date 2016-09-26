@@ -11,10 +11,10 @@ debug = require('debug/browser')
 pluginManager = require './plugin-manager'
 log = debug 'imdone-atom:client'
 
-# READY:240 The client public_key, secret and pusherKey should be configurable
+# READY: The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
 NO_RESPONSE_ERR = new Error "No response from imdone.io"
-baseUrl = config.baseUrl # READY:250 This should be set to localhost if process.env.IMDONE_ENV = /dev/i
+baseUrl = config.baseUrl # READY: This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
@@ -105,7 +105,7 @@ class ImdoneioClient extends Emitter
       @handlePushEvents()
 
   onAuthFailure: (err, res, cb) ->
-    # READY:50 Add imdone_status to the Error
+    # READY: Add imdone_status to the Error
     status = err.imdone_status = if err && (err.code == 'ECONNREFUSED' || _.get(err, 'response.err.status') == 404) then 'unavailable' else 'failed'
     @connectionAccepted = true unless status == "unavailable"
     @authenticated = false
@@ -129,7 +129,7 @@ class ImdoneioClient extends Emitter
       encrypted: true
       authEndpoint: pusherAuthUrl
       disableStats: true
-    # READY:300 imdoneio pusher channel needs to be configurable
+    # READY: imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.unlinked', data
@@ -163,7 +163,7 @@ class ImdoneioClient extends Emitter
     @doPost("/projects/")
 
   getProducts: (projectId, cb) ->
-    # READY:180 Implement getProducts
+    # READY: Implement getProducts
     @doGet("/projects/#{projectId}/products").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -176,7 +176,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getProject: (projectId, cb) ->
-    # READY:190 Implement getProject
+    # READY: Implement getProject
     @doGet("/projects/#{projectId}").end (err, res) =>
       return cb(NO_RESPONSE_ERR) unless res
       return cb(PROJECT_ID_NOT_VALID_ERR) if err && err.status == 404
@@ -208,7 +208,7 @@ class ImdoneioClient extends Emitter
   createConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:130 Implement createProject
+    # READY: Implement createProject
     @doPost("/projects/#{projectId}/connectors").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -216,7 +216,7 @@ class ImdoneioClient extends Emitter
   updateConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:140 Implement createProject
+    # READY: Implement createProject
     @doPatch("/projects/#{projectId}/connectors/#{connector.id}").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -230,14 +230,14 @@ class ImdoneioClient extends Emitter
   _connectorAction: (repo, connector, action, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:150 Implement createProject
+    # READY: Implement createProject
     @doPost("/projects/#{projectId}/connectors/#{connector.id}/#{action}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   createProject: (repo, cb) ->
-    # READY:160 Implement createProject
-    # DOING:20 This should throw an error if TOO_MANY_PROJECTS_ERROR
+    # READY: Implement createProject
+    # DOING:50 This should throw an error if TOO_MANY_PROJECTS_ERROR
     @doPost("/projects").send(
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()
@@ -250,9 +250,9 @@ class ImdoneioClient extends Emitter
       repo.saveConfig (err) => cb err, project
 
   getOrCreateProject: (repo, cb) ->
-    # READY:170 Implement getOrCreateProject
-    # BACKLOG:220 move this to connectorManager
-    # DONE:0 Make sure this works github_closed:true
+    # READY: Implement getOrCreateProject
+    # BACKLOG:210 move this to connectorManager
+    # DONE: Make sure this works github_closed:true
     return cb() unless repo && repo.config && @isAuthenticated()
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
@@ -270,6 +270,7 @@ class ImdoneioClient extends Emitter
   getProjectName: (repo) -> _.get repo, 'config.sync.name'
   setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
 
+  # DOING:20 Send branch on sync if available for rules. gh:135 +now
   syncTasks: (repo, tasks, cb) ->
     projectId = @getProjectId repo
     @doPost("/projects/#{projectId}/tasks").send(tasks).end (err, res) =>
@@ -291,11 +292,11 @@ class ImdoneioClient extends Emitter
     @datastore[collection]
 
   tasksDb: (repo) ->
-    #READY:320 return the project specific task DB
+    #READY: return the project specific task DB
     @db 'tasks',repo.getPath().replace(/\//g, '_')
 
   listsDb: (repo) ->
-    #READY:330 return the project specific task DB
+    #READY: return the project specific task DB
     @db 'lists',repo.getPath().replace(/\//g, '_')
 
   @instance: new ImdoneioClient
