@@ -10,12 +10,12 @@ class ProductDetailView extends View
 
     @on 'click', '.enable-btn', =>
       return if @product.isEnabled()
-      # READY: Connector plugin should be added
+      # READY: Connector plugin should be added id:95
       @emitter.emit 'connector.enable', @product.connector
 
     @on 'click', '.disable-btn', =>
       return unless @product.isEnabled()
-      # READY: Connector plugin should be removed
+      # READY: Connector plugin should be removed id:96
       @emitter.emit 'connector.disable', @product.connector
 
   @content: (params) ->
@@ -35,8 +35,8 @@ class ProductDetailView extends View
 
   createEditor: ->
     options =
-      schema: @product.schemas.config # TODO:160 Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow
-      startval: @product.connector.config # TODO:170 Rule values to be set by GET /projects/ :projectId/products +rules
+      schema: @product.schemas.config # TODO:0 Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow id:97
+      startval: @product.connector.config # TODO:0 Rule values to be set by GET /projects/ :projectId/products +rules id:98
       theme: 'bootstrap3'
       required_by_default: true
       disable_edit_json: true
@@ -45,7 +45,7 @@ class ProductDetailView extends View
       disable_array_delete_last_row: true
       disable_array_delete_all_rows: true
 
-    # TODO:0 Add provider configurations before creating editor
+    # TODO:0 Add provider configurations before creating editor id:99
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
     @configEditor.on 'change', => @emitChange()
@@ -59,12 +59,12 @@ class ProductDetailView extends View
     _.set @product, 'connector.name', @product.name unless _.get @product, "connector.name"
     @emitter.emit 'connector.change', @product
 
-  # READY: Add enable checkbox and take appropriate actions on check/uncheck +urgent
-  # READY: When unlinked disable all connectors (In API) +urgent
+  # READY: Add enable checkbox and take appropriate actions on check/uncheck +urgent id:100
+  # READY: When unlinked disable all connectors (In API) +urgent id:101
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
-      # TODO:180 This will have to be upadted on an event sent with pusher
+      # TODO:0 This will have to be upadted on an event sent with pusher id:102
       @div class:'block', =>
         if product.isLinked()
           @div class:'btn-group', =>

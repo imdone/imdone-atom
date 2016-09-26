@@ -12,7 +12,7 @@ beta =
   pusherChannelPrefix: 'private-imdoneio-beta'
   baseUrl:    'http://beta.imdone.io'
 
-# TODO:30 Change these prior to release
+# TODO:0 Change these prior to release id:3
 prod =
   imdoneKeyA: 'BcbpJqNyYvAI5FhR-dt5AbdcpXKV8gj0vv0RHjb1qGCXoymcckb8hQ=='
   imdoneKeyB: 'EUyEtV2d-ZSgvvWKGlCiOVvAmlc='

@@ -17,7 +17,7 @@ class ProjectSettingsView extends View
         @div outlet: 'settingsPanel', style:'display:none;', =>
           @h1 "Project Settings"
 
-          # READY: Add config view here
+          # READY: Add config view here id:103
           # @h1 "Configuration (.imdone/config.json)"
         @div outlet:'enabledProject', class:'block' , style:'display:none;', =>
           @button click:'disableProject', class:'btn btn-small btn-error pull-right', "Stop using imdone.io with this project"
@@ -44,7 +44,7 @@ class ProjectSettingsView extends View
 
   enableProject: (e) ->
     @client.createProject @imdoneRepo, (err, project) =>
-      # DONE: If err=TOO_MANY_PROJECTS_ERROR then show a message!!!
+      # DONE:0 If err=TOO_MANY_PROJECTS_ERROR then show a message!!! id:104
       if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
         @emitter.emit 'error', @$tooManyProjectsMsg()
       return if err
@@ -62,5 +62,5 @@ class ProjectSettingsView extends View
         @span " before adding another."
 
   disableProject: (e) ->
-    # DOING:60 implement disableProject
+    # DOING: implement disableProject id:105
     @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"
