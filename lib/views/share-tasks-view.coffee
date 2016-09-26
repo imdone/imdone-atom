@@ -17,7 +17,7 @@ class ShareTasksView extends View
         @span class:'loading loading-spinner-small inline-block'
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', =>
         @div class: 'col-md-3 product-select-wrapper pull-left', =>
-          @h1 'Integrations'
+          @h1 'TODOBOTs'
           @subview 'productSelect', new ProductSelectionView
         @div class:'col-md-8 product-detail-wrapper config-container', =>
           @subview 'productDetail', new ProductDetailView

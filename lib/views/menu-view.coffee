@@ -43,15 +43,15 @@ class MenuView extends View
               @i class: "icon icon-question toolbar-icon"
               @span class:'tool-text', 'Help'
           @div class: "menu-sep-space-2x"
+          @div outlet: "$imdoneioButtons", style: "display:none;", =>
+            @div click: "openShare", class: "imdone-toolbar-button", title: "TODOBOTs", =>
+              @a href: "#", =>
+                @i class: "icon flaticon-robot-with-big-head toolbar-icon"
+                @span class:'tool-text', 'TODOBOTs'
           @div click:'openProjectSettings', outlet:'$projectSettings', class:'imdone-toolbar-button', title:'Project Settings', style: "display:none;", =>
             @a href: "#", =>
               @i class:"icon icon-settings toolbar-icon"
               @span class:'tool-text', 'Project Settings'
-          @div outlet: "$imdoneioButtons", style: "display:none;", =>
-            @div click: "openShare", class: "imdone-toolbar-button", title: "Project Integrations", =>
-              @a href: "#", =>
-                @i class: "icon icon-imdone-share2 toolbar-icon"
-                @span class:'tool-text', 'Project Integrations'
           @div class: "imdone-project-plugins"
           @div outlet:'$login', class:'imdone-icon imdone-toolbar-button', title:'login to imdone.io', =>
             @a click:'openLogin', href: "#", =>

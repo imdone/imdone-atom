@@ -5,6 +5,7 @@
 @import "ui-variables";
 @import "imdone-plugins";
 @import "icomoon/style";
+@import "flaticon/flaticon";
 @import "bootstrap-tokenfield";
 
 @menu-component-width: 178px;
@@ -418,6 +419,7 @@
           cursor: move;
           border: 2px solid @task-background-color;
           .task-text {
+            margin-right: 1em;
             p {
               margin: 0 0 5px;
             }
@@ -458,6 +460,7 @@
           .imdone-task-plugins {
             text-align: right;
             min-height: 20px;
+            margin-right: .3em;
           }
           &.selected {
             border-color: @text-color-info;
