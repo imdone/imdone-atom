@@ -172,5 +172,6 @@ module.exports = ImdoneAtom =
   createImdoneAtomView: ({path, uri}) ->
     ImdoneAtomView ?= require './views/imdone-atom-view'
     imdoneHelper ?= require './services/imdone-helper'
+    debugger
     {connectorManager, repo} = imdoneHelper.createRepo path, uri
     new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri, connectorManager: connectorManager)

@@ -7,6 +7,7 @@ Pusher = allowUnsafeEval -> require 'pusher-js'
 _ = require 'lodash'
 Task = require 'imdone-core/lib/task'
 config = require '../../config'
+helper = require './imdone-helper'
 debug = require('debug/browser')
 pluginManager = require './plugin-manager'
 log = debug 'imdone-atom:client'
@@ -272,8 +273,12 @@ class ImdoneioClient extends Emitter
 
   # DOING:20 Send branch on sync if available for rules. gh:135 +now
   syncTasks: (repo, tasks, cb) ->
+    gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
-    @doPost("/projects/#{projectId}/tasks").send(tasks).end (err, res) =>
+    opts =
+      tasks: tasks
+      branch: gitRepo && gitRepo.branch
+    @doPost("/projects/#{projectId}/tasks").send(opts).end (err, res) =>
       return cb(err, res) if err || !res.ok
       tasks = res.body
       cb null, tasks

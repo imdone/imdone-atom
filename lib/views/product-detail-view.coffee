@@ -45,7 +45,7 @@ class ProductDetailView extends View
       disable_array_delete_last_row: true
       disable_array_delete_all_rows: true
 
-    # TODO:10 Add provider configurations before creating editor
+    # TODO:0 Add provider configurations before creating editor
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
     @configEditor.on 'change', => @emitChange()
