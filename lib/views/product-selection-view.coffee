@@ -30,7 +30,7 @@ class ProductSelectionView extends SelectListView
     _.find @items, name: name
 
   confirmed: (product) ->
-    @emitter.emit 'product.selected', product
+    @emitter.emit 'product.selected', product if @emitter
 
   viewForItem: (product) ->
     icon = 'icon-sign-in'

@@ -167,11 +167,10 @@ module.exports = ImdoneAtom =
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])
-    @createImdoneAtomView(path: pathname, uri: uri)
+    @getImdoneAtomView(path: pathname, uri: uri)
 
-  createImdoneAtomView: ({path, uri}) ->
+  getImdoneAtomView: ({path, uri}) ->
     ImdoneAtomView ?= require './views/imdone-atom-view'
     imdoneHelper ?= require './services/imdone-helper'
-    debugger
-    {connectorManager, repo} = imdoneHelper.createRepo path, uri
+    {connectorManager, repo} = imdoneHelper.getRepo path, uri
     new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri, connectorManager: connectorManager)

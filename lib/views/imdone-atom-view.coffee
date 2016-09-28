@@ -11,7 +11,7 @@ fileService = null
 log = null
 config = require '../services/imdone-config'
 
-# BACKLOG:0 Add keen stats for features id:67
+# DOING:0 Add keen stats for features id:67
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -318,6 +318,7 @@ class ImdoneAtomView extends ScrollView
     visibleTasks
 
   initImdone: () ->
+    return @onRepoUpdate() if @imdoneRepo.initialized
     if @numFiles > 1000
       @ignorePrompt.hide()
       @progressContainer.show()
@@ -501,7 +502,6 @@ class ImdoneAtomView extends ScrollView
 
   destroy: ->
     @emitter.emit 'did-destroy', @
-    @imdoneRepo.destroy()
     @emitter.dispose()
     @remove()
 
