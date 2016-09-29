@@ -8,11 +8,14 @@ repos = {}
 
 module.exports =
   getRepo: (pathname, uri) ->
+    # TODO: This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout id:131
     return repos[pathname] if repos and repos[pathname]
     imdoneRepo = @fsStore(new ImdoneRepo(pathname))
     @excludeVcsIgnoresMixin(imdoneRepo)
     repos[pathname] = require('./imdoneio-store') imdoneRepo
     repos[pathname]
+
+  destroyRepos: () -> repo.repo.destroy() for path, repo of repos
 
   fsStore: (repo) ->
     fsStore = atomFsStore if configHelper.getSettings().useAlternateFileWatcher

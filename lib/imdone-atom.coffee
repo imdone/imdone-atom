@@ -81,7 +81,6 @@ module.exports = ImdoneAtom =
 
   activate: (state) ->
     # READY: Put requires in activate to speed up startup issue:77 id:5
-    # #DONE:0 Add back serialization (The right way) +Roadmap @testing id:6
     _ = require 'lodash'
     url = require 'url'
     ImdoneAtomView ?= require './views/imdone-atom-view'
@@ -122,6 +121,7 @@ module.exports = ImdoneAtom =
       previousActivePane.activate()
 
   deactivate: ->
+    imdoneHelper.destroyRepos()
     @subscriptions.dispose()
 
   getCurrentProject: ->
@@ -167,9 +167,9 @@ module.exports = ImdoneAtom =
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])
-    @getImdoneAtomView(path: pathname, uri: uri)
+    @createImdoneAtomView(path: pathname, uri: uri)
 
-  getImdoneAtomView: ({path, uri}) ->
+  createImdoneAtomView: ({path, uri}) ->
     ImdoneAtomView ?= require './views/imdone-atom-view'
     imdoneHelper ?= require './services/imdone-helper'
     {connectorManager, repo} = imdoneHelper.getRepo path, uri

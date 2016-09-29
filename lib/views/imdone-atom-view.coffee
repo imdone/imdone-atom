@@ -318,7 +318,8 @@ class ImdoneAtomView extends ScrollView
     visibleTasks
 
   initImdone: () ->
-    return @onRepoUpdate() if @imdoneRepo.initialized
+    return @onRepoUpdate() && @menuView.updateMenu() if @imdoneRepo.initialized
+
     if @numFiles > 1000
       @ignorePrompt.hide()
       @progressContainer.show()
