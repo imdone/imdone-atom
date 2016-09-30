@@ -11,16 +11,18 @@ module.exports =
 class ProjectSettingsView extends View
   @content: (params) ->
     @div class: "config-container", =>
-      @div class: 'block imdone-team-settings-pane config-container', =>
-        @div outlet:'disabledProject', class:'block' , =>
-          @button click:'enableProject', class:'btn btn-lg btn-success', "Use imdone.io with this project"
-        @div outlet: 'settingsPanel', style:'display:none;', =>
-          @h1 "Project Settings"
+      @div outlet:'disabledProject', class:'block text-center' , =>
+        @h1 "Welcome to imdone.io!"
+        @h3 "Create and Update GitHub issues from TODO comments in your code!"
+        @button click:'enableProject', class:'btn btn-lg btn-success', "Use imdone.io with this project"
+      @div outlet: 'settingsPanel', style:'display:none;', =>
+        # @h1 "Project Settings"
 
-          # READY: Add config view here
-          # @h1 "Configuration (.imdone/config.json)"
-        @div outlet:'enabledProject', class:'block' , style:'display:none;', =>
-          @button click:'disableProject', class:'btn btn-small btn-error pull-right', "Stop using imdone.io with this project"
+        # READY: Add config view here
+        # @h1 "Configuration (.imdone/config.json)"
+
+      @div outlet:'enabledProject', class:'block text-center' , style:'display:none;', =>
+        @button click:'disableProject', class:'btn btn-small btn-error', "Stop using imdone.io with this project"
 
 
   show: ->
@@ -43,10 +45,12 @@ class ProjectSettingsView extends View
       @disabledProject.show()
 
   enableProject: (e) ->
+    @emitter.emit 'error.hide'
     @client.createProject @imdoneRepo, (err, project) =>
       # DONE: If err=TOO_MANY_PROJECTS_ERROR then show a message!!!
       if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
         @emitter.emit 'error', @$tooManyProjectsMsg()
+        @disabledProject.show()
       return if err
       return unless project
       @imdoneRepo.checkForIIOProject()

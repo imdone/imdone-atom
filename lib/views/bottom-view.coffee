@@ -24,7 +24,7 @@ class BottomView extends View
           @subview 'projectSettingsView', new ProjectSettingsView params
         @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
           @subview 'shareTasksView', new ShareTasksView params
-        @div outlet: '$login', class: 'Login config-panel', =>
+        @div outlet: '$login', class: 'config-panel', =>
           @subview 'loginView', new LoginView params
         @div outlet: 'renameList', class:'rename-list config-panel', =>
           @h2 =>
@@ -112,6 +112,8 @@ class BottomView extends View
     @emitter.on 'menu.toggle', => @toggleClass 'shift'
 
     @emitter.on 'error', ($html) => @error.html($html).show()
+
+    @emitter.on 'error.hide', => @error.hide()
 
   isOpen: ->
     @hasClass 'open'

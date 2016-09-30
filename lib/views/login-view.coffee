@@ -10,19 +10,21 @@ module.exports =
 class LoginView extends View
   @content: (params) ->
     @div class: "login-container config-container", =>
+      @div class: "text-center", =>
+        @h1 "Welcome to imdone.io!"
+        @h2 "Login or sign up to create and update GitHub issues from TODO comments in your code!"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
       # READY: login should be it's own view
-      @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
-        @div class: 'input-med', =>
+      @div outlet:'loginPanel', class: 'imdone-login-pane', style: 'display:none;', =>
+        @div class: 'input input-med inline-block-tight', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
-        @div class: 'input-med', =>
+        @div class: 'input input-med inline-block-tight', =>
           @subview 'passwordEditor', new TextEditorView(mini: true, placeholderText: 'password')
-        @div class:'btn-group btn-group-login', =>
+        @div class:'btn-group btn-group-login inline-block-tight', =>
           @button outlet: 'loginButton', click: 'login', title: 'WHOOSH!', class:'btn btn-primary inline-block-tight', 'LOGIN'
-        @div class:'block', =>
-          @span "or "
-          @a href:"#{Client.signUpUrl}", "sign up"
+      @h2 "or"
+      @a class: 'btn btn-lg btn-primary', href:"#{Client.signUpUrl}", "Sign up"
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
