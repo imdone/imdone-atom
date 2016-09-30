@@ -12,7 +12,7 @@ class LoginView extends View
     @div class: "login-container config-container", =>
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      # READY: login should be it's own view id:87
+      # READY: login should be it's own view
       @div outlet:'loginPanel', class: 'block imdone-login-pane', style: 'display:none;', =>
         @div class: 'input-med', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
@@ -63,7 +63,7 @@ class LoginView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO:0 We need to show an error here if login fails because service can't be reached or if login fails id:88
+      # TODO: We need to show an error here if login fails because service can't be reached or if login fails
       log 'login:end'
       return @loginPanel.show() unless @client.isAuthenticated()
       @onAuthenticated()
