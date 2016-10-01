@@ -171,7 +171,6 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getAccount: (cb) ->
-    debugger
     log 'getAccount:start'
     @doGet("/account").end (err, res) =>
       log 'getAccount:end'

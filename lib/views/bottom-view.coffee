@@ -11,7 +11,7 @@ class BottomView extends View
   @content: (params) ->
     LoginView = require './login-view'
     ShareTasksView = require './share-tasks-view'
-    ProjectSettingsView = require './project-settings-view'
+    # ProjectSettingsView = require './project-settings-view'
     @div class:'imdone-bottom-view', =>
       @div class:'bottom-view-header', =>
         @div outlet: 'resizer', class:'split-handle-y'
@@ -20,8 +20,8 @@ class BottomView extends View
         # DOING: Set up a messaging area
         @div outlet: 'error', class:'alert alert-error'
       @div class:'bottom-view-main', =>
-        @div outlet: 'projectSettings', class:'project-settings config-panel', =>
-          @subview 'projectSettingsView', new ProjectSettingsView params
+        # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
+        #   @subview 'projectSettingsView', new ProjectSettingsView params
         @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
           @subview 'shareTasksView', new ShareTasksView params
         @div outlet: '$login', class: 'config-panel', =>
@@ -47,7 +47,7 @@ class BottomView extends View
     if @initialized || !@emitter then return else @initialized = true
     @loginView.handleEvents @emitter
     @shareTasksView.handleEvents @emitter
-    @projectSettingsView.handleEvents @emitter
+    # @projectSettingsView.handleEvents @emitter
 
     # #DONE: Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
@@ -91,6 +91,8 @@ class BottomView extends View
 
     @imdoneRepo.on 'list.modified', (list) => @hide()
 
+    @imdoneRepo.on 'project.not-found', => @showShare()
+
     @closeButton.on 'click', => @hide()
 
     @client.on 'unauthenticated', => @hide()
@@ -105,7 +107,7 @@ class BottomView extends View
 
     @emitter.on 'login', => @showLogin()
 
-    @emitter.on 'project.settings', => @showProjectSettings()
+    # @emitter.on 'project.settings', => @showProjectSettings()
 
     @imdoneRepo.on 'project.removed', => @hide()
 
@@ -166,11 +168,11 @@ class BottomView extends View
     @setHeight(500)
     @show()
 
-  showProjectSettings: () ->
-    @hide()
-    @projectSettings.show () => @projectSettingsView.show()
-    @setHeight(500)
-    @show()
+  # showProjectSettings: () ->
+  #   @hide()
+  #   @projectSettings.show () => @projectSettingsView.show()
+  #   @setHeight(500)
+  #   @show()
 
   showRename: (name) ->
     @hide()

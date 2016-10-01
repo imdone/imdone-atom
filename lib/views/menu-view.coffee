@@ -45,14 +45,10 @@ class MenuView extends View
               @span class:'tool-text', 'Help'
           @div class: "menu-sep-space-2x"
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
-            @div click: "openShare", class: "imdone-toolbar-button", title: "TODOBOTs", =>
+            @div click: "openShare", class: "imdone-toolbar-button", title: "Project TODOBOTs", =>
               @a href: "#", =>
-                @i class: "icon flaticon-robot-with-big-head toolbar-icon"
-                @span class:'tool-text', 'TODOBOTs'
-          @div click:'openProjectSettings', outlet:'$projectSettings', class:'imdone-toolbar-button', title:'Project Settings', style: "display:none;", =>
-            @a href: "#", =>
-              @i class:"icon icon-settings toolbar-icon"
-              @span class:'tool-text', 'Project Settings'
+                @i class: "icon icon-settings toolbar-icon"
+                @span class:'tool-text', 'Project TODOBOTs'
           @div class: "imdone-project-plugins"
           @div outlet:'$login', class:'imdone-icon imdone-toolbar-button', title:'login to imdone.io', =>
             @a click:'openLogin', href: "#", =>
@@ -133,8 +129,6 @@ class MenuView extends View
     @imdoneRepo.on 'list.modified', => @updateMenu()
     @imdoneRepo.on 'file.update', => @updateMenu()
     @imdoneRepo.on 'tasks.moved', => @updateMenu()
-    @imdoneRepo.on 'project.found', => @$imdoneioButtons.show()
-    @imdoneRepo.on 'project.removed', => @$imdoneioButtons.hide()
 
     @client.on 'authenticated', => @authenticated()
     @client.on 'unauthenticated', => @unauthenticated()
@@ -148,20 +142,16 @@ class MenuView extends View
     @$login.hide()
     @$logOff.show();
     @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title)
-    @$projectSettings.show()
-    @$imdoneioButtons.show() if @imdoneRepo.project
+    @$imdoneioButtons.show()
 
   unauthenticated: ->
     @$login.show()
     @$logOff.hide()
-    @$projectSettings.hide()
     @$imdoneioButtons.hide()
 
   openShare: -> @emitter.emit 'share'
 
   openLogin: -> @emitter.emit 'login'
-
-  openProjectSettings: -> @emitter.emit 'project.settings'
 
   logOff: ->
     @client.logoff()

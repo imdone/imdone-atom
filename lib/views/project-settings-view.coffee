@@ -10,7 +10,7 @@ require('bootstrap-tokenfield') $
 module.exports =
 class ProjectSettingsView extends View
   @content: (params) ->
-    @div class: "config-container", =>
+    @div =>
       @div outlet:'disabledProject', class:'block text-center' , =>
         @h1 "Welcome to imdone.io!"
         @h3 "Create and Update GitHub issues from TODO comments in your code!"
@@ -21,9 +21,8 @@ class ProjectSettingsView extends View
         # READY: Add config view here
         # @h1 "Configuration (.imdone/config.json)"
 
-      @div outlet:'enabledProject', class:'block text-center' , style:'display:none;', =>
-        @button click:'disableProject', class:'btn btn-small btn-error', "Stop using imdone.io with this project"
-
+      @div outlet:'enabledProject', style:'display:none;', =>
+        @a click:'disableProject', class:'inline-block', "Stop using imdone.io with this project"
 
   show: ->
     super()
@@ -66,5 +65,4 @@ class ProjectSettingsView extends View
         @span " before adding another."
 
   disableProject: (e) ->
-    # DOING: implement disableProject
     @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"

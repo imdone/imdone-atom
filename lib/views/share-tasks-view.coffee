@@ -7,6 +7,7 @@ log = debug 'imdone-atom:share-tasks-view'
 Client = require '../services/imdoneio-client'
 ProductSelectionView = require './product-selection-view'
 ProductDetailView = require './product-detail-view'
+ProjectSettingsView = require './project-settings-view'
 ConnectorManager = require '../services/connector-manager'
 
 module.exports =
@@ -15,12 +16,13 @@ class ShareTasksView extends View
     @div class: "share-tasks-container config-container", =>
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', =>
-        @div class: 'col-md-3 product-select-wrapper pull-left', =>
+      @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style:'display:none;', =>
+        @div class: 'product-select-wrapper', =>
           @h1 'TODOBOTs'
           @subview 'productSelect', new ProductSelectionView
-        @div class:'col-md-8 product-detail-wrapper config-container', =>
+        @div class:'product-detail-wrapper', =>
           @subview 'productDetail', new ProductDetailView
+      @subview 'projectSettings', new ProjectSettingsView params
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
@@ -55,6 +57,7 @@ class ShareTasksView extends View
     if @initialized || !@emitter then return else @initialized = true
     @productSelect.handleEvents @emitter
     @productDetail.handleEvents @emitter
+    @projectSettings.handleEvents @emitter
 
     self = @
     @emitter.on 'product.selected', (product) =>

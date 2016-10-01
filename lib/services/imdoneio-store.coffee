@@ -50,7 +50,7 @@ module.exports =  (repo) ->
     # READY: This should be moved to imdoneio-store
     return if repo.project
     return unless client.isAuthenticated()
-    return unless repo.getProjectId()
+    return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
       # TODO: Do something with this error
       return if err
