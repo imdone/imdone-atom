@@ -8,6 +8,10 @@ configHelper        = require './services/imdone-config'
 
 module.exports = ImdoneAtom =
   config:
+    showLoginOnLaunch:
+      description: "Display imdone.io login panel on startup if user is not logged in."
+      type: 'boolean'
+      default: true
     useAlternateFileWatcher:
       description: "If your board won't update when you edit files, then try the alternate file watcher"
       type: 'boolean'

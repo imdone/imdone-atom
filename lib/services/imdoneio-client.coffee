@@ -15,6 +15,7 @@ log = debug 'imdone-atom:client'
 # READY: The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
 NO_RESPONSE_ERR = new Error "No response from imdone.io"
+USER_NOT_FOUND_ERR = new Error "User not found"
 baseUrl = config.baseUrl # READY: This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
@@ -29,6 +30,7 @@ Pusher.log = debug 'imdone-atom:pusher'
 module.exports =
 class ImdoneioClient extends Emitter
   @PROJECT_ID_NOT_VALID_ERR: PROJECT_ID_NOT_VALID_ERR
+  @USER_NOT_FOUND_ERR: USER_NOT_FOUND_ERR
   @baseUrl: baseUrl
   @baseAPIUrl: baseAPIUrl
   @signUpUrl: signUpUrl
@@ -44,8 +46,11 @@ class ImdoneioClient extends Emitter
     async.until test,
       (cb) =>
         setTimeout () =>
-          return cb() if @connectionAccepted
           @authFromStorage (err) =>
+            if err == USER_NOT_FOUND_ERR
+              @connectionAccepted = true
+              @emit 'unauthenticated'
+              cb err
             return cb err if err && @connectionAccepted
             cb()
         , 2000
@@ -69,10 +74,14 @@ class ImdoneioClient extends Emitter
     @setHeaders request.patch("#{baseAPIUrl}#{path}")
 
   _auth: (cb) ->
+    return cb null, @user if @user
+    @authenticating = true
     @getAccount (err, user) =>
+      @user = user
       return @onAuthFailure err, null, cb if err
       return @onAuthFailure new Error('User is null'), null, cb if !user or !user.profile
       @onAuthSuccess user, cb
+      delete @authenticating
 
   logoff: ->
     @removeCredentials (err) =>
@@ -86,18 +95,19 @@ class ImdoneioClient extends Emitter
   authFromStorage: (cb) ->
     cb = (() ->) unless cb
     return cb new Error("Auth from stoage failed") if @storageAuthFailed
+    return cb null, @user if @user
     @loadCredentials (err) =>
       return cb err if err
       @_auth (err, user) =>
-        console.error "Authentication err:", err if err
+        console.log "Authentication err:", err if err
         @storageAuthFailed = _.get err, 'imdone_status'
         # TODO: if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->
+    return cb null, user if @authenticated
     @authenticated = true
     @authRetryCount = 0
-    @user = user
     @emit 'authenticated'
     pluginManager.init()
     @saveCredentials (err) =>
@@ -152,7 +162,7 @@ class ImdoneioClient extends Emitter
   loadCredentials: (cb) ->
     @db().findOne {}, (err, doc) =>
       return cb err if err
-      return cb "No user found" unless doc
+      return cb USER_NOT_FOUND_ERR unless doc
       parts = authUtil.fromBase64(doc.key).split(':')
       @email = parts[0]
       @password = parts[1]

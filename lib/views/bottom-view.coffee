@@ -1,5 +1,6 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
+config = require '../services/imdone-config'
 
 module.exports =
 class BottomView extends View
@@ -95,7 +96,9 @@ class BottomView extends View
 
     @closeButton.on 'click', => @hide()
 
-    @client.on 'unauthenticated', => @hide()
+    @client.on 'unauthenticated', =>
+      @hide() unless config.getSettings().showLoginOnLaunch
+      @showLogin() if config.getSettings().showLoginOnLaunch
 
     # DONE: This belongs in bottomView +refactor
     @emitter.on 'list.new', => @showNewList()
