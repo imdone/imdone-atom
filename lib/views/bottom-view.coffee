@@ -97,8 +97,6 @@ class BottomView extends View
 
     @client.on 'unauthenticated', => @hide()
 
-    @emitter.on 'authenticated', => @hide()
-
     # DONE: This belongs in bottomView +refactor
     @emitter.on 'list.new', => @showNewList()
 
@@ -122,6 +120,7 @@ class BottomView extends View
 
   show: ->
     unless @isOpen()
+      @error.hide()
       @emitter.emit 'config.open'
       @addClass 'open'
       # @removeClass 'hidden'

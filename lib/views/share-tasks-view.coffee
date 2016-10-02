@@ -16,13 +16,13 @@ class ShareTasksView extends View
     @div class: "share-tasks-container config-container", =>
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
+      @subview 'projectSettings', new ProjectSettingsView params
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style:'display:none;', =>
         @div class: 'product-select-wrapper', =>
           @h1 'TODOBOTs'
           @subview 'productSelect', new ProductSelectionView
         @div class:'product-detail-wrapper', =>
           @subview 'productDetail', new ProductDetailView
-      @subview 'projectSettings', new ProjectSettingsView params
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance

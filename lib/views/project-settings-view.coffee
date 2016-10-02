@@ -20,8 +20,7 @@ class ProjectSettingsView extends View
 
         # READY: Add config view here
         # @h1 "Configuration (.imdone/config.json)"
-
-      @div outlet:'enabledProject', style:'display:none;', =>
+      @div id:'disable-project-link', outlet:'enabledProject', class: 'pull-right highlight-error', style:'display:none;', =>
         @a click:'disableProject', class:'inline-block', "Stop using imdone.io with this project"
 
   show: ->

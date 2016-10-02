@@ -11,7 +11,7 @@ class LoginView extends View
   @content: (params) ->
     @div class: "login-container config-container", =>
       @div class: "text-center", =>
-        @h1 "Welcome to imdone.io!"
+        @h1 "Introducing imdone.io!"
         @h2 "Login or sign up to create and update GitHub issues from TODO comments in your code!"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
@@ -36,6 +36,7 @@ class LoginView extends View
     @emailEditor.focus()
 
   onAuthenticated: () ->
+    delete @authenticating
     @loginPanel.hide()
     @spinner.hide()
     @emitter.emit 'authenticated'
@@ -57,6 +58,7 @@ class LoginView extends View
       passwordElement.append('<style id="password-style">.password-lines .line span.text:before {content:"' + string + '";}</style>')
 
   login: () ->
+    @authenticating = true
     log 'login:begin'
     @loginPanel.hide()
     @spinner.show()

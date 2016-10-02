@@ -158,7 +158,7 @@ class ImdoneioClient extends Emitter
       @password = parts[1]
       cb null
 
-  removeCredentials: (cb) -> @db().remove {}, {}, cb
+  removeCredentials: (cb) -> @db().remove {}, { multi: true }, cb
 
   # API methods -------------------------------------------------------------------------------------------------------
   inviteToProject: (repo, invited) ->
