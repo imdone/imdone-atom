@@ -14,7 +14,11 @@ class ProjectSettingsView extends View
       @div outlet:'disabledProject', class:'block text-center' , =>
         @h1 "Welcome to imdone.io!"
         @h3 "Create and Update GitHub issues from TODO comments in your code!"
-        @button click:'enableProject', class:'btn btn-lg btn-success', "Use imdone.io with this project"
+        @button outlet:'enableProjectBtn', click:'enableProject', class:'btn btn-lg btn-success', "Use imdone.io with this project"
+        @div outlet:'progressContainer', class:'block', style:'display:none;', =>
+          @progress outlet:'progress', class:'inline-block'
+          @div class:'block', =>
+            @span outlet:'progressText'
       @div outlet: 'settingsPanel', style:'display:none;', =>
         # @h1 "Project Settings"
 
@@ -33,6 +37,8 @@ class ProjectSettingsView extends View
     if @initialized || !@emitter then return else @initialized = true
 
     @imdoneRepo.on 'project.found', (project) =>
+      console.log "Sync took #{new Date().getTime() - @startTime}ms"
+      @updateProgress 0
       @settingsPanel.show()
       @disabledProject.hide()
       @enabledProject.show()
@@ -40,15 +46,26 @@ class ProjectSettingsView extends View
     @imdoneRepo.on 'project.removed', (project) =>
       @settingsPanel.hide()
       @enabledProject.hide()
+      @enableProjectBtn.show()
       @disabledProject.show()
+
+  updateProgress: (n) ->
+    return @progressContainer.hide() if n == 0
+    n ?= ''
+    @progressText.html "Syncing #{n} Comments.  Please wait..."
+    @progressContainer.show()
 
   enableProject: (e) ->
     @emitter.emit 'error.hide'
+    @startTime = new Date().getTime()
+    @updateProgress @imdoneRepo.getTasks().length
+    @enableProjectBtn.hide()
     @client.createProject @imdoneRepo, (err, project) =>
-      # DONE: If err=TOO_MANY_PROJECTS_ERROR then show a message!!!
       if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
         @emitter.emit 'error', @$tooManyProjectsMsg()
+        @enableProjectBtn.show()
         @disabledProject.show()
+        @updateProgress 0
       return if err
       return unless project
       @imdoneRepo.checkForIIOProject()

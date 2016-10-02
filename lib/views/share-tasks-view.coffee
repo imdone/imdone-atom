@@ -86,6 +86,8 @@ class ShareTasksView extends View
 
     @client.on 'authenticated', => @onAuthenticated()
 
+    @imdoneRepo.on 'project.removed', => @productPanel.hide()
+
   updateConnector: (connector) ->
     # BACKLOG: This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/)
     updatedProduct = @productSelect.getProduct connector.name
