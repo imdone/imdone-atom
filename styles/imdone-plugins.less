@@ -1,0 +1,58 @@
+// The ui-variables file is provided by base themes provided by Atom.
+//
+// See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
+// for a full listing of what's available.
+@import "ui-variables";
+@import "octicon-mixins";
+@import "octicon-utf-codes.less";
+
+.make-mega(@name) {
+  .icon-@{name}.mega-icon { .mega-octicon(@name); }
+}
+.make-mega(diff-added);
+.make-mega(diff-removed);
+
+.imdoneio-plugin-view {
+  .input-med {
+    width: 300px;
+    float: left;
+    margin-right: 5px;
+  }
+  .issue-list {
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    overflow: auto;
+    width: 49%;
+    &.related-issues {
+      right: 10px;
+    }
+    &.search-result {
+      left: 10px;
+    }
+    ol {
+      list-style: none;
+      padding-left: 0;
+      .well {
+        background-color: @pane-item-background-color;
+      }
+      .issue {
+        .issue-title {
+          font-size: 1.25em;
+          .issue-number {
+            color: @text-color-highlight;
+          }
+        }
+        .issue-state {
+          .badge {
+            border-radius: 3px;
+          }
+        }
+      }
+
+    }
+    .spinner {
+      text-align: center;
+    }
+  }
+}

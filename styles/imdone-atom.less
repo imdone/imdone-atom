@@ -2,23 +2,53 @@
 //
 // See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 // for a full listing of what's available.
+@name: "imdone-atom-beta";
+
 @import "ui-variables";
+@import "imdone-plugins";
+@import "icomoon/style";
+@import "flaticon/flaticon";
+@import "bootstrap-tokenfield";
+
 @menu-component-width: 178px;
 @menu-width: 232px;
 @board-list-width: 362px;
 @board-list-name-width: 330px;
 @config-height: 300px;
-@task-font-size: 14px;
+@task-font-size: 1.2em;
 // @task-background-color: @inset-panel-background-color;
 @task-background-color: @tab-background-color;
 
 .imdone-atom {
+  svg {
+    .base-fill {
+      fill: @pane-item-background-color;
+      fill-opacity:0;
+      fill-rule:nonzero;
+    }
+    .base-stroke {
+      stroke: @pane-item-background-color;
+      stroke-width:6;
+      stroke-linecap:butt;
+      stroke-linejoin:round
+    }
+
+    .visible-fill {
+      fill:@text-color;
+    }
+
+    .visible-stroke {
+      stroke:@text-color;
+      stroke-width:12;
+    }
+  }
+
   .mask {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0;
+    right: 40px;
     display: none;
     z-index: 99;
     .spinner {
@@ -34,11 +64,8 @@
     }
     .spinner-mask {
       background-color: @tab-background-color;
-      opacity: .45;
+      opacity: .35;
     }
-  }
-  .btn {
-    height: 27px;
   }
   .imdone-loading {
     p, ul {
@@ -59,28 +86,45 @@
     right: 0;
     bottom: 0;
     left: 0;
-    &.shift {
-      bottom: @config-height;
-    }
   }
 
   .imdone-main-container {
     display: none;
   }
 
-  .imdone-config-container {
+  .imdone-bottom-view {
+    background-color: @base-background-color;
     position: absolute;
     bottom: -@config-height;
     right: 0;
-    left: 0;
+    left: 42px;
     height: @config-height;
-    background-color: @tool-panel-background-color;
+    // background-color: @tool-panel-background-color;
     border-top: 1px solid @tool-panel-border-color;
     padding: 0 1em;
+    transition: left 0.2s;
     &.open {
       bottom: 0;
       z-index: 100;
       display: block;
+    }
+    &.shift {
+      left: (@menu-width + 10);
+    }
+    .bottom-view-header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 40px;
+    }
+    .bottom-view-main {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: auto;
     }
     .input-small {
       width: 200px;
@@ -89,16 +133,68 @@
     }
     .config-panel {
       display: none;
+      height: 95%;
+      margin-left: 2px;
+      .config-container {
+        // height: 100%;
+        margin: .25em 1.5em 1.5em 0;
+      }
+      .vertical-scroll {
+        overflow-y: auto;
+        height: 100%;
+      }
+      .login-container {
+        text-align:center;
+        .imdone-login-pane {
+          .input {
+            text-align: left;
+          }
+          display: inline-block;
+          margin: auto;
+        }
+      }
+
+      #disable-project-link {
+        margin-right: 6em;
+      }
     }
     .close-button {
       position: absolute;
       top: 2px;
-      right: 8px;
-      cursor: default;
+      right: .2em;
+      cursor: pointer;
       font-size: 2em;
       font-weight: bold;
+      width: 1.5em;
+      text-align: center;
       &:hover {
         color: white;
+      }
+    }
+
+    .imdone-product-pane {
+      margin-top: 2.5em;
+      h1 {
+        margin-top: 0;
+      }
+      .select-list .product-name {
+        margin-left: 1em;
+      }
+      .select-list, .product-detail {
+        width: 30em;
+      }
+      .product-detail-view-content {
+        .form-control {
+          width: 60%;
+        }
+      }
+      .product-select-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .product-detail-wrapper {
+        margin-left: 32em;
       }
     }
   }
@@ -135,18 +231,106 @@
       left: 0;
       margin: 1.5em 0 1em 1em;
     }
-    .imdone-toolbar {
-      right: 6px;
-      top: 2px;
+    .imdone-menu-toggle {
       position: absolute;
-      width: 24px;
+      top: 6px;
+      right: 0;
+      width: 28px;
+      text-align: center;
+    }
+    .imdone-toolbar {
+      left: 192px;
+      bottom: 2px;
+      position: absolute;
+      transition: left  0.2s;
+      &.open {
+        left: -4px;
+        width: @menu-width;
+        .imdone-toolbar-button {
+          .tool-text {
+            visibility: visible;
+            transition: visibility 0.2s, opacity 0.2s linear;
+            opacity: 1;
+          }
+        }
+      }
+      .imdone-menu-toggle {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
       .imdone-toolbar-button {
         cursor: pointer;
-        text-align: center;
+        text-align: left;
         border: none;
         background-color: inherit;
         height: 24px;
+        min-width: 24px;
         padding: 4px;
+
+        .icon {
+          width: 36px;
+          text-align: center;
+
+          svg {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-bottom: -4px;
+            margin-right: 2px;
+            &:hover {
+              fill:white;
+              .visible-fill {
+                fill:white;
+              }
+              .visible-stroke {
+                fill:white;
+                stroke:white;
+                stroke-width:12;
+              }
+            }
+          }
+        }
+
+        a {
+          .tool-text {
+            margin-left: 2px;
+          }
+        }
+
+        .tool-text {
+          visibility: hidden;
+          opacity: 0;
+          transition: visibility 0s, opacity 0s linear;
+        }
+      }
+      .menu-sep-space {
+        font-size: 0;
+        height: 10px;
+        line-height: 0;
+      }
+      .menu-sep-space-2x {
+        .menu-sep-space();
+        height: 20px;
+      }
+      .menu-sep-space-3x {
+        .menu-sep-space();
+        height: 30px;
+      }
+      .imdone-icon {
+        margin-top: 6px;
+      }
+      .imdone-profile {
+        margin-bottom: .9em;
+        .profile-image {
+          margin-left: -4px;
+          margin-right: 4px;
+          img {
+            border-radius: 50%;
+            height: 24px;
+            width: 24px;
+          }
+        }
       }
     }
     .imdone-filter {
@@ -170,7 +354,7 @@
       overflow: auto;
       position: absolute;
       top: 30px;
-      bottom: 0;
+      bottom: 260px;
     }
     .lists {
       list-style: none;
@@ -208,6 +392,9 @@
     &.shift {
       left: @menu-width;
     }
+    &.shift-bottom {
+      bottom: @config-height;
+    }
     transition: left 0.2s;
     .imdone-board {
       margin: .5em 1em 1em 0;
@@ -221,7 +408,7 @@
         .list-name-wrapper {
           background-color: @task-background-color;
           font-size: 1.5em;
-          padding: .5em;
+          padding: .25em .4em;
           .list-name {
             display: inline-block;
             width: @board-list-name-width;
@@ -251,6 +438,7 @@
           cursor: move;
           border: 2px solid @task-background-color;
           .task-text {
+            margin-right: 1em;
             p {
               margin: 0 0 5px;
             }
@@ -271,6 +459,7 @@
             border-bottom: none;
             width: 100%;
             margin: .5em 0 .5em 0;
+            font-size: .85em;
             tr {
               border-bottom: 1px solid @panel-heading-background-color;
               word-break: break-word;
@@ -289,6 +478,8 @@
           }
           .imdone-task-plugins {
             text-align: right;
+            min-height: 20px;
+            margin-right: .3em;
           }
           &.selected {
             border-color: @text-color-info;
@@ -300,6 +491,36 @@
 
   .well {
     padding: 10px;
-    margin-bottom: @task-font-size;
+    margin-bottom: 14px;
+  }
+
+  .config-panel {
+    .input-med {
+      width: 300px;
+      float: left;
+      margin-right: 5px;
+    }
+
+    .json-editor-container {
+      margin-top: 20px;
+      .json-editor {
+        margin: 5px;
+      }
+      .mask {
+        top: 80px;
+      }
+    }
+  }
+}
+
+atom-text-editor::shadow .password-lines .line {
+  span.text:before {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    color: @text-color !important;
+  }
+  span.text {
+    color:rgba(0, 0, 0, 0);
   }
 }

@@ -1,3 +1,12 @@
+## 2.0.0
+* Integrations with http://imdone.io
+* Save priority by imdone.io in local db and on imdone.io
+
+## 1.4.0
+* Fix serialization
+* New "Enable file opener" setting to improve activation time for those who don't use file-opener [default false]
+* Add new languages
+
 ## 1.3.31
 * Add yaml and crystal file extensions
 

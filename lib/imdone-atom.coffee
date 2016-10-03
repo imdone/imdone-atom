@@ -1,15 +1,17 @@
-ImdoneAtomView        = require './imdone-atom-view'
-url                   = require 'url'
-{CompositeDisposable} = require 'atom'
-path                  = require 'path'
-moment                = require 'moment'
-mkdirp                = require 'mkdirp'
-imdoneHelper          = require './imdone-helper'
-fileService           = require './file-service'
-_                     = require 'lodash'
+path                = require 'path'
+url                 = null
+CompositeDisposable = null
+_                   = null
+ImdoneAtomView      = null
+imdoneHelper        = null
+configHelper        = require './services/imdone-config'
 
 module.exports = ImdoneAtom =
   config:
+    showLoginOnLaunch:
+      description: "Display imdone.io login panel on startup if user is not logged in."
+      type: 'boolean'
+      default: true
     useAlternateFileWatcher:
       description: "If your board won't update when you edit files, then try the alternate file watcher"
       type: 'boolean'
@@ -32,16 +34,25 @@ module.exports = ImdoneAtom =
       description: 'Show notifications upon clicking task source link.'
       type: 'boolean'
       default: false
-    fileOpenerPort:
-      description: 'Port the file opener communicates on'
-      type: 'integer'
-      default: 9799
-    # DONE:50 This is config for globs to open with editors issue:48
+    # DONE: This is config for globs to open with editors issue:48
     openIn:
+      title: 'File Opener'
       description: 'Open files in a different IDE or editor'
       type: 'object'
       properties:
+        enable:
+          order: 1
+          title: 'Enable file opener'
+          type: 'boolean'
+          default: false
+        port:
+          order: 2
+          title: 'File Opener Port'
+          description: 'Port the file opener communicates on'
+          type: 'integer'
+          default: 9799
         intellij:
+          order: 3
           description: '[Glob pattern](https://github.com/isaacs/node-glob) for files that should open in Intellij.'
           type: 'string'
           default: 'Glob pattern'
@@ -65,11 +76,21 @@ module.exports = ImdoneAtom =
           type: 'string'
           default: 'YYYY-MM'
   subscriptions: null
+  #
+  # serialize: ->
+  #   views = atom.workspace.getPaneItems().filter (view) -> view instanceof ImdoneAtomView
+  #   serialized = views.map (view) -> view.serialize()
+  #   console.log 'serializedViews:', serialized
+  #   serialized
 
   activate: (state) ->
-    # #DONE:190 Add back serialization (The right way) +Roadmap @testing
+    # READY: Put requires in activate to speed up startup issue:77
+    _ = require 'lodash'
+    url = require 'url'
+    ImdoneAtomView ?= require './views/imdone-atom-view'
+    {CompositeDisposable} = require 'atom'
     _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
-    atom.deserializers.deserialize(state) if (state)
+    # state.forEach (view) -> atom.deserializers.deserialize(view) if state
     @subscriptions = new CompositeDisposable
 
     @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:tasks", (evt) =>
@@ -91,9 +112,9 @@ module.exports = ImdoneAtom =
       return unless protocol is 'imdone:'
       @viewForUri(uriToOpen)
 
-    @fileService = fileService.init atom.config.get('imdone-atom.fileOpenerPort')
+    @fileService = require('./services/file-service').init configHelper.getSettings().openIn.port
 
-    # DONE:220 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) due:2015-07-21
+    # DONE: Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428)
 
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()
@@ -104,6 +125,7 @@ module.exports = ImdoneAtom =
       previousActivePane.activate()
 
   deactivate: ->
+    imdoneHelper.destroyRepos()
     @subscriptions.dispose()
 
   getCurrentProject: ->
@@ -111,27 +133,33 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath && active.getPath()
-      # DONE:140 This fails for projects that start with the name of another project
+      # DONE: This fails for projects that start with the name of another project
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]
 
-  provideService: -> require './plugin-manager'
+  provideService: -> require './services/plugin-manager'
 
   openJournalFile: ->
-    config = atom.config.get('imdone-atom.todaysJournal')
-    date = moment().format config.dateFormat
-    month = moment().format config.monthFormat
-    template = (t) -> t.replace("${date}",date).replace("${month}", month)
-    file = template config.fileNameTemplate
-    dir = template config.directory
-    filePath = path.join dir, file
-    mkdirp dir, (err) ->
-      if (err)
-        atom.notifications.addError "Can't open journal file #{filePath}"
-        return;
-      atom.project.addPath dir
-      atom.workspace.open filePath
+    moment = require 'moment'
+    mkdirp = require 'mkdirp'
+    {allowUnsafeEval, allowUnsafeNewFunction} = require 'loophole'
+    allowUnsafeNewFunction -> allowUnsafeEval ->
+      config = configHelper.getSettings().todaysJournal
+      dateFormat = config.dateFormat
+      monthFormat = config.monthFormat
+      context =
+        date: moment().format(dateFormat)
+        month: moment().format(monthFormat)
+      file = _.template(config.fileNameTemplate)(context)
+      dir = _.template(config.directory)(context)
+      filePath = path.join dir, file
+      mkdirp dir, (err) ->
+        if (err)
+          atom.notifications.addError "Can't open journal file #{filePath}"
+          return;
+        atom.project.addPath dir
+        atom.workspace.open filePath
 
   uriForProject: (projectPath) ->
     projectPath = projectPath || @getCurrentProject()
@@ -143,5 +171,10 @@ module.exports = ImdoneAtom =
     {protocol, host, pathname} = url.parse(uri)
     return unless pathname
     pathname = decodeURIComponent(pathname.split('/')[1])
-    imdoneRepo = imdoneHelper.newImdoneRepo(pathname, uri)
-    new ImdoneAtomView(imdoneRepo: imdoneRepo, path: pathname, uri: uri)
+    @createImdoneAtomView(path: pathname, uri: uri)
+
+  createImdoneAtomView: ({path, uri}) ->
+    ImdoneAtomView ?= require './views/imdone-atom-view'
+    imdoneHelper ?= require './services/imdone-helper'
+    {connectorManager, repo} = imdoneHelper.getRepo path, uri
+    new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri, connectorManager: connectorManager)

@@ -1,4 +1,18 @@
-[![Stories in Ready](https://badge.waffle.io/imdone/imdone-atom.png?label=ready&title=Ready)](https://waffle.io/imdone/imdone-atom)
+Welcome to the beta version of the new imdone-atom.  We're taking TODO comments to the next level by integrating with some of your favorite issue
+trackers.  By signing up at [beta.imdone.io](https://beta.imdone.io) you'll be able to try out new integrations with github and waffle.io.  We plan to add
+Trello and Jira soon.  But for those of you who use github issue tracking, this release is sure to tighten up your agile development workflow by letting you track issues directly in your code.
+
+Let's say you create a TODO like this...
+
+```js
+// TODO: Add listener for task.modified event
+```
+
+- #TODO: Finish the readme for Beta.
+
+
+----
+
 A hackable task-board in your code.
 ----
 ### You live in the code, your tasks should too!

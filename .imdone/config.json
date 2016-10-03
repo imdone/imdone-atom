@@ -3,6 +3,7 @@
     "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
+  "keepEmptyPriority": false,
   "code": {
     "include_lists": [
       "TODO",
@@ -21,10 +22,6 @@
   },
   "lists": [
     {
-      "name": "CHANGED",
-      "hidden": true
-    },
-    {
       "name": "BACKLOG",
       "hidden": true
     },
@@ -38,14 +35,14 @@
     },
     {
       "name": "READY",
+      "hidden": false
+    },
+    {
+      "name": "CHANGED",
       "hidden": true
     },
     {
       "name": "DONE",
-      "hidden": true
-    },
-    {
-      "name": "ARCHIVE",
       "hidden": true
     }
   ],
@@ -58,14 +55,10 @@
     "langPrefix": "language-"
   },
   "meta": {
-    "user": {
-      "urlTemplate": "https://github.com/%s",
-      "titleTemplate": "github profile for %s"
-    },
-    "issue": {
+    "gh": {
       "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
-      "titleTemplate": "github issue #%s"
+      "titleTemplate": "View github issue %s",
+      "icon": "icon-octoface"
     }
-  },
-  "keepEmptyPriority": false
+  }
 }
