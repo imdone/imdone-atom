@@ -14,7 +14,7 @@
     "name": "Jesse Piascik",
     "email": "jesse@piascik.net"
   },
-  "repository": "https://github.com/imdone/imdone-atom-beta",
+  "repository": "https://github.com/innobuilt/imdone-atom-beta",
   "license": "MIT",
   "engines": {
     "atom": ">=1.2.4 <2.0.0"
