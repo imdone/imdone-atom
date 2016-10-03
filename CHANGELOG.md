@@ -7,6 +7,12 @@
 * New "Enable file opener" setting to improve activation time for those who don't use file-opener [default false]
 * Add new languages
 
+## 1.3.31
+* Add yaml and crystal file extensions
+
+## 1.3.30
+* replace `_.template` with `String.replace` for journal.  Fixes #53
+
 ## 1.3.29
 * Add c++ extensions by @eistaa
 
@@ -257,7 +263,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5](#DONE:)
+* [Fix config path checking for windows git-iss:5](#DONE:200)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -304,4 +310,4 @@
 
 ----
 
-- #TODO: Remember to update changelog before +publishing +package @piascikj
+#DOING:20 Remember to update changelog before +publishing +package @piascikj
