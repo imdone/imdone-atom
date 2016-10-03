@@ -32,8 +32,11 @@ class LoginView extends View
 
   show: () ->
     super
-    @loginPanel.show()
+    @showLogin()
     @emailEditor.focus()
+
+  showLogin: () ->
+    @loginPanel.css 'display', 'inline-block'
 
   onAuthenticated: () ->
     delete @authenticating
@@ -42,7 +45,7 @@ class LoginView extends View
     @emitter.emit 'authenticated'
 
   onUnauthenticated: () ->
-    @loginPanel.show()
+    @showLogin()
     @emitter.emit 'unauthenticated'
 
   initPasswordField: () ->
@@ -69,7 +72,7 @@ class LoginView extends View
       @passwordEditor.getModel().setText ''
       # TODO: We need to show an error here if login fails because service can't be reached or if login fails
       log 'login:end'
-      return @loginPanel.show() unless @client.isAuthenticated()
+      return @showLogin() unless @client.isAuthenticated()
       @onAuthenticated()
 
   handleEvents: (@emitter) ->
