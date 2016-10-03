@@ -13,20 +13,20 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY: Show logged in user and avatar here
+        # READY:0 Show logged in user and avatar here id:87
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
-        # BACKLOG: Save my favorite filters +story
+        # BACKLOG:0 Save my favorite filters +story id:88
         @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           @a href: "#", class: "icon #{menuClosedClass}"
         @div outlet: '$toolbar', class: "imdone-toolbar", =>
-          # DONE: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
+          # DONE:0 Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:89
           # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
           # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
-          # BACKLOG: Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49>
+          # BACKLOG:0 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:90
           # @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           #   @a href: "#", class: "icon #{menuClosedClass}"
           # @div class: "menu-sep-space-2x"
@@ -34,7 +34,7 @@ class MenuView extends View
             @a href: "#", =>
               @i class: "icon icon-plus toolbar-icon"
               @span class:'tool-text', 'Add a new list'
-          # DONE: Add a link to open filtered files issue:49
+          # DONE:0 Add a link to open filtered files issue:49 id:91
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button", title: "Zap! (open visible files)", =>
             @a href: "#", =>
               @i class: "icon icon-zap toolbar-icon"
@@ -58,7 +58,7 @@ class MenuView extends View
           @div outlet: '$logOff', click: "logOff", class: "imdone-profile imdone-toolbar-button", style:'display:none;', =>
             @i class:"profile-image icon", outlet:'$profileImage'
             @span class:'tool-text', 'Sign out'
-          # BACKLOG: Add the plugin project buttons
+          # BACKLOG:0 Add the plugin project buttons id:92
           @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
             @span class: 'loading loading-spinner-tiny inline-block'
 

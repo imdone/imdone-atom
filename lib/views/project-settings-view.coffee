@@ -23,7 +23,7 @@ class ProjectSettingsView extends View
       @div outlet: 'settingsPanel', style:'display:none;', =>
         # @h1 "Project Settings"
 
-        # READY: Add config view here
+        # READY:0 Add config view here id:101
         # @h1 "Configuration (.imdone/config.json)"
       @div id:'disable-project-link', outlet:'enabledProject', class: 'pull-right highlight-error', style:'display:none;', =>
         @a click:'disableProject', class:'inline-block', "Stop using imdone.io with this project"

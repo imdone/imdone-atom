@@ -33,7 +33,7 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # READY: Connector plugin should be removed
+      # READY:0 Connector plugin should be removed id:102
       @updateConnectorAfterDisable(product.connector)
       @updateConnectorForEdit product
       @productSelect.updateItem product
@@ -68,21 +68,21 @@ class ShareTasksView extends View
     @emitter.on 'connector.change', (product) =>
       connector = _.cloneDeep product.connector
       @connectorManager.saveConnector connector, (err, connector) =>
-        # TODO: Handle errors by unauthenticating if needed and show login with error
+        # TODO:0 Handle errors by unauthenticating if needed and show login with error id:103
         throw err if err
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # TODO: Handle errors
+        # TODO:0 Handle errors id:104
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # TODO: Handle errors
+        # TODO:0 Handle errors id:105
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
@@ -90,7 +90,7 @@ class ShareTasksView extends View
     @imdoneRepo.on 'project.removed', => @productPanel.hide()
 
   updateConnector: (connector) ->
-    # BACKLOG: This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/)
+    # BACKLOG:0 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/) id:106
     updatedProduct = @productSelect.getProduct connector.name
     updatedProduct.connector = connector
     @productSelect.updateItem updatedProduct

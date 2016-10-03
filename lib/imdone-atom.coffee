@@ -34,7 +34,7 @@ module.exports = ImdoneAtom =
       description: 'Show notifications upon clicking task source link.'
       type: 'boolean'
       default: false
-    # DONE: This is config for globs to open with editors issue:48
+    # DONE:0 This is config for globs to open with editors issue:48 id:3
     openIn:
       title: 'File Opener'
       description: 'Open files in a different IDE or editor'
@@ -84,7 +84,7 @@ module.exports = ImdoneAtom =
   #   serialized
 
   activate: (state) ->
-    # READY: Put requires in activate to speed up startup issue:77
+    # READY:0 Put requires in activate to speed up startup issue:77 id:4
     _ = require 'lodash'
     url = require 'url'
     ImdoneAtomView ?= require './views/imdone-atom-view'
@@ -114,7 +114,7 @@ module.exports = ImdoneAtom =
 
     @fileService = require('./services/file-service').init configHelper.getSettings().openIn.port
 
-    # DONE: Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428)
+    # DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) id:5
 
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()
@@ -133,7 +133,7 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath && active.getPath()
-      # DONE: This fails for projects that start with the name of another project
+      # DONE:0 This fails for projects that start with the name of another project id:6
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]
