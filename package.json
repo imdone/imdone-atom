@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom-beta",
   "main": "./lib/imdone-atom",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "A hackable task-board for TODOs, FIXMEs, HACKs, etc in your code.",
   "keywords": [
     "todo",
