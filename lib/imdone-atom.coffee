@@ -143,23 +143,19 @@ module.exports = ImdoneAtom =
   openJournalFile: ->
     moment = require 'moment'
     mkdirp = require 'mkdirp'
-    {allowUnsafeEval, allowUnsafeNewFunction} = require 'loophole'
-    allowUnsafeNewFunction -> allowUnsafeEval ->
-      config = configHelper.getSettings().todaysJournal
-      dateFormat = config.dateFormat
-      monthFormat = config.monthFormat
-      context =
-        date: moment().format(dateFormat)
-        month: moment().format(monthFormat)
-      file = _.template(config.fileNameTemplate)(context)
-      dir = _.template(config.directory)(context)
-      filePath = path.join dir, file
-      mkdirp dir, (err) ->
-        if (err)
-          atom.notifications.addError "Can't open journal file #{filePath}"
-          return;
-        atom.project.addPath dir
-        atom.workspace.open filePath
+    config = atom.config.get('imdone-atom.todaysJournal')
+    date = moment().format config.dateFormat
+    month = moment().format config.monthFormat
+    template = (t) -> t.replace("${date}",date).replace("${month}", month)
+    file = template config.fileNameTemplate
+    dir = template config.directory
+    filePath = path.join dir, file
+    mkdirp dir, (err) ->
+      if (err)
+        atom.notifications.addError "Can't open journal file #{filePath}"
+        return;
+      atom.project.addPath dir
+      atom.workspace.open filePath
 
   uriForProject: (projectPath) ->
     projectPath = projectPath || @getCurrentProject()
