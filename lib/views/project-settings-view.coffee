@@ -3,6 +3,7 @@
 _ = require 'lodash'
 util = require 'util'
 debug = require 'debug/browser'
+config = require '../../config'
 log = debug 'imdone-atom:project-settings-view'
 Client = require '../services/imdoneio-client'
 require('bootstrap-tokenfield') $
@@ -12,7 +13,7 @@ class ProjectSettingsView extends View
   @content: (params) ->
     @div =>
       @div outlet:'disabledProject', class:'block text-center' , =>
-        @h1 "Welcome to imdone.io!"
+        @h1 "Welcome to #{config.name}!"
         @h3 "Create and Update GitHub issues from TODO comments in your code!"
         @button outlet:'enableProjectBtn', click:'enableProject', class:'btn btn-lg btn-success', "Use imdone.io with this project"
         @div outlet:'progressContainer', class:'block', style:'display:none;', =>

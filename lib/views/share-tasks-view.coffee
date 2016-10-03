@@ -63,6 +63,7 @@ class ShareTasksView extends View
     @emitter.on 'product.selected', (product) =>
       @updateConnectorForEdit product
       @productDetail.setProduct product
+      @emitter.emit 'connector.enabled', product.connector if product.isEnabled()
 
     @emitter.on 'connector.change', (product) =>
       connector = _.cloneDeep product.connector

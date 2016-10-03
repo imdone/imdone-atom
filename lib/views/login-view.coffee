@@ -3,6 +3,7 @@
 _ = require 'lodash'
 util = require 'util'
 debug = require 'debug/browser'
+config = require '../../config'
 log = debug 'imdone-atom:share-tasks-view'
 Client = require '../services/imdoneio-client'
 
@@ -11,7 +12,7 @@ class LoginView extends View
   @content: (params) ->
     @div class: "login-container config-container", =>
       @div class: "text-center", =>
-        @h1 "Introducing imdone.io!"
+        @h1 "Introducing #{config.name}!"
         @h2 "Login or sign up to create and update GitHub issues from TODO comments in your code!"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'

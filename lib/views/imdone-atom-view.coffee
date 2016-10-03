@@ -258,6 +258,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginView plugin
 
   addPlugin: (Plugin) ->
+    return unless Plugin
     @connectorManager.getProduct Plugin.provider, (err, product) => # READY: Get the connector from the connector manager
       return if err || (product && !product.isEnabled())
       connector = product && product.connector
@@ -277,6 +278,7 @@ class ImdoneAtomView extends ScrollView
   addPluginByProvider: (provider) -> @addPlugin pluginManager.getByProvider(provider)
 
   removePlugin: (Plugin) ->
+    return unless Plugin
     plugin = @plugins[Plugin.pluginName]
     @bottomView.removePlugin plugin if plugin && plugin.getView
     delete @plugins[Plugin.pluginName]

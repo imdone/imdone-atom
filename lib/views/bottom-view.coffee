@@ -19,7 +19,7 @@ class BottomView extends View
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
         # DOING: Set up a messaging area
-        @div outlet: 'error', class:'alert alert-error'
+        @div outlet: 'error', class:'alert alert-error highlight-error text-center'
       @div class:'bottom-view-main', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
         #   @subview 'projectSettingsView', new ProjectSettingsView params
