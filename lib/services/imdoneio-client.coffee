@@ -89,6 +89,7 @@ class ImdoneioClient extends Emitter
       @authenticated = false
       delete @password
       delete @email
+      delete @user
       @emit 'unauthenticated'
 
 

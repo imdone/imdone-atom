@@ -27,12 +27,13 @@ module.exports =  (repo) ->
   # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back.
   repo.isImdoneIOProject = () -> client.isAuthenticated() && repo.project && !repo.project.disabled
 
-  repo.disableProject = () ->
+  repo.disableProject = (cb) ->
+    cb ?= ()->
     projectId = repo.getProjectId()
     delete repo.config.sync
     delete repo.project
     repo.saveConfig (err) =>
-      return if err
+      return cb err if err
       async.eachSeries repo.getTasks(),
         (task, cb) ->
           currentTask = repo.getTask task.id
@@ -42,9 +43,10 @@ module.exports =  (repo) ->
           repo.modifyTask taskToModify, cb
         (err) ->
           repo.saveModifiedFiles (err, files) ->
-            return if err
+            return cb err if err
             repo.emit 'tasks.updated'
             repo.emit 'project.removed'
+            cb()
 
   repo.checkForIIOProject = checkForIIOProject = () ->
     # READY: This should be moved to imdoneio-store
@@ -53,17 +55,17 @@ module.exports =  (repo) ->
     return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
       # TODO: Do something with this error
-      return if err
       unless project
+        repo.disableProject()
+        return repo.emit 'project.not-found' unless project
         # Check account for plan type
-        repo.emit 'project.not-found'
-      else
-        repo.project = project
-        repo.setProjectName project.name
-        return unless repo.isImdoneIOProject()
-        repo.syncTasks repo.getTasks(), (err, done) =>
-          repo.emit 'project.found', project
-          done err
+      return if err
+      repo.project = project
+      repo.setProjectName project.name
+      return unless repo.isImdoneIOProject()
+      repo.syncTasks repo.getTasks(), (err, done) =>
+        repo.emit 'project.found', project
+        done err
 
   checkForIIOProject() if client.isAuthenticated()
   client.on 'authenticated', => checkForIIOProject()
