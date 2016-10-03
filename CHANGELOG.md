@@ -1,6 +1,13 @@
+
 ## 2.0.0
 * Integrations with http://imdone.io
 * Save priority by imdone.io in local db and on imdone.io
+
+## 1.9.6
+* security update for marked and minimatch
+
+## 1.9.0
+* beta test
 
 ## 1.4.0
 * Fix serialization
