@@ -15,7 +15,7 @@ class ProjectSettingsView extends View
       @div outlet:'disabledProject', class:'block text-center' , =>
         @h1 "Welcome to #{config.name}!"
         @h3 "Create and Update GitHub issues from TODO comments in your code!"
-        @button outlet:'enableProjectBtn', click:'enableProject', class:'btn btn-lg btn-success', "Use imdone.io with this project"
+        @button outlet:'enableProjectBtn', click:'enableProject', class:'btn btn-lg btn-success', "Use #{config.name} with this project"
         @div outlet:'progressContainer', class:'block', style:'display:none;', =>
           @progress outlet:'progress', class:'inline-block'
           @div class:'block', =>

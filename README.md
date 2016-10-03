@@ -1,6 +1,6 @@
 Welcome to the beta version of the new imdone-atom.  We're taking TODO comments to the next level by integrating with some of your favorite issue
-trackers.  By signing up at [beta.imdone.io](https://beta.imdone.io) you'll be able to try out new integrations with github and waffle.io.  We plan to add
-Trello and Jira soon.  But for those of you who use github issue tracking, this release is sure to tighten up your agile development workflow by letting you track issues directly in your code.
+trackers.  By signing up at [beta.imdone.io](https://beta.imdone.io) you'll be able to try out new integrations with github.  We plan to add
+Trello and Jira soon.  But for those of you who use github issue tracking, this release is sure to tighten up your development workflow by letting you track issues directly in your code.
 
 Let's say you create a TODO like this...
 
@@ -8,7 +8,25 @@ Let's say you create a TODO like this...
 // TODO: Add listener for task.modified event
 ```
 
-- #TODO: Finish the readme for Beta.
+After installing imdone-atom-beta and clicking the "Use imdone.io with this project" button, your task will have an id like this.
+
+```js
+// TODO: Add listener for task.modified event id:1
+```
+
+To create a github issue from the TODO, add a "Creator-bot" and configure a tag.  Let's say the tag was `+task`.  Add it tou you TODO like this...
+
+```js
+// TODO: Add listener for task.modified event id:1 +task
+```
+
+Now save the file.  Your task should get updated to look something like this
+
+```js
+// TODO: Add listener for task.modified event id:1 +task gh:1
+```
+
+Your TODO is now linked to GitHub issue number 1
 
 
 ----
