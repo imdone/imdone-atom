@@ -63,7 +63,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO:0 If we get a forbidden error, then emit auth failure id:26
+  # TODO: If we get a forbidden error, then emit auth failure id:26
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -102,7 +102,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         console.log "Authentication err:", err if err
         @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO:0 if err.status == 404 we should show an error id:27
+        # TODO: if err.status == 404 we should show an error id:27
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -203,7 +203,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO:0 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:32
+    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:32
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -243,14 +243,11 @@ class ImdoneioClient extends Emitter
   _connectorAction: (repo, connector, action, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:0 Implement createProject id:35
     @doPost("/projects/#{projectId}/connectors/#{connector.id}/#{action}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
   createProject: (repo, cb) ->
-    # READY:0 Implement createProject id:36
-    # DOING:0 This should throw an error if TOO_MANY_PROJECTS_ERROR id:37
     @doPost("/projects").send(
       name: repo.getDisplayName()
       localConfig: repo.config.toJSON()
@@ -263,9 +260,7 @@ class ImdoneioClient extends Emitter
       repo.saveConfig (err) => cb err, project
 
   getOrCreateProject: (repo, cb) ->
-    # READY:0 Implement getOrCreateProject id:38
     # BACKLOG:0 move this to connectorManager id:39
-    # DONE:0 Make sure this works github_closed:true id:40
     return cb() unless repo && repo.config && @isAuthenticated()
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId

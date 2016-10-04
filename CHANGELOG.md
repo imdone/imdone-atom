@@ -2,6 +2,8 @@
 ## 2.0.0
 * Integrations with http://imdone.io
 * Save priority by imdone.io in local db and on imdone.io
+* zoom
+* Add TODO token to config.code.list_names on new list  if it's all caps
 
 ## 1.9.6
 * security update for marked and minimatch
@@ -270,7 +272,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5 id:1](#DONE:200)
+* [Fix config path checking for windows git-iss:5 id:1](#DONE:0)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -317,4 +319,4 @@
 
 ----
 
-#DOING:20 Remember to update changelog before +publishing +package @piascikj id:0
+#INBOX: Remember to update changelog before +publishing +package @piascikj id:0

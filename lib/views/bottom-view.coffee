@@ -18,9 +18,9 @@ class BottomView extends View
         @div outlet: 'resizer', class:'split-handle-y'
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
-        # DOING:0 Set up a messaging area id:60
+        # INBOX: Set up a messaging area id:60
         @div outlet: 'error', class:'alert alert-error highlight-error text-center'
-      @div class:'bottom-view-main', =>
+      @div class:'bottom-view-main zoomable', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
         #   @subview 'projectSettingsView', new ProjectSettingsView params
         @div outlet: 'shareTasks', class:'share-tasks config-panel', =>
@@ -90,9 +90,9 @@ class BottomView extends View
       @hide() if code == 27
       true
 
-    @imdoneRepo.on 'list.modified', (list) => @hide()
+    @emitter.on 'list.modified', (list) => @hide()
 
-    @imdoneRepo.on 'project.not-found', => @showShare()
+    @emitter.on 'project.not-found', => @showShare()
 
     @closeButton.on 'click', => @hide()
 
@@ -110,7 +110,7 @@ class BottomView extends View
 
     # @emitter.on 'project.settings', => @showProjectSettings()
 
-    @imdoneRepo.on 'project.removed', => @hide()
+    @emitter.on 'project.removed', => @hide()
 
     @emitter.on 'menu.toggle', => @toggleClass 'shift'
 
@@ -157,7 +157,7 @@ class BottomView extends View
     @plugins.show()
     @show()
 
-  # TODO:0 DRY these show... methods up id:64
+  # TODO: DRY these show... methods up id:64
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()

@@ -75,7 +75,7 @@ class ConnectorPluginView extends View
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>
-      # #TODO:0 Check error for 404/Not Found id:9
+      # #TODO: Check error for 404/Not Found id:9
       if err
         console.log "error:", err
       else

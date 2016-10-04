@@ -35,8 +35,8 @@ class ProductDetailView extends View
 
   createEditor: ->
     options =
-      schema: @product.schemas.config # TODO:0 Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow id:95
-      startval: @product.connector.config # TODO:0 Rule values to be set by GET /projects/ :projectId/products +rules id:96
+      schema: @product.schemas.config # TODO: Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow id:95
+      startval: @product.connector.config # TODO: Rule values to be set by GET /projects/ :projectId/products +rules id:96
       theme: 'bootstrap3'
       required_by_default: true
       disable_edit_json: true
@@ -45,7 +45,7 @@ class ProductDetailView extends View
       disable_array_delete_last_row: true
       disable_array_delete_all_rows: true
 
-    # TODO:0 Add provider configurations before creating editor id:97
+    # TODO: Add provider configurations before creating editor id:97
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
     @configEditor.on 'change', => @emitChange()
@@ -64,7 +64,7 @@ class ProductDetailView extends View
   getDetail: (product) ->
     $$ ->
       @h1 "#{product.name}"
-      # TODO:0 This will have to be upadted on an event sent with pusher id:100
+      # TODO: This will have to be upadted on an event sent with pusher id:100
       @div class:'block', =>
         if product.isLinked()
           @div class:'btn-group', =>

@@ -24,7 +24,7 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
-  # TODO:0 Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. id:44
+  # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. id:44
   repo.isImdoneIOProject = () -> client.isAuthenticated() && repo.project && !repo.project.disabled
 
   repo.disableProject = (cb) ->
@@ -54,7 +54,7 @@ module.exports =  (repo) ->
     return unless client.isAuthenticated()
     return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
-      # TODO:0 Do something with this error id:46
+      # TODO: Do something with this error id:46
       unless project
         repo.disableProject()
         return repo.emit 'project.not-found' unless project
@@ -78,7 +78,7 @@ module.exports =  (repo) ->
     tasks = [tasks] unless _.isArray tasks
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, ioTasks) ->
-      return if err # TODO:0 Do something with this error id:47
+      return if err # TODO: Do something with this error id:47
       console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
         # READY:0 We have to be able to match on meta.id for updates. id:48
@@ -102,7 +102,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO:0 Do something with this error id:52
+      return if err # TODO: Do something with this error id:52
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -117,7 +117,7 @@ module.exports =  (repo) ->
 
   loadSort = (cb) ->
     loadSortFile cb
-    # TODO:0 also get from imdone.io in parallel? or just to start trying id:53
+    # TODO: also get from imdone.io in parallel? or just to start trying id:53
 
   loadSortFile = (cb) ->
     fs.exists SORT_FILE, (exists) ->
@@ -143,7 +143,7 @@ module.exports =  (repo) ->
     return cb() unless repo.project
     sort = _.get repo, 'sync.sort'
     repo.project.taskOrder = sort
-    # DOING:0 This should call client.updateTaskOrder, but we should also listen for pusher messages on project update id:55
+    # DOING: This should call client.updateTaskOrder, but we should also listen for pusher messages on project update id:55
     client.updateProject repo.project, (err, theProject) =>
       return cb(err) if err
       cb null, theProject.taskOrder

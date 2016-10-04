@@ -125,10 +125,10 @@ class MenuView extends View
     @getFilterEditor().onDidStopChanging () =>
       @emitter.emit 'filter', @getFilter()
 
-    @imdoneRepo.on 'initialized', => @updateMenu()
-    @imdoneRepo.on 'list.modified', => @updateMenu()
-    @imdoneRepo.on 'file.update', => @updateMenu()
-    @imdoneRepo.on 'tasks.moved', => @updateMenu()
+    @emitter.on 'initialized', => @updateMenu()
+    @emitter.on 'list.modified', => @updateMenu()
+    @emitter.on 'file.update', => @updateMenu()
+    @emitter.on 'tasks.moved', => @updateMenu()
 
     @client.on 'authenticated', => @authenticated()
     @client.on 'unauthenticated', => @unauthenticated()

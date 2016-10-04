@@ -37,14 +37,14 @@ class ProjectSettingsView extends View
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
 
-    @imdoneRepo.on 'project.found', (project) =>
+    @emitter.on 'project.found', (project) =>
       console.log "Sync took #{new Date().getTime() - @startTime}ms"
       @updateProgress 0
       @settingsPanel.show()
       @disabledProject.hide()
       @enabledProject.show()
 
-    @imdoneRepo.on 'project.removed', (project) =>
+    @emitter.on 'project.removed', (project) =>
       @settingsPanel.hide()
       @enabledProject.hide()
       @enableProjectBtn.show()

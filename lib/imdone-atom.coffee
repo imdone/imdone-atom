@@ -34,6 +34,12 @@ module.exports = ImdoneAtom =
       description: 'Show notifications upon clicking task source link.'
       type: 'boolean'
       default: false
+    zoomLevel:
+      description: 'Set the default zoom level on startup'
+      type: 'number'
+      default: 1
+      minimum: .2
+      maximum: 2.5
     # DONE:0 This is config for globs to open with editors issue:48 id:3
     openIn:
       title: 'File Opener'
@@ -107,6 +113,10 @@ module.exports = ImdoneAtom =
       evt.stopImmediatePropagation()
       @openJournalFile()
 
+    @subscriptions.add atom.commands.add 'atom-workspace', 'imdone-atom:board-zoom-in', (evt) => @zoom 'in'
+
+    @subscriptions.add atom.commands.add 'atom-workspace', 'imdone-atom:board-zoom-out', (evt) => @zoom 'out'
+
     atom.workspace.addOpener (uriToOpen) =>
       {protocol, host, pathname} = url.parse(uriToOpen)
       return unless protocol is 'imdone:'
@@ -116,11 +126,16 @@ module.exports = ImdoneAtom =
 
     # DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) id:5
 
+  zoom: (dir) ->
+    active = atom.workspace.getActivePaneItem()
+    return unless active instanceof ImdoneAtomView
+    active.emitter.emit 'zoom', dir
+
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()
     uri = @uriForProject(projectPath)
     return unless uri
-    atom.workspace.open(uri, searchAllPanes: true).then (imdoneAtomView) ->
+    atom.workspace.open(uri, searchAllPanes: true).then (imdoneAtomView) =>
       return unless imdoneAtomView instanceof ImdoneAtomView
       previousActivePane.activate()
 
@@ -173,4 +188,4 @@ module.exports = ImdoneAtom =
     ImdoneAtomView ?= require './views/imdone-atom-view'
     imdoneHelper ?= require './services/imdone-helper'
     {connectorManager, repo} = imdoneHelper.getRepo path, uri
-    new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri, connectorManager: connectorManager)
+    view = new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri, connectorManager: connectorManager)

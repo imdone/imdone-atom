@@ -11,7 +11,7 @@ fileService = null
 log = null
 config = require '../services/imdone-config'
 
-# DOING:0 Add keen stats for features id:65
+# INBOX: Add keen stats for features id:65
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -27,6 +27,8 @@ class ImdoneAtomView extends ScrollView
 
   initialize: ->
     super
+    @zoom config.getSettings().zoomLevel
+    # imdone icon stuff
     svgPath = path.join config.getPackagePath(), 'images', 'icons.svg'
     fs.readFile svgPath, (err, data) =>
       return if err
@@ -46,6 +48,7 @@ class ImdoneAtomView extends ScrollView
     @plugins = {}
 
     @handleEvents()
+
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
@@ -58,6 +61,13 @@ class ImdoneAtomView extends ScrollView
     deserializer: 'ImdoneAtomView'
     path: @path
     uri: @uri
+
+  zoom: (dir) ->
+    zoomable = @find '.zoomable'
+    return zoomable.css 'zoom', dir if typeof dir is 'number'
+    zoomVal = new Number(zoomable.css 'zoom')
+    zoomVal = if dir == 'in' then zoomVal+.05 else zoomVal-.05
+    zoomable.css 'zoom', zoomVal
 
   @content: (params) ->
     MenuView = require './menu-view'
@@ -89,7 +99,7 @@ class ImdoneAtomView extends ScrollView
           @subview 'menuView', new MenuView(params)
           @div outlet: 'boardWrapper', class: 'imdone-board-wrapper native-key-bindings', =>
             # @div outlet: 'messages', "HAHAH"
-            @div outlet: 'board', class: 'imdone-board'
+            @div outlet: 'board', class: 'imdone-board zoomable'
           @div outlet: 'configWrapper', class:'imdone-config-wrapper', =>
             @subview 'bottomView', new BottomView(params)
 
@@ -100,9 +110,26 @@ class ImdoneAtomView extends ScrollView
   getURI: ->
     @uri
 
+  addRepoListeners: ->
+    return if @listenersInitialized
+    repo = @imdoneRepo
+    emitter = @emitter
+    handlers = {}
+    handle = (event) ->
+      (data) -> emitter.emit event, data
+    events = ['list.modified', 'project.not-found', 'project.removed', 'project-found', 'tasks.updated', 'initialized',
+      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read']
+    for event in events
+      handler = handlers[event] = handle event
+      repo.on event, handler
+    @removeAllRepoListeners = () ->
+      repo.removeListener(event, handlers[event]) for event in events
+    @listenersInitialized = true
+
   handleEvents: ->
     repo = @imdoneRepo
     @emitter = @viewInterface = new PluginViewInterface @
+    @addRepoListeners()
     @menuView.handleEvents @emitter
     @bottomView.handleEvents @emitter
 
@@ -115,30 +142,30 @@ class ImdoneAtomView extends ScrollView
 
     @connectorManager.on 'sync.error', => @hideMask()
 
-    @imdoneRepo.on 'tasks.updated', => # READY:0 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:70
+    @emitter.on 'tasks.updated', => # READY:0 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:70
       @onRepoUpdate()
 
-    @imdoneRepo.on 'initialized', =>
+    @emitter.on 'initialized', =>
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
       @onRepoUpdate()
 
-    @imdoneRepo.on 'list.modified', =>
+    @emitter.on 'list.modified', =>
       console.log 'list.modified'
       @onRepoUpdate()
 
-    @imdoneRepo.on 'file.update', (file) =>
+    @emitter.on 'file.update', (file) =>
       console.log 'file.update: %s', file && file.getPath()
       @onRepoUpdate() if file.getPath()
 
-    @imdoneRepo.on 'tasks.moved', (tasks) =>
+    @emitter.on 'tasks.moved', (tasks) =>
       console.log 'tasks.moved', tasks
       @onRepoUpdate()
 
-    @imdoneRepo.on 'config.update', =>
+    @emitter.on 'config.update', =>
       console.log 'config.update'
       repo.refresh()
 
-    @imdoneRepo.on 'error', (err) => console.log('error:', err)
+    @emitter.on 'error', (err) => console.log('error:', err)
 
     @emitter.on 'task.modified', (task) =>
       @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
@@ -174,6 +201,8 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'resize.change', (height) =>
       @boardWrapper.css('bottom', height + 'px')
+
+    @emitter.on 'zoom', (dir) => @zoom dir
 
     @on 'click', '.source-link',  (e) =>
       link = e.target
@@ -214,7 +243,7 @@ class ImdoneAtomView extends ScrollView
       if (repo.getConfig())
         @addPlugin(Plugin)
       else
-        repo.on 'initialized', => @addPlugin(Plugin)
+        @emitter.on 'initialized', => @addPlugin(Plugin)
 
     pluginManager.emitter.on 'plugin.removed', (Plugin) => @removePlugin Plugin
 
@@ -225,7 +254,7 @@ class ImdoneAtomView extends ScrollView
         plugin.setConnector product.connector if plugin.constructor.provider == product.name
 
     @emitter.on 'logoff', => pluginManager.removeDefaultPlugins()
-    @imdoneRepo.on 'project.removed', => pluginManager.removeDefaultPlugins()
+    @emitter.on 'project.removed', => pluginManager.removeDefaultPlugins()
 
 
   addPluginButtons: ->
@@ -247,7 +276,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO:0 Add the plugin project buttons here id:72
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO: Add the plugin project buttons here id:72
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -325,7 +354,7 @@ class ImdoneAtomView extends ScrollView
     if @numFiles > 1000
       @ignorePrompt.hide()
       @progressContainer.show()
-      @imdoneRepo.on 'file.read', (data) =>
+      @emitter.on 'file.read', (data) =>
         complete = Math.ceil (data.completed/@numFiles)*100
         @progress.attr 'value', complete
     @imdoneRepo.init()
@@ -474,7 +503,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() # TODO:0 hide mask on event from connectorManager who will retry after emitting id:83
+    @hideMask() # TODO: hide mask on event from connectorManager who will retry after emitting id:83
     @makeTasksSortable()
     @emitter.emit 'board.update'
 
@@ -504,6 +533,7 @@ class ImdoneAtomView extends ScrollView
       tasksSortables.push(Sortable.create $(this).get(0), opts)
 
   destroy: ->
+    @removeAllRepoListeners()
     @emitter.emit 'did-destroy', @
     @emitter.dispose()
     @remove()

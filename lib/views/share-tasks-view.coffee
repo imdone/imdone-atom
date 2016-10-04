@@ -39,7 +39,6 @@ class ShareTasksView extends View
       @productSelect.updateItem product
       @productDetail.setProduct product
 
-    @imdoneRepo.on 'project.found', (project) => @showProductPanel project
     @showProductPanel @imdoneRepo.project if @imdoneRepo.project
 
   updateConnectorAfterDisable: (connector) ->
@@ -60,6 +59,7 @@ class ShareTasksView extends View
     @projectSettings.handleEvents @emitter
 
     self = @
+    @emitter.on 'project.found', (project) => @showProductPanel project
     @emitter.on 'product.selected', (product) =>
       @updateConnectorForEdit product
       @productDetail.setProduct product
@@ -68,26 +68,26 @@ class ShareTasksView extends View
     @emitter.on 'connector.change', (product) =>
       connector = _.cloneDeep product.connector
       @connectorManager.saveConnector connector, (err, connector) =>
-        # TODO:0 Handle errors by unauthenticating if needed and show login with error id:103
+        # TODO: Handle errors by unauthenticating if needed and show login with error id:103
         throw err if err
         product.connector = connector
         @productSelect.updateItem product
 
     @emitter.on 'connector.enable', (connector) =>
       @connectorManager.enableConnector connector, (err, updatedConnector) =>
-        # TODO:0 Handle errors id:104
+        # TODO: Handle errors id:104
         return if err
         @updateConnector updatedConnector
         @emitter.emit 'connector.enabled', updatedConnector
 
     @emitter.on 'connector.disable', (connector) =>
       @connectorManager.disableConnector connector, (err, updatedConnector) =>
-        # TODO:0 Handle errors id:105
+        # TODO: Handle errors id:105
         @updateConnectorAfterDisable updatedConnector unless err
 
     @client.on 'authenticated', => @onAuthenticated()
 
-    @imdoneRepo.on 'project.removed', => @productPanel.hide()
+    @emitter.on 'project.removed', => @productPanel.hide()
 
   updateConnector: (connector) ->
     # BACKLOG:0 This should probable use observer [Data-binding Revolutions with Object.observe() - HTML5 Rocks](http://www.html5rocks.com/en/tutorials/es7/observe/) id:106

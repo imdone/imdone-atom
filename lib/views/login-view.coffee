@@ -71,7 +71,7 @@ class LoginView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO:0 We need to show an error here if login fails because service can't be reached or if login fails id:86
+      # TODO: We need to show an error here if service can't be reached or login fails id:86
       log 'login:end'
       return @showLogin() unless @client.isAuthenticated()
       @onAuthenticated()
