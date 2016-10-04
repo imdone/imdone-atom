@@ -18,7 +18,7 @@ class BottomView extends View
         @div outlet: 'resizer', class:'split-handle-y'
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
-        # INBOX: Set up a messaging area id:60
+        # INBOX: Set up a messaging area
         @div outlet: 'error', class:'alert alert-error highlight-error text-center'
       @div class:'bottom-view-main zoomable', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
@@ -50,7 +50,7 @@ class BottomView extends View
     @shareTasksView.handleEvents @emitter
     # @projectSettingsView.handleEvents @emitter
 
-    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:61
+    # #DONE: Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/)
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
@@ -96,14 +96,18 @@ class BottomView extends View
 
     @closeButton.on 'click', => @hide()
 
+    @client.on 'authenticated', => @$login.hide()
+
+    @emitter.on 'project.found', => @hide()
+
     @client.on 'unauthenticated', =>
       @hide() unless config.getSettings().showLoginOnLaunch
       @showLogin() if config.getSettings().showLoginOnLaunch
 
-    # DONE:0 This belongs in bottomView +refactor id:62
+    # DONE: This belongs in bottomView +refactor
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE:0 This belongs in bottomView +refactor id:63
+    # DONE: This belongs in bottomView +refactor
     @emitter.on 'share', => @showShare()
 
     @emitter.on 'login', => @showLogin()
@@ -157,7 +161,7 @@ class BottomView extends View
     @plugins.show()
     @show()
 
-  # TODO: DRY these show... methods up id:64
+  # TODO: DRY these show... methods up
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()

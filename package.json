@@ -38,7 +38,8 @@
     "nedb": "^1.8.0",
     "pusher-js": "^3.0.0",
     "sortablejs": "1.4.2",
-    "superagent": "^1.8.0-beta.1"
+    "superagent": "^2.3.0",
+    "superagent-use": "^0.1.0"
   },
   "deserializers": {
     "ImdoneAtomView": "createImdoneAtomView"

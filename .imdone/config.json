@@ -24,7 +24,7 @@
   "lists": [
     {
       "name": "BACKLOG",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "TODO",
@@ -32,7 +32,7 @@
     },
     {
       "name": "INBOX",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DOING",
@@ -65,10 +65,5 @@
       "titleTemplate": "View github issue %s",
       "icon": "icon-octoface"
     }
-  },
-  "sync": {
-    "id": "57f337cb9223643b98dc2b15",
-    "name": "imdone-atom-beta",
-    "useImdoneioForPriority": true
   }
 }

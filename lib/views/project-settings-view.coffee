@@ -23,13 +23,10 @@ class ProjectSettingsView extends View
       @div outlet: 'settingsPanel', style:'display:none;', =>
         # @h1 "Project Settings"
 
-        # READY:0 Add config view here id:101
+        # READY: Add config view here
         # @h1 "Configuration (.imdone/config.json)"
       @div id:'disable-project-link', outlet:'enabledProject', class: 'pull-right highlight-error', style:'display:none;', =>
         @a click:'disableProject', class:'inline-block', "Stop using imdone.io with this project"
-
-  show: ->
-    super()
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
@@ -38,7 +35,6 @@ class ProjectSettingsView extends View
     if @initialized || !@emitter then return else @initialized = true
 
     @emitter.on 'project.found', (project) =>
-      console.log "Sync took #{new Date().getTime() - @startTime}ms"
       @updateProgress 0
       @settingsPanel.show()
       @disabledProject.hide()

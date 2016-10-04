@@ -1,4 +1,4 @@
-request = require 'superagent'
+request = require('superagent-use') require('superagent')
 async = require 'async'
 authUtil = require './auth-util'
 {Emitter} = require 'atom'
@@ -12,11 +12,11 @@ debug = require('debug/browser')
 pluginManager = require './plugin-manager'
 log = debug 'imdone-atom:client'
 
-# READY:0 The client public_key, secret and pusherKey should be configurable id:24
+# READY: The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
 NO_RESPONSE_ERR = new Error "No response from imdone.io"
 USER_NOT_FOUND_ERR = new Error "User not found"
-baseUrl = config.baseUrl # READY:0 This should be set to localhost if process.env.IMDONE_ENV = /dev/i id:25
+baseUrl = config.baseUrl # READY: This should be set to localhost if process.env.IMDONE_ENV = /dev/i
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
 signUpUrl = "#{baseUrl}/signup"
@@ -59,11 +59,18 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:begin'
     withHeaders = req.set('Date', (new Date()).getTime())
       .set('Accept', 'application/json')
-      .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA));
+      .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA))
+      .timeout 5000
+      .on 'error', (err) =>
+        if err.code == 'ECONNREFUSED' && @authenticated
+          @emit 'unavailable'
+          delete @authenticated
+          delete @user
+
     log 'setHeaders:end'
     withHeaders
 
-  # TODO: If we get a forbidden error, then emit auth failure id:26
+  # TODO: If we get a forbidden error, then emit auth failure
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -72,6 +79,9 @@ class ImdoneioClient extends Emitter
 
   doPatch: (path) ->
     @setHeaders request.patch("#{baseAPIUrl}#{path}")
+
+  doPut: (path) ->
+    @setHeaders request.put("#{baseAPIUrl}#{path}")
 
   _auth: (cb) ->
     return cb null, @user if @user
@@ -92,17 +102,16 @@ class ImdoneioClient extends Emitter
       delete @user
       @emit 'unauthenticated'
 
-
   authFromStorage: (cb) ->
     cb = (() ->) unless cb
-    return cb new Error("Auth from stoage failed") if @storageAuthFailed
+    # return cb new Error("Auth from stoage failed") if @storageAuthFailed
     return cb null, @user if @user
     @loadCredentials (err) =>
       return cb err if err
       @_auth (err, user) =>
         console.log "Authentication err:", err if err
-        @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO: if err.status == 404 we should show an error id:27
+        # @storageAuthFailed = _.get err, 'imdone_status'
+        # TODO: if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -118,7 +127,7 @@ class ImdoneioClient extends Emitter
       @handlePushEvents()
 
   onAuthFailure: (err, res, cb) ->
-    # READY:0 Add imdone_status to the Error id:28
+    # READY: Add imdone_status to the Error
     status = err.imdone_status = if err && (err.code == 'ECONNREFUSED' || _.get(err, 'response.err.status') == 404) then 'unavailable' else 'failed'
     @connectionAccepted = true unless status == "unavailable"
     @authenticated = false
@@ -142,7 +151,7 @@ class ImdoneioClient extends Emitter
       encrypted: true
       authEndpoint: pusherAuthUrl
       disableStats: true
-    # READY:0 imdoneio pusher channel needs to be configurable id:29
+    # READY: imdoneio pusher channel needs to be configurable
     @pusherChannel = @pusher.subscribe "#{config.pusherChannelPrefix}-#{@user.id}"
     @pusherChannel.bind 'product.linked', (data) => @emit 'product.linked', data
     @pusherChannel.bind 'product.unlinked', (data) => @emit 'product.unlinked', data
@@ -176,7 +185,7 @@ class ImdoneioClient extends Emitter
     @doPost("/projects/")
 
   getProducts: (projectId, cb) ->
-    # READY:0 Implement getProducts id:30
+    # READY: Implement getProducts
     @doGet("/projects/#{projectId}/products").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -189,7 +198,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getProject: (projectId, cb) ->
-    # READY:0 Implement getProject id:31
+    # READY: Implement getProject
     @doGet("/projects/#{projectId}").end (err, res) =>
       return cb(NO_RESPONSE_ERR) unless res
       return cb(PROJECT_ID_NOT_VALID_ERR) if err && err.status == 404
@@ -202,8 +211,13 @@ class ImdoneioClient extends Emitter
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
 
+  updateTaskOrder: (projectId, order, cb) ->
+    @doPut("/projects/#{projectId}/order").send(order).end (err, res) =>
+      return cb(err, res) if err || !res.ok
+      cb(null, res.body)
+
   getIssue: (connector, number, cb) ->
-    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:32
+    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -221,7 +235,7 @@ class ImdoneioClient extends Emitter
   createConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:0 Implement createProject id:33
+    # READY: Implement createProject
     @doPost("/projects/#{projectId}/connectors").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -229,7 +243,7 @@ class ImdoneioClient extends Emitter
   updateConnector: (repo, connector, cb) ->
     projectId = @getProjectId repo
     return cb "project must have a sync.id to connect" unless projectId
-    # READY:0 Implement createProject id:34
+    # READY: Implement createProject
     @doPatch("/projects/#{projectId}/connectors/#{connector.id}").send(connector).end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -260,7 +274,7 @@ class ImdoneioClient extends Emitter
       repo.saveConfig (err) => cb err, project
 
   getOrCreateProject: (repo, cb) ->
-    # BACKLOG:0 move this to connectorManager id:39
+    # BACKLOG: move this to connectorManager
     return cb() unless repo && repo.config && @isAuthenticated()
     projectId = @getProjectId repo
     return @createProject repo, cb unless projectId
@@ -278,14 +292,15 @@ class ImdoneioClient extends Emitter
   getProjectName: (repo) -> _.get repo, 'config.sync.name'
   setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
 
-  # READY:0 Send branch on sync if available for rules. gh:135 +now id:41
+  # READY: Send branch on sync if available for rules. gh:135 +now
   syncTasks: (repo, tasks, cb) ->
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
+    seconds = if tasks.length > 10 then 30 else 5
     opts =
       tasks: tasks
       branch: gitRepo && gitRepo.branch
-    @doPost("/projects/#{projectId}/tasks").send(opts).end (err, res) =>
+    @doPost("/projects/#{projectId}/tasks").timeout(seconds*1000).send(opts).end (err, res) =>
       return cb(err, res) if err || !res.ok
       tasks = res.body
       cb null, tasks
@@ -304,11 +319,11 @@ class ImdoneioClient extends Emitter
     @datastore[collection]
 
   tasksDb: (repo) ->
-    #READY:0 return the project specific task DB id:42
+    #READY: return the project specific task DB
     @db 'tasks',repo.getPath().replace(/\//g, '_')
 
   listsDb: (repo) ->
-    #READY:0 return the project specific task DB id:43
+    #READY: return the project specific task DB
     @db 'lists',repo.getPath().replace(/\//g, '_')
 
   @instance: new ImdoneioClient
