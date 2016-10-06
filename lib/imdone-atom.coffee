@@ -90,7 +90,7 @@ module.exports = ImdoneAtom =
   #   serialized
 
   activate: (state) ->
-    # READY: Put requires in activate to speed up startup issue:77
+    # READY:160 Put requires in activate to speed up startup issue:77
     _ = require 'lodash'
     url = require 'url'
     ImdoneAtomView ?= require './views/imdone-atom-view'

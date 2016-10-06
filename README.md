@@ -65,6 +65,8 @@ Commands
 |:------------------------------|:------------|:-------------------------|
 | `Imdone Atom: Tasks`          | Alt+T       | Open task board          |
 | `Imdone Atom: Todays Journal` | Alt+J       | Open todays journal file |
+| `Imdone Atom: Board Zoom In`  | Alt+.       | Zoom in board            |
+| `Imdone Atom: Board Zoom Out` | Alt+,       | Zoom out board           |
 
 Settings
 ----

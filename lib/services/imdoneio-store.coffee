@@ -49,7 +49,7 @@ module.exports =  (repo) ->
             cb()
 
   repo.checkForIIOProject = checkForIIOProject = () ->
-    # READY: This should be moved to imdoneio-store
+    # READY:220 This should be moved to imdoneio-store
     return repo.emit('project.found', repo.project) if repo.project
     return unless client.isAuthenticated()
     return repo.emit 'project.not-found' unless repo.getProjectId()
@@ -83,9 +83,9 @@ module.exports =  (repo) ->
       return if err # TODO: Do something with this error
       console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
-        # READY: We have to be able to match on meta.id for updates.
-        # READY: Test this with a new project to make sure we get the ids
-        # READY: We need a way to run tests on imdone-io without destroying the client
+        # READY:260 We have to be able to match on meta.id for updates.
+        # READY:200 Test this with a new project to make sure we get the ids
+        # READY:270 We need a way to run tests on imdone-io without destroying the client
         (task, cb) ->
           currentTask = repo.getTask task.id
           taskToModify = _.assign currentTask, task
@@ -143,7 +143,7 @@ module.exports =  (repo) ->
     cb ?= ()->
     return cb() unless repo.project
     sort = _.get repo, 'sync.sort'
-    # DOING: This should call client.updateTaskOrder, but we should also listen for pusher messages on project update
+    # READY:0 This should call client.updateTaskOrder, but we should also listen for pusher messages on project update
     client.updateTaskOrder repo.project.id, sort, (err, theProject) =>
       return cb(err) if err
       cb null, theProject.taskOrder
@@ -198,7 +198,7 @@ module.exports =  (repo) ->
     _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
       return cb err if err
       if shouldSync # DONE: Make sure the project is available
-        # READY: Only sync what we move!!! +important
+        # READY:150 Only sync what we move!!! +important
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks
           return cb null, tasksByList unless sortEnabled()
@@ -236,7 +236,7 @@ module.exports =  (repo) ->
     async.parallel fns, (err, results) ->
       return cb err if err
       repo.config = results[0]
-      # READY: Try an auth from storage
+      # READY:250 Try an auth from storage
       client.authFromStorage (err, user) ->
         if sortEnabled()
           _init (err, files) ->
