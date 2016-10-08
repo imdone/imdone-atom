@@ -119,7 +119,7 @@ class ImdoneAtomView extends ScrollView
     handle = (event) ->
       (data) -> emitter.emit event, data
     events = ['list.modified', 'project.not-found', 'project.removed', 'project.found', 'tasks.updated', 'initialized',
-      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read']
+      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read', 'sync.percent']
     for event in events
       handler = handlers[event] = handle event
       repo.on event, handler
@@ -142,11 +142,11 @@ class ImdoneAtomView extends ScrollView
       @hideMask()
       atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
 
-    @connectorManager.on 'tasks.syncing', => @showMask() # READY:310 mask isn't always hiding correctly gh:105
+    @connectorManager.on 'tasks.syncing', => @showMask() # READY: mask isn't always hiding correctly gh:105
 
     @connectorManager.on 'sync.error', => @hideMask()
 
-    @emitter.on 'tasks.updated', => # READY:100 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105
+    @emitter.on 'tasks.updated', => # READY: If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105
       @onRepoUpdate()
 
     @emitter.on 'initialized', =>
@@ -292,7 +292,7 @@ class ImdoneAtomView extends ScrollView
 
   addPlugin: (Plugin) ->
     return unless Plugin
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY:90 Get the connector from the connector manager
+    @connectorManager.getProduct Plugin.provider, (err, product) => # READY: Get the connector from the connector manager
       return if err || (product && !product.isEnabled())
       connector = product && product.connector
       if @plugins[Plugin.pluginName]

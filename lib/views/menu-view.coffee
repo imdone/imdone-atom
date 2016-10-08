@@ -13,7 +13,7 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:190 Show logged in user and avatar here
+        # READY: Show logged in user and avatar here
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
@@ -132,7 +132,7 @@ class MenuView extends View
 
     @client.on 'authenticated', => @authenticated()
     @client.on 'unauthenticated', => @unauthenticated()
-    @client.on 'unavailable', => @unauthenticated() #DOING:340 This should also show an alert!!!
+    @client.on 'unavailable', => @unauthenticated() #DOING: This should also show an alert!!!
 
   authenticated: ->
     console.log 'authenticated:', @client.user

@@ -17,13 +17,14 @@ class ProjectSettingsView extends View
         @h3 "Create and Update GitHub issues from TODO comments in your code!"
         @button outlet:'enableProjectBtn', click:'enableProject', class:'btn btn-lg btn-success', "Use #{config.name} with this project"
         @div outlet:'progressContainer', class:'block', style:'display:none;', =>
-          @progress outlet:'progress', class:'inline-block'
-          @div class:'block', =>
+          @progress outlet:'progress', class:'inline-block', max:'100'
+          @div outlet: 'progressValue', class: 'inline-block'
+          @div class: 'block', =>
             @span outlet:'progressText'
       @div outlet: 'settingsPanel', style:'display:none;', =>
         # @h1 "Project Settings"
 
-        # READY:10 Add config view here
+        # READY: Add config view here
         # @h1 "Configuration (.imdone/config.json)"
       @div id:'disable-project-link', outlet:'enabledProject', class: 'pull-right highlight-error', style:'display:none;', =>
         @a click:'disableProject', class:'inline-block', "Stop using imdone.io with this project"
@@ -33,7 +34,9 @@ class ProjectSettingsView extends View
 
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
-
+    @emitter.on 'sync.percent', (val) =>
+      @progress.attr 'value', val
+      @progressValue.html "#{val}%"
     @emitter.on 'project.found', (project) =>
       @updateProgress 0
       @settingsPanel.show()

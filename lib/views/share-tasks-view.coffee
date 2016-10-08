@@ -33,7 +33,7 @@ class ShareTasksView extends View
       @productDetail.setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
-      # READY:80 Connector plugin should be removed
+      # READY: Connector plugin should be removed
       @updateConnectorAfterDisable(product.connector)
       @updateConnectorForEdit product
       @productSelect.updateItem product

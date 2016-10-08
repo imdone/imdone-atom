@@ -90,7 +90,7 @@ module.exports = ImdoneAtom =
   #   serialized
 
   activate: (state) ->
-    # READY:160 Put requires in activate to speed up startup issue:77
+    # READY: Put requires in activate to speed up startup issue:77
     _ = require 'lodash'
     url = require 'url'
     ImdoneAtomView ?= require './views/imdone-atom-view'
@@ -158,7 +158,7 @@ module.exports = ImdoneAtom =
   openJournalFile: ->
     moment = require 'moment'
     mkdirp = require 'mkdirp'
-    config = atom.config.get('imdone-atom.todaysJournal')
+    config = configHelper.getSettings().todaysJournal
     date = moment().format config.dateFormat
     month = moment().format config.monthFormat
     template = (t) -> t.replace("${date}",date).replace("${month}", month)
