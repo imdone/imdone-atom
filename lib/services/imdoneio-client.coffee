@@ -1,7 +1,8 @@
-request = require('superagent-use') require('superagent')
+request = require 'superagent'
+Request = require 'request'
 async = require 'async'
 authUtil = require './auth-util'
-{$, Emitter} = require 'atom'
+{Emitter} = require 'atom'
 {allowUnsafeEval} = require 'loophole'
 Pusher = allowUnsafeEval -> require 'pusher-js'
 _ = require 'lodash'
@@ -302,27 +303,64 @@ class ImdoneioClient extends Emitter
     projectId = @getProjectId repo
     timeOutSeconds = if tasks.length > 10 then 30 else 5
     # DOING: Use _.chunk and asnyc eachLimit to sync batches of tasks
-    chunks = _.chunk tasks, 10
+    chunks = _.chunk tasks, 8
     modifiedTasks = []
     total = 0
     log "Sending #{tasks.length} tasks to imdone.io"
     repo.emit "sync.percent", 0
     log chunks
-    async.eachSeries chunks,
-      (chunk, cb) =>
-        log "Sending chunk of #{chunk.length} tasks to imdone.io"
-        opts =
-          tasks: chunk
-          branch: gitRepo && gitRepo.branch
-        @doPost("/projects/#{projectId}/tasks").timeout(timeOutSeconds*1000).send(opts).end (err, res) =>
-          return cb(err) if err || !res.ok
-          modifiedTasks.push res.body
-          total += res.body.length
-          repo.emit "sync.percent", Math.ceil(total/tasks.length*100)
-          log "Received #{total} tasks from imdone.io"
-          cb()
-      , (err) ->
-        cb err, _.flatten modifiedTasks
+    async.eachLimit chunks, 2, (chunk, cb) =>
+      log "Sending chunk of #{chunk.length} tasks to imdone.io"
+      data =
+        tasks: chunk
+        branch: gitRepo && gitRepo.branch
+      opts =
+        url: "#{baseAPIUrl}/projects/#{projectId}/tasks"
+        method: 'POST'
+        body: data
+        json: true
+        headers:
+          Date: (new Date()).getTime()
+          Accept: 'application/json'
+        timeout: timeOutSeconds*1000
+
+      opts.headers.Authorization = authUtil.getAuth(opts, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA)
+      Request opts, (err, response, data) =>
+        if err && err.code == 'ECONNREFUSED' && @authenticated
+          @emit 'unavailable'
+          delete @authenticated
+          delete @user
+        return cb err if err
+        modifiedTasks.push data
+        total += data.length
+        repo.emit "sync.percent", Math.ceil(total/tasks.length*100)
+        log "Received #{total} tasks from imdone.io"
+        cb()
+    , (err) ->
+      cb err, _.flatten modifiedTasks
+
+  # setHeaders: (req) ->
+  #   log 'setHeaders:begin'
+  #   withHeaders = req.set('Date', (new Date()).getTime())
+  #     .set('Accept', 'application/json')
+  #     .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA))
+  #     .timeout 5000
+  #     .on 'error', (err) =>
+  #       if err.code == 'ECONNREFUSED' && @authenticated
+  #         @emit 'unavailable'
+  #         delete @authenticated
+  #         delete @user
+  #
+  #   log 'setHeaders:end'
+  #   withHeaders
+  #
+        # @doPost("/projects/#{projectId}/tasks").use(nocache).timeout(timeOutSeconds*1000).send(opts).end (err, res) =>
+        #   return cb(err) if err || !res.ok
+        #   modifiedTasks.push res.body
+        #   total += res.body.length
+        #   repo.emit "sync.percent", Math.ceil(total/tasks.length*100)
+        #   log "Received #{total} tasks from imdone.io"
+        #   cb()
 
   # collection can be an array of strings or string
   db: (collection) ->
