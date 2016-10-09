@@ -39,7 +39,7 @@
     "pusher-js": "^3.0.0",
     "request": "^2.75.0",
     "sortablejs": "1.4.2",
-    "superagent": "^2.3.0",
+    "superagent": "^2.3.0"
   },
   "deserializers": {
     "ImdoneAtomView": "createImdoneAtomView"
