@@ -53,6 +53,8 @@ class ProjectSettingsView extends View
     return @progressContainer.hide() if n == 0
     n ?= ''
     @progressText.html "Syncing #{n} Comments.  Please wait..."
+    @progress.attr 'value', null
+    @progressValue.html ''
     @progressContainer.show()
 
   enableProject: (e) ->
