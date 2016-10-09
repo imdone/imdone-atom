@@ -12,7 +12,7 @@ helper = require './imdone-helper'
 debug = require('debug/browser')
 pluginManager = require './plugin-manager'
 log = debug 'imdone-atom:client'
-localStorage.debug = 'imdone-atom:client'
+# localStorage.debug = 'imdone-atom:client'
 
 # READY: The client public_key, secret and pusherKey should be configurable
 PROJECT_ID_NOT_VALID_ERR = new Error "Project ID not valid"
