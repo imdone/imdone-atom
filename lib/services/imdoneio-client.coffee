@@ -278,17 +278,6 @@ class ImdoneioClient extends Emitter
       @setSortConfig repo
       repo.saveConfig (err) => cb err, project
 
-  getOrCreateProject: (repo, cb) ->
-    # BACKLOG: move this to connectorManager
-    return cb() unless repo && repo.config && @isAuthenticated()
-    projectId = @getProjectId repo
-    return @createProject repo, cb unless projectId
-    @getProject projectId, (err, project) =>
-      return @createProject repo, cb if err == PROJECT_ID_NOT_VALID_ERR
-      return cb err if err
-      @setProjectName repo, project.name
-      repo.saveConfig (err) -> cb err, project
-
   getProjectId: (repo) ->  _.get repo, 'config.sync.id'
   setProjectId: (repo, id) -> _.set repo, 'config.sync.id', id
   setSortConfig: (repo) ->

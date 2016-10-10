@@ -7,7 +7,7 @@ Task = require 'imdone-core/lib/task'
 
 module.exports =
 class ConnectorManager extends Emitter
-  products: null
+  products: []
 
   constructor: (@repo) ->
     super
@@ -31,8 +31,9 @@ class ConnectorManager extends Emitter
   getProducts: (cb) ->
     cb = (()->) unless cb
     return cb "unauthenticated" unless @client.isAuthenticated()
-    return cb null, @products if @products
     return cb "No project found" unless @projectId()
+    if @products.length > 0
+      return cb null, @products
     @client.getProducts @projectId(), (err, products) =>
       return cb err if err
       @enhanceProduct product for product in products
@@ -65,7 +66,13 @@ class ConnectorManager extends Emitter
     @updateConnector connector, cb
 
   createConnector: (connector, cb) ->
-    @client.createConnector @repo, connector, cb
+    @client.createConnector @repo, connector, (err, connector) =>
+      return cb err if err
+      @getProduct connector.name, (err, product) =>
+        return cb err if err
+        product.connector = connector
+        @setProduct product, (err, product) =>
+          cb err, connector
 
   updateConnector: (connector, cb) ->
     @client.updateConnector @repo, connector, (err, connector) =>

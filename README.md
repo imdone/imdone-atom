@@ -11,19 +11,19 @@ Let's say you create a TODO like this...
 After installing imdone-atom-beta and clicking the "Use imdone.io with this project" button, your task will have an id like this.
 
 ```js
-// TODO: Add listener for task.modified event id:1
+// TODO: Add listener for task.modified event
 ```
 
 To create a github issue from the TODO, add a "Creator-bot" and configure a tag.  Let's say the tag was `+task`.  Add it tou you TODO like this...
 
 ```js
-// TODO: Add listener for task.modified event id:1 +task
+// TODO: Add listener for task.modified event +task
 ```
 
 Now save the file.  Your task should get updated to look something like this
 
 ```js
-// TODO: Add listener for task.modified event id:1 +task gh:1
+// TODO: Add listener for task.modified event +task gh:1
 ```
 
 Your TODO is now linked to GitHub issue number 1

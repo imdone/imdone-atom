@@ -1,22 +1,61 @@
 {$, $$, $$$, View} = require 'atom-space-pen-views'
+_ = require 'lodash'
 util = require 'util'
 
 module.exports =
 class ProductDetailView extends View
+  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+
+  updateConnectorForEdit: (product) ->
+    _.set product, 'connector', {} unless product.connector
+    return unless product.name == 'github' && !_.get(product, 'connector.config.repoURL')
+    _.set product, 'connector.config.repoURL', @connectorManager.getGitOrigin() || ''
+
   handleEvents: (@emitter)->
     if @initialized || !@emitter then return else @initialized = true
     # @on 'click', '#create-tasks', =>
     #   @emitter.emit 'tasks.create', @product.name
+    @emitter.on 'project.removed', (project) =>
+      @$configEditor.empty()
+      @configEditor.destroy() if @configEditor
+      delete @product
+
+    @emitter.on 'product.selected', (product) =>
+      @updateConnectorForEdit product
+      @setProduct product
+      @emitter.emit 'connector.enabled', product.connector if product.isEnabled()
+
+    @connectorManager.on 'product.linked', (product) =>
+      @updateConnectorForEdit product
+      @setProduct product
+
+    @connectorManager.on 'product.unlinked', (product) =>
+      # READY: Connector plugin should be removed
+      @updateConnectorForEdit product
+      @setProduct product
 
     @on 'click', '.enable-btn', =>
       return if @product.isEnabled()
       # READY: Connector plugin should be added
-      @emitter.emit 'connector.enable', @product.connector
+      if @product.connector.id
+        @connectorManager.enableConnector @product.connector, (err, updatedConnector) =>
+          # TODO: Handle errors
+          return if err
+          @product.connector = updatedConnector
+          @setProduct @product
+          @emitter.emit 'connector.enabled', updatedConnector
+      @product.connector.enabled = true
+      @emitChange()
 
     @on 'click', '.disable-btn', =>
       return unless @product.isEnabled()
       # READY: Connector plugin should be removed
-      @emitter.emit 'connector.disable', @product.connector
+      @connectorManager.disableConnector @product.connector, (err, updatedConnector) =>
+        # TODO: Handle errors
+        return unless updatedConnector
+        @product.connector = updatedConnector
+        @setProduct @product
+        @emitter.emit 'connector.disabled', updatedConnector
 
   @content: (params) ->
     require 'json-editor'
@@ -51,13 +90,19 @@ class ProductDetailView extends View
     @configEditor.on 'change', => @emitChange()
 
   emitChange: ->
-    _ = require 'lodash'
     editorVal = @configEditor.getValue()
-    currentVal =  _.get(@product, 'connector.config')
+    currentVal =  _.get @product, 'connector.config'
+    return unless @product.isEnabled()
     return if _.isEqual editorVal, currentVal
     _.set @product, 'connector.config', editorVal
     _.set @product, 'connector.name', @product.name unless _.get @product, "connector.name"
-    @emitter.emit 'connector.change', @product
+    connector = _.cloneDeep @product.connector
+    @connectorManager.saveConnector connector, (err, connector) =>
+      # TODO: Handle errors by unauthenticating if needed and show login with error
+      throw err if err
+      @product.connector = connector
+      @setProduct @product
+      @emitter.emit 'connector.changed', @product
 
   # READY: Add enable checkbox and take appropriate actions on check/uncheck +urgent
   # READY: When unlinked disable all connectors (In API) +urgent

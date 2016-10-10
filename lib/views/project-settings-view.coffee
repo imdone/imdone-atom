@@ -12,7 +12,7 @@ module.exports =
 class ProjectSettingsView extends View
   @content: (params) ->
     @div =>
-      @div outlet:'disabledProject', class:'block text-center' , =>
+      @div outlet:'disabledProject', class:'block text-center' , style:'display:none;', =>
         @h1 "Welcome to #{config.name}!"
         @h3 "Create and Update GitHub issues from TODO comments in your code!"
         @button outlet:'enableProjectBtn', click:'enableProject', class:'btn btn-lg btn-success', "Use #{config.name} with this project"
@@ -31,6 +31,8 @@ class ProjectSettingsView extends View
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
+    @enabledProject.show() if @imdoneRepo.isImdoneIOProject()
+    @disabledProject.show() unless @imdoneRepo.isImdoneIOProject()
 
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
@@ -70,6 +72,7 @@ class ProjectSettingsView extends View
         @updateProgress 0
       return if err
       return unless project
+       # DOING: This should emit an event that causes the share panel to stay open +new
       @imdoneRepo.checkForIIOProject()
 
   $tooManyProjectsMsg: ->

@@ -119,7 +119,7 @@ class ImdoneAtomView extends ScrollView
     handle = (event) ->
       (data) -> emitter.emit event, data
     events = ['list.modified', 'project.not-found', 'project.removed', 'project.found', 'tasks.updated', 'initialized',
-      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read', 'sync.percent']
+      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read', 'sync.percent', 'connector.enabled']
     for event in events
       handler = handlers[event] = handle event
       repo.on event, handler
@@ -253,7 +253,9 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'connector.disabled', (connector) => @removePluginByProvider connector.name
     @emitter.on 'connector.enabled', (connector) => @addPluginByProvider connector.name
-    @emitter.on 'connector.change', (product) =>
+    @connectorManager.on 'product.unlinked', (product) => @removePluginByProvider product.name
+    @emitter.on 'connector.changed', (product) =>
+      @addPluginByProvider product.connector.name
       for name, plugin of @plugins
         plugin.setConnector product.connector if plugin.constructor.provider == product.name
 
@@ -308,7 +310,8 @@ class ImdoneAtomView extends ScrollView
         else
           @initPluginView plugin
 
-  addPluginByProvider: (provider) -> @addPlugin pluginManager.getByProvider(provider)
+  addPluginByProvider: (provider) ->
+    @addPlugin pluginManager.getByProvider(provider)
 
   removePlugin: (Plugin) ->
     return unless Plugin
@@ -317,7 +320,8 @@ class ImdoneAtomView extends ScrollView
     delete @plugins[Plugin.pluginName]
     @addPluginButtons()
 
-  removePluginByProvider: (provider) -> @removePlugin pluginManager.getByProvider(provider)
+  removePluginByProvider: (provider) ->
+    @removePlugin pluginManager.getByProvider(provider)
 
   hasPlugins: ->
     Object.keys(@plugins).length > 0
@@ -353,8 +357,12 @@ class ImdoneAtomView extends ScrollView
     visibleTasks
 
   initImdone: () ->
-    return @onRepoUpdate() && @menuView.updateMenu() if @imdoneRepo.initialized
-
+    if @imdoneRepo.initialized
+      @onRepoUpdate()
+      @menuView.updateMenu()
+      @imdoneRepo.initProducts()
+      # @connectorManager.getProducts() #TODO we should add plugins by provider from here
+      return
     if @numFiles > 1000
       @ignorePrompt.hide()
       @progressContainer.show()

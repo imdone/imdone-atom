@@ -4,9 +4,15 @@ util = require 'util'
 
 module.exports =
 class ProductSelectionView extends SelectListView
+  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+
   handleEvents: (@emitter) ->
     return if @initialized || !@emitter
     @initialized = true
+
+    @connectorManager.on 'product.linked', (product) => @updateItem product
+
+    @connectorManager.on 'product.unlinked', (product) => @updateItem product
 
   setItems: (products) ->
     super(products)

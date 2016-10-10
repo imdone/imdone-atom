@@ -66,12 +66,14 @@ module.exports =  (repo) ->
       _.set repo, 'sync.sort', project.taskOrder if sortEnabled()
       repo.syncTasks repo.getTasks(), (err, done) =>
         repo.emit 'project.found', project
+        repo.initProducts()
         done err if done
 
   checkForIIOProject() if client.isAuthenticated()
   client.on 'authenticated', => checkForIIOProject()
 
   syncDone = (err) -> repo.emit 'tasks.updated' unless err
+
   repo.syncTasks = syncTasks = (tasks, cb) ->
     return cb("unauthenticated", ()->) unless client.isAuthenticated()
     return cb("not enabled") unless repo.getProjectId()
@@ -261,4 +263,12 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
+  repo.initProducts = () ->
+    connectorManager.getProducts (err, products) =>
+      return if err
+      repo.emit 'connector.enabled', product.connector for product in products when product.isEnabled()
+
+
+  repo.connectorManager = connectorManager
+  # DOING: Modify callers to only expect repo
   connectorManager: connectorManager, repo: repo

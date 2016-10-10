@@ -98,7 +98,7 @@ class BottomView extends View
 
     @client.on 'authenticated', => @$login.hide()
 
-    @emitter.on 'project.found', => @hide()
+    # @emitter.on 'project.found', => @hide()
 
     @client.on 'unauthenticated', =>
       @hide() unless config.getSettings().showLoginOnLaunch

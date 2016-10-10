@@ -24,7 +24,7 @@
   "lists": [
     {
       "name": "BACKLOG",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "TODO",
@@ -40,7 +40,7 @@
     },
     {
       "name": "READY",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "CHANGED",
