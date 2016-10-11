@@ -23,7 +23,8 @@ module.exports = PluginManager =
 
   getAll: -> (val for key, val of @plugins)
 
-  getByProvider: (provider) -> _.find @getAll(), provider: provider
+  getByProvider: (provider) ->
+    _.find(@getAll(), provider: provider) || _.find(@defaultPlugins, provider: provider)
 
   init: ->
     for plugin in @defaultPlugins

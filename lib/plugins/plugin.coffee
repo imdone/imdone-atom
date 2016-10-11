@@ -1,5 +1,6 @@
 {Emitter} = require 'atom'
 gitup = require 'git-up'
+_ = require 'lodash'
 module.exports =
 class ConnectorPlugin extends Emitter
   @PluginView: require('./plugin-view')

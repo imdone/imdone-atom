@@ -21,15 +21,18 @@ class ProductDetailView extends View
       delete @product
 
     @emitter.on 'product.selected', (product) =>
+      return unless product
       @updateConnectorForEdit product
       @setProduct product
       @emitter.emit 'connector.enabled', product.connector if product.isEnabled()
 
     @connectorManager.on 'product.linked', (product) =>
+      return unless product
       @updateConnectorForEdit product
       @setProduct product
 
     @connectorManager.on 'product.unlinked', (product) =>
+      return unless product
       # READY: Connector plugin should be removed
       @updateConnectorForEdit product
       @setProduct product

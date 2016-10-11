@@ -10,13 +10,15 @@ class ProductSelectionView extends SelectListView
     return if @initialized || !@emitter
     @initialized = true
 
+    @emitter.on 'project.removed', (project) => @setItems []
+
     @connectorManager.on 'product.linked', (product) => @updateItem product
 
     @connectorManager.on 'product.unlinked', (product) => @updateItem product
 
   setItems: (products) ->
     super(products)
-    @selectProduct @getSelectedItem()
+    @selectProduct @getSelectedItem() if products && products.length > 0
     @focusFilterEditor()
 
   updateItem: (item) ->

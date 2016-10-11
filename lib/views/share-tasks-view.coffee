@@ -19,14 +19,13 @@ class ShareTasksView extends View
       @subview 'projectSettings', new ProjectSettingsView params
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style:'display:none;', =>
         @div class: 'product-select-wrapper', =>
-          @h1 'TODOBOTs'
           @subview 'productSelect', new ProductSelectionView params
         @div class:'product-detail-wrapper', =>
           @subview 'productDetail', new ProductDetailView params
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
-    @showProductPanel @imdoneRepo.project if @imdoneRepo.project
+    @show()
 
   show: () ->
     super
