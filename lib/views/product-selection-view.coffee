@@ -1,11 +1,13 @@
-{$, $$, $$$, SelectListView} = require 'atom-space-pen-views'
+{$, $$, $$$, View} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
 util = require 'util'
+_ = require 'lodash'
+pluginManager = require '../services/plugin-manager'
 
 module.exports =
-class ProductSelectionView extends SelectListView
+class ProductSelectionView extends View
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
-
+  @content: (params) -> @div()
   handleEvents: (@emitter) ->
     return if @initialized || !@emitter
     @initialized = true
@@ -16,10 +18,29 @@ class ProductSelectionView extends SelectListView
 
     @connectorManager.on 'product.unlinked', (product) => @updateItem product
 
-  setItems: (products) ->
-    super(products)
-    @selectProduct @getSelectedItem() if products && products.length > 0
-    @focusFilterEditor()
+    @emitter.on 'connector.enabled', (connector) =>
+      @find("[data-name=#{connector.name}] .icon").removeClass("text-warning text-info").addClass("text-success")
+
+    @emitter.on 'connector.disabled', (connector) =>
+      @find("[data-name=#{connector.name}] .icon").removeClass("text-success text-info").addClass("text-warning")
+
+    @on 'click', (e) =>
+      $link = $(e.target).closest 'a'
+      name = $link.data('name')
+      product = _.find @products, name: name
+      @selectProduct product
+
+  setItems: (@products) ->
+    @selectProduct @products[0] if @products && @products.length > 0
+    @populateList()
+
+  populateList: ->
+    @empty()
+    @append @viewForItem(product) for product in @products
+
+  show: ->
+    @populateList()
+    super()
 
   updateItem: (item) ->
     for product, i in @items
@@ -28,34 +49,23 @@ class ProductSelectionView extends SelectListView
     selectedItem = @getSelectedItem()
     itemSelector = "li[data-name=#{selectedItem.name}]"
     @populateList()
-    @selectItemView(@list.find itemSelector)
-    @confirmSelection()
 
-  selectProduct: (product) -> @confirmed product
+  getSelectedItem: -> @selected
+
+  selectProduct: (product) ->
+    @selected = product
+    @emitter.emit 'product.selected', product if @emitter
 
   getProduct: (name) ->
     _ = require 'lodash'
     _.find @items, name: name
 
-  confirmed: (product) ->
-    @emitter.emit 'product.selected', product if @emitter
-
   viewForItem: (product) ->
-    icon = 'icon-sign-in'
-    text = 'text-info'
-    if product.isEnabled()
-      icon = 'icon-cloud-upload'
-      text = 'text-success'
-    else if product.isLinked()
-      icon = 'icon-log-out'
-      text = 'text-warning'
-
+    plugin = pluginManager.getByProvider product.name
+    icon = if plugin then "icon-#{plugin.icon}" else "icon-package"
+    text = if product.isEnabled() then 'text-success' else if product.isLinked() then 'text-warning' else 'text-info'
     $$ ->
       @li class:"integration-product", 'data-name': product.name, =>
-        @div class:"pull-right icon #{icon} #{text}"
-        @span class:'product-name', product.name
-
-  getFilterKey: -> 'name'
-
-  cancel: ->
-    console.log("cancelled")
+        @a href:'#', 'data-name': product.name, =>
+          @div class:"icon #{icon} #{text}"
+          @div class:"product-name", product.name

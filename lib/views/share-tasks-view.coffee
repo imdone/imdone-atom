@@ -20,7 +20,7 @@ class ShareTasksView extends View
       @div outlet: 'productPanel', class: 'block imdone-product-pane row config-container', style:'display:none;', =>
         @div class: 'product-select-wrapper', =>
           @subview 'productSelect', new ProductSelectionView params
-        @div class:'product-detail-wrapper', =>
+        @div class:'product-detail-wrapper native-key-bindings', =>
           @subview 'productDetail', new ProductDetailView params
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
@@ -50,4 +50,5 @@ class ShareTasksView extends View
     @connectorManager.getProducts (err, products) =>
       return if err
       @productSelect.setItems products
+      @productSelect.show()
       @productPanel.show()

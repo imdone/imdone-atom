@@ -91,6 +91,7 @@ class ProductDetailView extends View
     @configEditor.destroy() if @configEditor
     @configEditor = new JSONEditor @$configEditor.get(0), options
     @configEditor.on 'change', => @emitChange()
+    @$configEditor.find('input').first().focus()
 
   emitChange: ->
     editorVal = @configEditor.getValue()
@@ -111,9 +112,8 @@ class ProductDetailView extends View
   # READY: When unlinked disable all connectors (In API) +urgent
   getDetail: (product) ->
     $$ ->
-      @h1 "#{product.name}"
       # TODO: This will have to be upadted on an event sent with pusher
-      @div class:'block', =>
+      @div class:"block", =>
         if product.isLinked()
           @div class:'btn-group', =>
             selected = if product.isEnabled() then " selected" else ""

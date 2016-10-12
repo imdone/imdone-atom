@@ -126,10 +126,12 @@ module.exports = ImdoneAtom =
 
     # DONE: Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428)
 
-  zoom: (dir) ->
+  emit: (name, data) ->
     active = atom.workspace.getActivePaneItem()
     return unless active instanceof ImdoneAtomView
-    active.emitter.emit 'zoom', dir
+    active.emitter.emit name, data
+
+  zoom: (dir) -> @emit 'zoom', dir
 
   tasks: (projectPath) ->
     previousActivePane = atom.workspace.getActivePane()

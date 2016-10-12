@@ -167,7 +167,7 @@ class BottomView extends View
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
-    @setHeight(500)
+    @setHeight(800)
     @show()
 
   showLogin: () ->
