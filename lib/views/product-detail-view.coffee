@@ -12,7 +12,8 @@ class ProductDetailView extends View
     _.set product, 'connector.config.repoURL', @connectorManager.getGitOrigin() || ''
 
   handleEvents: (@emitter)->
-    if @initialized || !@emitter then return else @initialized = true
+    return if @initialized || !@emitter
+    @initialized = true
     # @on 'click', '#create-tasks', =>
     #   @emitter.emit 'tasks.create', @product.name
     @emitter.on 'project.removed', (project) =>
@@ -24,7 +25,6 @@ class ProductDetailView extends View
       return unless product
       @updateConnectorForEdit product
       @setProduct product
-      @emitter.emit 'connector.enabled', product.connector if product.isEnabled()
 
     @connectorManager.on 'product.linked', (product) =>
       return unless product
@@ -37,42 +37,22 @@ class ProductDetailView extends View
       @updateConnectorForEdit product
       @setProduct product
 
-    @on 'click', '.enable-btn', =>
-      return if @product.isEnabled()
-      # READY: Connector plugin should be added
-      if @product.connector.id
-        @connectorManager.enableConnector @product.connector, (err, updatedConnector) =>
-          # TODO: Handle errors
-          return if err
-          @product.connector = updatedConnector
-          @setProduct @product
-          @emitter.emit 'connector.enabled', updatedConnector
-      @product.connector.enabled = true
-      @emitChange()
+    @emitter.on 'connector.changed', (product) =>
+      return unless product
+      @updateConnectorForEdit product
+      @setProduct product
 
-    @on 'click', '.disable-btn', =>
-      return unless @product.isEnabled()
-      # READY: Connector plugin should be removed
-      @connectorManager.disableConnector @product.connector, (err, updatedConnector) =>
-        # TODO: Handle errors
-        return unless updatedConnector
-        @product.connector = updatedConnector
-        @setProduct @product
-        @emitter.emit 'connector.disabled', updatedConnector
 
   @content: (params) ->
     require 'json-editor'
     @div class: 'product-detail-view-content config-container', =>
-      @div outlet: '$detail'
       @div class: 'json-editor-container', =>
         @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
 
   setProduct: (@product)->
     return unless @product && @product.name
-    @$detail.html @getDetail(@product)
     @$configEditor.empty()
     return unless @product.linked
-    if @product.isEnabled() then @$configEditor.show() else @$configEditor.hide()
     @createEditor()
 
   createEditor: ->
@@ -89,6 +69,7 @@ class ProductDetailView extends View
 
     # TODO: Add provider configurations before creating editor
     @configEditor.destroy() if @configEditor
+    if @product.isEnabled() then @$configEditor.show() else @$configEditor.hide()
     @configEditor = new JSONEditor @$configEditor.get(0), options
     @configEditor.on 'change', => @emitChange()
     @$configEditor.find('input').first().focus()
@@ -107,20 +88,3 @@ class ProductDetailView extends View
       @product.connector = connector
       @setProduct @product
       @emitter.emit 'connector.changed', @product
-
-  # READY: Add enable checkbox and take appropriate actions on check/uncheck +urgent
-  # READY: When unlinked disable all connectors (In API) +urgent
-  getDetail: (product) ->
-    $$ ->
-      # TODO: This will have to be upadted on an event sent with pusher
-      @div class:"block", =>
-        if product.isLinked()
-          @div class:'btn-group', =>
-            selected = if product.isEnabled() then " selected" else ""
-            @button class:"enable-btn btn#{selected}", 'ON'
-            selected = unless product.isEnabled() then " selected" else ""
-            @button class:"disable-btn btn#{selected}", 'OFF'
-          @a href:product.logout, class:'btn icon icon-log-out inline-block-tight', "unlink your #{product.name} account"
-          # @button id:'create-tasks', class:'btn icon icon icon-cloud-upload inline-block-tight', "create #{product.entity}s on #{product.name}"
-        else
-          @a href:product.login, class:'btn icon icon-log-in inline-block-tight', "link your #{product.name} account"

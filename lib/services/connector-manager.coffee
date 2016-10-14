@@ -71,7 +71,7 @@ class ConnectorManager extends Emitter
       @getProduct connector.name, (err, product) =>
         return cb err if err
         product.connector = connector
-        @setProduct product, (err, product) =>
+        @setProduct product, (err, product) ->
           cb err, connector
 
   updateConnector: (connector, cb) ->

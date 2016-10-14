@@ -51,5 +51,11 @@
         "1.0.0": "provideService"
       }
     }
+  },
+  "coffeelintConfig": {
+    "max_line_length": {
+      "level": "warn",
+      "value": 120
+    }
   }
 }
