@@ -49,9 +49,10 @@ module.exports =  (repo) ->
             cb()
 
   repo.checkForIIOProject = checkForIIOProject = () ->
+    console.log "Checking for imdone.io project"
     # READY: This should be moved to imdoneio-store
     return repo.emit('project.found', repo.project) if repo.project
-    return unless client.isAuthenticated()
+    return unless client.isAuthenticated() && repo.initialized
     return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
       # TODO: Do something with this error
@@ -79,6 +80,7 @@ module.exports =  (repo) ->
     return cb("not enabled") unless repo.getProjectId()
     tasks = [tasks] unless _.isArray tasks
     return cb() unless tasks.length > 0
+    # DONE: Keep sync from happening twice +bug +beta gh:140
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, ioTasks) ->
@@ -203,6 +205,7 @@ module.exports =  (repo) ->
       return cb err if err
       if shouldSync # DONE: Make sure the project is available
         # READY: Only sync what we move!!! +important
+        console.log "Tasks moved.  Syncing with imdone.io"
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks
           return cb null, tasksByList unless sortEnabled()
@@ -270,5 +273,5 @@ module.exports =  (repo) ->
 
 
   repo.connectorManager = connectorManager
-  # DOING: Modify callers to only expect repo
+  # TODO: Modify callers to only expect repo
   connectorManager: connectorManager, repo: repo

@@ -8,6 +8,7 @@ module.exports =
 class ProductSelectionView extends View
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
   @content: (params) -> @div()
+  # DOING: Add stop using imdone.io with icon-stop
   handleEvents: (@emitter) ->
     return if @initialized || !@emitter
     @initialized = true
@@ -93,7 +94,7 @@ class ProductSelectionView extends View
   viewForItem: (product) ->
     plugin = pluginManager.getByProvider product.name
     icon = if plugin then "icon-#{plugin.icon}" else "icon-package"
-    text = if product.isEnabled() then 'text-success' else if product.isLinked() then 'text-warning' else 'text-info'
+    text = if product.isEnabled() then 'text-success'
     $$ ->
       @li class:"integration-product", 'data-name': product.name, =>
         @div =>

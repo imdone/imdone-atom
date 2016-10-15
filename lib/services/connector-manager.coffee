@@ -16,7 +16,7 @@ class ConnectorManager extends Emitter
     # READY: Check for updates to products/connectors and update @products with changes
 
   handleEvents: ->
-    # DONE: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth +story
+    # DONE: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>

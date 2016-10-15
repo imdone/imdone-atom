@@ -291,7 +291,6 @@ class ImdoneioClient extends Emitter
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
     timeOutSeconds = if tasks.length > 10 then 30 else 5
-    # DOING: Use _.chunk and asnyc eachLimit to sync batches of tasks
     chunks = _.chunk tasks, 8
     modifiedTasks = []
     total = 0

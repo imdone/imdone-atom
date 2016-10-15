@@ -172,6 +172,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'error', (err) => console.log('error:', err)
 
     @emitter.on 'task.modified', (task) =>
+      console.log "Task modified.  Syncing with imdone.io"
       @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
 
     @emitter.on 'menu.toggle', =>

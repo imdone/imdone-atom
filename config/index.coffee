@@ -23,7 +23,7 @@ prod =
   baseUrl:    'https://imdone.io'
   pusherChannelPrefix: 'private-imdoneio-dev'
 
-module.exports = beta
+module.exports = dev
   # if /dev/i.test process.env.IMDONE_ENV then dev
   # else if /beta/i.test process.env.IMDONE_ENV then beta
   # else prod
