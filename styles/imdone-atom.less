@@ -153,10 +153,6 @@
           margin: auto;
         }
       }
-
-      #disable-project-link {
-        margin-right: 6em;
-      }
     }
     .close-button {
       position: absolute;
@@ -177,22 +173,6 @@
       h1 {
         margin-top: 0;
       }
-      li.integration-product {
-        list-style: none;
-        a {
-          width: 4em;
-          display: inline-block;
-          margin: 1.25em 0 .5em 1.25em;
-          text-align: center;
-          .icon::before {
-            font-size: 4em;
-          }
-          .icon {
-            margin-left: -2em;
-            margin-bottom: .5em;
-          }
-        }
-      }
 
       .product-detail-view-content {
         .json-editor-btn-add {
@@ -206,6 +186,30 @@
         position: absolute;
         top: 0;
         left: 0;
+
+        li {
+          list-style: none;
+          width: 8em;
+          text-align: center;
+          margin-bottom: 1.5em;
+          a {
+            width: 4em;
+            display: inline-block;
+            margin-bottom: .5em;
+            text-align: center;
+            .icon::before {
+              font-size: 4em;
+            }
+            .icon {
+              margin-left: -2em;
+              margin-bottom: .5em;
+              &.icon-stop {
+                color: @background-color-error;
+              }
+            }
+          }
+        }
+
       }
       .product-detail-wrapper {
         margin-left: 10em;

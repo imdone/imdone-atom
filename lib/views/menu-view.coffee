@@ -44,21 +44,35 @@ class MenuView extends View
               @i class: "icon icon-question toolbar-icon"
               @span class:'tool-text', 'Help'
           @div class: "menu-sep-space-2x"
+          @div class: "imdone-project-plugins"
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
             @div click: "openShare", class: "imdone-toolbar-button", title: "Project TODOBOTs", =>
               @a href: "#", =>
                 @i class: "icon icon-settings toolbar-icon"
                 @span class:'tool-text', 'Project TODOBOTs'
-          @div class: "imdone-project-plugins"
+
+            @div outlet:'$disconnect', click: 'disconnectImdoneio', class: 'imdone-toolbar-button', style: 'display: none;', =>
+              @a href: '#', =>
+                @i class:"icon icon-stop"
+                @span class:'tool-text', 'Disconnect from imdone.io'
+
+            @div outlet: '$logOff', click: "logOff", class: "imdone-toolbar-button", =>
+              @a href: '#', =>
+                @i class:"icon icon-log-out"
+                @span class:'tool-text', 'Sign out'
+
+            @div outlet: '$account', click: "showAccount", class: "imdone-profile imdone-toolbar-button", =>
+              @i class:"profile-image icon", outlet:'$profileImage'
+              @span class:'tool-text', 'Account'
+
           @div outlet:'$login', class:'imdone-icon imdone-toolbar-button', title:'login to imdone.io', =>
             @a click:'openLogin', href: "#", =>
               @i class:'icon', =>
                 @tag 'svg', => @tag 'use', "xlink:href":"#imdone-logo-icon"
               @span class:'tool-text', 'Login'
-          @div outlet: '$logOff', click: "logOff", class: "imdone-profile imdone-toolbar-button", style:'display:none;', =>
-            @i class:"profile-image icon", outlet:'$profileImage'
-            @span class:'tool-text', 'Sign out'
+
           # BACKLOG: Add the plugin project buttons
+
           @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
             @span class: 'loading loading-spinner-tiny inline-block'
 
@@ -71,6 +85,7 @@ class MenuView extends View
     @client = Client.instance
     return @authenticated() if @client.isAuthenticated()
     @client.authFromStorage
+    @$disconnect.show() if @imdoneRepo.isImdoneIOProject()
 
   addPluginProjectButtons: (plugins) ->
 
@@ -125,6 +140,10 @@ class MenuView extends View
     @getFilterEditor().onDidStopChanging () =>
       @emitter.emit 'filter', @getFilter()
 
+    @emitter.on 'project.found', => @$disconnect.show()
+    @emitter.on 'project.not-found', => @$disconnect.hide()
+    @emitter.on 'project.removed', => @$disconnect.hide()
+
     @emitter.on 'initialized', => @updateMenu()
     @emitter.on 'list.modified', => @updateMenu()
     @emitter.on 'file.update', => @updateMenu()
@@ -141,13 +160,13 @@ class MenuView extends View
     title = "Sign out#{crlf}#{config.name} Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
     @$login.hide()
-    @$logOff.show();
     @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title)
     @$imdoneioButtons.show()
+    @$disconnect.hide() unless @imdoneRepo.isImdoneIOProject()
+
 
   unauthenticated: ->
     @$login.show()
-    @$logOff.hide()
     @$imdoneioButtons.hide()
 
   openShare: -> @emitter.emit 'share'
@@ -160,6 +179,10 @@ class MenuView extends View
   logOff: ->
     @client.logoff()
     @emitter.emit "logoff"
+
+  disconnectImdoneio: (e) ->
+    @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"
+
 
   updateMenu: ->
     return unless @imdoneRepo

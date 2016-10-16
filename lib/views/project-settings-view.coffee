@@ -26,12 +26,9 @@ class ProjectSettingsView extends View
 
         # READY: Add config view here
         # @h1 "Configuration (.imdone/config.json)"
-      @div id:'disable-project-link', outlet:'enabledProject', class: 'pull-right highlight-error', style:'display:none;', =>
-        @a click:'disableProject', class:'inline-block', "Stop using imdone.io with this project"
 
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
     @client = Client.instance
-    @enabledProject.show() if @imdoneRepo.isImdoneIOProject()
     @disabledProject.show() unless @imdoneRepo.isImdoneIOProject()
 
   handleEvents: (@emitter) ->
@@ -43,11 +40,9 @@ class ProjectSettingsView extends View
       @updateProgress 0
       @settingsPanel.show()
       @disabledProject.hide()
-      @enabledProject.show()
 
     @emitter.on 'project.removed', (project) =>
       @settingsPanel.hide()
-      @enabledProject.hide()
       @enableProjectBtn.show()
       @disabledProject.show()
 
@@ -84,6 +79,3 @@ class ProjectSettingsView extends View
         @span " or "
         @a href:"#{Client.projectsUrl}", "disable/remove projects"
         @span " before adding another."
-
-  disableProject: (e) ->
-    @imdoneRepo.disableProject() if window.confirm "Do you really want to stop using imdone.io with #{@imdoneRepo.getProjectName()}?"

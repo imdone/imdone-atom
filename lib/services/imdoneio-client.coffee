@@ -64,7 +64,7 @@ class ImdoneioClient extends Emitter
     withHeaders = req.set('Date', (new Date()).getTime())
       .set('Accept', 'application/json')
       .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA))
-      .timeout 5000
+      .timeout 10000
       .on 'error', (err) =>
         if err.code == 'ECONNREFUSED' && @authenticated
           @emit 'unavailable'
@@ -290,7 +290,7 @@ class ImdoneioClient extends Emitter
   syncTasks: (repo, tasks, cb) ->
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
-    timeOutSeconds = if tasks.length > 10 then 30 else 5
+    timeOutSeconds = if tasks.length > 10 then 30 else 10
     chunks = _.chunk tasks, 8
     modifiedTasks = []
     total = 0

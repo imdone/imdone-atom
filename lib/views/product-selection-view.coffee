@@ -7,7 +7,31 @@ pluginManager = require '../services/plugin-manager'
 module.exports =
 class ProductSelectionView extends View
   initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
-  @content: (params) -> @div()
+  @content: (params) ->
+    @div =>
+      @div outlet: 'productControls'
+
+  populateList: ->
+    @productControls.empty()
+    @productControls.append @viewForItem(product) for product in @products
+
+  viewForItem: (product) ->
+    plugin = pluginManager.getByProvider product.name
+    icon = if plugin then "icon-#{plugin.icon}" else "icon-package"
+    text = if product.isEnabled() then 'text-success'
+    $$ ->
+      @li class:"integration-product", 'data-name': product.name, =>
+        @div =>
+          @a class: 'product-link', href:'#', 'data-name': product.name, =>
+            @div class:"icon #{icon} #{text}"
+            @div class:"product-name", product.name
+        @div =>
+          @label class:'input-label', =>
+            @text "OFF "
+            @input class:'input-toggle', 'data-name':product.name, type:'checkbox', checked:'checked' if product.isEnabled()
+            @input class:'input-toggle', 'data-name':product.name, type:'checkbox' unless product.isEnabled()
+            @text " ON"
+
   # DOING: Add stop using imdone.io with icon-stop
   handleEvents: (@emitter) ->
     return if @initialized || !@emitter
@@ -65,10 +89,6 @@ class ProductSelectionView extends View
     @selectProduct @products[0] if @products && @products.length > 0
     @populateList()
 
-  populateList: ->
-    @empty()
-    @append @viewForItem(product) for product in @products
-
   show: ->
     @populateList()
     super()
@@ -84,26 +104,8 @@ class ProductSelectionView extends View
   getSelectedItem: -> @selected
 
   selectProduct: (product) ->
+    return unless @emitter
     @emitter.emit 'product.selected', product
     @selected = product
 
-  getProduct: (name) ->
-    _ = require 'lodash'
-    _.find @items, name: name
-
-  viewForItem: (product) ->
-    plugin = pluginManager.getByProvider product.name
-    icon = if plugin then "icon-#{plugin.icon}" else "icon-package"
-    text = if product.isEnabled() then 'text-success'
-    $$ ->
-      @li class:"integration-product", 'data-name': product.name, =>
-        @div =>
-          @a class: 'product-link', href:'#', 'data-name': product.name, =>
-            @div class:"icon #{icon} #{text}"
-            @div class:"product-name", product.name
-        @div =>
-          @label class:'input-label', =>
-            @text "OFF "
-            @input class:'input-toggle', 'data-name':product.name, type:'checkbox', checked:'checked' if product.isEnabled()
-            @input class:'input-toggle', 'data-name':product.name, type:'checkbox' unless product.isEnabled()
-            @text " ON"
+  getProduct: (name) ->  _.find @items, name: name
