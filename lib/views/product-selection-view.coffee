@@ -18,12 +18,11 @@ class ProductSelectionView extends View
   viewForItem: (product) ->
     plugin = pluginManager.getByProvider product.name
     icon = if plugin then "icon-#{plugin.icon}" else "icon-package"
-    text = if product.isEnabled() then 'text-success'
     $$ ->
       @li class:"integration-product", 'data-name': product.name, =>
         @div =>
           @a class: 'product-link', href:'#', 'data-name': product.name, =>
-            @div class:"icon #{icon} #{text}"
+            @div class:"icon #{icon}"
             @div class:"product-name", product.name
         @div =>
           @label class:'input-label', =>
@@ -45,11 +44,9 @@ class ProductSelectionView extends View
 
     @emitter.on 'connector.enabled', (connector) =>
       @find(".input-toggle[data-name=#{connector.name}]").prop "checked", true
-      @find("[data-name=#{connector.name}] .icon").addClass("text-success")
 
     @emitter.on 'connector.disabled', (connector) =>
       @find(".input-toggle[data-name=#{connector.name}]").prop "checked", false
-      @find("[data-name=#{connector.name}] .icon").removeClass("text-success")
 
     @on 'click', '.product-link', (e) => @selectClosestProduct e
 

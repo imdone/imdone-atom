@@ -51,19 +51,20 @@ class MenuView extends View
                 @i class: "icon icon-settings toolbar-icon"
                 @span class:'tool-text', 'Project TODOBOTs'
 
-            @div outlet:'$disconnect', click: 'disconnectImdoneio', class: 'imdone-toolbar-button', style: 'display: none;', =>
+            @div outlet:'$disconnect', click: 'disconnectImdoneio', class: 'imdone-toolbar-button', style: 'display: none;', title: 'Disconnect from imdone.io', =>
               @a href: '#', =>
                 @i class:"icon icon-stop"
                 @span class:'tool-text', 'Disconnect from imdone.io'
 
-            @div outlet: '$logOff', click: "logOff", class: "imdone-toolbar-button", =>
+            @div outlet: '$logOff', click: "logOff", class: "imdone-toolbar-button", title: 'Log off', =>
               @a href: '#', =>
                 @i class:"icon icon-log-out"
                 @span class:'tool-text', 'Sign out'
 
-            @div outlet: '$account', click: "showAccount", class: "imdone-profile imdone-toolbar-button", =>
-              @i class:"profile-image icon", outlet:'$profileImage'
-              @span class:'tool-text', 'Account'
+            @div outlet: '$account', class: "imdone-profile imdone-toolbar-button", titel: "Account", =>
+              @a href: "#{config.baseUrl}/account", =>
+                @i class:"profile-image icon", outlet:'$profileImage'
+                @span class:'tool-text', 'Account'
 
           @div outlet:'$login', class:'imdone-icon imdone-toolbar-button', title:'login to imdone.io', =>
             @a click:'openLogin', href: "#", =>
@@ -157,10 +158,11 @@ class MenuView extends View
     console.log 'authenticated:', @client.user
     user = @client.user
     crlf = "&#x0a;"
-    title = "Sign out#{crlf}#{config.name} Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
+    title = "Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
     @$login.hide()
-    @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src, title: title)
+    @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src)
+    @$account.attr 'title', title
     @$imdoneioButtons.show()
     @$disconnect.hide() unless @imdoneRepo.isImdoneIOProject()
 
