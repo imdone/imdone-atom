@@ -8,8 +8,8 @@ dev =
 
 beta =
   name: 'beta.imdone.io'
-  imdoneKeyA: 'jvMFNRWuyXX86zwcIXjEuNB_UCo4r5RWlm7UfpklxrV5bQg9ou7SOw=='
-  imdoneKeyB: '7sBRnEWu21vfnv6N0_xoPhdbEIU='
+  imdoneKeyA: 'WFuE-QDFbrN5lip0gdHyYAdXDMdZPerXFey02k93dn-HOYJXoAAdBA=='
+  imdoneKeyB: 'ALnfTYYEtghJBailJ1n-7tx4hIo='
   pusherKey:  '0a4f9a6c45def222ab08'
   pusherChannelPrefix: 'private-imdoneio-beta'
   baseUrl:    'https://beta.imdone.io'

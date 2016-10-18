@@ -71,7 +71,9 @@ module.exports =  (repo) ->
         done err if done
 
   checkForIIOProject() if client.isAuthenticated()
-  client.on 'authenticated', => checkForIIOProject()
+  client.on 'authenticated', =>
+    repo.emit 'authenticated'
+    checkForIIOProject()
 
   syncDone = (err) -> repo.emit 'tasks.updated' unless err
 

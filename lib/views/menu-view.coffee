@@ -34,7 +34,7 @@ class MenuView extends View
             @a href: "#", =>
               @i class: "icon icon-plus toolbar-icon"
               @span class:'tool-text', 'Add a new list'
-          # DONE: Add a link to open filtered files issue:49
+          # DONE: Add a link to open filtered files gh:49
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button", title: "Zap! (open visible files)", =>
             @a href: "#", =>
               @i class: "icon icon-zap toolbar-icon"

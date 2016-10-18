@@ -547,9 +547,9 @@ class ImdoneAtomView extends ScrollView
 
   destroy: ->
     @removeAllRepoListeners()
+    @remove()
     @emitter.emit 'did-destroy', @
     @emitter.dispose()
-    @remove()
 
   onDidDestroy: (callback) ->
     @emitter.on 'did-destroy', callback
