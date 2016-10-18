@@ -94,13 +94,11 @@ class BottomView extends View
 
     @emitter.on 'project.not-found', => @showShare()
 
-    @emitter.on 'project.found', => @hide()
+    # @emitter.on 'project.found', => @hide()
 
     @closeButton.on 'click', => @hide()
 
     @client.on 'authenticated', => @$login.hide()
-
-    # @emitter.on 'project.found', => @hide()
 
     @client.on 'unauthenticated', =>
       @hide() unless config.getSettings().showLoginOnLaunch

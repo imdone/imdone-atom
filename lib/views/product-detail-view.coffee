@@ -48,6 +48,8 @@ class ProductDetailView extends View
     @div class: 'product-detail-view-content config-container', =>
       @div class: 'json-editor-container', =>
         @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
+      @div outlet: '$welcome', class: 'block text-center', style: 'display:none;', =>
+        @h1 "No TODOBOTS yet?  Turn on GitHub now."
 
   setProduct: (@product)->
     return unless @product && @product.name
@@ -69,10 +71,21 @@ class ProductDetailView extends View
 
     # TODO: Add provider configurations before creating editor
     @configEditor.destroy() if @configEditor
-    if @product.isEnabled() then @$configEditor.show() else @$configEditor.hide()
-    @configEditor = new JSONEditor @$configEditor.get(0), options
-    @configEditor.on 'change', => @emitChange()
-    @$configEditor.find('input').first().focus()
+    if @product.isEnabled()
+      @showConfig()
+      @configEditor = new JSONEditor @$configEditor.get(0), options
+      @configEditor.on 'change', => @emitChange()
+      @$configEditor.find('input').first().focus()
+    else
+      @hideConfig()
+
+  hideConfig: ->
+    @$configEditor.hide()
+    @$welcome.show()
+
+  showConfig: ->
+    @$configEditor.show()
+    @$welcome.hide()
 
   emitChange: ->
     editorVal = @configEditor.getValue()
