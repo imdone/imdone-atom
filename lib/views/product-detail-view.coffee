@@ -98,7 +98,7 @@ class ProductDetailView extends View
     connector = _.cloneDeep @product.connector
     @connectorManager.saveConnector connector, (err, connector) =>
       # TODO: Handle errors by unauthenticating if needed and show login with error
-      throw err if err
+      return if err
       @product.connector = connector
       @setProduct @product
       @emitter.emit 'connector.changed', @product

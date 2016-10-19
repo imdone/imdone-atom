@@ -18,6 +18,10 @@ module.exports =  (repo) ->
   _moveTasks = repo.moveTasks.bind repo
   _emitFileUpdate = repo.emitFileUpdate.bind repo
 
+  client.on 'authenticated', -> repo.emit 'authenticated'
+  client.on 'unauthenticated', -> repo.emit 'unauthenticated'
+  client.on 'authentication-failed', ({status, retries}) -> repo.emit 'authentication-failed', ({status, retries})
+  client.on 'unavailable', -> repo.emit 'unavailable'
 
   repo.getProjectId = () -> _.get repo, 'config.sync.id'
   repo.setProjectId = (id) -> _.set repo, 'config.sync.id', id
@@ -71,9 +75,7 @@ module.exports =  (repo) ->
         done err if done
 
   checkForIIOProject() if client.isAuthenticated()
-  client.on 'authenticated', =>
-    repo.emit 'authenticated'
-    checkForIIOProject()
+  client.on 'authenticated', => checkForIIOProject()
 
   syncDone = (err) -> repo.emit 'tasks.updated' unless err
 

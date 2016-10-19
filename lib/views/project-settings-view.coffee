@@ -67,7 +67,6 @@ class ProjectSettingsView extends View
         @updateProgress 0
       return if err
       return unless project
-       # DOING: This should emit an event that causes the share panel to stay open +new
       @imdoneRepo.checkForIIOProject()
 
   $tooManyProjectsMsg: ->

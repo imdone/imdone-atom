@@ -43,7 +43,6 @@ class LoginView extends View
     delete @authenticating
     @loginPanel.hide()
     @spinner.hide()
-    @emitter.emit 'authenticated'
 
   onUnauthenticated: () ->
     @showLogin()
@@ -104,5 +103,5 @@ class LoginView extends View
         else return true
       false
 
-    @client.on 'authenticated', => @onAuthenticated()
-    @client.on 'unauthenticated', => @onUnauthenticated()
+    @emitter.on 'authenticated', => @onAuthenticated()
+    @emitter.on 'unauthenticated', => @onUnauthenticated()

@@ -119,7 +119,8 @@ class ImdoneAtomView extends ScrollView
     handle = (event) ->
       (data) -> emitter.emit event, data
     events = ['list.modified', 'project.not-found', 'project.removed', 'project.found', 'tasks.updated', 'initialized',
-      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read', 'sync.percent', 'connector.enabled']
+      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read', 'sync.percent', 'connector.enabled',
+      'authenticated', 'unauthenticated', 'authentication-failed', 'unavailable']
     for event in events
       handler = handlers[event] = handle event
       repo.on event, handler
@@ -134,14 +135,15 @@ class ImdoneAtomView extends ScrollView
     @menuView.handleEvents @emitter
     @bottomView.handleEvents @emitter
 
-    @client.on 'authentication-failed', ({status, retries}) =>
+    @emitter.on 'authentication-failed', ({status, retries}) =>
       @hideMask() if status == "unavailable" && retries
       console.log "auth-failed" if status == "failed"
 
-    @client.on 'unavailable', =>
+    @emitter.on 'unavailable', =>
       @hideMask()
       atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
 
+    # DOING: Encapsulate connectorManager in repo +now
     @connectorManager.on 'tasks.syncing', => @showMask() # READY: mask isn't always hiding correctly gh:105
 
     @connectorManager.on 'sync.error', => @hideMask()
@@ -362,7 +364,6 @@ class ImdoneAtomView extends ScrollView
       @onRepoUpdate()
       @menuView.updateMenu()
       @imdoneRepo.initProducts()
-      # @connectorManager.getProducts() #TODO we should add plugins by provider from here
       return
     if @numFiles > 1000
       @ignorePrompt.hide()

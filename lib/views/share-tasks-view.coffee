@@ -8,7 +8,6 @@ Client = require '../services/imdoneio-client'
 ProductSelectionView = require './product-selection-view'
 ProductDetailView = require './product-detail-view'
 ProjectSettingsView = require './project-settings-view'
-ConnectorManager = require '../services/connector-manager'
 
 module.exports =
 class ShareTasksView extends View
@@ -42,7 +41,7 @@ class ShareTasksView extends View
     self = @
     @emitter.on 'project.found', (project) => @showProductPanel project
 
-    @client.on 'authenticated', => @onAuthenticated()
+    @emitter.on 'authenticated', => @onAuthenticated()
 
     @emitter.on 'project.removed', => @productPanel.hide()
 

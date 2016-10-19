@@ -150,9 +150,9 @@ class MenuView extends View
     @emitter.on 'file.update', => @updateMenu()
     @emitter.on 'tasks.moved', => @updateMenu()
 
-    @client.on 'authenticated', => @authenticated()
-    @client.on 'unauthenticated', => @unauthenticated()
-    @client.on 'unavailable', => @unauthenticated() #DOING: This should also show an alert!!!
+    @emitter.on 'authenticated', => @authenticated()
+    @emitter.on 'unauthenticated', => @unauthenticated()
+    @emitter.on 'unavailable', => @unauthenticated() #DOING: This should also show an alert!!!
 
   authenticated: ->
     console.log 'authenticated:', @client.user
