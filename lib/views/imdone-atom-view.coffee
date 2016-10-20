@@ -35,7 +35,7 @@ class ImdoneAtomView extends ScrollView
       return if err
       @$svg.html data.toString()
 
-  constructor: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+  constructor: ({@imdoneRepo, @path, @uri}) ->
     super
     util = require 'util'
     Sortable = require 'sortablejs'
@@ -118,12 +118,15 @@ class ImdoneAtomView extends ScrollView
     handlers = {}
     handle = (event) ->
       (data) -> emitter.emit event, data
-    events = ['list.modified', 'project.not-found', 'project.removed', 'project.found', 'tasks.updated', 'initialized',
-      'file.update', 'tasks.moved', 'config.update', 'error', 'file.read', 'sync.percent', 'connector.enabled',
-      'authenticated', 'unauthenticated', 'authentication-failed', 'unavailable']
+    events = ['list.modified', 'project.not-found', 'project.removed', 'project.found', 'product.linked',
+      'product.unlinked', 'tasks.updated', 'tasks.syncing', 'sync.error', 'initialized', 'file.update', 'tasks.moved',
+      'config.update', 'error', 'file.read', 'sync.percent', 'connector.enabled', 'authenticated', 'unauthenticated',
+      'authentication-failed', 'unavailable']
+
     for event in events
       handler = handlers[event] = handle event
       repo.on event, handler
+
     @removeAllRepoListeners = () ->
       repo.removeListener(event, handlers[event]) for event in events
     @listenersInitialized = true
@@ -143,10 +146,10 @@ class ImdoneAtomView extends ScrollView
       @hideMask()
       atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
 
-    # DOING: Encapsulate connectorManager in repo +now
-    @connectorManager.on 'tasks.syncing', => @showMask() # READY: mask isn't always hiding correctly gh:105
+    # DONE: Encapsulate connectorManager in repo +refactor +enhancement gh:141
+    @emitter.on 'tasks.syncing', => @showMask() # READY: mask isn't always hiding correctly gh:105
 
-    @connectorManager.on 'sync.error', => @hideMask()
+    @emitter.on 'sync.error', => @hideMask()
 
     @emitter.on 'tasks.updated', => # READY: If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105
       @onRepoUpdate()
@@ -256,7 +259,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'connector.disabled', (connector) => @removePluginByProvider connector.name
     @emitter.on 'connector.enabled', (connector) => @addPluginByProvider connector.name
-    @connectorManager.on 'product.unlinked', (product) => @removePluginByProvider product.name
+    @emitter.on 'product.unlinked', (product) => @removePluginByProvider product.name
     @emitter.on 'connector.changed', (product) =>
       @addPluginByProvider product.connector.name
       for name, plugin of @plugins
@@ -297,7 +300,7 @@ class ImdoneAtomView extends ScrollView
 
   addPlugin: (Plugin) ->
     return unless Plugin
-    @connectorManager.getProduct Plugin.provider, (err, product) => # READY: Get the connector from the connector manager
+    @imdoneRepo.getProduct Plugin.provider, (err, product) => # READY: Get the connector from the connector manager
       return if err || (product && !product.isEnabled())
       connector = product && product.connector
       if @plugins[Plugin.pluginName]

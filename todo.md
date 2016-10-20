@@ -15,7 +15,7 @@ Roadmap
 Completed
 ----
 - [x] #DONE: Re-apply filter when board is refreshed
-- [x] #DONE: Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement
+- [x] #DONE: Consider respecting "Exclude VCS ignored paths" or .imdoneignore issue:6 issue:4 +enhancement gh:145
 - [x] #DONE: Add list rename +Roadmap
 - [x] #DONE: Add help for configuration
 - [x] #DONE: Add help for task syntax

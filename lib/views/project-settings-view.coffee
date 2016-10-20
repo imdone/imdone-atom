@@ -27,10 +27,11 @@ class ProjectSettingsView extends View
         # READY: Add config view here
         # @h1 "Configuration (.imdone/config.json)"
 
-  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+  initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
     @disabledProject.show() unless @imdoneRepo.isImdoneIOProject()
 
+  # DOING: Show sync status when a connected repo is initialized +feature gh:158
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
     @emitter.on 'sync.percent', (val) =>

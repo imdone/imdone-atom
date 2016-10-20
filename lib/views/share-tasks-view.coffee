@@ -22,7 +22,7 @@ class ShareTasksView extends View
         @div class:'product-detail-wrapper native-key-bindings', =>
           @subview 'productDetail', new ProductDetailView params
 
-  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+  initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
     @show()
 
@@ -46,7 +46,7 @@ class ShareTasksView extends View
     @emitter.on 'project.removed', => @productPanel.hide()
 
   showProductPanel: (@project)->
-    @connectorManager.getProducts (err, products) =>
+    @imdoneRepo.getProducts (err, products) =>
       return if err
       @productSelect.setItems products
       @productSelect.show()

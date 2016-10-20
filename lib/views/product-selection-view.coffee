@@ -6,7 +6,7 @@ pluginManager = require '../services/plugin-manager'
 
 module.exports =
 class ProductSelectionView extends View
-  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+  initialize: ({@imdoneRepo, @path, @uri}) ->
   @content: (params) ->
     @div =>
       @div outlet: 'productControls'
@@ -38,9 +38,9 @@ class ProductSelectionView extends View
 
     @emitter.on 'project.removed', (project) => @setItems []
 
-    @connectorManager.on 'product.linked', (product) => @updateItem product
+    @emitter.on 'product.linked', (product) => @updateItem product
 
-    @connectorManager.on 'product.unlinked', (product) => @updateItem product
+    @emitter.on 'product.unlinked', (product) => @updateItem product
 
     @emitter.on 'connector.enabled', (connector) =>
       @find(".input-toggle[data-name=#{connector.name}]").prop "checked", true
@@ -56,20 +56,20 @@ class ProductSelectionView extends View
       connector.name = @selected.name
       if e.target.checked
         if connector.id
-          @connectorManager.enableConnector connector, (err, updatedConnector) =>
+          @imdoneRepo.enableConnector connector, (err, updatedConnector) =>
             # TODO: Handle errors
             return if err
             @selected.connector = updatedConnector
             @emitter.emit 'connector.changed', @selected
             @emitter.emit 'connector.enabled', updatedConnector
         else
-          @connectorManager.saveConnector connector, (err, connector) =>
+          @imdoneRepo.saveConnector connector, (err, connector) =>
             # TODO: Handle errors by unauthenticating if needed and show login with error
             throw err if err
             @selected.connector = connector
             @emitter.emit 'connector.changed', @selected
       else
-        @connectorManager.disableConnector connector, (err, updatedConnector) =>
+        @imdoneRepo.disableConnector connector, (err, updatedConnector) =>
           # TODO: Handle errors
           return unless updatedConnector
           @selected.connector = updatedConnector

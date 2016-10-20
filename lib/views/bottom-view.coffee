@@ -104,10 +104,10 @@ class BottomView extends View
       @hide() unless config.getSettings().showLoginOnLaunch
       @showLogin() if config.getSettings().showLoginOnLaunch
 
-    # DONE: This belongs in bottomView +refactor
+    # DONE: This belongs in bottomView +refactor gh:144
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE: This belongs in bottomView +refactor
+    # DONE: This belongs in bottomView +refactor gh:143
     @emitter.on 'share', => @showShare()
 
     @emitter.on 'login', => @showLogin()

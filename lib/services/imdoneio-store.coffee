@@ -275,7 +275,16 @@ module.exports =  (repo) ->
       return if err
       repo.emit 'connector.enabled', product.connector for product in products when product.isEnabled()
 
+  connectorManager.on 'tasks.syncing', () -> repo.emit 'tasks.syncing'
+  connectorManager.on 'sync.error', () -> repo.emit 'sync.error'
+  connectorManager.on 'product.linked', (product) -> repo.emit 'product.linked', product
+  connectorManager.on 'product.unlinked', (product) -> repo.emit 'product.unlinked', product
+  repo.getProduct = (provider, cb) -> connectorManager.getProduct provider, cb
+  repo.getProducts = (cb) -> connectorManager.getProducts(cb)
+  repo.saveConnector = (connector, cb) -> connectorManager.saveConnector connector, cb
+  repo.enableConnector = (connector, cb) -> connectorManager.enableConnector connector, cb
+  repo.disableConnector = (connector, cb) -> connectorManager.disableConnector connector, cb
+  repo.getGitOrigin = () -> connectorManager.getGitOrigin()
 
   repo.connectorManager = connectorManager
-  # TODO: Modify callers to only expect repo
-  connectorManager: connectorManager, repo: repo
+  repo

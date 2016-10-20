@@ -27,7 +27,7 @@ class LoginView extends View
       @h2 "or"
       @a class: 'btn btn-lg btn-primary', href:"#{Client.signUpUrl}", "Sign up"
 
-  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+  initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
     @initPasswordField()
 

@@ -4,12 +4,12 @@ util = require 'util'
 
 module.exports =
 class ProductDetailView extends View
-  initialize: ({@imdoneRepo, @path, @uri, @connectorManager}) ->
+  initialize: ({@imdoneRepo, @path, @uri}) ->
 
   updateConnectorForEdit: (product) ->
     _.set product, 'connector', {} unless product.connector
     return unless product.name == 'github' && !_.get(product, 'connector.config.repoURL')
-    _.set product, 'connector.config.repoURL', @connectorManager.getGitOrigin() || ''
+    _.set product, 'connector.config.repoURL', @imdoneRepo.getGitOrigin() || ''
 
   handleEvents: (@emitter)->
     return if @initialized || !@emitter
@@ -26,12 +26,12 @@ class ProductDetailView extends View
       @updateConnectorForEdit product
       @setProduct product
 
-    @connectorManager.on 'product.linked', (product) =>
+    @emitter.on 'product.linked', (product) =>
       return unless product
       @updateConnectorForEdit product
       @setProduct product
 
-    @connectorManager.on 'product.unlinked', (product) =>
+    @emitter.on 'product.unlinked', (product) =>
       return unless product
       # READY: Connector plugin should be removed
       @updateConnectorForEdit product
@@ -96,8 +96,9 @@ class ProductDetailView extends View
     _.set @product, 'connector.config', editorVal
     _.set @product, 'connector.name', @product.name unless _.get @product, "connector.name"
     connector = _.cloneDeep @product.connector
-    @connectorManager.saveConnector connector, (err, connector) =>
+    @imdoneRepo.saveConnector connector, (err, connector) =>
       # TODO: Handle errors by unauthenticating if needed and show login with error
+      # DOING: Need a way to handle repos that don't allow issues (Forks, etc) +enhancement gh:142
       return if err
       @product.connector = connector
       @setProduct @product
