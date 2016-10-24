@@ -24,4 +24,4 @@ prod =
   pusherChannelPrefix: 'private-imdoneio'
 
 module.exports = prod;
-# DOING: Merge imdone-atom-beta with imdone-atom and publish +chore id:119 gh:162
+# DONE: Merge imdone-atom-beta with imdone-atom and publish +chore id:119 gh:162

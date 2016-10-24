@@ -80,7 +80,7 @@ class ImdoneAtomView extends ScrollView
         @h1 "Loading #{path.basename(params.path)} Tasks."
         @p "It's gonna be legen... wait for it."
         @ul outlet: 'messages', class: 'imdone-messages'
-        # #DONE:0 Update progress bar on repo load id:63
+        # #DONE: Update progress bar on repo load id:63
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
           @p "Too many files make me bloated.  Ignoring files and directories in .imdoneignore can make me feel better."
@@ -217,7 +217,7 @@ class ImdoneAtomView extends ScrollView
     @on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
-      # DONE:0 Use setting to determine if we should show a task notification id:67
+      # DONE: Use setting to determine if we should show a task notification id:67
       if config.getSettings().showNotifications
         taskId = $(link).closest('.task').attr 'id'
         task = @imdoneRepo.getTask taskId
@@ -413,7 +413,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-    # #DONE:0 Add task drag and drop support id:72
+    # #DONE: Add task drag and drop support id:72
 
     # BACKLOG:0 We can display data from imdone.io in a card summary/details id:73
     getTask = (task) =>
@@ -447,7 +447,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>
             @raw html
-          # #DONE:0 Add todo.txt stuff like chrome app! id:75
+          # #DONE: Add todo.txt stuff like chrome app! id:75
           if contexts && !showTagsInline
             @div =>
               for context, i in contexts
@@ -462,7 +462,7 @@ class ImdoneAtomView extends ScrollView
                   @span ", " if (i < tags.length-1)
           @div class: 'task-meta', =>
             @table =>
-              # DONE:0 x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj issue:45 id:76
+              # DONE: x 2015-11-20 2015-11-20 Fix todo.txt date display @piascikj issue:45 id:76
               if dateDue
                 @tr =>
                   @td "due"
@@ -482,7 +482,7 @@ class ImdoneAtomView extends ScrollView
                   @td "completed"
                   @td dateCompleted
                   @td =>
-                    # #DONE:0 Implement #filter/*filterRegex* links id:77
+                    # #DONE: Implement #filter/*filterRegex* links id:77
                     @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
                       @span class:"icon icon-light-bulb"
               for data in task.getMetaDataWithLinks(repo.getConfig())
@@ -507,7 +507,7 @@ class ImdoneAtomView extends ScrollView
           @div class: 'list-name-wrapper well', =>
             @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
               @raw list.name
-              # #DONE:0 Add delete list icon if length is 0 id:78
+              # #DONE: Add delete list icon if length is 0 id:78
               if (tasks.length < 1)
                 @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                   @span class:'icon icon-trashcan'
@@ -560,7 +560,7 @@ class ImdoneAtomView extends ScrollView
 
   openPath: (filePath, line) ->
     return unless filePath
-    # DONE:0 send the project path issue:48 id:80
+    # DONE: send the project path issue:48 id:80
     fileService.openFile @path, filePath, line, (success) =>
       return if success
       atom.workspace.open(filePath, split: 'left').then =>

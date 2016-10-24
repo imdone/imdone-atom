@@ -31,7 +31,7 @@ class ProductSelectionView extends View
             @input class:'input-toggle', 'data-name':product.name, type:'checkbox' unless product.isEnabled()
             @text " ON"
 
-  # DONE:0 Add stop using imdone.io with icon-stop id:95
+  # DONE: Add stop using imdone.io with icon-stop id:95
   handleEvents: (@emitter) ->
     return if @initialized || !@emitter
     @initialized = true

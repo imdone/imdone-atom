@@ -40,7 +40,7 @@ module.exports = ImdoneAtom =
       default: 1
       minimum: .2
       maximum: 2.5
-    # DONE:0 This is config for globs to open with editors issue:48 id:3
+    # DONE: This is config for globs to open with editors issue:48 id:3
     openIn:
       title: 'File Opener'
       description: 'Open files in a different IDE or editor'
@@ -124,7 +124,7 @@ module.exports = ImdoneAtom =
 
     @fileService = require('./services/file-service').init configHelper.getSettings().openIn.port
 
-    # DONE:0 Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) id:5
+    # DONE: Add file tree context menu to open imdone issues board. see [Creating Tree View Context-Menu Commands · Issue #428 · atom/tree-view](https://github.com/atom/tree-view/issues/428) id:5
 
   emit: (name, data) ->
     active = atom.workspace.getActivePaneItem()
@@ -150,7 +150,7 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath && active.getPath()
-      # DONE:0 This fails for projects that start with the name of another project id:6
+      # DONE: This fails for projects that start with the name of another project id:6
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]

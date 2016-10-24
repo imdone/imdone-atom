@@ -104,7 +104,7 @@ module.exports =  (repo) ->
             console.log "Sync Error:", err
             return cm.emit 'sync.error', err
           repo.saveModifiedFiles (err, files)->
-            # DONE:0 Refresh the board id:47
+            # DONE: Refresh the board id:47
             return syncDone err unless cb
             cb err, syncDone
 
@@ -207,7 +207,7 @@ module.exports =  (repo) ->
     cb ?= ()->
     _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
       return cb err if err
-      if shouldSync # DONE:0 Make sure the project is available id:51
+      if shouldSync # DONE: Make sure the project is available id:51
         # READY:0 Only sync what we move!!! +important id:52
         console.log "Tasks moved.  Syncing with imdone.io"
         syncTasks tasks, (err, done) ->

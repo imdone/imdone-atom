@@ -50,7 +50,7 @@ class BottomView extends View
     @shareTasksView.handleEvents @emitter
     # @projectSettingsView.handleEvents @emitter
 
-    # #DONE:0 Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:56
+    # #DONE: Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:56
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
