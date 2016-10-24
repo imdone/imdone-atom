@@ -222,7 +222,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO:0 We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:33
+    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:33
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -286,7 +286,7 @@ class ImdoneioClient extends Emitter
   getProjectName: (repo) -> _.get repo, 'config.sync.name'
   setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
 
-  # READY:0 Send branch on sync if available for rules. gh:135 +now id:36
+  # READY: Send branch on sync if available for rules. gh:135 +now id:36
   syncTasks: (repo, tasks, cb) ->
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo

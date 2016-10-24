@@ -1,8 +1,8 @@
 {
-  "name": "imdone-atom-beta",
+  "name": "imdone-atom",
   "main": "./lib/imdone-atom",
   "version": "1.9.21",
-  "description": "A hackable task-board in your code with TODOBOTs that do your issue tracking",
+  "description": "A hackable task-board in your code with TODOBOTs that do your issue tracking so you can stay in the zone.",
   "keywords": [
     "todo",
     "fixme",
@@ -14,7 +14,7 @@
     "name": "Jesse Piascik",
     "email": "jesse@piascik.net"
   },
-  "repository": "https://github.com/innobuilt/imdone-atom-beta",
+  "repository": "https://github.com/innobuilt/imdone-atom",
   "license": "MIT",
   "engines": {
     "atom": ">=1.2.4 <2.0.0"

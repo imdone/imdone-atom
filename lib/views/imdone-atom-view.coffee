@@ -53,7 +53,7 @@ class ImdoneAtomView extends ScrollView
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
       @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
-      # #DONE:0 If over 2000 files, ask user to add excludes in `.imdoneignore` +feature id:62
+      # #DONE: If over 2000 files, ask user to add excludes in `.imdoneignore` +feature id:62 gh:164
       if @numFiles > config.getSettings().maxFilesPrompt
         @ignorePrompt.show()
       else @initImdone()
@@ -146,12 +146,12 @@ class ImdoneAtomView extends ScrollView
       @hideMask()
       atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
 
-    # DONE:0 Encapsulate connectorManager in repo +refactor +enhancement gh:141 id:64
-    @emitter.on 'tasks.syncing', => @showMask() # READY:0 mask isn't always hiding correctly gh:105 id:65
+    # DONE: Encapsulate connectorManager in repo +refactor +enhancement gh:141 id:64
+    @emitter.on 'tasks.syncing', => @showMask() # READY: mask isn't always hiding correctly gh:105 id:65
 
     @emitter.on 'sync.error', => @hideMask()
 
-    @emitter.on 'tasks.updated', => # READY:0 If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:66
+    @emitter.on 'tasks.updated', => # READY: If syncing don't fire onRepoUpdate.  Wait until done syncing. gh:105 id:66
       @onRepoUpdate()
 
     @emitter.on 'initialized', =>
@@ -442,7 +442,7 @@ class ImdoneAtomView extends ScrollView
         @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
           # @div class:'task-order', title: 'move task', =>
           #   @span class: 'highlight', task.order
-          # BACKLOG:0 Maybe show assigned avatar on task +feature id:74
+          # BACKLOG: Maybe show assigned avatar on task +feature id:74 gh:165
           @div class: 'imdone-task-plugins'
           @div class: 'task-full-text hidden', task.getText()
           @div class: 'task-text', =>

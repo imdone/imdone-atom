@@ -84,7 +84,7 @@ module.exports =  (repo) ->
     return cb("not enabled") unless repo.getProjectId()
     tasks = [tasks] unless _.isArray tasks
     return cb() unless tasks.length > 0
-    # DONE:0 Keep sync from happening twice +bug +beta gh:140 id:42
+    # DONE: Keep sync from happening twice +bug +beta gh:140 id:42
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, ioTasks) ->
@@ -147,7 +147,7 @@ module.exports =  (repo) ->
       (cb) -> saveSortCloud cb
     ]
     async.parallel fns, cb
-    # DONE:0 also save to imdone.io in parallel gh:102 id:49
+    # DONE: also save to imdone.io in parallel gh:102 id:49
 
   saveSortCloud = (cb) ->
     cb ?= ()->

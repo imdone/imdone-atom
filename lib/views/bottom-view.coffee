@@ -18,7 +18,7 @@ class BottomView extends View
         @div outlet: 'resizer', class:'split-handle-y'
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
-        # DONE:0 Set up a global messaging area. +enhancement gh:159 id:55
+        # DONE: Set up a global messaging area. +enhancement gh:159 id:55
         @div outlet: 'error', class:'alert alert-error highlight-error text-center'
       @div class:'bottom-view-main zoomable', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
@@ -104,10 +104,10 @@ class BottomView extends View
       @hide() unless config.getSettings().showLoginOnLaunch
       @showLogin() if config.getSettings().showLoginOnLaunch
 
-    # DONE:0 This belongs in bottomView +refactor gh:144 id:57
+    # DONE: This belongs in bottomView +refactor gh:144 id:57
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE:0 This belongs in bottomView +refactor gh:143 id:58
+    # DONE: This belongs in bottomView +refactor gh:143 id:58
     @emitter.on 'share', => @showShare()
 
     @emitter.on 'login', => @showLogin()
