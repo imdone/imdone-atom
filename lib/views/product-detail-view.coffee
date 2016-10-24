@@ -75,7 +75,7 @@ class ProductDetailView extends View
     if @product.isEnabled()
       @showConfig()
       @configEditor = new JSONEditor @$configEditor.get(0), options
-      @configEditor.on 'change', => @emitChange()
+      @configEditor.on 'change', => @handleChange()
       @$configEditor.find('input').first().focus()
     else
       @hideConfig()
@@ -88,7 +88,7 @@ class ProductDetailView extends View
     @$configEditor.show()
     @$welcome.hide()
 
-  emitChange: ->
+  handleChange: ->
     editorVal = @configEditor.getValue()
     currentVal =  _.get @product, 'connector.config'
     return unless @product.isEnabled()
@@ -98,8 +98,7 @@ class ProductDetailView extends View
     connector = _.cloneDeep @product.connector
     @imdoneRepo.saveConnector connector, (err, connector) =>
       # TODO: Handle errors by unauthenticating if needed and show login with error
-      # DOING: Need a way to handle repos that don't allow issues (Forks, etc) +enhancement gh:142
+      # DOING: Need a way to handle repos that don't allow issues (Forks, etc).  Maybe two settings. (gitub repo and github issues repo) +enhancement gh:142
       return if err
       @product.connector = connector
       @setProduct @product
-      @emitter.emit 'connector.changed', @product

@@ -152,7 +152,7 @@ class MenuView extends View
 
     @emitter.on 'authenticated', => @authenticated()
     @emitter.on 'unauthenticated', => @unauthenticated()
-    @emitter.on 'unavailable', => @unauthenticated() #DOING: This should also show an alert!!!
+    @emitter.on 'unavailable', => @unauthenticated()
 
   authenticated: ->
     console.log 'authenticated:', @client.user

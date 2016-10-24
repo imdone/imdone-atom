@@ -18,7 +18,7 @@ class BottomView extends View
         @div outlet: 'resizer', class:'split-handle-y'
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
-        # INBOX: Set up a messaging area
+        # DONE: Set up a global messaging area. +enhancement gh:159
         @div outlet: 'error', class:'alert alert-error highlight-error text-center'
       @div class:'bottom-view-main zoomable', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
