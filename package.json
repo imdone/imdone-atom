@@ -12,9 +12,10 @@
   ],
   "author": {
     "name": "Jesse Piascik",
-    "email": "jesse@piascik.net"
+    "email": "jesse@piascik.net",
+    "url": "https://imdone.io"
   },
-  "repository": "https://github.com/innobuilt/imdone-atom",
+  "repository": "https://github.com/imdone/imdone-atom",
   "license": "MIT",
   "engines": {
     "atom": ">=1.2.4 <2.0.0"
