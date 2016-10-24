@@ -14,16 +14,13 @@ beta =
   pusherChannelPrefix: 'private-imdoneio-beta'
   baseUrl:    'https://beta.imdone.io'
 
-# TODO: Change these prior to release
+# DOING: Change these prior to release +chore id:2 gh:161
 prod =
   name: 'imdone.io'
-  imdoneKeyA: 'BcbpJqNyYvAI5FhR-dt5AbdcpXKV8gj0vv0RHjb1qGCXoymcckb8hQ=='
-  imdoneKeyB: 'EUyEtV2d-ZSgvvWKGlCiOVvAmlc='
-  pusherKey:  '64354707585286cfe58f'
+  imdoneKeyA: 'X8aukodrNNHKGkMKGhtcU8lI4KvNdMxCkYUiKOjh3JjH1-zj0qIDPA=='
+  imdoneKeyB: '7Bo_oUdtzJxeFhdnGrrVrtGHTy8='
+  pusherKey:  'ba1f2dde238cb1f5944e'
   baseUrl:    'https://imdone.io'
-  pusherChannelPrefix: 'private-imdoneio-dev'
+  pusherChannelPrefix: 'private-imdoneio'
 
-module.exports = beta
-  # if /dev/i.test process.env.IMDONE_ENV then dev
-  # else if /beta/i.test process.env.IMDONE_ENV then beta
-  # else prod
+# DOING: Merge imdone-atom-beta with imdone-atom and publish +chore id:119 gh:162

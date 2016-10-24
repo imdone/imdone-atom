@@ -1,4 +1,4 @@
-# READY: This should manage access to all config settings
+# READY:0 This should manage access to all config settings id:23
 pkg = require '../../package.json'
 
 module.exports =

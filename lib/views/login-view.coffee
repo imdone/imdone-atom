@@ -16,7 +16,7 @@ class LoginView extends View
         @h2 "Login or sign up to create and update GitHub issues from TODO comments in your code!"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      # READY: login should be it's own view
+      # READY:0 login should be it's own view id:81
       @div outlet:'loginPanel', class: 'imdone-login-pane', style: 'display:none;', =>
         @div class: 'input input-med inline-block-tight', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
@@ -70,7 +70,7 @@ class LoginView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO: We need to show an error here if service can't be reached or login fails
+      # TODO:0 We need to show an error here if service can't be reached or login fails id:82
       log 'login:end'
       return @showLogin() unless @client.isAuthenticated()
       @onAuthenticated()

@@ -65,5 +65,10 @@
       "titleTemplate": "View github issue %s",
       "icon": "icon-octoface"
     }
+  },
+  "sync": {
+    "id": "580e6d7582f3d921ac856455",
+    "name": "imdone-atom-beta",
+    "useImdoneioForPriority": true
   }
 }
