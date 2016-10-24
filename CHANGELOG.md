@@ -1,3 +1,21 @@
+
+## 2.0.0
+* Integrations with http://imdone.io
+* Save priority by imdone.io in local db and on imdone.io
+* zoom
+* Add TODO token to config.code.list_names on new list  if it's all caps
+
+## 1.9.6
+* security update for marked and minimatch
+
+## 1.9.0
+* beta test
+
+## 1.4.0
+* Fix serialization
+* New "Enable file opener" setting to improve activation time for those who don't use file-opener [default false]
+* Add new languages
+
 ## 1.3.31
 * Add yaml and crystal file extensions
 
@@ -254,7 +272,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* [Fix config path checking for windows git-iss:5](#DONE:200)
+* [Fix config path checking for windows git-iss:5 id:1](#DONE:0)
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9
@@ -301,4 +319,4 @@
 
 ----
 
-#DOING:20 Remember to update changelog before +publishing +package @piascikj
+#INBOX:0 Remember to update changelog before +publishing +package @piascikj id:0

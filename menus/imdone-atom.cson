@@ -1,7 +1,7 @@
 'context-menu':
   'atom-text-editor': [
     {
-      'label': 'Open imdone task-board'
+      'label': 'imdone task-board'
       'command': 'imdone-atom:tasks'
     },
     {
@@ -11,7 +11,7 @@
   ],
   '.tree-view.full-menu': [
     {
-      'label': 'Open imdone task-board'
+      'label': 'imdone task-board'
       'command': 'imdone-atom:tasks'
     }
   ]
@@ -22,7 +22,7 @@
       'label': 'imdone'
       'submenu': [
         {
-          'label': 'Open imdone task-board'
+          'label': 'imdone task-board'
           'command': 'imdone-atom:tasks'
         },
         {

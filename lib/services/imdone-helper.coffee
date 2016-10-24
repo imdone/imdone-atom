@@ -3,16 +3,25 @@ ImdoneRepo = require 'imdone-core/lib/repository'
 atomFsStore = require './atom-watched-fs-store'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
+configHelper = require './imdone-config'
+repos = {}
 
 module.exports =
-  newImdoneRepo: (pathname, uri) ->
-    fsStore = atomFsStore if atom.config.get('imdone-atom.useAlternateFileWatcher')
-    imdoneRepo = fsStore(new ImdoneRepo(pathname))
+  getRepo: (pathname, uri) ->
+    # TODO:0 This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout id:24
+    return repos[pathname] if repos and repos[pathname]
+    imdoneRepo = @fsStore(new ImdoneRepo(pathname))
     @excludeVcsIgnoresMixin(imdoneRepo)
-    imdoneRepo
+    repos[pathname] = require('./imdoneio-store') imdoneRepo
+    repos[pathname]
+
+  destroyRepos: () -> repo.repo.destroy() for path, repo of repos
+
+  fsStore: (repo) ->
+    fsStore = atomFsStore if configHelper.getSettings().useAlternateFileWatcher
+    fsStore(repo)
 
   excludeVcsIgnoresMixin: (imdoneRepo) ->
-    keyPath = 'imdone-atom.excludeVcsIgnoredPaths'
     repoPath = imdoneRepo.getPath()
     vcsRepo = @repoForPath repoPath
     return unless vcsRepo
@@ -21,8 +30,8 @@ module.exports =
       return true if vcsRepo.isPathIgnored(relPath)
       _shouldExclude.call imdoneRepo, relPath
 
-    imdoneRepo.shouldExclude = shouldExclude if atom.config.get(keyPath)
-    atom.config.observe keyPath, (exclude) ->
+    imdoneRepo.shouldExclude = shouldExclude if configHelper.getSettings().excludeVcsIgnoredPaths
+    atom.config.observe "excludeVcsIgnoredPaths", (exclude) ->
       imdoneRepo.shouldExclude = if exclude then shouldExclude else _shouldExclude
       imdoneRepo.refresh() if imdoneRepo.initialized
 

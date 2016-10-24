@@ -1,0 +1,119 @@
+    /*
+    Flaticon icon font: Flaticon
+    Creation date: 22/06/2016 15:18
+    */
+
+    @font-face {
+  font-family: "Flaticon";
+  src: url("./Flaticon.eot");
+  src: url("./Flaticon.eot?#iefix") format("embedded-opentype"),
+       url("./Flaticon.woff") format("woff"),
+       url("./Flaticon.ttf") format("truetype"),
+       url("./Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+    .fi:before{
+        display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+    }
+
+    .flaticon-apple-robot:before { content: "\f100"; }
+.flaticon-big-robot-head:before { content: "\f101"; }
+.flaticon-broken-robot:before { content: "\f102"; }
+.flaticon-evil-robot-holding-a-knife-and-a-bomb:before { content: "\f103"; }
+.flaticon-laptop-with-eyes:before { content: "\f104"; }
+.flaticon-man-kicking-robots-head:before { content: "\f105"; }
+.flaticon-mouse-with-cable:before { content: "\f106"; }
+.flaticon-plug-wire:before { content: "\f107"; }
+.flaticon-robot-box:before { content: "\f108"; }
+.flaticon-robot-collapsed:before { content: "\f109"; }
+.flaticon-robot-computer:before { content: "\f10a"; }
+.flaticon-robot-head-with-cardiogram:before { content: "\f10b"; }
+.flaticon-robot-holding-a-star:before { content: "\f10c"; }
+.flaticon-robot-holding-heart:before { content: "\f10d"; }
+.flaticon-robot-in-love:before { content: "\f10e"; }
+.flaticon-robot-on-rocket:before { content: "\f10f"; }
+.flaticon-robot-round-head:before { content: "\f110"; }
+.flaticon-robot-with-add-sign:before { content: "\f111"; }
+.flaticon-robot-with-antenna:before { content: "\f112"; }
+.flaticon-robot-with-arm-up:before { content: "\f113"; }
+.flaticon-robot-with-big-head:before { content: "\f114"; }
+.flaticon-robot-with-cancel-sign:before { content: "\f115"; }
+.flaticon-robot-with-check-mark:before { content: "\f116"; }
+.flaticon-robot-with-clock-bomb:before { content: "\f117"; }
+.flaticon-robot-with-cogwheel-on-chest:before { content: "\f118"; }
+.flaticon-robot-with-error-sign:before { content: "\f119"; }
+.flaticon-robot-with-keyboard:before { content: "\f11a"; }
+.flaticon-robot-with-left-arm-up:before { content: "\f11b"; }
+.flaticon-robot-with-minus-sign:before { content: "\f11c"; }
+.flaticon-robot-with-padlock:before { content: "\f11d"; }
+.flaticon-robot-with-piano-keys:before { content: "\f11e"; }
+.flaticon-robot-with-plug:before { content: "\f11f"; }
+.flaticon-robot-with-rising-arms:before { content: "\f120"; }
+.flaticon-robot-with-round-head:before { content: "\f121"; }
+.flaticon-robot-with-sd-card:before { content: "\f122"; }
+.flaticon-robot-with-server:before { content: "\f123"; }
+.flaticon-robot-with-two-arms-up:before { content: "\f124"; }
+.flaticon-robot-with-usb-symbol:before { content: "\f125"; }
+.flaticon-smartphone-with-robot:before { content: "\f126"; }
+.flaticon-smiling-robot:before { content: "\f127"; }
+    
+    $font-Flaticon-apple-robot: "\f100";
+    $font-Flaticon-big-robot-head: "\f101";
+    $font-Flaticon-broken-robot: "\f102";
+    $font-Flaticon-evil-robot-holding-a-knife-and-a-bomb: "\f103";
+    $font-Flaticon-laptop-with-eyes: "\f104";
+    $font-Flaticon-man-kicking-robots-head: "\f105";
+    $font-Flaticon-mouse-with-cable: "\f106";
+    $font-Flaticon-plug-wire: "\f107";
+    $font-Flaticon-robot-box: "\f108";
+    $font-Flaticon-robot-collapsed: "\f109";
+    $font-Flaticon-robot-computer: "\f10a";
+    $font-Flaticon-robot-head-with-cardiogram: "\f10b";
+    $font-Flaticon-robot-holding-a-star: "\f10c";
+    $font-Flaticon-robot-holding-heart: "\f10d";
+    $font-Flaticon-robot-in-love: "\f10e";
+    $font-Flaticon-robot-on-rocket: "\f10f";
+    $font-Flaticon-robot-round-head: "\f110";
+    $font-Flaticon-robot-with-add-sign: "\f111";
+    $font-Flaticon-robot-with-antenna: "\f112";
+    $font-Flaticon-robot-with-arm-up: "\f113";
+    $font-Flaticon-robot-with-big-head: "\f114";
+    $font-Flaticon-robot-with-cancel-sign: "\f115";
+    $font-Flaticon-robot-with-check-mark: "\f116";
+    $font-Flaticon-robot-with-clock-bomb: "\f117";
+    $font-Flaticon-robot-with-cogwheel-on-chest: "\f118";
+    $font-Flaticon-robot-with-error-sign: "\f119";
+    $font-Flaticon-robot-with-keyboard: "\f11a";
+    $font-Flaticon-robot-with-left-arm-up: "\f11b";
+    $font-Flaticon-robot-with-minus-sign: "\f11c";
+    $font-Flaticon-robot-with-padlock: "\f11d";
+    $font-Flaticon-robot-with-piano-keys: "\f11e";
+    $font-Flaticon-robot-with-plug: "\f11f";
+    $font-Flaticon-robot-with-rising-arms: "\f120";
+    $font-Flaticon-robot-with-round-head: "\f121";
+    $font-Flaticon-robot-with-sd-card: "\f122";
+    $font-Flaticon-robot-with-server: "\f123";
+    $font-Flaticon-robot-with-two-arms-up: "\f124";
+    $font-Flaticon-robot-with-usb-symbol: "\f125";
+    $font-Flaticon-smartphone-with-robot: "\f126";
+    $font-Flaticon-smiling-robot: "\f127";

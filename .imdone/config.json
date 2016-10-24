@@ -3,6 +3,7 @@
     "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
+  "keepEmptyPriority": false,
   "code": {
     "include_lists": [
       "TODO",
@@ -16,14 +17,11 @@
       "XXX",
       "IDEA",
       "NOTE",
-      "REVIEW"
+      "REVIEW",
+      "INBOX"
     ]
   },
   "lists": [
-    {
-      "name": "CHANGED",
-      "hidden": true
-    },
     {
       "name": "BACKLOG",
       "hidden": true
@@ -31,6 +29,10 @@
     {
       "name": "TODO",
       "hidden": true
+    },
+    {
+      "name": "INBOX",
+      "hidden": false
     },
     {
       "name": "DOING",
@@ -41,12 +43,12 @@
       "hidden": true
     },
     {
-      "name": "DONE",
+      "name": "CHANGED",
       "hidden": true
     },
     {
-      "name": "ARCHIVE",
-      "hidden": true
+      "name": "DONE",
+      "hidden": false
     }
   ],
   "marked": {
@@ -58,14 +60,15 @@
     "langPrefix": "language-"
   },
   "meta": {
-    "user": {
-      "urlTemplate": "https://github.com/%s",
-      "titleTemplate": "github profile for %s"
-    },
-    "issue": {
+    "gh": {
       "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
-      "titleTemplate": "github issue #%s"
+      "titleTemplate": "View github issue %s",
+      "icon": "icon-octoface"
     }
   },
-  "keepEmptyPriority": false
+  "sync": {
+    "id": "580e6d7582f3d921ac856455",
+    "name": "imdone-atom-beta",
+    "useImdoneioForPriority": true
+  }
 }

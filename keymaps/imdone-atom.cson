@@ -10,3 +10,5 @@
 'atom-workspace':
   'alt-t': 'imdone-atom:tasks'
   'alt-j': 'imdone-atom:todays-journal'
+  'alt-.': 'imdone-atom:board-zoom-in'
+  'alt-,': 'imdone-atom:board-zoom-out'
