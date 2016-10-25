@@ -1,3 +1,8 @@
+## 2.0.3
+* Remove debug code and provide github signup
+
+## 2.0.2
+* Fix call stack exceeded
 
 ## 2.0.0
 * Integrations with http://imdone.io

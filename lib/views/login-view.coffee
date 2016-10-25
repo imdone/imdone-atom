@@ -26,6 +26,7 @@ class LoginView extends View
           @button outlet: 'loginButton', click: 'login', title: 'WHOOSH!', class:'btn btn-primary inline-block-tight', 'LOGIN'
       @h2 "or"
       @a class: 'btn btn-lg btn-primary', href:"#{Client.signUpUrl}", "Sign up"
+      @a class: 'btn btn-lg btn-success icon icon-mark-github', href:"#{Client.githubAuthUrl}", "Sign up with GitHub"
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance

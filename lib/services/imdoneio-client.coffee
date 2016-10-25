@@ -25,6 +25,7 @@ signUpUrl = "#{baseUrl}/signup"
 projectsUrl = "#{baseUrl}/account/projects"
 plansUrl = "#{baseUrl}/plans"
 pusherAuthUrl = "#{baseUrl}/pusher/auth"
+githubAuthUrl = "#{baseUrl}/auth/github"
 
 credKey = 'imdone-atom.credentials'
 Pusherlog = debug 'imdone-atom:pusher'
@@ -38,6 +39,7 @@ class ImdoneioClient extends Emitter
   @signUpUrl: signUpUrl
   @projectsUrl: projectsUrl
   @plansUrl: plansUrl
+  @githubAuthUrl: githubAuthUrl
   authenticated: false
   connectionAccepted: false
   authRetryCount: 0
