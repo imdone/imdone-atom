@@ -44,9 +44,7 @@ class LoginView extends View
     @loginPanel.hide()
     @spinner.hide()
 
-  onUnauthenticated: () ->
-    @showLogin()
-    @emitter.emit 'unauthenticated'
+  onUnauthenticated: () -> @showLogin()
 
   initPasswordField: () ->
     # [Password fields when using EditorView subview - packages - Atom Discussion](https://discuss.atom.io/t/password-fields-when-using-editorview-subview/11061/7)
