@@ -21,7 +21,6 @@ USER_NOT_FOUND_ERR = new Error "User not found"
 baseUrl = config.baseUrl # READY:0 This should be set to localhost if process.env.IMDONE_ENV = /dev/i id:26
 baseAPIUrl = "#{baseUrl}/api/1.0"
 accountUrl = "#{baseAPIUrl}/account"
-signUpUrl = "#{baseUrl}/signup"
 projectsUrl = "#{baseUrl}/account/projects"
 plansUrl = "#{baseUrl}/plans"
 pusherAuthUrl = "#{baseUrl}/pusher/auth"
@@ -36,7 +35,6 @@ class ImdoneioClient extends Emitter
   @USER_NOT_FOUND_ERR: USER_NOT_FOUND_ERR
   @baseUrl: baseUrl
   @baseAPIUrl: baseAPIUrl
-  @signUpUrl: signUpUrl
   @projectsUrl: projectsUrl
   @plansUrl: plansUrl
   @githubAuthUrl: githubAuthUrl

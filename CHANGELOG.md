@@ -1,3 +1,7 @@
+## 2.0.4
+* Use [ignore](https://www.npmjs.com/package/ignore) package instead of minimatch to mimic .gitignore function
+* Remove plain sign up button
+
 ## 2.0.3
 * Remove debug code and provide github signup
 
