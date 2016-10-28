@@ -1,3 +1,6 @@
+## 2.0.5
+* Enable default github TODOBOTs
+
 ## 2.0.4
 * Use [ignore](https://www.npmjs.com/package/ignore) package instead of minimatch to mimic .gitignore function
 * Remove plain sign up button
