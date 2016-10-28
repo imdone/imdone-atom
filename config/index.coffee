@@ -23,5 +23,5 @@ prod =
   baseUrl:    'https://imdone.io'
   pusherChannelPrefix: 'private-imdoneio'
 
-module.exports = prod;
+module.exports = dev;
 # DONE: Merge imdone-atom-beta with imdone-atom and publish +chore id:119 gh:162

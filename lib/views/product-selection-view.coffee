@@ -3,6 +3,7 @@
 util = require 'util'
 _ = require 'lodash'
 pluginManager = require '../services/plugin-manager'
+DEFAULT_CONNECTOR = require '../services/default-connector'
 
 module.exports =
 class ProductSelectionView extends View
@@ -14,6 +15,7 @@ class ProductSelectionView extends View
   populateList: ->
     @productControls.empty()
     @productControls.append @viewForItem(product) for product in @products
+    @saveDefaultConnector()
 
   viewForItem: (product) ->
     plugin = pluginManager.getByProvider product.name
@@ -57,20 +59,16 @@ class ProductSelectionView extends View
       if e.target.checked
         if connector.id
           @imdoneRepo.enableConnector connector, (err, updatedConnector) =>
-            # TODO:0 Handle errors id:96
+            # TODO: Handle errors id:96
             return if err
             @selected.connector = updatedConnector
             @emitter.emit 'connector.changed', @selected
             @emitter.emit 'connector.enabled', updatedConnector
         else
-          @imdoneRepo.saveConnector connector, (err, connector) =>
-            # TODO:0 Handle errors by unauthenticating if needed and show login with error id:105
-            throw err if err
-            @selected.connector = connector
-            @emitter.emit 'connector.changed', @selected
+          @saveConnector connector
       else
         @imdoneRepo.disableConnector connector, (err, updatedConnector) =>
-          # TODO:0 Handle errors id:106
+          # TODO: Handle errors id:106
           return unless updatedConnector
           @selected.connector = updatedConnector
           @emitter.emit 'connector.changed', @selected
@@ -81,6 +79,26 @@ class ProductSelectionView extends View
     name = $link.data('name')
     product = _.find @products, name: name
     @selectProduct product
+
+  saveConnector: (connector, cb) ->
+    cb ?= ()->
+    @imdoneRepo.saveConnector connector, (err, connector) =>
+      # TODO: Handle errors by unauthenticating if needed and show login with error id:105
+      cb err if err
+      @selected.connector = connector
+      @emitter.emit 'connector.changed', @selected
+      cb null, connector
+
+  saveDefaultConnector: ->
+    return unless @imdoneRepo.isImdoneIOProject()
+    product = _.find @products, name: DEFAULT_CONNECTOR.name
+    return if product.connector.id
+    product.connector.enabled = true
+    product.connector.name = DEFAULT_CONNECTOR.name
+    _.set product.connector, 'config.rules', DEFAULT_CONNECTOR.config.rules
+    @saveConnector product.connector, (err, connector) ->
+      detail = "Your default #{connector.name} TODOBOTs have been enabled! Take a look below to see what they do."
+      atom.notifications.addInfo "TODOBOTs Enabled!", detail: detail, dismissable: true, icon: 'check'
 
   setItems: (@products) ->
     @selectProduct @products[0] if @products && @products.length > 0

@@ -288,7 +288,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO:0 Add the plugin project buttons here id:68
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO: Add the plugin project buttons here id:68
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -520,7 +520,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() # TODO:0 hide mask on event from connectorManager who will retry after emitting id:79
+    @hideMask() # TODO: hide mask on event from connectorManager who will retry after emitting id:79
     @makeTasksSortable()
     @emitter.emit 'board.update'
 

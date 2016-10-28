@@ -1,12 +1,16 @@
-A hackable task-board in your code.
+The TODO comment task board
 ----
-### You live in the code, your tasks should too!
+**Turn your TODO comments into a task-board and let [imdone.io](https://imdone.io) do your issue tracking so you can stay in the zone.**  
+Just use `alt+t` while editing a file to see your projects board.
+
 
 ![gifrecord_2015-11-12_085528](https://cloud.githubusercontent.com/assets/233505/11121461/9899fb14-891b-11e5-8aba-a4646f8b1428.gif)
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
+You live in the code, your tasks should too!
+----
 Developers are creative people and the text editor is their canvas.  For decades they've used TODO style code comments to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that integrates with any web based issue tracking system.
 
 imdone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.

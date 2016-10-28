@@ -28,7 +28,7 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
-  # TODO:0 Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. id:39
+  # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. id:39
   repo.isImdoneIOProject = () -> client.isAuthenticated() && repo.project && !repo.project.disabled
 
   repo.disableProject = (cb) ->
@@ -59,7 +59,7 @@ module.exports =  (repo) ->
     return unless client.isAuthenticated() && repo.initialized
     return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
-      # TODO:0 Do something with this error id:41
+      # TODO: Do something with this error id:41
       unless project
         repo.disableProject()
         return repo.emit 'project.not-found' unless project
@@ -88,7 +88,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, ioTasks) ->
-      return if err # TODO:0 Do something with this error id:43
+      return if err # TODO: Do something with this error id:43
       console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
         # READY:0 We have to be able to match on meta.id for updates. id:44
@@ -114,7 +114,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO:0 Do something with this error id:48
+      return if err # TODO: Do something with this error id:48
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -182,6 +182,7 @@ module.exports =  (repo) ->
     return saveSort(cb) if _.get repo, 'project.taskOrder'
     fs.exists SORT_FILE, (exists) ->
       return cb() if exists
+      # DOING: remove sort number on all TODO comments when saving sort to cloud +enhancement id:120 gh:168
       # Populate the config.sync.sort from existing sort
       setListSort list.name, tasksToIds(list.tasks) for list in _getTasksByList()
       saveSort cb
@@ -270,10 +271,12 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
-  repo.initProducts = () ->
+  repo.initProducts = (cb) ->
+    cb ?= ()->
     connectorManager.getProducts (err, products) =>
-      return if err
+      return cb(err) if err
       repo.emit 'connector.enabled', product.connector for product in products when product.isEnabled()
+      cb()
 
   connectorManager.on 'tasks.syncing', () -> repo.emit 'tasks.syncing'
   connectorManager.on 'sync.error', () -> repo.emit 'sync.error'

@@ -35,6 +35,7 @@ class MenuView extends View
               @i class: "icon icon-plus toolbar-icon"
               @span class:'tool-text', 'Add a new list'
           # DONE: Add a link to open filtered files gh:49 id:87
+          # TODO: As a user I would to confirm opening of all visible files if no filter is applied. +story id:121 gh:169
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button", title: "Zap! (open visible files)", =>
             @a href: "#", =>
               @i class: "icon icon-zap toolbar-icon"

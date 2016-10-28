@@ -8,7 +8,7 @@ repos = {}
 
 module.exports =
   getRepo: (pathname, uri) ->
-    # TODO:0 This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout id:24
+    # TODO: This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout id:24
     return repos[pathname] if repos and repos[pathname]
     imdoneRepo = @fsStore(new ImdoneRepo(pathname))
     @excludeVcsIgnoresMixin(imdoneRepo)

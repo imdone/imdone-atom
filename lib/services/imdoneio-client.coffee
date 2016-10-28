@@ -74,7 +74,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO:0 If we get a forbidden error, then emit auth failure id:27
+  # TODO: If we get a forbidden error, then emit auth failure id:27
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -116,7 +116,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         log "Authentication err:", err if err
         # @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO:0 if err.status == 404 we should show an error id:28
+        # TODO: if err.status == 404 we should show an error id:28
         cb err, user
 
   onAuthSuccess: (user, cb) ->

@@ -28,11 +28,11 @@
     },
     {
       "name": "TODO",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "INBOX",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DOING",
@@ -68,7 +68,7 @@
   },
   "sync": {
     "id": "580e6d7582f3d921ac856455",
-    "name": "imdone-atom-beta",
+    "name": "imdone-atom",
     "useImdoneioForPriority": true
   }
 }
