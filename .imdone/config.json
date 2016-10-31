@@ -23,6 +23,10 @@
   },
   "lists": [
     {
+      "name": "NOTE",
+      "hidden": true
+    },
+    {
       "name": "BACKLOG",
       "hidden": true
     },
@@ -48,10 +52,6 @@
     },
     {
       "name": "DONE",
-      "hidden": true
-    },
-    {
-      "name": "NOTE",
       "hidden": false
     }
   ],

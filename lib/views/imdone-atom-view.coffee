@@ -195,9 +195,12 @@ class ImdoneAtomView extends ScrollView
         file = @imdoneRepo.getFileForTask(task)
         fullPath = @imdoneRepo.getFullPath file
         paths[fullPath] = task.line
-      for fpath, line of paths
-        console.log fpath, line
-        @openPath fpath, line
+      # DONE: As a user I would to confirm opening of all visible files if no filter is applied. +story gh:169 id:90
+      numFiles = _.keys(paths).length
+      if numFiles < 5 || window.confirm "imdone is about to open #{numFiles} files.  Continue?"
+        for fpath, line of paths
+          console.log fpath, line
+          @openPath fpath, line
 
     @emitter.on 'repo.change', => @showMask()
 

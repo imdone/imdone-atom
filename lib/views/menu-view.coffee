@@ -121,8 +121,7 @@ class MenuView extends View
   newList: ->
     @emitter.emit 'list.new'
 
-  # NOTE: @defunkt This issue was created in @atom with @imdone-atom.  Stay in the flow~~~~~~~ +discuss id:118 gh:171
-  # TODO: As a user I would to confirm opening of all visible files if no filter is applied. +story gh:169 id:90
+  # NOTE: @defunkt This issue was created in @atom with @imdone.  Stay in the flow~~~~~~~ +discuss id:118 gh:171
   openVisible: ->
     @emitter.emit 'visible.open'
 

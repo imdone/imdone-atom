@@ -1,3 +1,8 @@
+## 2.0.7
+* Add .boot to languages
+* Confirm opening of more than 5 files
+* Set keepEmptyPriority=true before syncing for the first time
+
 ## 2.0.5
 * Enable default github TODOBOTs
 
