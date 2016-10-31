@@ -4,7 +4,7 @@ minimatch = null
 log       = null
 configHelper = require './imdone-config'
 
-# DONE: implement socket server to handle opening files in configured client issue:48 id:17
+# DONE: implement socket server to handle opening files in configured client issue:48 id:18
 module.exports =
   clients: {}
   init: (port) ->
@@ -14,7 +14,7 @@ module.exports =
     eioClient = require 'engine.io-client'
     minimatch = require 'minimatch'
     log       = require './log'
-    # DONE: Check if something else is listening on port issue:51 id:18
+    # DONE: Check if something else is listening on port issue:51 id:19
     http = require('http').createServer()
     http.on 'error', (err) =>
       if (err.code == 'EADDRINUSE')
@@ -35,9 +35,9 @@ module.exports =
     @
 
   tryProxy: (port) ->
-    # DONE: First check if it's imdone listening on the port issue:52 id:19
-    # DONE: if imdone is listening we should connect as a client and use the server as a proxy issue:52 id:20
-    # BACKLOG:0 if imdone is not listening we should ask for another port issue:52 id:21
+    # DONE: First check if it's imdone listening on the port issue:52 id:20
+    # DONE: if imdone is listening we should connect as a client and use the server as a proxy issue:52 id:21
+    # BACKLOG: if imdone is not listening we should ask for another port issue:52 id:22
     log 'Trying proxy'
     socket = eioClient('ws://localhost:' + port)
     socket.on 'open', =>
@@ -64,7 +64,7 @@ module.exports =
   openFile: (project, path, line, cb) ->
     return cb() unless @getConfig().openIn.enable
     editor = @getEditor path
-    # DONE: only send open request to editors who deserve them issue:48 id:22
+    # DONE: only send open request to editors who deserve them issue:48 id:23
     socket = @getSocket editor
     return cb() unless socket
     isProxied = if @proxy then true else false

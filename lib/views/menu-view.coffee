@@ -13,20 +13,20 @@ class MenuView extends View
   @content: (params) ->
     @div class: "imdone-menu", =>
       @div class: "imdone-menu-inner", =>
-        # READY:0 Show logged in user and avatar here id:83
+        # READY: Show logged in user and avatar here id:85
         @div class: "imdone-filter", =>
           @subview 'filterField', new TextEditorView(mini: true, placeholderText: "filter tasks")
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
-        # BACKLOG:0 Save my favorite filters id:84
+        # BACKLOG: Save my favorite filters id:86
         @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           @a href: "#", class: "icon #{menuClosedClass}"
         @div outlet: '$toolbar', class: "imdone-toolbar", =>
-          # DONE: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:85
+          # DONE: Replace this with imdone-logo-dark.svg [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/) id:87
           # - [Icon System with SVG Sprites | CSS-Tricks](https://css-tricks.com/svg-sprites-use-better-icon-fonts/)
           # - [SVG `symbol` a Good Choice for Icons | CSS-Tricks](https://css-tricks.com/svg-symbol-good-choice-icons/)
-          # BACKLOG:0 Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:86
+          # BACKLOG: Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> id:88
           # @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           #   @a href: "#", class: "icon #{menuClosedClass}"
           # @div class: "menu-sep-space-2x"
@@ -34,8 +34,7 @@ class MenuView extends View
             @a href: "#", =>
               @i class: "icon icon-plus toolbar-icon"
               @span class:'tool-text', 'Add a new list'
-          # DONE: Add a link to open filtered files gh:49 id:87
-          # TODO: As a user I would to confirm opening of all visible files if no filter is applied. +story id:121 gh:169
+          # DONE: Add a link to open filtered files gh:49 id:89
           @div click: "openVisible", outlet: "zap", class: "imdone-toolbar-button", title: "Zap! (open visible files)", =>
             @a href: "#", =>
               @i class: "icon icon-zap toolbar-icon"
@@ -73,7 +72,7 @@ class MenuView extends View
                 @tag 'svg', => @tag 'use', "xlink:href":"#imdone-logo-icon"
               @span class:'tool-text', 'Login'
 
-          # BACKLOG:0 Add the plugin project buttons id:88
+          # BACKLOG: Add the plugin project buttons id:91
 
           @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
             @span class: 'loading loading-spinner-tiny inline-block'
@@ -122,6 +121,8 @@ class MenuView extends View
   newList: ->
     @emitter.emit 'list.new'
 
+  # NOTE: @defunkt This issue was created in @atom with @imdone-atom.  Stay in the flow~~~~~~~ +discuss id:118 gh:171
+  # TODO: As a user I would to confirm opening of all visible files if no filter is applied. +story gh:169 id:90
   openVisible: ->
     @emitter.emit 'visible.open'
 

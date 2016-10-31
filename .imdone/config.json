@@ -48,6 +48,10 @@
     },
     {
       "name": "DONE",
+      "hidden": true
+    },
+    {
+      "name": "NOTE",
       "hidden": false
     }
   ],
@@ -67,7 +71,7 @@
     }
   },
   "sync": {
-    "id": "580e6d7582f3d921ac856455",
+    "id": "58177ea89bc0f127b2c63d28",
     "name": "imdone-atom",
     "useImdoneioForPriority": true
   }

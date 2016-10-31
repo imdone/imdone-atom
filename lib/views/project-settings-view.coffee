@@ -24,14 +24,14 @@ class ProjectSettingsView extends View
       @div outlet: 'settingsPanel', style:'display:none;', =>
         # @h1 "Project Settings"
 
-        # READY:0 Add config view here id:107
+        # READY: Add config view here id:102
         # @h1 "Configuration (.imdone/config.json)"
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
     @disabledProject.show() unless @imdoneRepo.isImdoneIOProject()
 
-  # DOING: Show sync status when a connected repo is initialized +feature gh:158 id:108
+  # DOING: Show sync status when a connected repo is initialized +feature gh:158 id:103
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
     @emitter.on 'sync.percent', (val) =>

@@ -28,7 +28,7 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
-  # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. id:39
+  # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. id:40
   repo.isImdoneIOProject = () -> client.isAuthenticated() && repo.project && !repo.project.disabled
 
   repo.disableProject = (cb) ->
@@ -54,12 +54,12 @@ module.exports =  (repo) ->
 
   repo.checkForIIOProject = checkForIIOProject = () ->
     console.log "Checking for imdone.io project"
-    # READY:0 This should be moved to imdoneio-store id:40
+    # READY: This should be moved to imdoneio-store id:41
     return repo.emit('project.found', repo.project) if repo.project
     return unless client.isAuthenticated() && repo.initialized
     return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
-      # TODO: Do something with this error id:41
+      # TODO: Do something with this error id:42
       unless project
         repo.disableProject()
         return repo.emit 'project.not-found' unless project
@@ -84,16 +84,16 @@ module.exports =  (repo) ->
     return cb("not enabled") unless repo.getProjectId()
     tasks = [tasks] unless _.isArray tasks
     return cb() unless tasks.length > 0
-    # DONE: Keep sync from happening twice +bug +beta gh:140 id:42
+    # DONE: Keep sync from happening twice +bug +beta gh:140 id:43
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io", tasks
     client.syncTasks repo, tasks, (err, ioTasks) ->
-      return if err # TODO: Do something with this error id:43
+      return if err # TODO: Do something with this error id:44
       console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
-        # READY:0 We have to be able to match on meta.id for updates. id:44
-        # READY:0 Test this with a new project to make sure we get the ids id:45
-        # READY:0 We need a way to run tests on imdone-io without destroying the client id:46
+        # READY: We have to be able to match on meta.id for updates. id:45
+        # READY: Test this with a new project to make sure we get the ids id:46
+        # READY: We need a way to run tests on imdone-io without destroying the client id:47
         (task, cb) ->
           currentTask = repo.getTask task.id
           taskToModify = _.assign currentTask, task
@@ -104,7 +104,7 @@ module.exports =  (repo) ->
             console.log "Sync Error:", err
             return cm.emit 'sync.error', err
           repo.saveModifiedFiles (err, files)->
-            # DONE: Refresh the board id:47
+            # DONE: Refresh the board id:48
             return syncDone err unless cb
             cb err, syncDone
 
@@ -114,7 +114,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO: Do something with this error id:48
+      return if err # TODO: Do something with this error id:49
       console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -147,13 +147,13 @@ module.exports =  (repo) ->
       (cb) -> saveSortCloud cb
     ]
     async.parallel fns, cb
-    # DONE: also save to imdone.io in parallel gh:102 id:49
+    # DONE: also save to imdone.io in parallel gh:102 id:50
 
   saveSortCloud = (cb) ->
     cb ?= ()->
     return cb() unless repo.project
     sort = _.get repo, 'sync.sort'
-    # READY:0 This should call client.updateTaskOrder, but we should also listen for pusher messages on project update id:50
+    # READY: This should call client.updateTaskOrder, but we should also listen for pusher messages on project update id:51
     client.updateTaskOrder repo.project.id, sort, (err, theProject) =>
       return cb(err) if err
       cb null, theProject.taskOrder
@@ -182,7 +182,7 @@ module.exports =  (repo) ->
     return saveSort(cb) if _.get repo, 'project.taskOrder'
     fs.exists SORT_FILE, (exists) ->
       return cb() if exists
-      # DOING: remove sort number on all TODO comments when saving sort to cloud +enhancement id:120 gh:168
+      # DOING: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:52
       # Populate the config.sync.sort from existing sort
       setListSort list.name, tasksToIds(list.tasks) for list in _getTasksByList()
       saveSort cb
@@ -208,8 +208,8 @@ module.exports =  (repo) ->
     cb ?= ()->
     _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
       return cb err if err
-      if shouldSync # DONE: Make sure the project is available id:51
-        # READY:0 Only sync what we move!!! +important id:52
+      if shouldSync # DONE: Make sure the project is available id:53
+        # READY: Only sync what we move!!! +important id:54
         console.log "Tasks moved.  Syncing with imdone.io"
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks
@@ -248,7 +248,7 @@ module.exports =  (repo) ->
     async.parallel fns, (err, results) ->
       return cb err if err
       repo.config = results[0]
-      # READY:0 Try an auth from storage id:53
+      # READY: Try an auth from storage id:55
       client.authFromStorage (err, user) ->
         if sortEnabled()
           _init (err, files) ->
