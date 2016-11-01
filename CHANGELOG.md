@@ -1,4 +1,7 @@
-## 2.0.8
+## 2.0.10
+* Remove unused bootstrap-token library causing errors
+
+## 2.0.9
 * Fix multiple connectors getting created
 
 ## 2.0.7

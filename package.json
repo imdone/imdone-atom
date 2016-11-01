@@ -2,7 +2,7 @@
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
   "version": "2.0.9",
-  "description": "Turn your TODO comments into a task-board and let imdone.io do your issue tracking so you can stay in the zone.",
+  "description": "A TODO comment task-board that does your issue tracking so you can stay in the zone.",
   "keywords": [
     "todo",
     "fixme",
@@ -25,7 +25,6 @@
   "dependencies": {
     "async": "^1.5.2",
     "atom-space-pen-views": "^2.0.5",
-    "bootstrap-tokenfield": "^0.12.0",
     "debug": "^2.2.0",
     "engine.io": "^1.5.4",
     "engine.io-client": "^1.6.4",

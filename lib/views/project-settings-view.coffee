@@ -6,7 +6,6 @@ debug = require 'debug/browser'
 config = require '../../config'
 log = debug 'imdone-atom:project-settings-view'
 Client = require '../services/imdoneio-client'
-require('bootstrap-tokenfield') $
 
 module.exports =
 class ProjectSettingsView extends View
