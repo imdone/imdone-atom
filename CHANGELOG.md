@@ -1,3 +1,6 @@
+## 2.0.8
+* Fix multiple connectors getting created
+
 ## 2.0.7
 * Add .boot to languages
 * Confirm opening of more than 5 files

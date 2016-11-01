@@ -90,13 +90,17 @@ class ProductSelectionView extends View
       cb null, connector
 
   saveDefaultConnector: ->
+    return if @defaultConnectorCreated
     return unless @imdoneRepo.isImdoneIOProject()
     product = _.find @products, name: DEFAULT_CONNECTOR.name
     return if product.connector.id
+    @defaultConnectorCreated = true
     product.connector.enabled = true
     product.connector.name = DEFAULT_CONNECTOR.name
     _.set product.connector, 'config.rules', DEFAULT_CONNECTOR.config.rules
     @saveConnector product.connector, (err, connector) ->
+      return if err
+      product.connector.id = connector.id
       detail = "Your default #{connector.name} TODOBOTs have been enabled! Take a look below to see what they do."
       atom.notifications.addInfo "TODOBOTs Enabled!", detail: detail, dismissable: true, icon: 'check'
 
