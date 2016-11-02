@@ -1,3 +1,6 @@
+## 2.0.12
+* Defer progress update when syncing
+
 ## 2.0.11
 * Send up to 3 requests of 4 tasks each when syncing with imdone.io
 
