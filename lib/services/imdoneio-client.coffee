@@ -291,13 +291,13 @@ class ImdoneioClient extends Emitter
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
     timeOutSeconds = if tasks.length > 10 then 30 else 10
-    chunks = _.chunk tasks, 8
+    chunks = _.chunk tasks, 4
     modifiedTasks = []
     total = 0
     log "Sending #{tasks.length} tasks to imdone.io"
     repo.emit "sync.percent", 0
     log chunks
-    async.eachLimit chunks, 2, (chunk, cb) =>
+    async.eachLimit chunks, 3, (chunk, cb) =>
       log "Sending chunk of #{chunk.length} tasks to imdone.io"
       data =
         tasks: chunk
