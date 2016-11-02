@@ -34,8 +34,7 @@ class ProjectSettingsView extends View
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
     @emitter.on 'sync.percent', (val) =>
-      @progress.attr 'value', val
-      @progressValue.html "#{val}%"
+      process.nextTick => @updatePercent val
     @emitter.on 'project.found', (project) =>
       @updateProgress 0
       @settingsPanel.show()
@@ -54,6 +53,10 @@ class ProjectSettingsView extends View
     @progressValue.html ''
     @progressContainer.show()
 
+  updatePercent: (val) ->
+    @progress.attr 'value', val
+    @progressValue.html "#{val}%"
+
   enableProject: (e) ->
     @emitter.emit 'error.hide'
     @startTime = new Date().getTime()
@@ -64,7 +67,7 @@ class ProjectSettingsView extends View
         @emitter.emit 'error', @$tooManyProjectsMsg()
         @enableProjectBtn.show()
         @disabledProject.show()
-        @updateProgress 0
+      @updatePercent 0
       return if err
       return unless project
       @imdoneRepo.checkForIIOProject()

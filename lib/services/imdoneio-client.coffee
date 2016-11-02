@@ -291,12 +291,11 @@ class ImdoneioClient extends Emitter
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
     timeOutSeconds = if tasks.length > 10 then 30 else 10
-    chunks = _.chunk tasks, 4
+    chunks = _.chunk tasks, 5
     modifiedTasks = []
     total = 0
     log "Sending #{tasks.length} tasks to imdone.io"
-    repo.emit "sync.percent", 0
-    log chunks
+    repo.emit 'sync.percent', 0
     async.eachLimit chunks, 3, (chunk, cb) =>
       log "Sending chunk of #{chunk.length} tasks to imdone.io"
       data =
@@ -321,36 +320,13 @@ class ImdoneioClient extends Emitter
         return cb err if err
         modifiedTasks.push data
         total += data.length
-        repo.emit "sync.percent", Math.ceil(total/tasks.length*100)
+        repo.emit 'sync.percent', Math.ceil(total/tasks.length*100)
         log "Received #{total} tasks from imdone.io"
         cb()
+        # setTimeout cb, 200 # Give the UI time to catch up
     , (err) ->
       cb err, _.flatten modifiedTasks
 
-  # setHeaders: (req) ->
-  #   log 'setHeaders:begin'
-  #   withHeaders = req.set('Date', (new Date()).getTime())
-  #     .set('Accept', 'application/json')
-  #     .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA))
-  #     .timeout 5000
-  #     .on 'error', (err) =>
-  #       if err.code == 'ECONNREFUSED' && @authenticated
-  #         @emit 'unavailable'
-  #         delete @authenticated
-  #         delete @user
-  #
-  #   log 'setHeaders:end'
-  #   withHeaders
-  #
-        # @doPost("/projects/#{projectId}/tasks").use(nocache).timeout(timeOutSeconds*1000).send(opts).end (err, res) =>
-        #   return cb(err) if err || !res.ok
-        #   modifiedTasks.push res.body
-        #   total += res.body.length
-        #   repo.emit "sync.percent", Math.ceil(total/tasks.length*100)
-        #   log "Received #{total} tasks from imdone.io"
-        #   cb()
-
-  # collection can be an array of strings or string
   db: (collection) ->
     path = require 'path'
     collection = path.join.apply @, arguments if arguments.length > 1
