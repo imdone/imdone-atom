@@ -45,7 +45,7 @@ class ConnectorPluginView extends View
       $(@).closest('li').remove();
       self.task.addMetaData self.idMetaKey, id
       self.repo.modifyTask self.task, true, (err, result) ->
-        console.log err, result
+        #console.log err, result
         self.issues = self.getIssueIds()
         self.showRelatedIssues()
         self.imdoneView.emit "task.modified", self.task
@@ -56,7 +56,7 @@ class ConnectorPluginView extends View
       self.task.removeMetaData self.idMetaKey, id
       # DONE: add or update task using imdoneio-client id:0
       self.repo.modifyTask self.task, true, (err, result) ->
-        console.log err, result
+        #console.log err, result
         self.issues = self.getIssueIds()
         self.doFind()
         self.imdoneView.emit "task.modified", self.task
@@ -77,7 +77,7 @@ class ConnectorPluginView extends View
     , (err, results) =>
       # TODO: Check error for 404/Not Found id:2
       if err
-        console.log "error:", err
+        #console.log "error:", err
       else
         @relatedIssues.html @$issueList(results)
 
@@ -100,7 +100,7 @@ class ConnectorPluginView extends View
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true, (err, result) =>
-        console.log err, result
+        #console.log err, result
         @issues = @getIssueIds()
         @imdoneView.emit "task.modified", @task
         @showRelatedIssues()

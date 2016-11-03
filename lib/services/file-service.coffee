@@ -18,7 +18,7 @@ module.exports =
     http = require('http').createServer()
     http.on 'error', (err) =>
       if (err.code == 'EADDRINUSE')
-        console.log 'port in use'
+        #console.log 'port in use'
         @tryProxy port
       log err
     http.listen port, =>
@@ -59,7 +59,7 @@ module.exports =
         @openFile msg.project, msg.path, msg.line, () ->
       log 'message received:', msg
     catch error
-      console.log 'Error receiving message:', json
+      #console.log 'Error receiving message:', json
 
   openFile: (project, path, line, cb) ->
     return cb() unless @getConfig().openIn.enable

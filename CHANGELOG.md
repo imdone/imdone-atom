@@ -1,3 +1,6 @@
+## 2.0.13
+* Increase timeout for sync requests
+
 ## 2.0.12
 * Defer progress update when syncing
 

@@ -2,6 +2,7 @@ module.exports =  (repo) ->
   ConnectorManager = require './connector-manager'
   connectorManager = cm = new ConnectorManager repo
   imdoneioClient = client = require('./imdoneio-client').instance
+  log = require('debug') 'imdoneio-store'
   Task = require 'imdone-core/lib/task'
   fs = require 'fs'
   _ = require 'lodash'
@@ -53,7 +54,7 @@ module.exports =  (repo) ->
             cb()
 
   repo.checkForIIOProject = checkForIIOProject = () ->
-    console.log "Checking for imdone.io project"
+    log "Checking for imdone.io project"
     # READY: This should be moved to imdoneio-store id:41
     return repo.emit('project.found', repo.project) if repo.project
     return unless client.isAuthenticated() && repo.initialized
@@ -86,10 +87,10 @@ module.exports =  (repo) ->
     return cb() unless tasks.length > 0
     # DONE: Keep sync from happening twice +bug +beta gh:140 id:43
     cm.emit 'tasks.syncing'
-    console.log "sending tasks to imdone-io", tasks
+    #console.log "sending #{tasks.length} tasks to imdone-io "
     client.syncTasks repo, tasks, (err, ioTasks) ->
       return if err # TODO: Do something with this error id:44
-      console.log "received tasks from imdone-io:", ioTasks
+      #console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
         # READY: We have to be able to match on meta.id for updates. id:45
         # READY: Test this with a new project to make sure we get the ids id:46
@@ -101,7 +102,7 @@ module.exports =  (repo) ->
           repo.modifyTask taskToModify, cb
         (err) ->
           if err
-            console.log "Sync Error:", err
+            #console.log "Sync Error:", err
             return cm.emit 'sync.error', err
           repo.saveModifiedFiles (err, files)->
             # DONE: Refresh the board id:48
@@ -112,10 +113,10 @@ module.exports =  (repo) ->
     return cb("unauthenticated", ()->) unless client.isAuthenticated()
     return cb("not enabled") unless repo.getProjectId()
     cm.emit 'tasks.syncing'
-    console.log "sending tasks to imdone-io for: %s", file.path, file.getTasks()
+    #console.log "sending tasks to imdone-io for: #{file.path}"
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
       return if err # TODO: Do something with this error id:49
-      console.log "received tasks from imdone-io for: %s", tasks
+      #console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
           taskToModify = _.assign repo.getTask(task.id), task
@@ -210,7 +211,7 @@ module.exports =  (repo) ->
       return cb err if err
       if shouldSync # DONE: Make sure the project is available id:53
         # READY: Only sync what we move!!! +important id:54
-        console.log "Tasks moved.  Syncing with imdone.io"
+        #console.log "Tasks moved.  Syncing with imdone.io"
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks
           return cb null, tasksByList unless sortEnabled()

@@ -86,7 +86,7 @@ module.exports = ImdoneAtom =
   # serialize: ->
   #   views = atom.workspace.getPaneItems().filter (view) -> view instanceof ImdoneAtomView
   #   serialized = views.map (view) -> view.serialize()
-  #   console.log 'serializedViews:', serialized
+  #   #console.log 'serializedViews:', serialized
   #   serialized
 
   activate: (state) ->

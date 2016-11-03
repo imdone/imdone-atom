@@ -64,8 +64,9 @@ class ImdoneioClient extends Emitter
     withHeaders = req.set('Date', (new Date()).getTime())
       .set('Accept', 'application/json')
       .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA))
-      .timeout 10000
+      .timeout 30000
       .on 'error', (err) =>
+        #console.log "Error on request to imdone.io:", err
         if err.code == 'ECONNREFUSED' && @authenticated
           @emit 'unavailable'
           delete @authenticated
@@ -290,13 +291,12 @@ class ImdoneioClient extends Emitter
   syncTasks: (repo, tasks, cb) ->
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
-    timeOutSeconds = if tasks.length > 10 then 30 else 10
-    chunks = _.chunk tasks, 5
+    chunks = _.chunk tasks, 10
     modifiedTasks = []
     total = 0
     log "Sending #{tasks.length} tasks to imdone.io"
     repo.emit 'sync.percent', 0
-    async.eachLimit chunks, 3, (chunk, cb) =>
+    async.eachOfLimit chunks, 2, (chunk, i, cb) =>
       log "Sending chunk of #{chunk.length} tasks to imdone.io"
       data =
         tasks: chunk
@@ -309,11 +309,16 @@ class ImdoneioClient extends Emitter
         headers:
           Date: (new Date()).getTime()
           Accept: 'application/json'
-        timeout: timeOutSeconds*1000
+        timeout: 30000
+        pool:
+          maxSockets: Infinity
 
       opts.headers.Authorization = authUtil.getAuth(opts, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA)
+      #console.log "Making sync request #{i}"
       Request opts, (err, response, data) =>
+        #console.log "Received Sync Response #{i} err:#{err}"
         if err && err.code == 'ECONNREFUSED' && @authenticated
+          #console.log "Error on syncing tasks with imdone.io", err
           @emit 'unavailable'
           delete @authenticated
           delete @user
@@ -323,7 +328,7 @@ class ImdoneioClient extends Emitter
         repo.emit 'sync.percent', Math.ceil(total/tasks.length*100)
         log "Received #{total} tasks from imdone.io"
         cb()
-        # setTimeout cb, 200 # Give the UI time to catch up
+      log "Chunk of #{chunk.length} tasks sent to imdone.io"
     , (err) ->
       cb err, _.flatten modifiedTasks
 

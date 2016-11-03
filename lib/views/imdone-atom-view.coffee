@@ -140,7 +140,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'authentication-failed', ({status, retries}) =>
       @hideMask() if status == "unavailable" && retries
-      console.log "auth-failed" if status == "failed"
+      #console.log "auth-failed" if status == "failed"
 
     @emitter.on 'unavailable', =>
       @hideMask()
@@ -159,25 +159,25 @@ class ImdoneAtomView extends ScrollView
       @onRepoUpdate()
 
     @emitter.on 'list.modified', =>
-      console.log 'list.modified'
+      #console.log 'list.modified'
       @onRepoUpdate()
 
     @emitter.on 'file.update', (file) =>
-      console.log 'file.update: %s', file && file.getPath()
+      #console.log 'file.update: %s', file && file.getPath()
       @onRepoUpdate() if file.getPath()
 
     @emitter.on 'tasks.moved', (tasks) =>
-      console.log 'tasks.moved', tasks
+      #console.log 'tasks.moved', tasks
       @onRepoUpdate()
 
     @emitter.on 'config.update', =>
-      console.log 'config.update'
+      #console.log 'config.update'
       repo.refresh()
 
-    @emitter.on 'error', (err) => console.log('error:', err)
+    @emitter.on 'error', (err) => #console.log('error:', err)
 
     @emitter.on 'task.modified', (task) =>
-      console.log "Task modified.  Syncing with imdone.io"
+      #console.log "Task modified.  Syncing with imdone.io"
       @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
 
     @emitter.on 'menu.toggle', =>
@@ -199,7 +199,7 @@ class ImdoneAtomView extends ScrollView
       numFiles = _.keys(paths).length
       if numFiles < 5 || window.confirm "imdone is about to open #{numFiles} files.  Continue?"
         for fpath, line of paths
-          console.log fpath, line
+          #console.log fpath, line
           @openPath fpath, line
 
     @emitter.on 'repo.change', => @showMask()

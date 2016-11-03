@@ -156,7 +156,7 @@ class MenuView extends View
     @emitter.on 'unavailable', => @unauthenticated()
 
   authenticated: ->
-    console.log 'authenticated:', @client.user
+    #console.log 'authenticated:', @client.user
     user = @client.user
     crlf = "&#x0a;"
     title = "Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
@@ -176,7 +176,7 @@ class MenuView extends View
 
   openLogin: ->
     @client.authFromStorage (err) =>
-      console.log err
+      #console.log err
       @emitter.emit 'login' if err
 
   logOff: ->

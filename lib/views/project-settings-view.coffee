@@ -35,6 +35,7 @@ class ProjectSettingsView extends View
     if @initialized || !@emitter then return else @initialized = true
     @emitter.on 'sync.percent', (val) =>
       process.nextTick => @updatePercent val
+
     @emitter.on 'project.found', (project) =>
       @updateProgress 0
       @settingsPanel.show()
@@ -62,6 +63,7 @@ class ProjectSettingsView extends View
     @startTime = new Date().getTime()
     @updateProgress @imdoneRepo.getTasks().length
     @enableProjectBtn.hide()
+    #console.log "Creating new project"
     @client.createProject @imdoneRepo, (err, project) =>
       if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
         @emitter.emit 'error', @$tooManyProjectsMsg()
