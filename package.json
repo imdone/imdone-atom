@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "description": "A TODO comment task-board that does your issue tracking so you can stay in the zone.",
   "keywords": [
     "todo",
