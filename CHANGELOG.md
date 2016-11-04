@@ -1,3 +1,6 @@
+##2.0.14
+* Add delay to chunked requests to kick the event loop
+
 ## 2.0.13
 * Increase timeout for sync requests
 

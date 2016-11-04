@@ -1,5 +1,5 @@
 request = require 'superagent'
-Request = require 'request'
+noCache = require 'superagent-no-cache'
 async = require 'async'
 authUtil = require './auth-util'
 {Emitter} = require 'atom'
@@ -65,6 +65,7 @@ class ImdoneioClient extends Emitter
       .set('Accept', 'application/json')
       .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA))
       .timeout 30000
+      .use noCache
       .on 'error', (err) =>
         #console.log "Error on request to imdone.io:", err
         if err.code == 'ECONNREFUSED' && @authenticated
@@ -89,15 +90,16 @@ class ImdoneioClient extends Emitter
     @setHeaders request.put("#{baseAPIUrl}#{path}")
 
   _auth: (cb) ->
-    return cb null, @user if @user
-    @authenticating = true
-    @getAccount (err, user) =>
-      err = user.err if user && user.err
-      return @onAuthFailure err, null, cb if err
-      @user = user
-      return @onAuthFailure new Error('User is null'), null, cb if !user or !user.profile
-      @onAuthSuccess user, cb
-      delete @authenticating
+    process.nextTick () =>
+      return cb null, @user if @user
+      @authenticating = true
+      @getAccount (err, user) =>
+        err = user.err if user && user.err
+        return @onAuthFailure err, null, cb if err
+        @user = user
+        return @onAuthFailure new Error('User is null'), null, cb if !user or !user.profile
+        @onAuthSuccess user, cb
+        delete @authenticating
 
   logoff: ->
     @removeCredentials (err) =>
@@ -268,17 +270,17 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   createProject: (repo, cb) ->
-    @doPost("/projects").send(
-      name: repo.getDisplayName()
-      localConfig: repo.config.toJSON()
-    ).end (err, res) =>
-      return cb(err, res) if err || !res.ok
-      project = res.body
-      @setProjectId repo, project.id
-      @setProjectName repo, project.name
-      @setSortConfig repo
-      repo.saveConfig (err) => cb err, project
-
+    process.nextTick () =>
+      @doPost("/projects").send(
+        name: repo.getDisplayName()
+        localConfig: repo.config.toJSON()
+      ).end (err, res) =>
+        return cb(err, res) if err || !res.ok
+        project = res.body
+        @setProjectId repo, project.id
+        @setProjectName repo, project.name
+        @setSortConfig repo
+        repo.saveConfig (err) => cb err, project
   getProjectId: (repo) ->  _.get repo, 'config.sync.id'
   setProjectId: (repo, id) -> _.set repo, 'config.sync.id', id
   setSortConfig: (repo) ->
@@ -301,34 +303,23 @@ class ImdoneioClient extends Emitter
       data =
         tasks: chunk
         branch: gitRepo && gitRepo.branch
-      opts =
-        url: "#{baseAPIUrl}/projects/#{projectId}/tasks"
-        method: 'POST'
-        body: data
-        json: true
-        headers:
-          Date: (new Date()).getTime()
-          Accept: 'application/json'
-        timeout: 30000
-        pool:
-          maxSockets: Infinity
-
-      opts.headers.Authorization = authUtil.getAuth(opts, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA)
-      #console.log "Making sync request #{i}"
-      Request opts, (err, response, data) =>
-        #console.log "Received Sync Response #{i} err:#{err}"
-        if err && err.code == 'ECONNREFUSED' && @authenticated
-          #console.log "Error on syncing tasks with imdone.io", err
-          @emit 'unavailable'
-          delete @authenticated
-          delete @user
-        return cb err if err
-        modifiedTasks.push data
-        total += data.length
-        repo.emit 'sync.percent', Math.ceil(total/tasks.length*100)
-        log "Received #{total} tasks from imdone.io"
-        cb()
-      log "Chunk of #{chunk.length} tasks sent to imdone.io"
+      setTimeout () => # Not sure why, but this sometimes hangs without using setTimeout
+        @doPost("/projects/#{projectId}/tasks").send(data).end (err, res) =>
+          #console.log "Received Sync Response #{i} err:#{err}"
+          if err && err.code == 'ECONNREFUSED' && @authenticated
+            #console.log "Error on syncing tasks with imdone.io", err
+            @emit 'unavailable'
+            delete @authenticated
+            delete @user
+          return cb err if err
+          data = res.body
+          modifiedTasks.push data
+          total += data.length
+          repo.emit 'sync.percent', Math.ceil(total/tasks.length*100)
+          log "Received #{total} tasks from imdone.io"
+          cb()
+        log "Chunk of #{chunk.length} tasks sent to imdone.io"
+      ,10
     , (err) ->
       cb err, _.flatten modifiedTasks
 
