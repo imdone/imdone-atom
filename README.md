@@ -3,8 +3,7 @@ The TODO comment task board
 **Turn your TODO comments into a task-board and let [imdone.io](https://imdone.io) do your issue tracking so you can stay in the zone.**  
 Just use `alt+t` while editing a file to see your projects board.
 
-
-![gifrecord_2015-11-12_085528](https://cloud.githubusercontent.com/assets/233505/11121461/9899fb14-891b-11e5-8aba-a4646f8b1428.gif)
+![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
