@@ -1,3 +1,9 @@
+##2.0.16
+* Fix error on open files of visible tasks
+
+##2.0.15
+* Add new preview image
+
 ##2.0.14
 * Add delay to chunked requests to kick the event loop
 

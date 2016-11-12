@@ -9,6 +9,7 @@ Sortable = null
 pluginManager = null
 fileService = null
 log = null
+_ = null
 config = require '../services/imdone-config'
 envConfig = require '../../config'
 
@@ -43,6 +44,7 @@ class ImdoneAtomView extends ScrollView
     fileService = require '../services/file-service'
     @client = require('../services/imdoneio-client').instance
     log = require '../services/log'
+    _ = require 'lodash'
     require('./jq-utils')($)
 
     @title = "#{path.basename(@path)} Tasks"
