@@ -1,3 +1,6 @@
+##2.0.17
+- Add haml extension and -# comment
+
 ##2.0.16
 * Fix error on open files of visible tasks
 
