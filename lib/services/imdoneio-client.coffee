@@ -26,7 +26,6 @@ plansUrl = "#{baseUrl}/plans"
 pusherAuthUrl = "#{baseUrl}/pusher/auth"
 githubAuthUrl = "#{baseUrl}/auth/github"
 
-credKey = 'imdone-atom.credentials'
 Pusherlog = debug 'imdone-atom:pusher'
 
 module.exports =

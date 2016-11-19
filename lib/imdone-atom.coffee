@@ -190,4 +190,5 @@ module.exports = ImdoneAtom =
     ImdoneAtomView ?= require './views/imdone-atom-view'
     imdoneHelper ?= require './services/imdone-helper'
     repo = imdoneHelper.getRepo path, uri
+
     view = new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri)

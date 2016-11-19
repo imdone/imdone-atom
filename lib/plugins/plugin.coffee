@@ -42,8 +42,8 @@ class ConnectorPlugin extends Emitter
   idMetaKey: -> @connector.config.idMetaKey
   metaKeyConfig: -> @repo.config.meta && @repo.config.meta[@idMetaKey()]
   addMetaKeyConfig: (cb) ->
-    return cb() if @metaKeyConfig() || !@idMetaKey()
     projectInfo = @githubProjectInfo()
+    return cb() if @metaKeyConfig() || !@idMetaKey() || !projectInfo
     @repo.config.meta = {} unless @repo.config.meta
     @repo.config.meta[@idMetaKey()] =
       urlTemplate: "https://github.com/#{projectInfo.accountName}/#{projectInfo.projectName}/issues/%s"

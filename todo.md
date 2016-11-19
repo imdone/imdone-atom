@@ -6,7 +6,7 @@ Roadmap
 - [ ] #BACKLOG: Integrate with Waffle.io, GitHub, Jira, Pivotal id:107
 - [ ] #BACKLOG: Add configuration for autoclose task with date on moving into list id:108
 - [ ] #BACKLOG: As a user I would like to hide a list without opening the menu id:109
-- [ ] #BACKLOG: AAUIWLT click a button on the board to open the package configuration id:110
+- [ ] #BACKLOG: AAUIWLT click a button on the board to open the package configuration id:110 +story gh:178
 
 Completed
 ----

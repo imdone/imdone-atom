@@ -2,7 +2,7 @@
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
   "version": "2.0.17",
-  "description": "A TODO comment task-board that does your issue tracking so you can stay in the zone.",
+  "description": "Finds TODO comments and puts them in a task board that integrates with GitHub issues",
   "keywords": [
     "todo",
     "fixme",
@@ -14,7 +14,7 @@
   ],
   "author": {
     "name": "Jesse Piascik",
-    "email": "jesse@piascik.net",
+    "email": "jesse@imdone.io",
     "url": "https://imdone.io"
   },
   "repository": "https://github.com/imdone/imdone-atom",

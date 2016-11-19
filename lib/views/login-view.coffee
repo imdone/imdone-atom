@@ -12,8 +12,8 @@ class LoginView extends View
   @content: (params) ->
     @div class: "login-container config-container", =>
       @div class: "text-center", =>
-        @h1 "Introducing #{config.name}!"
-        @h2 "Login or sign up to create and update GitHub issues from TODO comments in your code!"
+        @h1 "Create, update and close GitHub issues from TODO comments in your code with #{config.name}!"
+        @h2 "Login or sign up to get started"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
       # READY: login should be it's own view id:83
@@ -26,6 +26,7 @@ class LoginView extends View
           @button outlet: 'loginButton', click: 'login', title: 'WHOOSH!', class:'btn btn-primary inline-block-tight', 'LOGIN'
       @h2 "or"
       @a class: 'btn btn-lg btn-success icon icon-mark-github', href:"#{Client.githubAuthUrl}", "Sign up with GitHub"
+      # @iframe width: "974", height:"548", src:"https://www.youtube.com/embed/ECIfGmngetU", frameborder:"0", allowfullscreen: true
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance

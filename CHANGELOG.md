@@ -1,3 +1,9 @@
+##2.0.18
+- Update login view
+- Remove deprecated styles
+- Update package description
+- Fix issue with undefined project info
+
 ##2.0.17
 - Add haml extension and -# comment
 

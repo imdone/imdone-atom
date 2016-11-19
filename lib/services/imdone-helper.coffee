@@ -11,7 +11,7 @@ module.exports =
     # TODO: This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout id:25
     return repos[pathname] if repos and repos[pathname]
     imdoneRepo = @fsStore(new ImdoneRepo(pathname))
-    @excludeVcsIgnoresMixin(imdoneRepo)
+    @excludeVcsIgnoresMixin imdoneRepo
     repos[pathname] = require('./imdoneio-store') imdoneRepo
     repos[pathname]
 
@@ -26,14 +26,11 @@ module.exports =
     vcsRepo = @repoForPath repoPath
     return unless vcsRepo
     _shouldExclude = imdoneRepo.shouldExclude
-    shouldExclude = (relPath) ->
-      return true if vcsRepo.isPathIgnored(relPath)
+    imdoneRepo.shouldExclude = (relPath) ->
+      return _shouldExclude.call imdoneRepo, relPath unless configHelper.getSettings().excludeVcsIgnoredPaths
+      vcsIgnored = vcsRepo.isPathIgnored relPath
+      return true if vcsIgnored
       _shouldExclude.call imdoneRepo, relPath
-
-    imdoneRepo.shouldExclude = shouldExclude if configHelper.getSettings().excludeVcsIgnoredPaths
-    atom.config.observe "excludeVcsIgnoredPaths", (exclude) ->
-      imdoneRepo.shouldExclude = if exclude then shouldExclude else _shouldExclude
-      imdoneRepo.refresh() if imdoneRepo.initialized
 
   repoForPath: (repoPath) ->
     for projectPath, i in atom.project.getPaths()
