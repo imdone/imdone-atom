@@ -1,3 +1,6 @@
+##2.0.19
+- Fix password field issue introduced in last release
+
 ##2.0.18
 - Update login view
 - Remove deprecated styles
