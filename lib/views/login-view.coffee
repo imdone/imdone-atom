@@ -2,7 +2,7 @@
 {Emitter} = require 'atom'
 _ = require 'lodash'
 util = require 'util'
-debug = require 'debug/browser'
+debug = require 'debug'
 config = require '../../config'
 log = debug 'imdone-atom:share-tasks-view'
 Client = require '../services/imdoneio-client'
@@ -16,7 +16,7 @@ class LoginView extends View
         @h2 "Login or sign up to get started"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      # READY: login should be it's own view id:83
+      # READY: login should be it's own view id:85
       @div outlet:'loginPanel', class: 'imdone-login-pane', style: 'display:none;', =>
         @div class: 'input input-med inline-block-tight', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
@@ -69,7 +69,7 @@ class LoginView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO: We need to show an error here if service can't be reached or login fails id:84
+      # TODO: We need to show an error here if service can't be reached or login fails id:86
       log 'login:end'
       return @showLogin() unless @client.isAuthenticated()
       @onAuthenticated()

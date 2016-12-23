@@ -122,6 +122,8 @@ class BottomView extends View
 
     @emitter.on 'error.hide', => @error.hide()
 
+    # DOING: Close bottom-view if none of it's direct descendants are visible +bug gh:182 id:61
+
   isOpen: ->
     @hasClass 'open'
 
@@ -161,7 +163,7 @@ class BottomView extends View
     @plugins.show()
     @show()
 
-  # TODO: DRY these show... methods up id:61
+  # TODO: DRY these show... methods up id:62
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()

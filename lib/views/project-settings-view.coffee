@@ -2,7 +2,7 @@
 {Emitter} = require 'atom'
 _ = require 'lodash'
 util = require 'util'
-debug = require 'debug/browser'
+debug = require 'debug'
 config = require '../../config'
 log = debug 'imdone-atom:project-settings-view'
 Client = require '../services/imdoneio-client'
@@ -23,14 +23,14 @@ class ProjectSettingsView extends View
       @div outlet: 'settingsPanel', style:'display:none;', =>
         # @h1 "Project Settings"
 
-        # READY: Add config view here id:102
+        # READY: Add config view here id:104
         # @h1 "Configuration (.imdone/config.json)"
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
     @disabledProject.show() unless @imdoneRepo.isImdoneIOProject()
 
-  # DOING: Show sync status when a connected repo is initialized +feature gh:158 id:103
+  # DOING: Show sync status when a connected repo is initialized +feature gh:158 id:105
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
     @emitter.on 'sync.percent', (val) =>

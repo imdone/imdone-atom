@@ -74,7 +74,7 @@ module.exports =
   getEditor: (path) ->
     openIn = @getConfig().openIn
     for editor, pattern of openIn
-      if pattern
+      if pattern and typeof pattern is 'string'
         return editor if minimatch(path, pattern, {matchBase: true})
     "atom"
 

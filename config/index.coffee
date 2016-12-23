@@ -14,7 +14,6 @@ beta =
   pusherChannelPrefix: 'private-imdoneio-beta'
   baseUrl:    'https://beta.imdone.io'
 
-# DONE: Change these prior to release +chore gh:161 id:11
 prod =
   name: 'imdone.io'
   imdoneKeyA: 'X8aukodrNNHKGkMKGhtcU8lI4KvNdMxCkYUiKOjh3JjH1-zj0qIDPA=='
@@ -24,4 +23,3 @@ prod =
   pusherChannelPrefix: 'private-imdoneio'
 
 module.exports = prod;
-# DONE: Merge imdone-atom-beta with imdone-atom and publish +chore gh:162 id:12

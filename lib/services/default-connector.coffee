@@ -10,6 +10,10 @@ module.exports=
       labelBot: [
         withContext: ""
       ]
+      waffleIoMappingBot: [
+        imdoneListName: "DOING"
+        waffleListNameLabel: "in progress"
+      ]
       createIssue: [
         stripTODOText: true
         withTag: "story"

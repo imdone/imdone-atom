@@ -1,7 +1,7 @@
 _ = require 'lodash'
 async = require 'async'
 helper = require './imdone-helper'
-log = require('debug/browser') 'imdone-atom:connector-manager'
+log = require('debug') 'imdone-atom:connector-manager'
 Task = require 'imdone-core/lib/task'
 {Emitter} = require 'atom'
 
@@ -13,7 +13,7 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @handleEvents()
-    # READY: Check for updates to products/connectors and update @products with changes id:7
+    # READY: Check for updates to products/connectors and update @products with changes id:16
 
   handleEvents: ->
     # DONE: Listen for events on repo and update imdone.io with tasks, but on first run we'll have to queue them up for after auth id:17
