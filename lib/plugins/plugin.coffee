@@ -10,6 +10,8 @@ class ConnectorPlugin extends Emitter
   @icon: "mark-github"
 
   ready: false
+  pluginName: ConnectorPlugin.pluginName
+
   constructor: (@repo, @imdoneView, @connector) ->
     # We need some way to get the connector!
     super
@@ -68,3 +70,17 @@ class ConnectorPlugin extends Emitter
       @imdoneView.selectTask id
       @view.setTask task
       @view.show @view.getIssueIds(task)
+
+  projectButtons: () ->
+    {$, $$, $$$} = require 'atom-space-pen-views'
+    return unless @repo
+    connector = @connector
+    title = "#{@connector.config.waffleIoProject} waffles!"
+    pluginName = @constructor.pluginName
+    icon = @constructor.icon
+    $$ ->
+      @div class:"imdone-icon imdone-toolbar-button", =>
+        @a href: "https://waffle.io/#{connector.config.waffleIoProject}", title: title, class: "#{pluginName}-waffle", =>
+          @i class:'icon', =>
+            @tag 'svg', => @tag 'use', "xlink:href":"#waffle-logo-icon"
+          @span class:'tool-text', 'title'

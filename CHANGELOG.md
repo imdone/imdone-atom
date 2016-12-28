@@ -1,22 +1,25 @@
-##2.0.19
+## 2.0.20  
+- Fixed \#185 and \#187
+
+## 2.0.19
 - Fix password field issue introduced in last release
 
-##2.0.18
+## 2.0.18
 - Update login view
 - Remove deprecated styles
 - Update package description
 - Fix issue with undefined project info
 
-##2.0.17
+## 2.0.17
 - Add haml extension and -# comment
 
-##2.0.16
+## 2.0.16
 * Fix error on open files of visible tasks
 
-##2.0.15
+## 2.0.15
 * Add new preview image
 
-##2.0.14
+## 2.0.14
 * Add delay to chunked requests to kick the event loop
 
 ## 2.0.13

@@ -19,6 +19,8 @@ module.exports =  (repo) ->
   _moveTasks = repo.moveTasks.bind repo
   _emitFileUpdate = repo.emitFileUpdate.bind repo
 
+  plugins = []
+
   client.on 'authenticated', -> repo.emit 'authenticated'
   client.on 'unauthenticated', -> repo.emit 'unauthenticated'
   client.on 'authentication-failed', ({status, retries}) -> repo.emit 'authentication-failed', ({status, retries})
@@ -183,7 +185,7 @@ module.exports =  (repo) ->
     return saveSort(cb) if _.get repo, 'project.taskOrder'
     fs.exists SORT_FILE, (exists) ->
       return cb() if exists
-      # DOING: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:52
+      # TODO: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:52
       # Populate the config.sync.sort from existing sort
       setListSort list.name, tasksToIds(list.tasks) for list in _getTasksByList()
       saveSort cb
@@ -278,6 +280,15 @@ module.exports =  (repo) ->
       return cb(err) if err
       repo.emit 'connector.enabled', product.connector for product in products when product.isEnabled()
       cb()
+
+  repo.addPlugin = (plugin) ->
+    repo.removePlugin plugin
+    @plugins.push plugin
+
+  repo.removePlugin = (plugin) ->
+    @plugins = _.reject plugins, { pluginName: plugin.pluginName }
+
+  repo.getPlugins = () -> @plugins
 
   connectorManager.on 'tasks.syncing', () -> repo.emit 'tasks.syncing'
   connectorManager.on 'sync.error', () -> repo.emit 'sync.error'

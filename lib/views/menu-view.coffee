@@ -44,7 +44,9 @@ class MenuView extends View
               @i class: "icon icon-question toolbar-icon"
               @span class:'tool-text', 'Help'
           @div class: "menu-sep-space-2x"
-          @div class: "imdone-project-plugins"
+          @div outlet:'$projectButtons', class: "imdone-project-plugins", style: "disaply:none"
+          @div outlet:'$projectButtonsSpace', class: "imdone-project-plugins-spacer menu-sep-space-2x", style: "display:none;"
+
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
             @div click: "openShare", class: "imdone-toolbar-button", title: "Project TODOBOTs", =>
               @a href: "#", =>
@@ -56,7 +58,7 @@ class MenuView extends View
                 @i class:"icon icon-stop"
                 @span class:'tool-text', 'Disconnect from imdone.io'
 
-            @div outlet: '$logOff', click: "logOff", class: "imdone-toolbar-button", title: 'Log off', =>
+            @div outlet: '$logOff', click: "logOff", class: "imdone-toolbar-button", title: 'Log out', =>
               @a href: '#', =>
                 @i class:"icon icon-log-out"
                 @span class:'tool-text', 'Sign out'
@@ -88,7 +90,15 @@ class MenuView extends View
     @client.authFromStorage
     @$disconnect.show() if @imdoneRepo.isImdoneIOProject()
 
-  addPluginProjectButtons: (plugins) ->
+  addPluginProjectButtons: () ->
+    @$projectButtons.empty()
+    plugins = @imdoneRepo.getPlugins()
+    if plugins
+      @$projectButtons.show().append plugin.projectButtons() for plugin in plugins
+      @$projectButtonsSpace.show()
+    else
+      @$projectButtons.hide()
+      @$projectButtonsSpace.hide()
 
   showSpinner: () -> @spinner.show()
 

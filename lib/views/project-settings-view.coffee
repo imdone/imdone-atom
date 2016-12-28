@@ -30,7 +30,7 @@ class ProjectSettingsView extends View
     @client = Client.instance
     @disabledProject.show() unless @imdoneRepo.isImdoneIOProject()
 
-  # DOING: Show sync status when a connected repo is initialized +feature gh:158 id:105
+  # TODO: Show sync status when a connected repo is initialized +feature gh:158 id:105
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
     @emitter.on 'sync.percent', (val) =>

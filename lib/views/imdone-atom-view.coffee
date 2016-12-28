@@ -313,6 +313,7 @@ class ImdoneAtomView extends ScrollView
       else
         plugin = new Plugin @imdoneRepo, @viewInterface, connector
         @plugins[Plugin.pluginName] = plugin
+        @imdoneRepo.addPlugin plugin
         if plugin instanceof Emitter
           if plugin.isReady()
             @initPluginView plugin
@@ -327,6 +328,7 @@ class ImdoneAtomView extends ScrollView
   removePlugin: (Plugin) ->
     return unless Plugin
     plugin = @plugins[Plugin.pluginName]
+    @imdoneRepo.removePlugin plugin
     @bottomView.removePlugin plugin if plugin && plugin.getView
     delete @plugins[Plugin.pluginName]
     @addPluginButtons()

@@ -8,8 +8,15 @@ class ProductDetailView extends View
 
   updateConnectorForEdit: (product) ->
     _.set product, 'connector', {} unless product.connector
-    return unless product.name == 'github' && !_.get(product, 'connector.config.repoURL')
-    _.set product, 'connector.config.repoURL', @imdoneRepo.getGitOrigin() || ''
+    gitOriginUrl = @imdoneRepo.getGitOrigin()
+    if product.name == 'github' and gitOriginUrl
+      repoUrlKey = 'connector.config.repoURL'
+      useWaffleIo = _.get product, 'connector.config.useWaffleIo'
+      waffleIoProjectKey = 'connector.config.waffleIoProject'
+      _.set product, repoUrlKey, gitOriginUrl if !_.get(product, repoUrlKey)
+      waffleIoProject = gitOriginUrl.replace(/^http.*?\/\/.*?\/(.*?)\.git$/,"$1")
+      _.set product, waffleIoProjectKey, waffleIoProject if !_.get(product, waffleIoProjectKey)
+    # READY: Set the waffle project to the github user/repo +feature id:130 gh:194
 
   handleEvents: (@emitter)->
     return if @initialized || !@emitter
@@ -74,7 +81,6 @@ class ProductDetailView extends View
     @configEditor.destroy() if @configEditor
     if @product.isEnabled()
       @showConfig()
-      debugger
       @configEditor = new JSONEditor @$configEditor.get(0), options
       @configEditor.on 'change', => @handleChange()
       @$configEditor.find('input').first().focus()
@@ -99,7 +105,7 @@ class ProductDetailView extends View
     connector = _.cloneDeep @product.connector
     @imdoneRepo.saveConnector connector, (err, connector) =>
       # TODO: Handle errors by unauthenticating if needed and show login with error id:98
-      # DOING: Need a way to handle repos that don't allow issues (Forks, etc).  Maybe two settings. (gitub repo and github issues repo) +enhancement gh:142 id:99
+      # TODO: Need a way to handle repos that don't allow issues (Forks, etc).  Maybe two settings. (gitub repo and github issues repo) +enhancement gh:142 id:99
       return if err
       @product.connector = connector
-      @setProduct @product
+      # @setProduct @product
