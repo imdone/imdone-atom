@@ -82,5 +82,5 @@ class ConnectorPlugin extends Emitter
       @div class:"imdone-icon imdone-toolbar-button", =>
         @a href: "https://waffle.io/#{connector.config.waffleIoProject}", title: title, class: "#{pluginName}-waffle", =>
           @i class:'icon', =>
-            @tag 'svg', => @tag 'use', "xlink:href":"#waffle-logo-icon"
-          @span class:'tool-text', 'title'
+            @tag 'svg', class:'waffle-logo', => @tag 'use', "xlink:href":"#waffle-logo-icon"
+          @span class:'tool-text waffle-logo', "Open waffle.io board"
