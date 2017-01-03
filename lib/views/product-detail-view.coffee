@@ -16,7 +16,7 @@ class ProductDetailView extends View
       _.set product, repoUrlKey, gitOriginUrl if !_.get(product, repoUrlKey)
       waffleIoProject = gitOriginUrl.replace(/^http.*?\/\/.*?\/(.*?)\.git$/,"$1")
       _.set product, waffleIoProjectKey, waffleIoProject if !_.get(product, waffleIoProjectKey)
-    # READY: Set the waffle project to the github user/repo +feature id:130 gh:194
+    # READY: Set the waffle project to the github user/repo +feature gh:194
 
   handleEvents: (@emitter)->
     return if @initialized || !@emitter
@@ -40,7 +40,7 @@ class ProductDetailView extends View
 
     @emitter.on 'product.unlinked', (product) =>
       return unless product
-      # READY: Connector plugin should be removed id:94
+      # READY: Connector plugin should be removed
       @updateConnectorForEdit product
       @setProduct product
 
@@ -67,8 +67,8 @@ class ProductDetailView extends View
 
   createEditor: ->
     options =
-      schema: @product.schemas.config # TODO: Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow id:95
-      startval: @product.connector.config # TODO: Rule values to be set by GET /projects/ :projectId/products +rules id:96
+      schema: @product.schemas.config # TODO: Rule schemas to be set by GET /projects/ :projectId/products +rules-workflow
+      startval: @product.connector.config # TODO: Rule values to be set by GET /projects/ :projectId/products +rules
       theme: 'bootstrap3'
       required_by_default: false
       disable_edit_json: true
@@ -77,7 +77,7 @@ class ProductDetailView extends View
       disable_array_delete_last_row: true
       disable_array_delete_all_rows: true
 
-    # TODO: Add provider configurations before creating editor id:97
+    # TODO: Add provider configurations before creating editor
     @configEditor.destroy() if @configEditor
     if @product.isEnabled()
       @showConfig()
@@ -104,8 +104,8 @@ class ProductDetailView extends View
     _.set @product, 'connector.name', @product.name unless _.get @product, "connector.name"
     connector = _.cloneDeep @product.connector
     @imdoneRepo.saveConnector connector, (err, connector) =>
-      # TODO: Handle errors by unauthenticating if needed and show login with error id:98
-      # TODO: Need a way to handle repos that don't allow issues (Forks, etc).  Maybe two settings. (gitub repo and github issues repo) +enhancement gh:142 id:99
+      # TODO: Handle errors by unauthenticating if needed and show login with error
+      # TODO: Need a way to handle repos that don't allow issues (Forks, etc).  Maybe two settings. (gitub repo and github issues repo) +enhancement gh:142
       return if err
       @product.connector = connector
       # @setProduct @product

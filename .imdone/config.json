@@ -18,29 +18,7 @@
       "IDEA",
       "NOTE",
       "REVIEW",
-      "INBOX",
-      "379",
-      "21",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "8152",
-      "4825",
-      "7531",
-      "5866",
-      "9682",
-      "5280",
-      "1450"
+      "INBOX"
     ]
   },
   "lists": [
@@ -91,10 +69,5 @@
       "titleTemplate": "View github issue %s",
       "icon": "icon-octoface"
     }
-  },
-  "sync": {
-    "id": "585941c05088a35d21f1eba2",
-    "name": "imdone-atom",
-    "useImdoneioForPriority": true
   }
 }

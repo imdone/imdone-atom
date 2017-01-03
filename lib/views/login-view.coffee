@@ -16,7 +16,7 @@ class LoginView extends View
         @h2 "Login or sign up to get started"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      # READY: login should be it's own view id:85
+      # READY: login should be it's own view
       @div outlet:'loginPanel', class: 'imdone-login-pane', style: 'display:none;', =>
         @div class: 'input input-med inline-block-tight', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
@@ -45,7 +45,9 @@ class LoginView extends View
     @loginPanel.hide()
     @spinner.hide()
 
-  onUnauthenticated: () -> @showLogin()
+  onUnauthenticated: (event) ->
+    # DOING: Show login error if present and hide progress
+    @showLogin()
 
   initPasswordField: () ->
     # [Password fields when using EditorView subview - packages - Atom Discussion](https://discuss.atom.io/t/password-fields-when-using-editorview-subview/11061/7)
@@ -69,7 +71,7 @@ class LoginView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO: We need to show an error here if service can't be reached or login fails id:86
+      # TODO: We need to show an error here if service can't be reached or login fails
       log 'login:end'
       return @showLogin() unless @client.isAuthenticated()
       @onAuthenticated()
@@ -103,4 +105,4 @@ class LoginView extends View
       false
 
     @emitter.on 'authenticated', => @onAuthenticated()
-    @emitter.on 'unauthenticated', => @onUnauthenticated()
+    @emitter.on 'unauthenticated', => @onUnauthenticated(event)
