@@ -33,7 +33,7 @@ class ProductSelectionView extends View
             @input class:'input-toggle', 'data-name':product.name, type:'checkbox' unless product.isEnabled()
             @text " ON"
 
-  # DONE: Add stop using imdone.io with icon-stop
+  # DONE: Add stop using imdone.io with icon-stop id:101
   handleEvents: (@emitter) ->
     return if @initialized || !@emitter
     @initialized = true
@@ -59,7 +59,7 @@ class ProductSelectionView extends View
       if e.target.checked
         if connector.id
           @imdoneRepo.enableConnector connector, (err, updatedConnector) =>
-            # TODO: Handle errors
+            # TODO: Handle errors id:102
             return if err
             @selected.connector = updatedConnector
             @emitter.emit 'connector.changed', @selected
@@ -68,7 +68,7 @@ class ProductSelectionView extends View
           @saveConnector connector
       else
         @imdoneRepo.disableConnector connector, (err, updatedConnector) =>
-          # TODO: Handle errors
+          # TODO: Handle errors id:103
           return unless updatedConnector
           @selected.connector = updatedConnector
           @emitter.emit 'connector.changed', @selected
@@ -83,7 +83,7 @@ class ProductSelectionView extends View
   saveConnector: (connector, cb) ->
     cb ?= ()->
     @imdoneRepo.saveConnector connector, (err, connector) =>
-      # TODO: Handle errors by unauthenticating if needed and show login with error
+      # TODO: Handle errors by unauthenticating if needed and show login with error id:104
       cb err if err
       @selected.connector = connector
       @emitter.emit 'connector.changed', @selected

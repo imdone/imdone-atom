@@ -36,7 +36,7 @@
     },
     {
       "name": "TODO",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DOING",
@@ -52,7 +52,7 @@
     },
     {
       "name": "DONE",
-      "hidden": true
+      "hidden": false
     }
   ],
   "marked": {
@@ -69,5 +69,10 @@
       "titleTemplate": "View github issue %s",
       "icon": "icon-octoface"
     }
+  },
+  "sync": {
+    "id": "586bcdf521a4015bf98226ca",
+    "name": "imdone-atom",
+    "useImdoneioForPriority": true
   }
 }
