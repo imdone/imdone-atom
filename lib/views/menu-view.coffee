@@ -30,6 +30,10 @@ class MenuView extends View
           # @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           #   @a href: "#", class: "icon #{menuClosedClass}"
           # @div class: "menu-sep-space-2x"
+          @div click: "openReadme", class: "readme-open imdone-toolbar-button", title: "Gimme some README", =>
+            @a href: "#", =>
+              @i class: "icon icon-book toolbar-icon"
+              @span class:'tool-text', 'Open the README.md'
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", =>
               @i class: "icon icon-plus toolbar-icon"
@@ -48,10 +52,10 @@ class MenuView extends View
           @div outlet:'$projectButtonsSpace', class: "imdone-project-plugins-spacer menu-sep-space-2x", style: "display:none;"
 
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
-            @div click: "openShare", class: "imdone-toolbar-button", title: "Project TODOBOTs", =>
+            @div click: "openShare", class: "imdone-toolbar-button", title: "Configure issue tracking", =>
               @a href: "#", =>
                 @i class: "icon icon-settings toolbar-icon"
-                @span class:'tool-text', 'Project TODOBOTs'
+                @span class:'tool-text', 'Configure issue tracking'
 
             @div outlet:'$disconnect', click: 'disconnectImdoneio', class: 'imdone-toolbar-button', style: 'display: none;', title: 'Disconnect from imdone.io', =>
               @a href: '#', =>
@@ -63,7 +67,7 @@ class MenuView extends View
                 @i class:"icon icon-log-out"
                 @span class:'tool-text', 'Sign out'
 
-            @div outlet: '$account', class: "imdone-profile imdone-toolbar-button", titel: "Account", =>
+            @div outlet: '$account', class: "imdone-profile imdone-toolbar-button", title: "Account", =>
               @a href: "#{config.baseUrl}/account", =>
                 @i class:"profile-image icon", outlet:'$profileImage'
                 @span class:'tool-text', 'Account'
@@ -131,12 +135,12 @@ class MenuView extends View
   newList: ->
     @emitter.emit 'list.new'
 
-  # NOTE: @defunkt This issue was created in @atom with @imdone.  Stay in the flow~~~~~~~ +discuss gh:171 id:93
-  openVisible: ->
-    @emitter.emit 'visible.open'
+  # NOTE: This issue was created in @atom with @imdone.  Stay in the flow~~~~~~~ +discuss gh:171 id:93
+  openVisible: -> @emitter.emit 'visible.open'
 
-  emitRepoChange: ->
-    @emitter.emit 'repo.change'
+  openReadme: -> @emitter.emit 'readme.open'
+
+  emitRepoChange: -> @emitter.emit 'repo.change'
 
   handleEvents: (@emitter) ->
     if @initialized || !@emitter then return else @initialized = true
@@ -169,7 +173,7 @@ class MenuView extends View
     #console.log 'authenticated:', @client.user
     user = @client.user
     crlf = "&#x0a;"
-    title = "Account: #{user.profile.name || user.handle} &#x0a(#{user.email})"
+    title = "Account: #{user.profile.name || user.handle} (#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
     @$login.hide()
     @$profileImage.html($$ -> @img class:'img-circle share-btn', src: src)

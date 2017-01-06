@@ -1,6 +1,6 @@
-The TODO comment task board
+The developer's task board
 ----
-**Turn your TODO comments into a task-board and let [imdone.io](https://imdone.io) do your issue tracking so you can stay in the zone.**  
+**Turn your TODO comments into a task board and let [imdone.io](https://imdone.io) do your issue tracking so you can stay in the zone.**  
 Just use `alt+t` while editing a file to see your projects board.
 
 ![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
@@ -8,24 +8,23 @@ Just use `alt+t` while editing a file to see your projects board.
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
-You live in the code, your tasks should too!
-----
-Developers are creative people and the text editor is their canvas.  For decades they've used TODO style code comments to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that integrates with any web based issue tracking system.
-
-imdone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
-
 Whats new!
 ----
-- Stay in the zone!  Track Github issues with TODO comments in your code.  Sign up at [imdone.io](https://imdone.io)!
-- Zoom your board.  See the commands bellow.
+- Move [waffle.io](https://waffle.io) cards from your code using [imdone.io](https://imdone.io)'s' github connector and the waffle.io todobot
+- Open project readme from the board
+- Track Github issues with TODO comments in your code.  Sign up at [imdone.io](https://imdone.io)!
+
+You live in the code, your tasks should too!
+----
+For decades developers have used TODO style code comments to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that aims to integrate with any web based issue tracking system.
+
+imdone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
 And more!
 ----
 - :notebook_with_decorative_cover: **Todays's Journal** - Open today's journal file as configured in settings.  Great for people who like to keep plain text notes.
 - :zap: **Open all files for visible tasks!**
 - **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
-- **[How To Write Plugins](https://github.com/imdone/imdone-atom/wiki/How-To-Write-Plugins) for imdone-atom**
-- **Link your TODO comments to github issues.  Try the [imdone-atom-github](https://atom.io/packages/imdone-atom-github) plugin!**
 
 Install
 ----

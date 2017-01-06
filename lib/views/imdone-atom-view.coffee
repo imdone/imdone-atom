@@ -204,6 +204,14 @@ class ImdoneAtomView extends ScrollView
           #console.log fpath, line
           @openPath fpath, line
 
+    @emitter.on 'readme.open', =>
+      file = _.get @imdoneRepo.getDefaultFile(), 'path'
+      unless file
+        atom.notifications.addInfo @imdoneRepo.getProjectName(), detail: "Sorry no reeadme :(", dismissable: true, icon: 'info'
+        return
+      else
+        @openPath @imdoneRepo.getFullPath(file)
+
     @emitter.on 'repo.change', => @showMask()
 
     @emitter.on 'config.close', =>

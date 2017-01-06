@@ -1,3 +1,11 @@
+## 2.1.1
+- Show the readme file from the board
+- Changed Open TODOBOT's to "Configure issue tracking"
+- Fixed for \#195
+
+## 2.1.0
+- Move [waffle.io](https://waffle.io) cards from your code
+
 ## 2.0.20  
 - Fixed \#185 and \#187
 
