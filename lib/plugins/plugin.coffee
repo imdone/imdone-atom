@@ -1,6 +1,7 @@
 {Emitter} = require 'atom'
 gitup = require 'git-up'
 _ = require 'lodash'
+shell = require 'shell'
 module.exports =
 class ConnectorPlugin extends Emitter
   @PluginView: require('./plugin-view')
@@ -75,12 +76,17 @@ class ConnectorPlugin extends Emitter
     {$, $$, $$$} = require 'atom-space-pen-views'
     return unless @repo
     connector = @connector
+    waffleURL = @getWaffleURL()
     title = "#{@connector.config.waffleIoProject} waffles!"
     pluginName = @constructor.pluginName
     icon = @constructor.icon
-    $$ ->
+    $btn = $$ ->
       @div class:"imdone-icon imdone-toolbar-button", =>
-        @a href: "https://waffle.io/#{connector.config.waffleIoProject}", title: title, class: "#{pluginName}-waffle", =>
+        @a href: "#{}", title: title, class: "#{pluginName}-waffle", =>
           @i class:'icon', =>
             @tag 'svg', class:'waffle-logo', => @tag 'use', "xlink:href":"#waffle-logo-icon"
           @span class:'tool-text waffle-logo', "Open waffle.io board"
+    $btn.on 'click', (e) =>
+      shell.openExternal @getWaffleURL()
+
+  getWaffleURL: -> "https://waffle.io/#{@connector.config.waffleIoProject}"
