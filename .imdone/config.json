@@ -18,7 +18,8 @@
       "IDEA",
       "NOTE",
       "REVIEW",
-      "INBOX"
+      "INBOX",
+      "DOING1"
     ]
   },
   "lists": [
@@ -36,7 +37,7 @@
     },
     {
       "name": "TODO",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DOING",
@@ -52,6 +53,10 @@
     },
     {
       "name": "DONE",
+      "hidden": false
+    },
+    {
+      "name": "DOING1",
       "hidden": false
     }
   ],

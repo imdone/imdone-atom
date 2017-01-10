@@ -67,7 +67,7 @@ module.exports =  (repo) ->
         # repo.disableProject()
         return repo.emit 'project.not-found' unless project # DOING: Handle the case where there is no project found id:41
         # Check account for plan type
-      return if err
+      return throw err if err
       repo.project = project
       repo.setProjectName project.name
       return unless repo.isImdoneIOProject()
@@ -80,7 +80,9 @@ module.exports =  (repo) ->
   checkForIIOProject() if client.isAuthenticated()
   client.on 'authenticated', => checkForIIOProject()
 
-  syncDone = (err) -> repo.emit 'tasks.updated' unless err
+  syncDone = (err) ->
+    repo.emit 'tasks.updated' unless err
+    throw err if err
 
   repo.syncTasks = syncTasks = (tasks, cb) ->
     return cb("unauthenticated", ()->) unless client.isAuthenticated()

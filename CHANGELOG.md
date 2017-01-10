@@ -1,3 +1,6 @@
+## 2.1.2
+- Fix error handling for create project
+
 ## 2.1.1
 - Show the readme file from the board
 - Changed Open TODOBOT's to "Configure issue tracking"

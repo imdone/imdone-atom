@@ -19,7 +19,6 @@ class BottomView extends View
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
         # DONE: Set up a global messaging area. +enhancement gh:159 id:56
-        @div outlet: 'error', class:'alert alert-error highlight-error text-center'
       @div class:'bottom-view-main zoomable', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
         #   @subview 'projectSettingsView', new ProjectSettingsView params
@@ -118,9 +117,7 @@ class BottomView extends View
 
     @emitter.on 'menu.toggle', => @toggleClass 'shift'
 
-    @emitter.on 'error', ($html) => @error.html($html).show()
-
-    @emitter.on 'error.hide', => @error.hide()
+    @emitter.on 'error', (mdMsg) => atom.notifications.addWarning "OOPS!", description: mdMsg, dismissable: true, icon: 'alert'
 
     # DOING: Close bottom-view if none of it's direct descendants are visible +bug gh:182 id:60
 
@@ -129,7 +126,6 @@ class BottomView extends View
 
   show: ->
     unless @isOpen()
-      @error.hide()
       @emitter.emit 'config.open'
       @addClass 'open'
       # @removeClass 'hidden'
@@ -137,7 +133,6 @@ class BottomView extends View
   hide: ->
     @find('.config-panel').hide()
     if @isOpen()
-      @error.empty()
       @removeClass 'open'
       # @addClass 'hidden'
       @css 'height', ''
@@ -225,5 +220,5 @@ class BottomView extends View
 
   listOk: (name) ->
     return true if /^[\w\-]+$/.test(name)
-    @error.html('List name can only contain letters, numbers , dashes and underscores')
+    @emitter.emit 'error', 'List name can only contain letters, numbers , dashes and underscores'
     false

@@ -66,20 +66,19 @@ class ProjectSettingsView extends View
     #console.log "Creating new project"
     @client.createProject @imdoneRepo, (err, project) =>
       if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
-        @emitter.emit 'error', @$tooManyProjectsMsg()
+        @emitter.emit 'error', @tooManyProjectsMsg()
         @enableProjectBtn.show()
         @disabledProject.show()
-      @updatePercent 0
-      return if err
+      else
+        throw err if err
       return unless project
+      @updatePercent 0
       @imdoneRepo.checkForIIOProject()
 
-  $tooManyProjectsMsg: ->
-    projectUrl = Client.projectsUrl
-    $$ ->
-      @p =>
-        @span "You'll have to "
-        @a href:"#{Client.plansUrl}", "upgrade"
-        @span " or "
-        @a href:"#{Client.projectsUrl}", "disable/remove projects"
-        @span " before adding another."
+  tooManyProjectsMsg: ->
+    """
+    Too many projects
+    ----
+    You'll have to [upgrade](#{Client.plansUrl}) or [disable/remove projects](#{Client.projectsUrl}) before adding
+    another project.
+    """
