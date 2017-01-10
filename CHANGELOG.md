@@ -1,4 +1,7 @@
-## 2.1.2
+## 2.1.4
+- Handle NO_CONTENT error
+
+## 2.1.3
 - Fix error handling for create project
 
 ## 2.1.1

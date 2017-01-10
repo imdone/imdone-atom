@@ -1,4 +1,7 @@
+
 module.exports =  (repo) ->
+  CONFIG_DIR = require('imdone-core/lib/constants').CONFIG_DIR
+  ERRORS = require('imdone-core/lib/constants').ERRORS
   ConnectorManager = require './connector-manager'
   connectorManager = cm = new ConnectorManager repo
   imdoneioClient = client = require('./imdoneio-client').instance
@@ -8,7 +11,6 @@ module.exports =  (repo) ->
   _ = require 'lodash'
   async = require 'async'
   path = require 'path'
-  CONFIG_DIR = require('imdone-core/lib/constants').CONFIG_DIR
   SORT_FILE = repo.getFullPath path.join(CONFIG_DIR, 'sort.json')
 
   _getTasksInList = repo.getTasksInList.bind repo
@@ -82,6 +84,7 @@ module.exports =  (repo) ->
 
   syncDone = (err) ->
     repo.emit 'tasks.updated' unless err
+    return if err == ERRORS.NO_CONTENT
     throw err if err
 
   repo.syncTasks = syncTasks = (tasks, cb) ->
