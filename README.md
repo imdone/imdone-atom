@@ -8,23 +8,32 @@ Just use `alt+t` while editing a file to see your projects board.
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
-Whats new!
-----
-- Move [waffle.io](https://waffle.io) cards from your code using [imdone.io](https://imdone.io)'s' github connector and the waffle.io todobot
-- Open project readme from the board
-- Track Github issues with TODO comments in your code.  Sign up at [imdone.io](https://imdone.io)!
-
 You live in the code, your tasks should too!
 ----
-For decades developers have used TODO style code comments to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that aims to integrate with any web based issue tracking system.
+For decades developers have used TODO style code comments to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that can integrate with [GitHub](https://github.com), [waffle.io](https://waffle.io) and soon [Jira](https://www.atlassian.com/software/jira) using [imdone.io](https://imdone.io).
 
 imdone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
-And more!
+Features
 ----
-- :notebook_with_decorative_cover: **Todays's Journal** - Open today's journal file as configured in settings.  Great for people who like to keep plain text notes.
-- :zap: **Open all files for visible tasks!**
+### Filtering your board
+### Using tags in your TODO comments
+### Using contexts and @name syntax
+### metadata
+### Integrate with issue tracking
+### Adding and removing tokens
+### Code journal
+### Using markdown
+### Open files in [intellij and webstorm](https://www.jetbrains.com/products.html)
 - **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
+
+
+Whats new!
+----
+- Move [waffle.io](https://waffle.io) cards from your code using [imdone.io](https://imdone.io)'s' [github] and [waffle.io](https://waffle.io) integration.
+- Open your project readme from the board
+- Track Github issues with TODO comments in your code.  Sign up at [imdone.io](https://imdone.io)!
+
 
 Install
 ----
@@ -72,27 +81,3 @@ To ignore all but some subdirectories, see this Stack Overflow question. [git - 
 imdone will also ignore files and folders that match a regex in the `.imdone/config.json`, `exclude` array.  The array is seeded with some common excludes on first run.
 
 **IMPORTANT:** If your project is large (#files > 1000) consider adding an .imdoneignore file.
-
-How To Link Code And Github Issues
-----
-Using [todo.txt metadata](https://github.com/imdone/imdone-core#metadata) in your tasks and a minor change to `.imdone/config.json`, you can link to external resources like github issues and profiles.  
-
-- Add a `meta` attribute to `.imdone/config.json`  
-```javascript
-"meta": {
-  "issue": {
-    "urlTemplate": "https://github.com/imdone/imdone-core/issues/%s",
-    "titleTemplate": "github issue #%s"
-  }
-}
-```
-
-- Use `issue:[gh issue id]` as metadata in your tasks.  
-<pre>
-// &#35;BACKLOG:0 issue:27 Export TODOs
-</pre>
-
-- Your issue is linked to the comment!  
-![gh-issue-imdone](https://cloud.githubusercontent.com/assets/233505/9595122/72542350-502a-11e5-87b3-a4eb49428b7c.png)
-
-Look at [imdone/imdone-core#metadata](https://github.com/imdone/imdone-core#metadata) for more info.

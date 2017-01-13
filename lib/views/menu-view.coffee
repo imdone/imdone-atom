@@ -52,10 +52,10 @@ class MenuView extends View
           @div outlet:'$projectButtonsSpace', class: "imdone-project-plugins-spacer menu-sep-space-2x", style: "display:none;"
 
           @div outlet: "$imdoneioButtons", style: "display:none;", =>
-            @div click: "openShare", class: "imdone-toolbar-button", title: "Configure issue tracking", =>
+            @div click: "openShare", class: "imdone-toolbar-button", title: "Configure integrations", =>
               @a href: "#", =>
                 @i class: "icon icon-settings toolbar-icon"
-                @span class:'tool-text', 'Configure issue tracking'
+                @span class:'tool-text', 'Configure integrations'
 
             @div outlet:'$disconnect', click: 'disconnectImdoneio', class: 'imdone-toolbar-button', style: 'display: none;', title: 'Disconnect from imdone.io', =>
               @a href: '#', =>

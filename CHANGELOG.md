@@ -1,3 +1,6 @@
+## 2.1.5
+- Fix error when no readme
+
 ## 2.1.4
 - Handle NO_CONTENT error
 

@@ -176,7 +176,7 @@ class ImdoneAtomView extends ScrollView
       #console.log 'config.update'
       repo.refresh()
 
-    @emitter.on 'error', (err) => #console.log('error:', err)
+    @emitter.on 'error', (mdMsg) => atom.notifications.addWarning "OOPS!", description: mdMsg, dismissable: true, icon: 'alert'
 
     @emitter.on 'task.modified', (task) =>
       #console.log "Task modified.  Syncing with imdone.io"
@@ -207,7 +207,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'readme.open', =>
       file = _.get @imdoneRepo.getDefaultFile(), 'path'
       unless file
-        atom.notifications.addInfo @imdoneRepo.getProjectName(), detail: "Sorry no reeadme :(", dismissable: true, icon: 'info'
+        @emitter.emit 'error', 'Sorry no reeadme :('
         return
       else
         @openPath @imdoneRepo.getFullPath(file)

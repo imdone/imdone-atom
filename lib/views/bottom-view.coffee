@@ -117,8 +117,6 @@ class BottomView extends View
 
     @emitter.on 'menu.toggle', => @toggleClass 'shift'
 
-    @emitter.on 'error', (mdMsg) => atom.notifications.addWarning "OOPS!", description: mdMsg, dismissable: true, icon: 'alert'
-
     # DOING: Close bottom-view if none of it's direct descendants are visible +bug gh:182 id:60
 
   isOpen: ->

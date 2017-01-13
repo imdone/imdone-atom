@@ -291,6 +291,7 @@ module.exports =  (repo) ->
     @plugins.push plugin
 
   repo.removePlugin = (plugin) ->
+    return unless plugin
     @plugins = _.reject plugins, { pluginName: plugin.pluginName }
 
   repo.getPlugins = () -> @plugins
