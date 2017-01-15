@@ -46,7 +46,7 @@ class LoginView extends View
     @spinner.hide()
 
   onUnauthenticated: (event) ->
-    # DOING: Show login error if present and hide progress id:85
+    # TODO: Show login error if present and hide progress id:85
     @showLogin()
 
   initPasswordField: () ->

@@ -1,3 +1,4 @@
+{$} = require 'atom-space-pen-views'
 
 module.exports =  (repo) ->
   CONFIG_DIR = require('imdone-core/lib/constants').CONFIG_DIR
@@ -67,7 +68,7 @@ module.exports =  (repo) ->
       # TODO: Do something with this error id:40
       unless project
         # repo.disableProject()
-        return repo.emit 'project.not-found' unless project # DOING: Handle the case where there is no project found id:41
+        return repo.emit 'project.not-found' unless project # TODO: Handle the case where there is no project found id:41
         # Check account for plan type
       return throw err if err
       repo.project = project
@@ -295,6 +296,22 @@ module.exports =  (repo) ->
     @plugins = _.reject plugins, { pluginName: plugin.pluginName }
 
   repo.getPlugins = () -> @plugins
+
+  # DOING: Implement list parm id:127
+  # DOING: Use this in imdone-atom-view and menu-view id:126
+  # TODO: In new vue.js version we'll have to gain access to the $board id:128
+  repo.visibleTasks = (list) ->
+    debugger
+    visibleTasks = []
+    addTask = (id) =>
+      visibleTasks.push repo.getTask(id)
+    return visibleTasks unless repo.$board
+    repo.$board.find('.task').each ->
+      return unless !list || $(this).closest('.tasks').data('list') == list
+      return if $(this).is ':hidden'
+      addTask $(this).attr('id')
+
+    visibleTasks
 
   connectorManager.on 'tasks.syncing', () -> repo.emit 'tasks.syncing'
   connectorManager.on 'sync.error', () -> repo.emit 'sync.error'

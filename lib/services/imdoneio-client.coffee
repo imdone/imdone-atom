@@ -292,7 +292,7 @@ class ImdoneioClient extends Emitter
   syncTasks: (repo, tasks, cb) ->
     gitRepo = helper.repoForPath repo.getPath()
     projectId = @getProjectId repo
-    chunks = _.chunk tasks, 10
+    chunks = _.chunk tasks, 20
     modifiedTasks = []
     total = 0
     log "Sending #{tasks.length} tasks to imdone.io"

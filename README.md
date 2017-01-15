@@ -17,6 +17,7 @@ imdone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 Features
 ----
 ### Filtering your board
+imdone uses regular expression matching to filter your cards on your board.
 ### Using tags in your TODO comments
 ### Using contexts and @name syntax
 ### metadata

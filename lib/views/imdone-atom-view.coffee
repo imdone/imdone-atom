@@ -352,8 +352,7 @@ class ImdoneAtomView extends ScrollView
     @menuView.addClass 'open'
     @boardWrapper.addClass 'shift'
 
-  getFilter: ->
-    @menuView.getFilter()
+  getFilter: -> @menuView.getFilter()
 
   filter: (text) ->
     text = @getFilter() unless text
@@ -362,20 +361,18 @@ class ImdoneAtomView extends ScrollView
       @board.find('.task').show()
     else
       @board.find('.task').hide()
-      @board.find(util.format('.task:regex(data-path,%s)', text)).each ->
-        id = $(this).show().attr('id')
-      @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each ->
-        id = $(this).closest('.task').show().attr('id')
+      @filterByPath text
+      @filterByContent text
+    @emitter.emit 'board.update'
 
-  visibleTasks: ->
-    visibleTasks = []
-    addTask = (id) =>
-      visibleTasks.push @imdoneRepo.getTask(id)
-    @board.find('.task').each ->
-      return if $(this).is ':hidden'
-      addTask $(this).attr('id')
+  filterByPath: (text) -> @board.find(util.format('.task:attrContainsRegex(data-path,%s)', text)).each -> $(this).show().attr('id')
 
-    visibleTasks
+  filterByContent: (text) -> @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each -> $(this).closest('.task').show().attr('id')
+
+  # DOING: replace this with @repo version when ready id:125
+  visibleTasks: (listName) ->
+    return [] unless @imdoneRepo
+    @imdoneRepo.visibleTasks listName
 
   initImdone: () ->
     if @imdoneRepo.initialized
@@ -425,6 +422,7 @@ class ImdoneAtomView extends ScrollView
     @destroySortables()
     @board.empty().hide()
     repo = @imdoneRepo
+    repo.$board = @board
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
