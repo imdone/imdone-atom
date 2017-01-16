@@ -48,7 +48,6 @@
     bottom: 0;
     left: 0;
     right: 40px;
-    display: none;
     z-index: 99;
     .spinner {
       text-align: center;
@@ -69,7 +68,7 @@
   .imdone-loading {
     position: absolute;
     top: 0;
-    margin: 100px;
+    margin: 0 1em;
     z-index: 1001;
     p, ul {
       font-size: 16px;
@@ -222,9 +221,6 @@
   .imdone-ghost {
     background-color: @background-color-highlight !important;
   }
-  .imdone-loading {
-    margin: 1em;
-  }
   color: @text-color;
   position: absolute;
   top: 0;
@@ -264,7 +260,6 @@
       bottom: 2px;
       position: absolute;
       transition: left  0.2s;
-      height: 264px;
       &.open {
         left: -4px;
         width: @menu-width;

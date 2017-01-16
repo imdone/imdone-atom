@@ -84,9 +84,6 @@ class MenuView extends View
 
           # BACKLOG: Add the plugin project buttons id:92
 
-          @div outlet: "spinner", class: "spinner imdone-toolbar-button", style:'display:none;', =>
-            @span class: 'loading loading-spinner-tiny inline-block'
-
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'
     util = require 'util'
@@ -107,10 +104,6 @@ class MenuView extends View
     else
       @$projectButtons.hide()
       @$projectButtonsSpace.hide()
-
-  showSpinner: () -> @spinner.show()
-
-  hideSpinner: () -> @spinner.hide()
 
   toggleMenu: (event, element) ->
     @toggleClass 'open'

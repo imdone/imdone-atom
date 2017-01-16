@@ -54,11 +54,13 @@ class ImdoneAtomView extends ScrollView
 
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
-      @messages.append($("<li>Found #{files.length} files in #{@getTitle()}</li>"))
+      @messages.append "<p>Found #{files.length} files in #{@getTitle()}</p>"
       # #DONE: If over 2000 files, ask user to add excludes in `.imdoneignore` +feature gh:164 id:64
       if @numFiles > config.getSettings().maxFilesPrompt
         @ignorePrompt.show()
-      else @initImdone()
+      else
+        @messages.append "<p>Looking for TODO's with the following tokens:</p> <p>#{@imdoneRepo.config.code.include_lists.join('<br/>')}</p>"
+        @initImdone()
 
   serialize: ->
     deserializer: 'ImdoneAtomView'
@@ -79,9 +81,9 @@ class ImdoneAtomView extends ScrollView
     @div tabindex: -1, class: 'imdone-atom pane-item', =>
       @div outlet: '$svg'
       @div outlet: 'loading', class: 'imdone-loading', =>
-        @h1 "Loading #{path.basename(params.path)} Tasks."
+        @h1 "Scanning files in #{path.basename(params.path)}."
         @p "Get ready for awesome!!!"
-        @ul outlet: 'messages', class: 'imdone-messages'
+        @div outlet: 'messages', class: 'imdone-messages'
         # #DONE: Update progress bar on repo load id:65
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
           @h2 class:'text-warning', "Help!  Don't make me crash!"
@@ -89,14 +91,16 @@ class ImdoneAtomView extends ScrollView
           @div class: 'block', =>
             @button click: 'openIgnore', class:'inline-block-tight btn btn-primary', "Edit .imdoneignore"
             @button click: 'initImdone', class:'inline-block-tight btn btn-warning', "Who cares, keep going"
-        @div outlet: 'progressContainer', style: 'display: none;', =>
+        @div outlet: 'progressContainer', style: 'display:none;', =>
           @progress class:'inline-block', outlet: 'progress', max:100, value:1
       @div outlet: 'error', class: 'imdone-error'
       @div outlet: 'mask', class: 'mask', =>
         @div class: 'spinner-mask'
-        @div class: 'spinner-container' #, =>
-          # @div class: 'spinner', =>
-          #   @span class:'loading loading-spinner-large inline-block'
+        @div class: 'spinner-container', =>
+          @div class: 'spinner', =>
+            @p outlet: 'spinnerMessage'
+            @p =>
+              @span class:'loading loading-spinner-small inline-block'
       @div outlet:'mainContainer', class:'imdone-main-container', =>
         @div outlet: 'appContainer', class:'imdone-app-container', =>
           @subview 'menuView', new MenuView(params)
@@ -110,8 +114,7 @@ class ImdoneAtomView extends ScrollView
 
   getIconName: -> "checklist"
 
-  getURI: ->
-    @uri
+  getURI: -> @uri
 
   addRepoListeners: ->
     return if @listenersInitialized
@@ -122,7 +125,7 @@ class ImdoneAtomView extends ScrollView
       (data) -> emitter.emit event, data
     events = ['list.modified', 'project.not-found', 'project.removed', 'project.found', 'product.linked',
       'product.unlinked', 'tasks.updated', 'tasks.syncing', 'sync.error', 'initialized', 'file.update', 'tasks.moved',
-      'config.update', 'error', 'file.read', 'sync.percent', 'connector.enabled', 'authenticated', 'unauthenticated',
+      'config.update', 'config.loaded', 'error', 'file.read', 'sync.percent', 'connector.enabled', 'authenticated', 'unauthenticated',
       'authentication-failed', 'unavailable']
 
     for event in events
@@ -149,7 +152,7 @@ class ImdoneAtomView extends ScrollView
       atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
 
     # DONE: Encapsulate connectorManager in repo +refactor +enhancement gh:141 id:66
-    @emitter.on 'tasks.syncing', => @showMask() # DONE: mask isn't always hiding correctly gh:105 id:67
+    @emitter.on 'tasks.syncing', => @showMask "Syncing with #{envConfig.name}..." # DONE: mask isn't always hiding correctly gh:105 id:67
 
     @emitter.on 'sync.error', => @hideMask()
 
@@ -379,7 +382,7 @@ class ImdoneAtomView extends ScrollView
       @menuView.updateMenu()
       @imdoneRepo.initProducts()
       return
-    if @numFiles > 1000
+    if @numFiles > 100
       @ignorePrompt.hide()
       @progressContainer.show()
       @emitter.on 'file.read', (data) =>
@@ -403,13 +406,11 @@ class ImdoneAtomView extends ScrollView
     @mainContainer.show()
     @hideMask()
 
-  showMask: ->
-    @menuView.showSpinner()
+  showMask: (msg)->
+    @spinnerMessage.html msg if msg
     @mask.show()
 
-  hideMask: ->
-    @menuView.hideSpinner()
-    @mask.hide() if @mask
+  hideMask: -> @mask.hide() if @mask
 
   genFilterLink: (opts) ->
     $$$ ->

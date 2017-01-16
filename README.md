@@ -17,11 +17,21 @@ imdone works best with todo.txt and markdown syntax.  See the [syntax guide at i
 Features
 ----
 ### Filtering your board
-imdone uses regular expression matching to filter your cards on your board.
+imdone uses regular expression matching to filter your cards on your board.  The content and the path of the file are searched, but the Token (e.g. TODO) is not searched.
+![filter-tasks](https://cloud.githubusercontent.com/assets/233505/21971105/fc44f31c-db72-11e6-857a-17fa92082a46.gif)
+
 ### Using tags in your TODO comments
+imdone uses a bit of [Todo.txt format](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format) (except priority), so `+bug` would be a tag.  Tags in TODO content are turned into filter links, so clicking on it will filter the board.
+
 ### Using contexts and @name syntax
+You can use [Todo.txt](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format)  contexts in the same way.  They'll also be turned into filter links.
+
 ### metadata
+Another great benefit of using [Todo.txt format](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format) is the [metadata](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format#add-on-file-format-definitions). Just use the format ` key:value `, and your metadata will be listed in a table inside the task card.  We use metadata for imdone.io integrations like `gh:1` to represent github issue number 1 and `id:1` to represent imdone task id 1.
+
 ### Integrate with issue tracking
+My favorite feature of imdone are the integrations.  Today you can integrate with github and waffle.io.  Jira SaaS integration is coming soon.
+
 ### Adding and removing tokens
 ### Code journal
 ### Using markdown
