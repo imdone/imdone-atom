@@ -80,7 +80,7 @@ class ImdoneAtomView extends ScrollView
       @div outlet: '$svg'
       @div outlet: 'loading', class: 'imdone-loading', =>
         @h1 "Loading #{path.basename(params.path)} Tasks."
-        @p "It's gonna be legen... wait for it."
+        @p "Get ready for awesome!!!"
         @ul outlet: 'messages', class: 'imdone-messages'
         # #DONE: Update progress bar on repo load id:65
         @div outlet: 'ignorePrompt', class: 'ignore-prompt', style: 'display: none;', =>
@@ -96,7 +96,7 @@ class ImdoneAtomView extends ScrollView
         @div class: 'spinner-mask'
         @div class: 'spinner-container' #, =>
           # @div class: 'spinner', =>
-            # @span class:'loading loading-spinner-large inline-block'
+          #   @span class:'loading loading-spinner-large inline-block'
       @div outlet:'mainContainer', class:'imdone-main-container', =>
         @div outlet: 'appContainer', class:'imdone-app-container', =>
           @subview 'menuView', new MenuView(params)
@@ -301,7 +301,7 @@ class ImdoneAtomView extends ScrollView
             $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
-  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # TODO: Add the plugin project buttons here id:71
+  addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins # DONE: Add the plugin project buttons here id:71
 
   addPluginView: (plugin) ->
     return unless plugin.getView
@@ -369,7 +369,6 @@ class ImdoneAtomView extends ScrollView
 
   filterByContent: (text) -> @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each -> $(this).closest('.task').show().attr('id')
 
-  # DOING: replace this with @repo version when ready id:125
   visibleTasks: (listName) ->
     return [] unless @imdoneRepo
     @imdoneRepo.visibleTasks listName

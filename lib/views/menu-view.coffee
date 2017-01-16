@@ -30,10 +30,10 @@ class MenuView extends View
           # @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           #   @a href: "#", class: "icon #{menuClosedClass}"
           # @div class: "menu-sep-space-2x"
-          @div click: "deleteTasks", class: "delete-tasks imdone-toolbar-button", title: "Delete filtered tasks", =>
-            @a href: "#", =>
-              @i class: "icon icon-trash toolbar-icon"
-              @span class:'tool-text', 'Delete filtered tasks'
+          # @div click: "deleteTasks", class: "delete-tasks imdone-toolbar-button", title: "Delete filtered tasks", =>
+          #   @a href: "#", =>
+          #     @i class: "icon icon-trashcan toolbar-icon"
+          #     @span class:'tool-text', 'Delete filtered tasks'
           @div click: "openReadme", class: "readme-open imdone-toolbar-button", title: "Gimme some README", =>
             @a href: "#", =>
               @i class: "icon icon-book toolbar-icon"
@@ -207,7 +207,6 @@ class MenuView extends View
 
 
   getFilteredCount: (list) ->
-    debugger
     return 0 unless @imdoneRepo
     @imdoneRepo.visibleTasks(list).length
 
@@ -227,10 +226,11 @@ class MenuView extends View
           @span class: "reorder icon icon-three-bars"
           @span class: "toggle-list  #{hiddenList if list.hidden}", "data-list": list.name, =>
             @span class: "icon icon-eye"
-            @span "#{list.name} ("
-            @span outlet: 'filteredCount', "#{getFilteredCount(list.name)}:"
-            @span repo.getTasksInList(list.name).length
-            @span ")"
+            @span "#{list.name} "
+            @span class: "list-meta", =>
+              @span outlet: 'filteredCount', "#{getFilteredCount(list.name)}"
+              @span ":"
+              @span repo.getTasksInList(list.name).length
     elements = (-> getList list for list in lists)
 
     @lists.append elements

@@ -297,11 +297,8 @@ module.exports =  (repo) ->
 
   repo.getPlugins = () -> @plugins
 
-  # DOING: Implement list parm id:127
-  # DOING: Use this in imdone-atom-view and menu-view id:126
   # TODO: In new vue.js version we'll have to gain access to the $board id:128
   repo.visibleTasks = (list) ->
-    debugger
     visibleTasks = []
     addTask = (id) =>
       visibleTasks.push repo.getTask(id)
