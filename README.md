@@ -88,25 +88,17 @@ You can add a token by just adding an all caps list using the add list button
 ![Adding a  TODO token](https://cloud.githubusercontent.com/assets/233505/21989108/548c5d9c-dbcf-11e6-96d0-8e2e92e73371.gif)
 
 ### Code journal
-Configure a directory to use as a daily journal.  Open the daily journal with alt+j.  If your like me, you'll just use dropbox for this.  Remember, you can use TODO's in any text file if you put a `#` in front of the token, like this...
+Configure a directory to use as a daily journal.  Open the daily journal with alt+j.  If your like me, you'll just use dropbox directory for this.  Remember, you can use TODO's in any text file if you put a `#` in front of the token, like this...
 ```md
 This is my simple markdown journal
 - #TODO: Finish this work id:129
 ```
 
-So use your code journal for anything, even planning for your next set of features!
+Use your code journal for anything, even planning your next set of features!
 
 <!-- ### Using markdown -->
 ### Open files in [intellij and webstorm](https://www.jetbrains.com/products.html)
 - **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
-
-
-Whats new!
-----
-- Move [waffle.io](https://waffle.io) cards from your code using [imdone.io](https://imdone.io)'s' [github] and [waffle.io](https://waffle.io) integration.
-- Open your project readme from the board
-- Track Github issues with TODO comments in your code.  Sign up at [imdone.io](https://imdone.io)!
-
 
 Install
 ----

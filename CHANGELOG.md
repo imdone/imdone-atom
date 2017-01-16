@@ -1,6 +1,9 @@
 ## 2.1.5
 - Fix error when no readme
 - Get rid of unwanted list names
+- Add filtered task count
+- Provide better messaging and loading spinner
+- Better documentation in README.md
 
 ## 2.1.4
 - Handle NO_CONTENT error
