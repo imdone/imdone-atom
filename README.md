@@ -32,9 +32,71 @@ Another great benefit of using [Todo.txt format](https://github.com/ginatrapani/
 ### Integrate with issue tracking
 My favorite feature of imdone are the integrations.  Today you can integrate with github and waffle.io.  Jira SaaS integration is coming soon.
 
+
+<a href="https://imdone.io/#video" target="_blank"><img src="http://img.youtube.com/vi/ECIfGmngetU/0.jpg" alt="imdone.io integration" width="240" height="180" border="10" /></a>
+
+- Create an issue and attach it to a TODO that has a tag you configure like +enhancement, +feature or +bug
+
+  A TODO like this
+
+  ```js
+  // TODO: DRY this code up, and create a new method +enhancement
+  ```
+
+  will trun into this
+
+  ```js
+  // TODO: DRY this code up, and create a new method +enhancement id:1 gh:1
+  ```
+
+  creating github issue number 1 with the title "DRY this code up, and create a new method" and attaching it to the TODO
+
+- Close a TODO's attached issue(s) when it's token changes to something you configure, like DONE.
+
+  A comment like this
+
+  ```js
+  // DONE: DRY this code up, and create a new method +enhancement id:1 gh:1
+  ```
+
+  would close github issue number 1.
+
+- Comment on a TODO's attached issue(s) when it's modified and optionaly contains a tag you configure
+
+- Create and add labels to a TODO's attached issue(s) for tags that occur in the TODO
+
+  A comment like this
+
+  ```js
+  // TODO: DRY this code up, and create a new method +enhancement id:1 gh:1 +groovy
+  ```
+
+  would add the label groovy to github issue number 1
+
+-  Move a TODO's attached issues to a waffle.io list you configure when the TODO's token is changed to a token you configure.
+
+  if the token DOING is mapped to "in progress" then a TODO like this
+
+  ```js
+  // DOING: DRY this code up, and create a new method +enhancement id:1 gh:1
+  ```
+
+  will move the waffle card to the "in progress" list in your waffle.io project
+
 ### Adding and removing tokens
+You can add a token by just adding an all caps list using the add list button
+![Adding a  TODO token](https://cloud.githubusercontent.com/assets/233505/21989108/548c5d9c-dbcf-11e6-96d0-8e2e92e73371.gif)
+
 ### Code journal
-### Using markdown
+Configure a directory to use as a daily journal.  Open the daily journal with alt+j.  If your like me, you'll just use dropbox for this.  Remember, you can use TODO's in any text file if you put a `#` in front of the token, like this...
+```md
+This is my simple markdown journal
+- #TODO: Finish this work id:129
+```
+
+So use your code journal for anything, even planning for your next set of features!
+
+<!-- ### Using markdown -->
 ### Open files in [intellij and webstorm](https://www.jetbrains.com/products.html)
 - **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
 

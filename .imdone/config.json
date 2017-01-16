@@ -3,7 +3,7 @@
     "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
   ],
   "watcher": true,
-  "keepEmptyPriority": true,
+  "keepEmptyPriority": false,
   "code": {
     "include_lists": [
       "TODO",
@@ -18,19 +18,12 @@
       "IDEA",
       "NOTE",
       "REVIEW",
-      "INBOX",
-      "DOING1"
+      "BACKLOG",
+      "READY",
+      "ICEBOX"
     ]
   },
   "lists": [
-    {
-      "name": "INBOX",
-      "hidden": true
-    },
-    {
-      "name": "NOTE",
-      "hidden": true
-    },
     {
       "name": "BACKLOG",
       "hidden": true
@@ -45,6 +38,10 @@
     },
     {
       "name": "READY",
+      "hidden": false
+    },
+    {
+      "name": "DONE",
       "hidden": true
     },
     {
@@ -52,8 +49,12 @@
       "hidden": true
     },
     {
-      "name": "DONE",
+      "name": "NOTE",
       "hidden": true
+    },
+    {
+      "name": "ICEBOX",
+      "hidden": false
     }
   ],
   "marked": {
