@@ -210,7 +210,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'readme.open', =>
       file = _.get @imdoneRepo.getDefaultFile(), 'path'
       unless file
-        @emitter.emit 'error', 'Sorry no reeadme :('
+        @emitter.emit 'error', 'Sorry no readme :('
         return
       else
         @openPath @imdoneRepo.getFullPath(file)
