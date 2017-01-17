@@ -30,10 +30,10 @@ class MenuView extends View
           # @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           #   @a href: "#", class: "icon #{menuClosedClass}"
           # @div class: "menu-sep-space-2x"
-          # @div click: "deleteTasks", class: "delete-tasks imdone-toolbar-button", title: "Delete filtered tasks", =>
-          #   @a href: "#", =>
-          #     @i class: "icon icon-trashcan toolbar-icon"
-          #     @span class:'tool-text', 'Delete filtered tasks'
+          @div click: "deleteTasks", class: "delete-tasks imdone-toolbar-button", title: "Delete filtered tasks", =>
+            @a href: "#", =>
+              @i class: "icon icon-trashcan toolbar-icon"
+              @span class:'tool-text', 'Delete filtered tasks'
           @div click: "openReadme", class: "readme-open imdone-toolbar-button", title: "Gimme some README", =>
             @a href: "#", =>
               @i class: "icon icon-book toolbar-icon"
@@ -129,8 +129,9 @@ class MenuView extends View
     @getFilterEditor().setText('')
     @emitter.emit 'filter.clear'
 
-  newList: ->
-    @emitter.emit 'list.new'
+  newList: -> @emitter.emit 'list.new'
+
+  deleteTasks: -> @emitter.emit 'tasks.delete'
 
   # NOTE: This issue was created in @atom with @imdone.  Stay in the flow~~~~~~~ +discuss gh:171 id:93
   openVisible: -> @emitter.emit 'visible.open'
@@ -202,7 +203,7 @@ class MenuView extends View
 
   getFilteredCount: (list) ->
     return 0 unless @imdoneRepo
-    @imdoneRepo.visibleTasks(list).length
+    @imdoneRepo.visibleTasksIds(list).length
 
   updateMenu: ->
     return unless @imdoneRepo

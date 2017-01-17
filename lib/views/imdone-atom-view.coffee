@@ -196,7 +196,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'visible.open', =>
       paths = {}
-      for task in @visibleTasks()
+      for task in @visibleTasksIds()
         file = @imdoneRepo.getFileForTask(task)
         fullPath = @imdoneRepo.getFullPath file
         paths[fullPath] = task.line
@@ -206,6 +206,14 @@ class ImdoneAtomView extends ScrollView
         for fpath, line of paths
           #console.log fpath, line
           @openPath fpath, line
+
+    @emitter.on 'tasks.delete', =>
+      visibleTasks = @imdoneRepo.visibleTasksIds
+      return unless visibleTasks
+      window.confirm "imdone is about to delete #{visibleTasks.length} tasks.  Continue?"
+      @showMask "deleting #{visibleTasks.length} tasks"
+      @imdoneRepo.deleteVisibleTasks (err) -> 
+        @hideMask()
 
     @emitter.on 'readme.open', =>
       file = _.get @imdoneRepo.getDefaultFile(), 'path'
@@ -372,9 +380,9 @@ class ImdoneAtomView extends ScrollView
 
   filterByContent: (text) -> @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each -> $(this).closest('.task').show().attr('id')
 
-  visibleTasks: (listName) ->
+  visibleTasksIds: (listName) ->
     return [] unless @imdoneRepo
-    @imdoneRepo.visibleTasks listName
+    @imdoneRepo.visibleTasksIds listName
 
   initImdone: () ->
     if @imdoneRepo.initialized
