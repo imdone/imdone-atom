@@ -146,7 +146,8 @@ class MenuView extends View
       @emitRepoChange()
       target = e.target
       name = target.dataset.list || target.parentElement.dataset.list
-      if (repo.getList(name).hidden)
+      list = repo.getList(name)
+      if (list && list.hidden)
         repo.showList name
       else repo.hideList name
 
@@ -214,6 +215,7 @@ class MenuView extends View
     getFilteredCount = (name) => @getFilteredCount name
 
     getList = (list) ->
+      return "" unless list
       $$ ->
         @li "data-list": list.name, =>
           @span class: "reorder icon icon-three-bars"

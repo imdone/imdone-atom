@@ -1,3 +1,10 @@
+## 2.1.9
+- Speed up startup with node-dir
+
+## 2.1.8
+- Fix typo when no readme
+- Fix issue with non CAPs tokens
+
 ## 2.1.5
 - Fix error when no readme
 - Get rid of unwanted list names
@@ -396,4 +403,4 @@
 
 ----
 
-#INBOX: Remember to update changelog before +publishing +package @piascikj id:0
+#TODO: Remember to update changelog before +publishing +package @piascikj id:0

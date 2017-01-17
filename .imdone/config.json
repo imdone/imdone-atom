@@ -26,8 +26,12 @@
   },
   "lists": [
     {
+      "name": "ICEBOX",
+      "hidden": false
+    },
+    {
       "name": "BACKLOG",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "TODO",
@@ -35,11 +39,11 @@
     },
     {
       "name": "DOING",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "READY",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DONE",
@@ -52,14 +56,6 @@
     {
       "name": "NOTE",
       "hidden": true
-    },
-    {
-      "name": "ICEBOX",
-      "hidden": false
-    },
-    {
-      "name": "INBOX",
-      "hidden": false
     }
   ],
   "marked": {

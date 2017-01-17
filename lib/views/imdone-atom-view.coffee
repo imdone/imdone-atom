@@ -13,7 +13,7 @@ _ = null
 config = require '../services/imdone-config'
 envConfig = require '../../config'
 
-# INBOX: Add keen stats for features id:62
+# ICEBOX: Add keen stats for features id:62
 module.exports =
 class ImdoneAtomView extends ScrollView
 
