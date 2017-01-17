@@ -94,7 +94,7 @@ If the list name matches this this regex `/[\w\-]+?/`, then you will have to use
 Configure a directory to use as a daily journal.  Open the daily journal with alt+j.  If your like me, you'll just use dropbox directory for this.  Remember, you can use TODO's in any text file if you put a `#` in front of the token, like this...
 ```md
 This is my simple markdown journal
-- #TODO: Finish this work id:129
+- #TODO: Finish this work
 ```
 
 Use your code journal for anything, even planning your next set of features!

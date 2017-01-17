@@ -20,7 +20,8 @@
       "REVIEW",
       "BACKLOG",
       "READY",
-      "ICEBOX"
+      "ICEBOX",
+      "INBOX"
     ]
   },
   "lists": [
@@ -54,6 +55,14 @@
     },
     {
       "name": "ICEBOX",
+      "hidden": false
+    },
+    {
+      "name": "INBOX",
+      "hidden": false
+    },
+    {
+      "name": "to-do",
       "hidden": false
     }
   ],
