@@ -83,10 +83,13 @@ My favorite feature of imdone are the integrations.  Today you can integrate wit
 
   will move the waffle card to the "in progress" list in your waffle.io project
 
-### Adding and removing tokens
-You can add a token by just adding an all caps list using the add list button
+### Adding and removing TODO tokens
+You can add a token by just adding an all caps list using the add list button.  If the list name matches this regex `[A-Z]+[A-Z-_]{2,}` a new token will be created.
 ![Adding a  TODO token](https://cloud.githubusercontent.com/assets/233505/21989108/548c5d9c-dbcf-11e6-96d0-8e2e92e73371.gif)
-
+If the list name matches this this regex `/[\w\-]+?/`, then you will have to use the [hash style syntax](https://github.com/imdone/imdone-core#hash-style) like this...
+```js
+// #to-do: This is in a list that doesn't have all caps!
+```
 ### Code journal
 Configure a directory to use as a daily journal.  Open the daily journal with alt+j.  If your like me, you'll just use dropbox directory for this.  Remember, you can use TODO's in any text file if you put a `#` in front of the token, like this...
 ```md
@@ -99,6 +102,19 @@ Use your code journal for anything, even planning your next set of features!
 <!-- ### Using markdown -->
 ### Open files in [intellij and webstorm](https://www.jetbrains.com/products.html)
 - **Open task links in [intellij](https://www.jetbrains.com/products.html) family of products with imdone-atom and [imdone intellij plugin](https://plugins.jetbrains.com/plugin/8067)!**
+
+### Ignoring files
+- Configuration setting  
+You can ignore files with the "Exclude Vcs Ignored Paths" setting
+
+- .imdoneignore  
+  `.imdoneignore` is implemented using the [ignore](https://www.npmjs.com/package/ignore) package.  Each file in your projects path is tested against the rules in `.imdoneignore`.  
+  To ignore all but some subdirectories, see this Stack Overflow question. [git - .gitignore exclude folder but include specific subfolder - Stack Overflow](http://stackoverflow.com/questions/5533050/gitignore-exclude-folder-but-include-specific-subfolder)
+
+- .imdone/config.json  
+  imdone will also ignore files and folders that match a regex in the `.imdone/config.json`, `exclude` array.  The array is seeded with some common excludes on first run.
+
+  **IMPORTANT:** If your project is large (#files > 1000) consider adding an .imdoneignore file.
 
 Install
 ----
@@ -132,17 +148,3 @@ Settings
 | Today's Journal Month Format       | string  | YYYY-MM     | How would you like your `month` variable formatted for use in directory or file name template? |
 | Use Alternate File Watcher         | boolean | false       | If your board won't update when you edit files, then try the alternate file watcher            |
 | Zoom Level                         | Number  | 1           | Set the default zoom level on startup.  min: .2, max: 2.5                                      |
-
-Ignoring files
-----
-- Configuration setting  
-You can ignore files with the "Exclude Vcs Ignored Paths" setting
-
-- .imdoneignore  
-`.imdoneignore` is implemented using the [ignore](https://www.npmjs.com/package/ignore) package.  Each file in your projects path is tested against the rules in `.imdoneignore`.  
-To ignore all but some subdirectories, see this Stack Overflow question. [git - .gitignore exclude folder but include specific subfolder - Stack Overflow](http://stackoverflow.com/questions/5533050/gitignore-exclude-folder-but-include-specific-subfolder)
-
-- .imdone/config.json  
-imdone will also ignore files and folders that match a regex in the `.imdone/config.json`, `exclude` array.  The array is seeded with some common excludes on first run.
-
-**IMPORTANT:** If your project is large (#files > 1000) consider adding an .imdoneignore file.

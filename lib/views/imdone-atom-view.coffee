@@ -215,7 +215,7 @@ class ImdoneAtomView extends ScrollView
       else
         @openPath @imdoneRepo.getFullPath(file)
 
-    @emitter.on 'repo.change', => @showMask()
+    @emitter.on 'repo.change', => @showMask "Loading TODOs..."
 
     @emitter.on 'config.close', =>
       @boardWrapper.removeClass 'shift-bottom'
@@ -382,7 +382,7 @@ class ImdoneAtomView extends ScrollView
       @menuView.updateMenu()
       @imdoneRepo.initProducts()
       return
-    if @numFiles > 100
+    if @numFiles > 1000
       @ignorePrompt.hide()
       @progressContainer.show()
       @emitter.on 'file.read', (data) =>
@@ -398,7 +398,7 @@ class ImdoneAtomView extends ScrollView
 
   onRepoUpdate: ->
     # BACKLOG: This should be queued so two updates don't colide id:73
-    @showMask()
+    @showMask 'Updating board'
     @updateBoard()
     @boardWrapper.css 'bottom', 0
     @bottomView.attr 'style', ''
@@ -555,7 +555,7 @@ class ImdoneAtomView extends ScrollView
         list = evt.item.parentNode.dataset.list
         filePath = @imdoneRepo.getFullPath evt.item.dataset.path
         task = @imdoneRepo.getTask id
-        @showMask()
+        @showMask "Moving Tasks"
         @imdoneRepo.moveTasks [task], list, pos
 
     @tasksSortables = tasksSortables = []

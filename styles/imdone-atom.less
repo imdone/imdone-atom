@@ -47,11 +47,19 @@
     top: 0;
     bottom: 0;
     left: 0;
-    right: 40px;
+    right: 0;
     z-index: 99;
     .spinner {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      width: 100%;
       text-align: center;
-      margin-top: 20em;
+      background-color: @app-background-color;
+      border-color: @base-border-color;
+      height: 8em;
+      padding-top: 1em;
     }
     .spinner-container, .spinner-mask {
       position: absolute;
@@ -67,7 +75,7 @@
   }
   .imdone-loading {
     position: absolute;
-    top: 0;
+    top: 8em;
     margin: 0 1em;
     z-index: 1001;
     p, ul {
