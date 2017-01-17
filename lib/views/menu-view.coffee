@@ -203,7 +203,7 @@ class MenuView extends View
 
   getFilteredCount: (list) ->
     return 0 unless @imdoneRepo
-    @imdoneRepo.visibleTasksIds(list).length
+    @imdoneRepo.visibleTasks(list).length
 
   updateMenu: ->
     return unless @imdoneRepo

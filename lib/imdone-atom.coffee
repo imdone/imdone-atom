@@ -143,7 +143,7 @@ module.exports = ImdoneAtom =
 
   deactivate: ->
     imdoneHelper require './services/imdone-helper'
-    imdoneHelper.destroyRepos() # DONE: That dang destroy error id:122 gh:195
+    imdoneHelper.destroyRepos() 
     @subscriptions.dispose()
 
   getCurrentProject: ->

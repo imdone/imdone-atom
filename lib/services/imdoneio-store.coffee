@@ -298,7 +298,7 @@ module.exports =  (repo) ->
   repo.getPlugins = () -> @plugins
 
   # TODO: In new vue.js version we'll have to gain access to the $board id:128
-  repo.visibleTaskIds = (list) ->
+  repo.visibleTasks = (list) ->
     visibleTasks = []
     addTask = (id) =>
       visibleTasks.push repo.getTask(id)
@@ -310,11 +310,7 @@ module.exports =  (repo) ->
 
     visibleTasks
 
-  repo.visibleTasks = (list) ->
-    visibleTasks = repo.visibleTasksIds list
-    visibleTasks.map (taskId) -> repo.getTask taskId
-
-  repo.deleteVisibleTasks = (cb) -> repo.deleteTasks repo.visibleTasks(), cb 
+  repo.deleteVisibleTasks = (cb) -> repo.deleteTasks repo.visibleTasks(), cb
 
   connectorManager.on 'tasks.syncing', () -> repo.emit 'tasks.syncing'
   connectorManager.on 'sync.error', () -> repo.emit 'sync.error'

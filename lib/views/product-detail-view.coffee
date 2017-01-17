@@ -16,7 +16,7 @@ class ProductDetailView extends View
       _.set product, repoUrlKey, gitOriginUrl if !_.get(product, repoUrlKey)
       waffleIoProject = gitOriginUrl.replace(/^http.*?\/\/.*?\/(.*?)\.git$/,"$1")
       _.set product, waffleIoProjectKey, waffleIoProject if !_.get(product, waffleIoProjectKey)
-    # DONE: Set the waffle project to the github user/repo +feature gh:194 id:94
+    
 
   handleEvents: (@emitter)->
     return if @initialized || !@emitter
