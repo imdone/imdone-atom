@@ -16,7 +16,7 @@ class LoginView extends View
         @h2 "Login or sign up to get started"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      # DONE: login should be it's own view id:84
+      
       @div outlet:'loginPanel', class: 'imdone-login-pane', style: 'display:none;', =>
         @div class: 'input input-med inline-block-tight', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')

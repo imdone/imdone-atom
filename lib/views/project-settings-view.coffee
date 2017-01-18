@@ -23,7 +23,7 @@ class ProjectSettingsView extends View
       @div outlet: 'settingsPanel', style:'display:none;', =>
         # @h1 "Project Settings"
 
-        # DONE: Add config view here id:105
+        
         # @h1 "Configuration (.imdone/config.json)"
 
   initialize: ({@imdoneRepo, @path, @uri}) ->

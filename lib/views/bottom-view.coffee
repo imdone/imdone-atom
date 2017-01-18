@@ -18,7 +18,7 @@ class BottomView extends View
         @div outlet: 'resizer', class:'split-handle-y'
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
-        # DONE: Set up a global messaging area. +enhancement gh:159 id:56
+        
       @div class:'bottom-view-main zoomable', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
         #   @subview 'projectSettingsView', new ProjectSettingsView params
@@ -49,7 +49,7 @@ class BottomView extends View
     @shareTasksView.handleEvents @emitter
     # @projectSettingsView.handleEvents @emitter
 
-    # #DONE: Make resizable when open [Edit fiddle - JSFiddle](http://jsfiddle.net/3jMQD/614/) id:57
+    
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
@@ -103,10 +103,10 @@ class BottomView extends View
       @hide() unless config.getSettings().showLoginOnLaunch
       @showLogin() if config.getSettings().showLoginOnLaunch
 
-    # DONE: This belongs in bottomView +refactor gh:144 id:58
+    
     @emitter.on 'list.new', => @showNewList()
 
-    # DONE: This belongs in bottomView +refactor gh:143 id:59
+    
     @emitter.on 'share', => @showShare()
 
     @emitter.on 'login', => @showLogin()

@@ -40,7 +40,7 @@ class ProductDetailView extends View
 
     @emitter.on 'product.unlinked', (product) =>
       return unless product
-      # DONE: Connector plugin should be removed id:95
+      
       @updateConnectorForEdit product
       @setProduct product
 
