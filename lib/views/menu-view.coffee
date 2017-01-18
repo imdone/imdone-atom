@@ -30,10 +30,10 @@ class MenuView extends View
           # @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           #   @a href: "#", class: "icon #{menuClosedClass}"
           # @div class: "menu-sep-space-2x"
-          @div click: "deleteTasks", class: "delete-tasks imdone-toolbar-button", title: "Delete filtered tasks", =>
+          @div click: "deleteTasks", class: "delete-tasks imdone-toolbar-button", title: "Delete visible tasks", =>
             @a href: "#", =>
               @i class: "icon icon-trashcan toolbar-icon"
-              @span class:'tool-text', 'Delete filtered tasks'
+              @span class:'tool-text', 'Delete visible tasks'
           @div click: "openReadme", class: "readme-open imdone-toolbar-button", title: "Gimme some README", =>
             @a href: "#", =>
               @i class: "icon icon-book toolbar-icon"

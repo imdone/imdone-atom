@@ -1,3 +1,6 @@
+## 2.1.10
+- Add delete visible files button
+
 ## 2.1.9
 - Speed up startup with node-dir
 
@@ -356,7 +359,7 @@
 * Fix Path for windows users
 
 ## 1.1.10
-* 
+*
 * Update version of imdone-core to allow pks and pkb files
 
 ## 1.1.9

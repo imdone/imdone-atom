@@ -20,6 +20,12 @@ Features
 imdone uses regular expression matching to filter your cards on your board.  The content and the path of the file are searched, but the Token (e.g. TODO) is not searched.
 ![filter-tasks](https://cloud.githubusercontent.com/assets/233505/21971105/fc44f31c-db72-11e6-857a-17fa92082a46.gif)
 
+### Delete all visible tasks
+Just click on the trash can icon and all the visible tasks will be deleted.  imdone will also get rid of any blank lines left behind!  Great for cleaning up!
+
+### Open all files for visible tasks
+Click on the lightning bolt icon and open all files for the visible tasks.
+
 ### Using tags in your TODO comments
 imdone uses a bit of [Todo.txt format](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format) (except priority), so `+bug` would be a tag.  Tags in TODO content are turned into filter links, so clicking on it will filter the board.
 

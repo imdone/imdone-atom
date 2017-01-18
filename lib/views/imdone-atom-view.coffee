@@ -54,7 +54,7 @@ class ImdoneAtomView extends ScrollView
 
     @imdoneRepo.fileStats (err, files) =>
       @numFiles = files.length
-      @messages.append "<p>Found #{files.length} files in #{@getTitle()}</p>"
+      @messages.append "<p>Found #{files.length} files in #{path.basename(@path)}</p>"
 
       if @numFiles > config.getSettings().maxFilesPrompt
         @ignorePrompt.show()
