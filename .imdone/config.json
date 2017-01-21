@@ -27,7 +27,7 @@
   "lists": [
     {
       "name": "ICEBOX",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "BACKLOG",
@@ -39,7 +39,7 @@
     },
     {
       "name": "DOING",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "READY",

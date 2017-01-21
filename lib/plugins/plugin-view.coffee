@@ -54,7 +54,7 @@ class ConnectorPluginView extends View
       id = $(@).attr('data-issue-number')
       $(@).closest('li').remove();
       self.task.removeMetaData self.idMetaKey, id
-      
+
       self.repo.modifyTask self.task, true, (err, result) ->
         #console.log err, result
         self.issues = self.getIssueIds()
@@ -71,11 +71,12 @@ class ConnectorPluginView extends View
     return unless @issues
     @relatedIssues.html @$spinner()
     async.map @issues, (number, cb) =>
-      
+
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>
-      # TODO: Check error for 404/Not Found id:8
+      # TODO: Check error for 404/Not Found when getting an issue from provider. +enhancement id:8 gh:203
+      # TODO: Be sure to fire waffle rules on the same request as the github issue creation to ensure it starts off in the right waffle list +enhancement id:132 gh:204 due:2017-02-01
       if err
         #console.log "error:", err
       else

@@ -33,7 +33,7 @@ class ProductSelectionView extends View
             @input class:'input-toggle', 'data-name':product.name, type:'checkbox' unless product.isEnabled()
             @text " ON"
 
-  
+
   handleEvents: (@emitter) ->
     return if @initialized || !@emitter
     @initialized = true
@@ -83,7 +83,6 @@ class ProductSelectionView extends View
   saveConnector: (connector, cb) ->
     cb ?= ()->
     @imdoneRepo.saveConnector connector, (err, connector) =>
-      # TODO: Handle errors by unauthenticating if needed and show login with error id:104
       cb err if err
       @selected.connector = connector
       @emitter.emit 'connector.changed', @selected

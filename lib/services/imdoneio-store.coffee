@@ -60,15 +60,15 @@ module.exports =  (repo) ->
 
   repo.checkForIIOProject = checkForIIOProject = () ->
     log "Checking for imdone.io project"
-    
+
     return repo.emit('project.found', repo.project) if repo.project
     return unless client.isAuthenticated() && repo.initialized
     return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
-      # TODO: Do something with this error id:40
+      # TODO: Do something with this error id:40 gh:116
       unless project
         # repo.disableProject()
-        return repo.emit 'project.not-found' unless project # TODO: Handle the case where there is no project found id:41
+        return repo.emit 'project.not-found' unless project # TODO: Handle the case where there is no project found. id:41 gh:116
         # Check account for plan type
       return throw err if err
       repo.project = project
@@ -93,16 +93,16 @@ module.exports =  (repo) ->
     return cb("not enabled") unless repo.getProjectId()
     tasks = [tasks] unless _.isArray tasks
     return cb() unless tasks.length > 0
-    
+
     cm.emit 'tasks.syncing'
     #console.log "sending #{tasks.length} tasks to imdone-io "
     client.syncTasks repo, tasks, (err, ioTasks) ->
-      return if err # TODO: Do something with this error id:43
+      return if err # TODO: Do something with this error id:43 gh:116
       #console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
-        
-        
-        
+
+
+
         (task, cb) ->
           currentTask = repo.getTask task.id
           taskToModify = _.assign currentTask, task
@@ -113,7 +113,7 @@ module.exports =  (repo) ->
             #console.log "Sync Error:", err
             return cm.emit 'sync.error', err
           repo.saveModifiedFiles (err, files)->
-            
+
             return syncDone err unless cb
             cb err, syncDone
 
@@ -123,7 +123,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     #console.log "sending tasks to imdone-io for: #{file.path}"
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO: Do something with this error id:48
+      return if err # TODO: Do something with this error id:48 gh:116
       #console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -156,13 +156,13 @@ module.exports =  (repo) ->
       (cb) -> saveSortCloud cb
     ]
     async.parallel fns, cb
-    
+
 
   saveSortCloud = (cb) ->
     cb ?= ()->
     return cb() unless repo.project
     sort = _.get repo, 'sync.sort'
-    
+
     client.updateTaskOrder repo.project.id, sort, (err, theProject) =>
       return cb(err) if err
       cb null, theProject.taskOrder
@@ -191,7 +191,7 @@ module.exports =  (repo) ->
     return saveSort(cb) if _.get repo, 'project.taskOrder'
     fs.exists SORT_FILE, (exists) ->
       return cb() if exists
-      # TODO: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:51
+      # BACKLOG: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:51
       # Populate the config.sync.sort from existing sort
       setListSort list.name, tasksToIds(list.tasks) for list in _getTasksByList()
       saveSort cb
@@ -217,8 +217,8 @@ module.exports =  (repo) ->
     cb ?= ()->
     _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
       return cb err if err
-      if shouldSync 
-        
+      if shouldSync
+
         #console.log "Tasks moved.  Syncing with imdone.io"
         syncTasks tasks, (err, done) ->
           repo.emit 'tasks.moved', tasks
@@ -257,7 +257,7 @@ module.exports =  (repo) ->
     async.parallel fns, (err, results) ->
       return cb err if err
       repo.config = results[0]
-      
+
       client.authFromStorage (err, user) ->
         if sortEnabled()
           _init (err, files) ->
@@ -280,6 +280,8 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
+  # DOING: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. id:131
+
   repo.initProducts = (cb) ->
     cb ?= ()->
     connectorManager.getProducts (err, products) =>
@@ -297,7 +299,7 @@ module.exports =  (repo) ->
 
   repo.getPlugins = () -> @plugins
 
-  # TODO: In new vue.js version we'll have to gain access to the $board id:128
+  # BACKLOG: In new vue.js version we'll have to gain access to the $board id:128
   repo.visibleTasks = (list) ->
     visibleTasks = []
     addTask = (id) =>

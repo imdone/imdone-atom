@@ -16,7 +16,7 @@ class LoginView extends View
         @h2 "Login or sign up to get started"
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
-      
+
       @div outlet:'loginPanel', class: 'imdone-login-pane', style: 'display:none;', =>
         @div class: 'input input-med inline-block-tight', =>
           @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
@@ -46,7 +46,7 @@ class LoginView extends View
     @spinner.hide()
 
   onUnauthenticated: (event) ->
-    # TODO: Show login error if present and hide progress id:85
+    # BACKLOG: Show login error if present and hide progress id:85
     @showLogin()
 
   initPasswordField: () ->
@@ -71,7 +71,7 @@ class LoginView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.getModel().setText ''
-      # TODO: We need to show an error here if service can't be reached or login fails id:86
+      # TODO: We need to show an error here if service can't be reached or login fails id:86 gh:116
       log 'login:end'
       return @showLogin() unless @client.isAuthenticated()
       @onAuthenticated()

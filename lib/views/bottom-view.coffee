@@ -117,7 +117,7 @@ class BottomView extends View
 
     @emitter.on 'menu.toggle', => @toggleClass 'shift'
 
-    # TODO: Close bottom-view if none of it's direct descendants are visible +bug gh:182 id:60 @piascikj
+    # BACKLOG: Close bottom-view if none of it's direct descendants are visible +bug gh:182 id:60 @piascikj
 
   isOpen: ->
     @hasClass 'open'
@@ -156,7 +156,7 @@ class BottomView extends View
     @plugins.show()
     @show()
 
-  # TODO: DRY these show... methods up id:61
+  # BACKLOG: DRY these show... methods up id:61
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
