@@ -310,7 +310,9 @@ class ImdoneAtomView extends ScrollView
         if typeof plugin.taskButton is 'function'
           $button = plugin.taskButton(id)
           if $button
-            $button.classList.add 'task-plugin-button' if $button.classList else $button.addClass 'task-plugin-button'
+            if $button.classList
+              $button.classList.add 'task-plugin-button'
+            else $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
   addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins
@@ -421,8 +423,11 @@ class ImdoneAtomView extends ScrollView
   hideMask: -> @mask.hide() if @mask
 
   genFilterLink: (opts) ->
-    $el.a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText,
+    console.log opts
+    $link = $el.a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link",
       $el.span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
+    $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
+    $link
 
   # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:74
   updateBoard: ->
@@ -444,7 +449,7 @@ class ImdoneAtomView extends ScrollView
       dateCreated = task.getDateCreated()
       dateCompleted = task.getDateCompleted()
       opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
-      html = task.getHtml(opts)
+      taskHtml = task.getHtml(opts)
       showTagsInline = config.getSettings().showTagsInline
       $taskText = $el.div class: 'task-text'
       $filters = $el.div()
@@ -455,12 +460,12 @@ class ImdoneAtomView extends ScrollView
         if contexts
           for context, i in contexts
             do (context, i) =>
-              html = html.replace( "@#{context}", @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true )
+              taskHtml = taskHtml.replace( "@#{context}", @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true )
 
         if tags
           for tag, i in tags
             do (tag, i) =>
-              html = html.replace( "+#{tag}", @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true  )
+              taskHtml = taskHtml.replace( "+#{tag}", @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true  )
       else
         if contexts
           $div = $el.div()
@@ -477,9 +482,16 @@ class ImdoneAtomView extends ScrollView
               $div.appendChild(self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags")
               $div.appendChild($el.span ", ") if (i < tags.length-1)
 
-      parser = new DOMParser();
-      $taskText.appendChild $child for $child in parser.parseFromString(html, "text/html").getElementsByTagName('body')[0].children
+      console.log taskHtml
 
+      # parser = new DOMParser();
+      # console.log html
+      # $children = parser.parseFromString(taskHtml, "text/html").getElementsByTagName('body')[0].children
+      $taskText.innerHTML = taskHtml
+      # console.log $children
+      # for $child in $children
+      #   console.log $child
+      #   $taskText.appendChild $child
 
       if dateDue
         $tr = $el.tr class:'meta-data-row',

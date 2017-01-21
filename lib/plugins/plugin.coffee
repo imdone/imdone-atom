@@ -100,8 +100,9 @@ class ConnectorPlugin extends Emitter
     $wafflebtn.on 'click', (e) => @openWaffle()
     $githubbtn = $$ ->
       @div class:"imdone-icon imdone-toolbar-button", =>
-        @a href: "", title: title, class: "#{pluginName}", =>
-          @span class:"icon icon-octoface"
+        @a href: "", title: "GitHub issues", class: "#{pluginName}", =>
+          @i class:"icon icon-octoface toolbar-icon"
+          @span class:"tool-text", "Open GitHub issues"
     $githubbtn.on 'click', (e) => @openGithub()
     return [$wafflebtn,$githubbtn]
 
