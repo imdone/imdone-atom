@@ -421,11 +421,6 @@ class ImdoneAtomView extends ScrollView
   hideMask: -> @mask.hide() if @mask
 
   genFilterLink: (opts) ->
-    $$$ ->
-      @a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText, =>
-        @span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
-
-  genFilterLinkNew: (opts) ->
     $el.a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link", "data-filter": opts.linkPrefix.replace( "+", "\\+" )+opts.linkText,
       $el.span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
 
@@ -441,7 +436,7 @@ class ImdoneAtomView extends ScrollView
 
 
     # BACKLOG: We can display data from imdone.io in a card summary/details id:76
-    getTaskNew = (task) =>
+    getTask = (task) =>
       self = @;
       contexts = task.getContext()
       tags = task.getTags()
@@ -472,14 +467,14 @@ class ImdoneAtomView extends ScrollView
           $filters.appendChild $div
           for context, i in contexts
             do (context, i) =>
-              $div.appendChild(self.genFilterLinkNew linkPrefix: "@", linkText: context, linkClass: "task-context")
+              $div.appendChild(self.genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context")
               $div.appendChild($el.span ", ") if (i < contexts.length-1)
         if tags
           $div = $el.div()
           $filters.appendChild $div
           for tag, i in tags
             do (tag, i) =>
-              $div.appendChild(self.genFilterLinkNew linkPrefix: "+", linkText: tag, linkClass: "task-tags")
+              $div.appendChild(self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags")
               $div.appendChild($el.span ", ") if (i < tags.length-1)
 
       parser = new DOMParser();
@@ -511,21 +506,22 @@ class ImdoneAtomView extends ScrollView
               $el.span class:"icon icon-light-bulb"
         $taskMetaTable.appendChild $tr
 
-        for data in task.getMetaDataWithLinks(repo.getConfig())
-          do (data) =>
-            $icons = $el.td()
-            if data.link
-              $link = $el.a href: data.link.url, title: data.link.title,
-                $el.span class:"icon #{data.link.icon || 'icon-link-external'}"
-              $icons.appendChild $link
-            $filterLink = $el.a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}",
-              $el.span class:"icon icon-light-bulb"
-            $icons.appendChild $filterLink
+      for data in task.getMetaDataWithLinks(repo.getConfig())
+        do (data) =>
+          $icons = $el.td()
+          if data.link
+            $link = $el.a href: data.link.url, title: data.link.title,
+              $el.span class:"icon #{data.link.icon || 'icon-link-external'}"
+            $icons.appendChild $link
+          $filterLink = $el.a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}",
+            $el.span class:"icon icon-light-bulb"
+          $icons.appendChild $filterLink
 
-            $tr = $el.tr class:'meta-data-row',
-              $el.td data.key
-              $el.td data.value
-              $icons
+          $tr = $el.tr class:'meta-data-row',
+            $el.td data.key
+            $el.td data.value
+            $icons
+          $taskMetaTable.appendChild $tr
 
       $el.li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line,
         $el.div class: 'imdone-task-plugins'
@@ -535,129 +531,9 @@ class ImdoneAtomView extends ScrollView
         $taskMeta
         $el.div class: 'task-source',
           $el.a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}", 'data-line': task.line, "#{task.source.path + ':' + task.line}"
-
-          #   @table =>
-          #
-          #     if dateDue
-          #       @tr =>
-          #         @td "due"
-          #         @td dateDue
-          #         @td =>
-          #           @a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}", =>
-          #             @span class:"icon icon-light-bulb"
-          #     if dateCreated
-          #       @tr =>
-          #         @td "created"
-          #         @td dateCreated
-          #         @td =>
-          #           @a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}", =>
-          #             @span class:"icon icon-light-bulb"
-          #     if dateCompleted
-          #       @tr =>
-          #         @td "completed"
-          #         @td dateCompleted
-          #         @td =>
-          #
-          #           @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
-          #             @span class:"icon icon-light-bulb"
-          #     for data in task.getMetaDataWithLinks(repo.getConfig())
-          #       do (data) =>
-          #         @tr =>
-          #           @td data.key
-          #           @td data.value
-          #           @td =>
-          #             if data.link
-          #               @a href: data.link.url, title: data.link.title, =>
-          #                 @span class:"icon #{data.link.icon || 'icon-link-external'}"
-          #             @a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}", =>
-          #               @span class:"icon icon-light-bulb"
-          # @div class: 'task-source', =>
-          #   @a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
-          #   'data-line': task.line, "#{task.source.path + ':' + task.line}"
-
-    getTask = (task) =>
-      contexts = task.getContext()
-      tags = task.getTags()
-      dateDue = task.getDateDue()
-      dateCreated = task.getDateCreated()
-      dateCompleted = task.getDateCompleted()
-      opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
-      html = task.getHtml(opts)
-      showTagsInline = config.getSettings().showTagsInline
-
-      if contexts && showTagsInline
-        for context, i in contexts
-          do (context, i) =>
-            html = html.replace( "@#{context}", @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true )
-
-      if tags && showTagsInline
-        for tag, i in tags
-          do (tag, i) =>
-            html = html.replace( "+#{tag}", @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true  )
-
-      self = @;
-
-      $$$ ->
-        @li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line, =>
-          # @div class:'task-order', title: 'move task', =>
-          #   @span class: 'highlight', task.order
-          # BACKLOG: Maybe show assigned avatar on task +feature gh:165 id:77
-          @div class: 'imdone-task-plugins'
-          @div class: 'task-full-text hidden', task.getText()
-          @div class: 'task-text', =>
-            @raw html
-
-          if contexts && !showTagsInline
-            @div =>
-              for context, i in contexts
-                do (context, i) =>
-                  @raw self.genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context"
-                  @span ", " if (i < contexts.length-1)
-          if tags && !showTagsInline
-            @div =>
-              for tag, i in tags
-                do (tag, i) =>
-                  @raw self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags"
-                  @span ", " if (i < tags.length-1)
-          @div class: 'task-meta', =>
-            @table =>
-
-              if dateDue
-                @tr =>
-                  @td "due"
-                  @td dateDue
-                  @td =>
-                    @a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}", =>
-                      @span class:"icon icon-light-bulb"
-              if dateCreated
-                @tr =>
-                  @td "created"
-                  @td dateCreated
-                  @td =>
-                    @a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}", =>
-                      @span class:"icon icon-light-bulb"
-              if dateCompleted
-                @tr =>
-                  @td "completed"
-                  @td dateCompleted
-                  @td =>
-
-                    @a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}", =>
-                      @span class:"icon icon-light-bulb"
-              for data in task.getMetaDataWithLinks(repo.getConfig())
-                do (data) =>
-                  @tr =>
-                    @td data.key
-                    @td data.value
-                    @td =>
-                      if data.link
-                        @a href: data.link.url, title: data.link.title, =>
-                          @span class:"icon #{data.link.icon || 'icon-link-external'}"
-                      @a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}", =>
-                        @span class:"icon icon-light-bulb"
-          @div class: 'task-source', =>
-            @a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}",
-            'data-line': task.line, "#{task.source.path + ':' + task.line}"
+          $el.span ' | '
+          $el.a href:"#", title: "just show me tasks in #{task.source.path}", class: "filter-link", "data-filter": "#{task.source.path}",
+            $el.span class:"icon icon-light-bulb"
 
     getList = (list) =>
       tasks = repo.getTasksInList(list.name)
@@ -674,7 +550,7 @@ class ImdoneAtomView extends ScrollView
 
 
       $tasks = $list.find('.tasks')
-      $tasks.append(getTaskNew task) for task in tasks # DOING: For performance create this in the DOM and append it! id:133
+      $tasks.append(getTask task) for task in tasks # DOING: For performance create this in the DOM and append it! id:133
       $list
 
     elements = (-> getList list for list in lists)

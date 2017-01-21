@@ -52,7 +52,7 @@ class MenuView extends View
               @i class: "icon icon-question toolbar-icon"
               @span class:'tool-text', 'Help'
           @div class: "menu-sep-space-2x"
-          @div outlet:'$projectButtons', class: "imdone-project-plugins", style: "disaply:none"
+          @div outlet:'$projectButtons', class: "imdone-project-plugins", style: "display:none;"
           @div outlet:'$projectButtonsSpace', class: "imdone-project-plugins-spacer menu-sep-space-2x", style: "display:none;"
 
           @div outlet: "$imdoneioButtons", style: "display:none;", =>

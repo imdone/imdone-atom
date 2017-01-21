@@ -2,6 +2,7 @@
 gitup = require 'git-up'
 _ = require 'lodash'
 shell = require 'shell'
+$el = require 'laconic'
 module.exports =
 class ConnectorPlugin extends Emitter
   @PluginView: require('./plugin-view')
@@ -11,7 +12,6 @@ class ConnectorPlugin extends Emitter
   @icon: "mark-github"
 
   ready: false
-  pluginName: ConnectorPlugin.pluginName
 
   constructor: (@repo, @imdoneView, @connector) ->
     # We need some way to get the connector!
@@ -44,12 +44,15 @@ class ConnectorPlugin extends Emitter
   getView: -> @view
   idMetaKey: -> @connector.config.idMetaKey
   metaKeyConfig: -> @repo.config.meta && @repo.config.meta[@idMetaKey()]
+  issuesUrlBase: ->
+    projectInfo = @githubProjectInfo()
+    "https://github.com/#{projectInfo.accountName}/#{projectInfo.projectName}/issues"
   addMetaKeyConfig: (cb) ->
     projectInfo = @githubProjectInfo()
     return cb() if @metaKeyConfig() || !@idMetaKey() || !projectInfo
     @repo.config.meta = {} unless @repo.config.meta
     @repo.config.meta[@idMetaKey()] =
-      urlTemplate: "https://github.com/#{projectInfo.accountName}/#{projectInfo.projectName}/issues/%s"
+      urlTemplate: "#{issuesUrlBase()}/%s"
       titleTemplate: "View github issue %s"
       icon: "icon-octoface"
     @repo.saveConfig cb
@@ -80,13 +83,32 @@ class ConnectorPlugin extends Emitter
     title = "#{@connector.config.waffleIoProject} waffles!"
     pluginName = @constructor.pluginName
     icon = @constructor.icon
-    $btn = $$ ->
+    issuesUrlBase = @issuesUrlBase()
+    $wafflebtn = $$ ->
       @div class:"imdone-icon imdone-toolbar-button", =>
         @a href: "#{}", title: title, class: "#{pluginName}-waffle", =>
           @i class:'icon', =>
             @tag 'svg', class:'waffle-logo', => @tag 'use', "xlink:href":"#waffle-logo-icon"
           @span class:'tool-text waffle-logo', "Open waffle.io board"
-    $btn.on 'click', (e) =>
-      shell.openExternal @getWaffleURL()
+    $wafflebtn.on 'click', (e) => @openWaffle()
+    $githubbtn = $$ ->
+      @div class:"imdone-icon imdone-toolbar-button", =>
+        @a href: "", title: title, class: "#{pluginName}", =>
+          @span class:"icon icon-octoface"
+    $githubbtn.on 'click', (e) => @openGithub()
+    return [$wafflebtn,$githubbtn]
 
+
+    # openWaffle = @openWaffle
+    # $btn = $el.div class:"imdone-icon imdone-toolbar-button",
+    #   $el.a href:"#{}", title: title, class: "#{pluginName}-waffle",
+    #     $el.i class:'icon',
+    #       $el 'svg', class:'waffle-logo',
+    #         $el 'use', "xlink:href":"#waffle-logo-icon"
+    #     $el.span class:'tool-text waffle-logo', "Open waffle.io board"
+    # $btn.onclick = () => @openWaffle()
+    $($btn)
+
+  openWaffle: -> shell.openExternal @getWaffleURL()
+  openGithub: -> shell.openExternal @issuesUrlBase()
   getWaffleURL: -> "https://waffle.io/#{@connector.config.waffleIoProject}"
