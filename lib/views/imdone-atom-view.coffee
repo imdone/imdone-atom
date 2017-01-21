@@ -310,7 +310,7 @@ class ImdoneAtomView extends ScrollView
         if typeof plugin.taskButton is 'function'
           $button = plugin.taskButton(id)
           if $button
-            $button.addClass 'task-plugin-button'
+            $button.classList.add 'task-plugin-button' if $button.classList else $button.addClass 'task-plugin-button'
             $taskPlugins.append $button
 
   addPluginProjectButtons: -> @menuView.addPluginProjectButtons @plugins

@@ -64,16 +64,23 @@ class ConnectorPlugin extends Emitter
     title = @constructor.title
     pluginName = @constructor.pluginName
     icon = @constructor.icon
-    $btn = $$ ->
-      @a href: '#', title: title, class: "#{pluginName}", =>
-        @span class:"icon icon-#{icon}"
-    $btn.on 'click', (e) =>
+    onClick = (e) =>
       $(e.target).find('.task')
       @task = task
       @imdoneView.showPlugin @
       @imdoneView.selectTask id
       @view.setTask task
       @view.show @view.getIssueIds(task)
+
+    $btn = $el.a href: '#', title: title, class: "#{pluginName}", onclick: onclick,
+      $el.span class:"icon icon-#{icon}"
+    # $btn.on 'click', (e) =>
+    #   $(e.target).find('.task')
+    #   @task = task
+    #   @imdoneView.showPlugin @
+    #   @imdoneView.selectTask id
+    #   @view.setTask task
+    #   @view.show @view.getIssueIds(task)
 
   projectButtons: () ->
     {$, $$, $$$} = require 'atom-space-pen-views'
