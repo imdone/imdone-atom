@@ -1,3 +1,9 @@
+## 2.1.11
+- Only update lists that have changed
+- Add github issues link for github connector
+- Add filter by file link
+- Create tasks with DOM instead of jquery
+
 ## 2.1.10
 - Add delete visible files button
 

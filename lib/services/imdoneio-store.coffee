@@ -54,7 +54,8 @@ module.exports =  (repo) ->
         (err) ->
           repo.saveModifiedFiles (err, files) ->
             return cb err if err
-            repo.emit 'tasks.updated'
+            debugger
+            repo.emit 'tasks.updated', tasks
             repo.emit 'project.removed'
             cb()
 
@@ -83,10 +84,11 @@ module.exports =  (repo) ->
   checkForIIOProject() if client.isAuthenticated()
   client.on 'authenticated', => checkForIIOProject()
 
-  syncDone = (err) ->
-    repo.emit 'tasks.updated' unless err
-    return if err == ERRORS.NO_CONTENT
-    throw err if err
+  syncDone = (tasks) ->
+    return (err) ->
+      repo.emit 'tasks.updated', tasks unless err
+      return if err == ERRORS.NO_CONTENT
+      throw err if err
 
   repo.syncTasks = syncTasks = (tasks, cb) ->
     return cb("unauthenticated", ()->) unless client.isAuthenticated()
@@ -100,9 +102,6 @@ module.exports =  (repo) ->
       return if err # TODO: Do something with this error id:43 gh:116
       #console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
-
-
-
         (task, cb) ->
           currentTask = repo.getTask task.id
           taskToModify = _.assign currentTask, task
@@ -113,9 +112,8 @@ module.exports =  (repo) ->
             #console.log "Sync Error:", err
             return cm.emit 'sync.error', err
           repo.saveModifiedFiles (err, files)->
-
-            return syncDone err unless cb
-            cb err, syncDone
+            return syncDone(tasks)(err) unless cb
+            cb err, syncDone(tasks)
 
   syncFile = (file, cb) ->
     return cb("unauthenticated", ()->) unless client.isAuthenticated()
@@ -133,8 +131,8 @@ module.exports =  (repo) ->
         (err) ->
           return cm.emit 'sync.error', err if err
           repo.writeFile file, (err, file)->
-            return syncDone err unless cb
-            cb err, syncDone
+            return syncDone(tasks)(err) unless cb
+            cb err, syncDone(tasks)
 
   loadSort = (cb) ->
     loadSortFile cb

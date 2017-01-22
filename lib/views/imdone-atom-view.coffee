@@ -157,24 +157,23 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'sync.error', => @hideMask()
 
-    @emitter.on 'tasks.updated', =>
-      @onRepoUpdate()
+    @emitter.on 'tasks.updated', (tasks) =>
+      @onRepoUpdate(tasks) # DOING: For UI performance only update the lists that have changed. id:134 +enhancement gh:205
 
     @emitter.on 'initialized', =>
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
-      @onRepoUpdate()
+      @onRepoUpdate @imdoneRepo.getTasks()
 
-    @emitter.on 'list.modified', =>
-      #console.log 'list.modified'
-      @onRepoUpdate()
+    @emitter.on 'list.modified', (list) =>
+      @onRepoUpdate @imdoneRepo.getTasksInList(list)
 
     @emitter.on 'file.update', (file) =>
       #console.log 'file.update: %s', file && file.getPath()
-      @onRepoUpdate() if file.getPath()
+      @onRepoUpdate(file.getTasks()) if file.getPath()
 
     @emitter.on 'tasks.moved', (tasks) =>
       #console.log 'tasks.moved', tasks
-      @onRepoUpdate()
+      @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed id:136
 
     @emitter.on 'config.update', =>
       #console.log 'config.update'
@@ -389,7 +388,7 @@ class ImdoneAtomView extends ScrollView
 
   initImdone: () ->
     if @imdoneRepo.initialized
-      @onRepoUpdate()
+      @onRepoUpdate(@imdoneRepo.getTasks())
       @menuView.updateMenu()
       @imdoneRepo.initProducts()
       return
@@ -407,9 +406,9 @@ class ImdoneAtomView extends ScrollView
     atom.workspace.open(ignorePath, split: 'left').then =>
       item.destroy()
 
-  onRepoUpdate: ->
+  onRepoUpdate: (tasks) ->
     # BACKLOG: This should be queued so two updates don't colide id:73
-    @updateBoard()
+    @updateBoard(tasks)
     @boardWrapper.css 'bottom', 0
     @bottomView.attr 'style', ''
     @loading.hide()
@@ -430,7 +429,10 @@ class ImdoneAtomView extends ScrollView
     $link
 
   # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:74
-  updateBoard: ->
+  updateBoard: (tasks) ->
+    # DOING: Only update board with changed tasks gh:205 id:137
+    # Compare tasks to tasks in board with rawTask
+    debugger
     @destroySortables()
     @board.empty().hide()
     repo = @imdoneRepo
@@ -530,7 +532,7 @@ class ImdoneAtomView extends ScrollView
 
       $el.li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line,
         $el.div class: 'imdone-task-plugins'
-        $el.div class: 'task-full-text hidden', task.getText()
+        $el.div class: 'task-full-text hidden', task.rawTask
         $taskText
         $filters
         $taskMeta
@@ -555,7 +557,7 @@ class ImdoneAtomView extends ScrollView
 
 
       $tasks = $list.find('.tasks')
-      $tasks.append(getTask task) for task in tasks # DOING: For performance create this in the DOM and append it! id:133
+      $tasks.append(getTask task) for task in tasks # DONE: For performance create this in the DOM and append it! id:133
       $list
 
     elements = (-> getList list for list in lists)
