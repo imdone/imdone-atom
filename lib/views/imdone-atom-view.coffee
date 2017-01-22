@@ -424,9 +424,11 @@ class ImdoneAtomView extends ScrollView
 
   genFilterLink: (opts) ->
     console.log opts
+    linkPrefix = opts.linkPrefix if opts.displayPrefix
     $link = $el.a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link",
-      $el.span class: opts.linkClass, ( if opts.displayPrefix then opts.linkPrefix else "" ) + opts.linkText
+      $el.span class: opts.linkClass, "#{linkPrefix}#{opts.linkText}"
     $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
+    debugger
     $link
 
   # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:74
