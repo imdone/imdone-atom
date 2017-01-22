@@ -423,13 +423,11 @@ class ImdoneAtomView extends ScrollView
   hideMask: -> @mask.hide() if @mask
 
   genFilterLink: (opts) ->
-    console.log opts
-    linkPrefix = opts.linkPrefix if opts.displayPrefix
+    linkPrefix = if opts.displayPrefix then opts.linkPrefix else ""
     $link = $el.a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link",
       $el.span class: opts.linkClass, "#{linkPrefix}#{opts.linkText}"
     $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
-    debugger
-    $el.div($link).innerHTML
+    $link
 
   # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:74
   updateBoard: ->
@@ -462,12 +460,14 @@ class ImdoneAtomView extends ScrollView
         if contexts
           for context, i in contexts
             do (context, i) =>
-              taskHtml = taskHtml.replace( "@#{context}", @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true )
+              $link = @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true
+              taskHtml = taskHtml.replace( "@#{context}", $el.div($link).innerHTML )
 
         if tags
           for tag, i in tags
             do (tag, i) =>
-              taskHtml = taskHtml.replace( "+#{tag}", @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true  )
+              $link = @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true
+              taskHtml = taskHtml.replace( "+#{tag}", $el.div($link).innerHTML )
       else
         if contexts
           $div = $el.div()
@@ -484,16 +484,7 @@ class ImdoneAtomView extends ScrollView
               $div.appendChild(self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags")
               $div.appendChild($el.span ", ") if (i < tags.length-1)
 
-      console.log taskHtml
-
-      # parser = new DOMParser();
-      # console.log html
-      # $children = parser.parseFromString(taskHtml, "text/html").getElementsByTagName('body')[0].children
       $taskText.innerHTML = taskHtml
-      # console.log $children
-      # for $child in $children
-      #   console.log $child
-      #   $taskText.appendChild $child
 
       if dateDue
         $tr = $el.tr class:'meta-data-row',
