@@ -429,7 +429,7 @@ class ImdoneAtomView extends ScrollView
       $el.span class: opts.linkClass, "#{linkPrefix}#{opts.linkText}"
     $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
     debugger
-    $link
+    $el.div($link).innerHTML
 
   # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:74
   updateBoard: ->
