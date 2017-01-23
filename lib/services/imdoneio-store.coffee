@@ -131,6 +131,7 @@ module.exports =  (repo) ->
         (err) ->
           return cm.emit 'sync.error', err if err
           repo.writeFile file, (err, file)->
+            # DOING: The tasks should come from the files id:139
             return syncDone(tasks)(err) unless cb
             cb err, syncDone(tasks)
 
@@ -278,7 +279,7 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
-  # DOING: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. id:131
+  # TODO: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. id:131
 
   repo.initProducts = (cb) ->
     cb ?= ()->

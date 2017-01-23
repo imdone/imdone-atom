@@ -14,7 +14,7 @@ _ = null
 config = require '../services/imdone-config'
 envConfig = require '../../config'
 
-# #ICEBOX: Add keen stats for features id:62
+# #BACKLOG: Add keen stats for features id:62
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -428,11 +428,177 @@ class ImdoneAtomView extends ScrollView
     $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
     $link
 
+  getTask: (task) =>
+    self = @;
+    repo = @imdoneRepo
+    contexts = task.getContext()
+    tags = task.getTags()
+    dateDue = task.getDateDue()
+    dateCreated = task.getDateCreated()
+    dateCompleted = task.getDateCompleted()
+    opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
+    taskHtml = task.getHtml(opts)
+    showTagsInline = config.getSettings().showTagsInline
+    $taskText = $el.div class: 'task-text'
+    $filters = $el.div()
+    $taskMetaTable = $el.table()
+    $taskMeta = $el.div class: 'task-meta', $taskMetaTable
+
+    if showTagsInline
+      if contexts
+        for context, i in contexts
+          do (context, i) =>
+            $link = @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true
+            taskHtml = taskHtml.replace( "@#{context}", $el.div($link).innerHTML )
+
+      if tags
+        for tag, i in tags
+          do (tag, i) =>
+            $link = @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true
+            taskHtml = taskHtml.replace( "+#{tag}", $el.div($link).innerHTML )
+    else
+      if contexts
+        $div = $el.div()
+        $filters.appendChild $div
+        for context, i in contexts
+          do (context, i) =>
+            $div.appendChild(self.genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context")
+            $div.appendChild($el.span ", ") if (i < contexts.length-1)
+      if tags
+        $div = $el.div()
+        $filters.appendChild $div
+        for tag, i in tags
+          do (tag, i) =>
+            $div.appendChild(self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags")
+            $div.appendChild($el.span ", ") if (i < tags.length-1)
+
+    $taskText.innerHTML = taskHtml
+
+    if dateDue
+      $tr = $el.tr class:'meta-data-row',
+        $el.td "due"
+        $el.td dateDue
+        $el.td class: 'meta-filter',
+          $el.a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}",
+            $el.span class:"icon icon-light-bulb"
+      $taskMetaTable.appendChild $tr
+    if dateCreated
+      $tr = $el.tr class:'meta-data-row',
+        $el.td "created"
+        $el.td dateCreated
+        $el.td class: 'meta-filter',
+          $el.a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}",
+            $el.span class:"icon icon-light-bulb"
+      $taskMetaTable.appendChild $tr
+    if dateCompleted
+      $tr = $el.tr class:'meta-data-row',
+        $el.td "completed"
+        $el.td dateCompleted
+        $el.td class: 'meta-filter',
+          $el.a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}",
+            $el.span class:"icon icon-light-bulb"
+      $taskMetaTable.appendChild $tr
+
+    for data in task.getMetaDataWithLinks(repo.getConfig())
+      do (data) =>
+        $icons = $el.td()
+        if data.link
+          $link = $el.a href: data.link.url, title: data.link.title,
+            $el.span class:"icon #{data.link.icon || 'icon-link-external'}"
+          $icons.appendChild $link
+        $filterLink = $el.a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}",
+          $el.span class:"icon icon-light-bulb"
+        $icons.appendChild $filterLink
+
+        $tr = $el.tr class:'meta-data-row',
+          $el.td data.key
+          $el.td data.value
+          $icons
+        $taskMetaTable.appendChild $tr
+
+    $el.li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line,
+      $el.div class: 'imdone-task-plugins'
+      $el.div class: 'task-full-text hidden', task.rawTask
+      $taskText
+      $filters
+      $taskMeta
+      $el.div class: 'task-source',
+        $el.a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}", 'data-line': task.line, "#{task.source.path + ':' + task.line}"
+        $el.span ' | '
+        $el.a href:"#", title: "just show me tasks in #{task.source.path}", class: "filter-link", "data-filter": "#{task.source.path}",
+          $el.span class:"icon icon-light-bulb"
+
+  getList: (list) =>
+    self = @
+    repo = @imdoneRepo
+    tasks = repo.getTasksInList(list.name)
+    $list = $$ ->
+      @div class: 'top list well', 'data-name': list.name, =>
+        @div class: 'list-name-wrapper well', =>
+          @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
+            @raw list.name
+
+            if (tasks.length < 1)
+              @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
+                @span class:'icon icon-trashcan'
+        @ol class: 'tasks', "data-list":"#{list.name}", =>
+    $tasks = $list.find('.tasks')
+    $tasks.append(self.getTask task) for task in tasks # DONE: For performance create this in the DOM and append it! id:133
+    $list
+
+  listOnBoard: (name) -> @board.find ".list[data-name='#{name}'] ol.tasks"
+
+  addListToBoard: (name) ->
+    position = _.findIndex @imdoneRepo.getLists(), name: name
+    list = _.find @imdoneRepo.getLists(), name: name
+    @board.find(".list:eq(#{position})").after(@getList list)
+
+  addTaskToBoard: (task) ->
+    @listOnBoard(task.list).prepend @getTask task
+
+  addTasksToBoard: (tasks) ->
+    lists = _.groupBy tasks, 'list'
+    for listName, listOfTasks of lists
+      if @listOnBoard(listName).length == 0
+        @addListToBoard listName
+      else @addTaskToBoard task for task in listOfTasks
+
+  updateTasksOnBoard: (tasks) ->
+    return false if tasks.length == 0
+    return false if tasks.length == @imdoneRepo.getTasks().length
+    self = @
+    @destroySortables()
+    tasksByList = _.groupBy tasks, 'list'
+    if _.keys(tasksByList).length == 1
+      listName = tasks[0].list
+      self.board.find(".list[data-name='#{listName}']").remove()
+      @addTasksToBoard @imdoneRepo.getTasksInList(listName)
+    else
+      # Update tasks by file
+      files = _.uniq(_.map tasks, 'source.path')
+      tasksInFiles = []
+      for file in files
+        # Remove Tasks for each file by data-path attribute
+        @board.find("li[data-path='#{file}']").remove()
+        # Add tasks from all files...
+        tasksInFiles = tasksInFiles.concat @imdoneRepo.getFile(file).getTasks()
+      @addTasksToBoard tasksInFiles
+    # remove lists that are hidden
+    @board.find('.list').each ->
+      $list = $(this)
+      listName = $list.attr 'data-name'
+      $list.remove() unless self.imdoneRepo.isListVisible listName
+    @addPluginButtons()
+    @makeTasksSortable()
+    @hideMask()
+    @emitter.emit 'board.update'
+
+
   # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:74
   updateBoard: (tasks) ->
-    # DOING: Only update board with changed tasks gh:205 id:137
-    # Compare tasks to tasks in board with rawTask
-    debugger
+    # DOING: Only update board with changed tasks gh:205 id:137 +master
+    # return if @updateTasksOnBoard tasks
+    self = @
     @destroySortables()
     @board.empty().hide()
     repo = @imdoneRepo
@@ -440,129 +606,7 @@ class ImdoneAtomView extends ScrollView
     lists = repo.getVisibleLists()
     width = 378*lists.length + "px"
     @board.css('width', width)
-
-
-    # BACKLOG: We can display data from imdone.io in a card summary/details id:76
-    getTask = (task) =>
-      self = @;
-      contexts = task.getContext()
-      tags = task.getTags()
-      dateDue = task.getDateDue()
-      dateCreated = task.getDateCreated()
-      dateCompleted = task.getDateCompleted()
-      opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
-      taskHtml = task.getHtml(opts)
-      showTagsInline = config.getSettings().showTagsInline
-      $taskText = $el.div class: 'task-text'
-      $filters = $el.div()
-      $taskMetaTable = $el.table()
-      $taskMeta = $el.div class: 'task-meta', $taskMetaTable
-
-      if showTagsInline
-        if contexts
-          for context, i in contexts
-            do (context, i) =>
-              $link = @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true
-              taskHtml = taskHtml.replace( "@#{context}", $el.div($link).innerHTML )
-
-        if tags
-          for tag, i in tags
-            do (tag, i) =>
-              $link = @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true
-              taskHtml = taskHtml.replace( "+#{tag}", $el.div($link).innerHTML )
-      else
-        if contexts
-          $div = $el.div()
-          $filters.appendChild $div
-          for context, i in contexts
-            do (context, i) =>
-              $div.appendChild(self.genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context")
-              $div.appendChild($el.span ", ") if (i < contexts.length-1)
-        if tags
-          $div = $el.div()
-          $filters.appendChild $div
-          for tag, i in tags
-            do (tag, i) =>
-              $div.appendChild(self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags")
-              $div.appendChild($el.span ", ") if (i < tags.length-1)
-
-      $taskText.innerHTML = taskHtml
-
-      if dateDue
-        $tr = $el.tr class:'meta-data-row',
-          $el.td "due"
-          $el.td dateDue
-          $el.td class: 'meta-filter',
-            $el.a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}",
-              $el.span class:"icon icon-light-bulb"
-        $taskMetaTable.appendChild $tr
-      if dateCreated
-        $tr = $el.tr class:'meta-data-row',
-          $el.td "created"
-          $el.td dateCreated
-          $el.td class: 'meta-filter',
-            $el.a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}",
-              $el.span class:"icon icon-light-bulb"
-        $taskMetaTable.appendChild $tr
-      if dateCompleted
-        $tr = $el.tr class:'meta-data-row',
-          $el.td "completed"
-          $el.td dateCompleted
-          $el.td class: 'meta-filter',
-            $el.a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}",
-              $el.span class:"icon icon-light-bulb"
-        $taskMetaTable.appendChild $tr
-
-      for data in task.getMetaDataWithLinks(repo.getConfig())
-        do (data) =>
-          $icons = $el.td()
-          if data.link
-            $link = $el.a href: data.link.url, title: data.link.title,
-              $el.span class:"icon #{data.link.icon || 'icon-link-external'}"
-            $icons.appendChild $link
-          $filterLink = $el.a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}",
-            $el.span class:"icon icon-light-bulb"
-          $icons.appendChild $filterLink
-
-          $tr = $el.tr class:'meta-data-row',
-            $el.td data.key
-            $el.td data.value
-            $icons
-          $taskMetaTable.appendChild $tr
-
-      $el.li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line,
-        $el.div class: 'imdone-task-plugins'
-        $el.div class: 'task-full-text hidden', task.rawTask
-        $taskText
-        $filters
-        $taskMeta
-        $el.div class: 'task-source',
-          $el.a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}", 'data-line': task.line, "#{task.source.path + ':' + task.line}"
-          $el.span ' | '
-          $el.a href:"#", title: "just show me tasks in #{task.source.path}", class: "filter-link", "data-filter": "#{task.source.path}",
-            $el.span class:"icon icon-light-bulb"
-
-    getList = (list) =>
-      tasks = repo.getTasksInList(list.name)
-      $list = $$ ->
-        @div class: 'top list well', =>
-          @div class: 'list-name-wrapper well', =>
-            @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
-              @raw list.name
-
-              if (tasks.length < 1)
-                @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
-                  @span class:'icon icon-trashcan'
-          @ol class: 'tasks', "data-list":"#{list.name}", =>
-
-
-      $tasks = $list.find('.tasks')
-      $tasks.append(getTask task) for task in tasks # DONE: For performance create this in the DOM and append it! id:133
-      $list
-
-    elements = (-> getList list for list in lists)
-
-    @board.append elements
+    @board.append (=> @getList list for list in lists)
     @addPluginButtons()
     @filter()
     @board.show()
