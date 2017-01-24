@@ -610,7 +610,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() # BACKLOG: hide mask on event from connectorManager who will retry after emitting id:82
+    @hideMask() 
     @makeTasksSortable()
     @emitter.emit 'board.update'
 

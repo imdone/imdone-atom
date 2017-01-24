@@ -99,7 +99,8 @@ class MenuView extends View
     @$projectButtons.empty()
     plugins = @imdoneRepo.getPlugins()
     if plugins
-      @$projectButtons.show().append plugin.projectButtons() for plugin in plugins
+      for plugin in plugins
+        @$projectButtons.show().append(plugin.projectButtons()) if plugin && plugin.projectButtons()
       @$projectButtonsSpace.show()
     else
       @$projectButtons.hide()

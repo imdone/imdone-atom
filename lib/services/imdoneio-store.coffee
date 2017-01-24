@@ -279,7 +279,7 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
-  # TODO: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. id:131
+  # DOING: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. id:131
 
   repo.initProducts = (cb) ->
     cb ?= ()->

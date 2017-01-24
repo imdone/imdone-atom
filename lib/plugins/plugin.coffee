@@ -46,13 +46,16 @@ class ConnectorPlugin extends Emitter
   metaKeyConfig: -> @repo.config.meta && @repo.config.meta[@idMetaKey()]
   issuesUrlBase: ->
     projectInfo = @githubProjectInfo()
+    return unless projectInfo
     "https://github.com/#{projectInfo.accountName}/#{projectInfo.projectName}/issues"
   addMetaKeyConfig: (cb) ->
     projectInfo = @githubProjectInfo()
     return cb() if @metaKeyConfig() || !@idMetaKey() || !projectInfo
     @repo.config.meta = {} unless @repo.config.meta
+    issuesUrl = issuesUrlBase()
+    return cb() unless issuesUrl
     @repo.config.meta[@idMetaKey()] =
-      urlTemplate: "#{issuesUrlBase()}/%s"
+      urlTemplate: "#{issuesUrl}/%s"
       titleTemplate: "View github issue %s"
       icon: "icon-octoface"
     @repo.saveConfig cb
@@ -91,6 +94,7 @@ class ConnectorPlugin extends Emitter
     pluginName = @constructor.pluginName
     icon = @constructor.icon
     issuesUrlBase = @issuesUrlBase()
+    return unless issuesUrlBase
     $wafflebtn = $$ ->
       @div class:"imdone-icon imdone-toolbar-button", =>
         @a href: "#{}", title: title, class: "#{pluginName}-waffle", =>
