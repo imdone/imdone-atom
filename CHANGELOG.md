@@ -1,3 +1,6 @@
+## 2.1.14
+- Reduce async file access limit to 256
+
 ## 2.1.13
 - Really fix the project buttons
 
