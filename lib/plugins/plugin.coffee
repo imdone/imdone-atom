@@ -52,7 +52,7 @@ class ConnectorPlugin extends Emitter
     projectInfo = @githubProjectInfo()
     return cb() if @metaKeyConfig() || !@idMetaKey() || !projectInfo
     @repo.config.meta = {} unless @repo.config.meta
-    issuesUrl = issuesUrlBase()
+    issuesUrl = @issuesUrlBase()
     return cb() unless issuesUrl
     @repo.config.meta[@idMetaKey()] =
       urlTemplate: "#{issuesUrl}/%s"

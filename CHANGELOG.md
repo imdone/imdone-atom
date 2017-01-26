@@ -1,3 +1,6 @@
+## 2.1.13
+- Really fix the project buttons
+
 ## 2.1.12
 - Bug fix for project buttons.
   - [Uncaught TypeError: Cannot read property 'accountName' of undefined · Issue #206 · imdone/imdone-atom](https://github.com/imdone/imdone-atom/issues/206)
