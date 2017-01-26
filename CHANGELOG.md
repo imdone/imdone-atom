@@ -1,4 +1,7 @@
 ## 2.1.14
+- Reduce async file access limit to 10
+
+## 2.1.14
 - Reduce async file access limit to 256
 
 ## 2.1.13
