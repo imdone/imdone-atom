@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "2.1.15",
+  "version": "2.1.16",
   "description": "The developer's task board.",
   "keywords": [
     "todo",
