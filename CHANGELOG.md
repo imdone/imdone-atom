@@ -1,3 +1,9 @@
+## 2.1.17
+- Simplify binary file check
+
+## 2.1.16
+- Fix error handling for isBinary check
+
 ## 2.1.14
 - Reduce async file access limit to 10
 

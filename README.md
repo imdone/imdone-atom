@@ -7,6 +7,8 @@ Just use `alt+t` while editing a file to see your projects board.
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
+[![apm](https://img.shields.io/gratipay/user/piascikj.svg)](https://gratipay.com/~piascikj/)
+
 
 You live in the code, your tasks should too!
 ----
