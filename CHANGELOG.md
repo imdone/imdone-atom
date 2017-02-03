@@ -1,3 +1,6 @@
+## 2.1.18
+- Fix github plugin's task button onclick handling.  This was broken while implementing 2.1.11.
+
 ## 2.1.17
 - Simplify binary file check
 
@@ -16,6 +19,7 @@
 ## 2.1.12
 - Bug fix for project buttons.
   - [Uncaught TypeError: Cannot read property 'accountName' of undefined · Issue #206 · imdone/imdone-atom](https://github.com/imdone/imdone-atom/issues/206)
+
 ## 2.1.11
 - Add github issues link for github connector
 - Add filter by file link

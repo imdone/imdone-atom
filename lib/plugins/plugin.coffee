@@ -75,7 +75,7 @@ class ConnectorPlugin extends Emitter
       @view.setTask task
       @view.show @view.getIssueIds(task)
 
-    $btn = $el.a href: '#', title: title, class: "#{pluginName}", onclick: onclick,
+    $btn = $el.a href: '#', title: title, class: "#{pluginName}", onclick: onClick,
       $el.span class:"icon icon-#{icon}"
     # $btn.on 'click', (e) =>
     #   $(e.target).find('.task')
