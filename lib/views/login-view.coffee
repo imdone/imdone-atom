@@ -17,11 +17,11 @@ class LoginView extends View
       @div outlet: 'spinner', class: 'spinner', style: 'display:none;', =>
         @span class:'loading loading-spinner-small inline-block'
 
-      @div outlet:'loginPanel', class: 'imdone-login-pane', style: 'display:none;', =>
-        @div class: 'input input-med inline-block-tight', =>
-          @subview 'emailEditor', new TextEditorView(mini: true, placeholderText: 'email')
-        @div class: 'input input-med inline-block-tight', =>
-          @subview 'passwordEditor', new TextEditorView(mini: true, placeholderText: 'password')
+      @div outlet:'loginPanel', class: 'imdone-login-pane form-group', style: 'display:none;', =>
+        @div class: 'input input-med inline-block-tight native-key-bindings', =>
+          @input type: 'email', outlet: 'emailEditor', placeholder: 'email', class: 'form-control'
+        @div class: 'input input-med inline-block-tight native-key-bindings', =>
+          @input type:'password', outlet: 'passwordEditor', placeholder: 'password', class: 'form-control'
         @div class:'btn-group btn-group-login inline-block-tight', =>
           @button outlet: 'loginButton', click: 'login', title: 'WHOOSH!', class:'btn btn-primary inline-block-tight', 'LOGIN'
       @h2 "or"
@@ -30,7 +30,6 @@ class LoginView extends View
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     @client = Client.instance
-    @initPasswordField()
 
   show: () ->
     super
@@ -49,28 +48,16 @@ class LoginView extends View
     # BACKLOG: Show login error if present and hide progress id:85
     @showLogin()
 
-  initPasswordField: () ->
-    # [Password fields when using EditorView subview - packages - Atom Discussion](https://discuss.atom.io/t/password-fields-when-using-editorview-subview/11061/7)
-    passwordElement = $(@passwordEditor.element.rootElement)
-    passwordElement.find('div.lines').addClass('password-lines')
-    @passwordEditor.getModel().onDidChange =>
-      string = @passwordEditor.getModel().getText().split('').map(->
-        '*'
-      ).join ''
-
-      passwordElement.find('#password-style').remove()
-      passwordElement.append('<style id="password-style">.password-lines .line span.text:before {content:"' + string + '";}</style>')
-
   login: () ->
     @authenticating = true
     log 'login:begin'
     @loginPanel.hide()
     @spinner.show()
-    email = @emailEditor.getModel().getText()
-    password = @passwordEditor.getModel().getText()
+    email = @emailEditor.val()
+    password = @passwordEditor.val()
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
-      @passwordEditor.getModel().setText ''
+      @passwordEditor.val ''
       # TODO: We need to show an error here if service can't be reached or login fails id:86 gh:116
       log 'login:end'
       return @showLogin() unless @client.isAuthenticated()

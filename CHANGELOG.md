@@ -1,3 +1,6 @@
+## 2.1.19
+- Fix deprecations and use plain input for login
+
 ## 2.1.18
 - Fix github plugin's task button onclick handling.  This was broken while implementing 2.1.11.
 
