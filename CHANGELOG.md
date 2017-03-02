@@ -1,3 +1,6 @@
+## 2.1.20
+- Simplify readFiles with eachLimit (Trying to fix the range error)
+
 ## 2.1.19
 - Fix deprecations and use plain input for login
 
