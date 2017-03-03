@@ -3,7 +3,7 @@ ImdoneRepo = require 'imdone-core/lib/repository'
 atomFsStore = require './atom-watched-fs-store'
 fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 path = require 'path'
-configHelper = require './imdone-config'
+getSettings = require('./imdone-config').getSettings
 repos = {}
 
 module.exports =
@@ -18,7 +18,7 @@ module.exports =
   destroyRepos: () -> repo.repo.destroy() for path, repo of repos
 
   fsStore: (repo) ->
-    fsStore = atomFsStore if configHelper.getSettings().useAlternateFileWatcher
+    fsStore = atomFsStore if getSettings().useAlternateFileWatcher
     fsStore(repo)
 
   excludeVcsIgnoresMixin: (imdoneRepo) ->
@@ -27,9 +27,9 @@ module.exports =
     return unless vcsRepo
     _shouldExclude = imdoneRepo.shouldExclude
     imdoneRepo.shouldExclude = (relPath) ->
-      return _shouldExclude.call imdoneRepo, relPath unless configHelper.getSettings().excludeVcsIgnoredPaths
-      vcsIgnored = vcsRepo.isPathIgnored relPath
-      return true if vcsIgnored
+      if getSettings().excludeVcsIgnoredPaths && vcsRepo
+        vcsIgnored = vcsRepo.isPathIgnored relPath
+        return true if vcsIgnored
       _shouldExclude.call imdoneRepo, relPath
 
   repoForPath: (repoPath) ->

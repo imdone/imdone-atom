@@ -6,4 +6,6 @@ module.exports =
 
   getPackagePath: () -> atom.packages.getLoadedPackage(pkg.name).path
 
-  getSettings: () -> atom.config.get "#{pkg.name}"
+  getSettings: () ->
+    return {} unless atom && atom.config
+    atom.config.get "#{pkg.name}" || {}
