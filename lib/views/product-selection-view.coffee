@@ -84,6 +84,7 @@ class ProductSelectionView extends View
     cb ?= ()->
     @imdoneRepo.saveConnector connector, (err, connector) =>
       cb err if err
+      cb null, connector unless @selected
       @selected.connector = connector
       @emitter.emit 'connector.changed', @selected
       cb null, connector
