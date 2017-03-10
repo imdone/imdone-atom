@@ -1,3 +1,6 @@
+## 2.1.23
+- Completely hide bottom view with display: none
+
 ## 2.1.22
 - #DONE: Fix gh:213 and gh:219 by checking for undefined id:142
 
