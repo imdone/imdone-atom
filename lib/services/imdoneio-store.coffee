@@ -44,7 +44,8 @@ module.exports =  (repo) ->
     delete repo.project
     repo.saveConfig (err) =>
       return cb err if err
-      async.eachSeries repo.getTasks(),
+      tasks = repo.getTasks()
+      async.eachSeries tasks,
         (task, cb) ->
           currentTask = repo.getTask task.id
           taskToModify = _.assign currentTask, task
@@ -54,7 +55,6 @@ module.exports =  (repo) ->
         (err) ->
           repo.saveModifiedFiles (err, files) ->
             return cb err if err
-            debugger
             repo.emit 'tasks.updated', tasks
             repo.emit 'project.removed'
             cb()

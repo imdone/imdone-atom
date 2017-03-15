@@ -101,8 +101,9 @@ class ProductSelectionView extends View
     @saveConnector product.connector, (err, connector) ->
       return if err
       product.connector.id = connector.id
-      detail = "Your default #{connector.name} TODOBOTs have been enabled! Take a look below to see what they do."
-      atom.notifications.addInfo "TODOBOTs Enabled!", detail: detail, dismissable: true, icon: 'check'
+      info = "#{connector.name} connector enabled!"
+      detail = "Your default #{connector.name} rules have been enabled! Take a look below to see what they do."
+      atom.notifications.addInfo info, detail: detail, dismissable: true, icon: 'check'
 
   setItems: (@products) ->
     @selectProduct @products[0] if @products && @products.length > 0

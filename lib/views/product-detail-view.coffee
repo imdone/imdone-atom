@@ -56,7 +56,7 @@ class ProductDetailView extends View
       @div class: 'json-editor-container', =>
         @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
       @div outlet: '$welcome', class: 'block text-center', style: 'display:none;', =>
-        @h1 "No TODOBOTS yet?  Turn on GitHub now."
+        @h1 "No Connectors yet?  Turn on GitHub now."
         @h2 "Let's make programming fun again!"
 
   setProduct: (@product)->
