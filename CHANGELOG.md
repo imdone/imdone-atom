@@ -1,3 +1,8 @@
+## 2.1.25
+- (NEW) task source link in task notification.
+- Allow umlauts and special characters in todo.txt contexts
+- Fix for issue with  
+
 ## 2.1.23
 - Completely hide bottom view with display: none
 

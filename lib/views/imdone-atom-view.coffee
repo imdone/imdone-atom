@@ -238,14 +238,22 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'zoom', (dir) => @zoom dir
 
-    @on 'click', '.source-link',  (e) =>
+    $('body').on 'click', '.source-link',  (e) =>
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
 
-      if config.getSettings().showNotifications
+      if config.getSettings().showNotifications && !$(link).hasClass('info-link')
         taskId = $(link).closest('.task').attr 'id'
         task = @imdoneRepo.getTask taskId
-        atom.notifications.addInfo task.list, detail: task.text, dismissable: true, icon: 'check'
+        # DONE: Add a link back to task src on notification id:143 +feature gh:223
+        file = @imdoneRepo.getFileForTask(task)
+        fullPath = @imdoneRepo.getFullPath file
+        line = task.line
+        newLink = $(link.cloneNode(true));
+        newLink.addClass 'info-link'
+        description = "#{task.text}\n\n#{newLink[0].outerHTML}"
+
+        atom.notifications.addInfo task.list, description: description, dismissable: true, icon: 'check'
 
     @on 'click', '.list-name', (e) =>
       name = e.target.dataset.list
@@ -610,7 +618,7 @@ class ImdoneAtomView extends ScrollView
     @addPluginButtons()
     @filter()
     @board.show()
-    @hideMask() 
+    @hideMask()
     @makeTasksSortable()
     @emitter.emit 'board.update'
 

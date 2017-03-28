@@ -14,7 +14,7 @@ module.exports =
     eioClient = require 'engine.io-client'
     minimatch = require 'minimatch'
     log       = require './log'
-    
+
     http = require('http').createServer()
     http.on 'error', (err) =>
       if (err.code == 'EADDRINUSE')
@@ -35,8 +35,8 @@ module.exports =
     @
 
   tryProxy: (port) ->
-    
-    
+
+
     # BACKLOG: if imdone is not listening we should ask for another port issue:52 id:20
     log 'Trying proxy'
     socket = eioClient('ws://localhost:' + port)
@@ -64,7 +64,7 @@ module.exports =
   openFile: (project, path, line, cb) ->
     return cb() unless @getConfig().openIn.enable
     editor = @getEditor path
-    
+
     socket = @getSocket editor
     return cb() unless socket
     isProxied = if @proxy then true else false
@@ -75,6 +75,7 @@ module.exports =
     openIn = @getConfig().openIn
     for editor, pattern of openIn
       if pattern and typeof pattern is 'string'
+        minimatch = require 'minimatch'
         return editor if minimatch(path, pattern, {matchBase: true})
     "atom"
 
