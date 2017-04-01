@@ -7,7 +7,7 @@
 - Completely hide bottom view with display: none
 
 ## 2.1.22
-- #DONE: Fix gh:213 and gh:219 by checking for undefined id:142
+- 
 
 ## 2.1.21
 - Check excludes for all files before send files to async

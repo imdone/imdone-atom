@@ -93,6 +93,7 @@ class ProductSelectionView extends View
     return if @defaultConnectorCreated
     return unless @imdoneRepo.isImdoneIOProject()
     product = _.find @products, name: DEFAULT_CONNECTOR.name
+    return unless product && product.connector
     return if product.connector.id
     @defaultConnectorCreated = true
     product.connector.enabled = true

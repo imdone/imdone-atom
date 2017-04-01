@@ -245,7 +245,6 @@ class ImdoneAtomView extends ScrollView
       if config.getSettings().showNotifications && !$(link).hasClass('info-link')
         taskId = $(link).closest('.task').attr 'id'
         task = @imdoneRepo.getTask taskId
-        # DONE: Add a link back to task src on notification id:143 +feature gh:223
         file = @imdoneRepo.getFileForTask(task)
         fullPath = @imdoneRepo.getFullPath file
         line = task.line
@@ -551,7 +550,7 @@ class ImdoneAtomView extends ScrollView
                 @span class:'icon icon-trashcan'
         @ol class: 'tasks', "data-list":"#{list.name}", =>
     $tasks = $list.find('.tasks')
-    $tasks.append(self.getTask task) for task in tasks # DONE: For performance create this in the DOM and append it! id:133
+    $tasks.append(self.getTask task) for task in tasks 
     $list
 
   listOnBoard: (name) -> @board.find ".list[data-name='#{name}'] ol.tasks"

@@ -39,7 +39,7 @@
     },
     {
       "name": "READY",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DONE",

@@ -63,7 +63,7 @@ class ImdoneioClient extends Emitter
     withHeaders = req.set('Date', (new Date()).getTime())
       .set('Accept', 'application/json')
       .set('Authorization', authUtil.getAuth(req, "imdone", @email, @password, config.imdoneKeyB, config.imdoneKeyA))
-      .timeout 30000
+      .timeout 20000
       .use noCache
       .on 'error', (err) =>
         #console.log "Error on request to imdone.io:", err
