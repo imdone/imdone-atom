@@ -298,7 +298,7 @@ class ImdoneioClient extends Emitter
     log "Sending #{tasks.length} tasks to imdone.io"
     repo.emit 'sync.percent', 0
     async.eachOfLimit chunks, 2, (chunk, i, cb) =>
-      log "Sending chunk of #{chunk.length} tasks to imdone.io"
+      log "Sending chunk #{i}:#{chunks.length} of #{chunk.length} tasks to imdone.io"
       data =
         tasks: chunk
         branch: gitRepo && gitRepo.branch
@@ -315,9 +315,9 @@ class ImdoneioClient extends Emitter
           modifiedTasks.push data
           total += data.length
           repo.emit 'sync.percent', Math.ceil(total/tasks.length*100)
-          log "Received #{total} tasks from imdone.io"
+          log "Received #{i}:#{chunks.length} #{total} tasks from imdone.io"
           cb()
-        log "Chunk of #{chunk.length} tasks sent to imdone.io"
+        log "Chunk #{i}:#{chunks.length} of #{chunk.length} tasks sent to imdone.io"
       ,10
     , (err) ->
       cb err, _.flatten modifiedTasks

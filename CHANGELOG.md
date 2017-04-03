@@ -1,3 +1,7 @@
+## 2.1.26
+- Fix no product error
+- shorten timeout for sync requests from 30 to 20 sec
+
 ## 2.1.25
 - (NEW) task source link in task notification.
 - Allow umlauts and special characters in todo.txt contexts
@@ -7,7 +11,7 @@
 - Completely hide bottom view with display: none
 
 ## 2.1.22
-- 
+-
 
 ## 2.1.21
 - Check excludes for all files before send files to async
