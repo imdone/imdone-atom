@@ -16,6 +16,8 @@ class ProductDetailView extends View
       _.set product, repoUrlKey, gitOriginUrl if !_.get(product, repoUrlKey)
       waffleIoProject = gitOriginUrl.replace(/^http.*?\/\/.*?\/(.*?)\.git$/,"$1")
       _.set product, waffleIoProjectKey, waffleIoProject if !_.get(product, waffleIoProjectKey)
+    if product.name == 'webhook'
+      _.set product, 'connector.config.payloadURL', 'https://imdone.io/tweet-hook'
 
 
   handleEvents: (@emitter)->
@@ -62,7 +64,7 @@ class ProductDetailView extends View
   setProduct: (@product)->
     return unless @product && @product.name
     @$configEditor.empty()
-    return unless @product.linked
+    return unless @product.linked || @product.name == 'webhook'
     @createEditor()
 
   createEditor: ->

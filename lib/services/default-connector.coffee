@@ -31,3 +31,8 @@ module.exports=
         withTag: ""
         listName: "DONE"
       ]
+  ,
+  enabled: true,
+  name: 'webhook'
+  config:
+    active: true

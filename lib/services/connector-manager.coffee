@@ -13,10 +13,10 @@ class ConnectorManager extends Emitter
     super
     @client = require('./imdoneio-client').instance
     @handleEvents()
-    
+
 
   handleEvents: ->
-    
+
 
     @client.on 'product.linked', (product) =>
       @setProduct product, (err, product) =>
@@ -61,6 +61,7 @@ class ConnectorManager extends Emitter
       cb null, connector
 
   saveConnector: (connector, cb) ->
+    debugger
     cb = (()->) unless cb
     return @createConnector connector, cb unless connector.id
     @updateConnector connector, cb
@@ -97,5 +98,5 @@ class ConnectorManager extends Emitter
   enhanceProduct: (product) ->
     product.connector.defaultSearch = product.defaultSearch if product.connector
     _.mixin product,
-      isLinked: () -> this.linked
-      isEnabled: () -> this.linked && this.connector && this.connector.enabled
+      isLinked: () -> (this.linked || this.name == 'webhook')
+      isEnabled: () -> (this.linked || this.name == 'webhook') && this.connector && this.connector.enabled

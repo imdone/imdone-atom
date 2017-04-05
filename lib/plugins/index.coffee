@@ -1,2 +1,2 @@
 # An array of plugins
-module.exports = [require './plugin']
+module.exports = [require('./webhook-plugin'),  require('./plugin')]

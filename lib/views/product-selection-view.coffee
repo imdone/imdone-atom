@@ -3,7 +3,7 @@
 util = require 'util'
 _ = require 'lodash'
 pluginManager = require '../services/plugin-manager'
-DEFAULT_CONNECTOR = require '../services/default-connector'
+DEFAULT_CONNECTORS = require '../services/default-connectors'
 
 module.exports =
 class ProductSelectionView extends View
@@ -19,7 +19,7 @@ class ProductSelectionView extends View
 
   viewForItem: (product) ->
     plugin = pluginManager.getByProvider product.name
-    icon = if plugin then "icon-#{plugin.icon}" else "icon-package"
+    icon = if plugin then "icon-#{plugin.icon}" else "icon-server"
     $$ ->
       @li class:"integration-product", 'data-name': product.name, =>
         @div =>
@@ -75,12 +75,14 @@ class ProductSelectionView extends View
           @emitter.emit 'connector.disabled', updatedConnector
 
   selectClosestProduct: (e) ->
+    debugger
     $link = $(e.target).closest '.integration-product'
     name = $link.data('name')
     product = _.find @products, name: name
     @selectProduct product
 
   saveConnector: (connector, cb) ->
+    debugger
     cb ?= ()->
     @imdoneRepo.saveConnector connector, (err, connector) =>
       cb err if err
@@ -91,20 +93,22 @@ class ProductSelectionView extends View
 
   saveDefaultConnector: ->
     return if @defaultConnectorCreated
-    return unless @imdoneRepo.isImdoneIOProject()
-    product = _.find @products, name: DEFAULT_CONNECTOR.name
-    return unless product && product.connector
-    return if product.connector.id
-    @defaultConnectorCreated = true
-    product.connector.enabled = true
-    product.connector.name = DEFAULT_CONNECTOR.name
-    _.set product.connector, 'config.rules', DEFAULT_CONNECTOR.config.rules
-    @saveConnector product.connector, (err, connector) ->
-      return if err
-      product.connector.id = connector.id
-      info = "#{connector.name} connector enabled!"
-      detail = "Your default #{connector.name} rules have been enabled! Take a look below to see what they do."
-      atom.notifications.addInfo info, detail: detail, dismissable: true, icon: 'check'
+    for defaultConnector in DEFAULT_CONNECTORS
+      return unless @imdoneRepo.isImdoneIOProject() || defaultConnector.name == 'webhook'
+      product = _.find @products, name: defaultConnector.name
+      return unless product && product.connector
+      return if product.connector.id
+      @defaultConnectorCreated = true
+      product.connector.enabled = true
+      product.connector.name = defaultConnector.name
+      _.set product.connector, 'config.rules', defaultConnector.config.rules
+      debugger
+      @saveConnector product.connector, (err, connector) ->
+        return if err
+        product.connector.id = connector.id
+        info = "#{connector.name} connector enabled!"
+        detail = "Your default #{connector.name} rules have been enabled! Take a look below to see what they do."
+        atom.notifications.addInfo info, detail: detail, dismissable: true, icon: 'check'
 
   setItems: (@products) ->
     @selectProduct @products[0] if @products && @products.length > 0
