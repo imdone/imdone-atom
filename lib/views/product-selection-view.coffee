@@ -75,14 +75,12 @@ class ProductSelectionView extends View
           @emitter.emit 'connector.disabled', updatedConnector
 
   selectClosestProduct: (e) ->
-    debugger
     $link = $(e.target).closest '.integration-product'
     name = $link.data('name')
     product = _.find @products, name: name
     @selectProduct product
 
   saveConnector: (connector, cb) ->
-    debugger
     cb ?= ()->
     @imdoneRepo.saveConnector connector, (err, connector) =>
       cb err if err
@@ -93,21 +91,22 @@ class ProductSelectionView extends View
 
   saveDefaultConnector: ->
     return if @defaultConnectorCreated
+    return unless @imdoneRepo.isImdoneIOProject()
     for defaultConnector in DEFAULT_CONNECTORS
-      return unless @imdoneRepo.isImdoneIOProject() || defaultConnector.name == 'webhook'
-      product = _.find @products, name: defaultConnector.name
-      return unless product && product.connector
-      return if product.connector.id
+      return unless @imdoneRepo.isImdoneIOProject()
       @defaultConnectorCreated = true
-      product.connector.enabled = true
-      product.connector.name = defaultConnector.name
-      _.set product.connector, 'config.rules', defaultConnector.config.rules
-      debugger
+      product = _.find @products, name: defaultConnector.name
+      continue unless product
+      _.set product, 'connector.config', defaultConnector.config unless product.connector && product.connector.config
+      continue unless product.connector
+      continue if product.connector.id
+      product.connector.enabled ?= defaultConnector.enabled
+      product.connector.name = product.name
       @saveConnector product.connector, (err, connector) ->
         return if err
         product.connector.id = connector.id
-        info = "#{connector.name} connector enabled!"
-        detail = "Your default #{connector.name} rules have been enabled! Take a look below to see what they do."
+        info = _.get(defaultConnector,'msg.info') || "#{connector.name} connector enabled!"
+        detail = _.get(defaultConnector, 'msg.detail') || "Your default #{connector.name} rules have been enabled! Take a look below to see what they do."
         atom.notifications.addInfo info, detail: detail, dismissable: true, icon: 'check'
 
   setItems: (@products) ->

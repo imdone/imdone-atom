@@ -1,6 +1,9 @@
 module.exports = [
-    enabled: true
+    enabled: false
     name: 'github'
+    msg:
+      info: "Default github connector created"
+      detail: "Your default github connector has been created, but it's not enabled.  Go configure it and put your TODO's to work!"
     config:
       rules:
         updateDiscussion: [
@@ -32,11 +35,18 @@ module.exports = [
           listName: "DONE"
         ]
   ,
-    enabled: true,
-    name: 'webhook'
+    enabled: false,
+    name: "webhooks"
+    msg:
+      info: "Default webhook created"
+      detail: "Your default webhook has been created, but it's not active.  Go configure it and put your TODO's to work!"
     config:
       rules:
-        'webhook-filters': []
-      payloadURL: 'https://imdone.io/tweet-hook'
-      active: true
+        webhooks: [
+          payloadURL: ""
+          contentType: ""
+          active: false
+          secret: ""
+          strictSSL: true
+        ]
 ]

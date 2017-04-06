@@ -58,13 +58,13 @@ class ProductDetailView extends View
       @div class: 'json-editor-container', =>
         @div outlet: '$configEditor', class: 'json-editor native-key-bindings'
       @div outlet: '$welcome', class: 'block text-center', style: 'display:none;', =>
-        @h1 "No Connectors yet?  Turn on GitHub now."
-        @h2 "Let's make programming fun again!"
+        @h1 "No Connectors yet?"
+        @h2 "Turn on GitHub or Webhooks or both and put your TODO's to work!"
 
   setProduct: (@product)->
     return unless @product && @product.name
     @$configEditor.empty()
-    return unless @product.linked || @product.name == 'webhook'
+    return unless @product.linked || @product.name == 'webhooks'
     @createEditor()
 
   createEditor: ->

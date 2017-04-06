@@ -61,7 +61,6 @@ class ConnectorManager extends Emitter
       cb null, connector
 
   saveConnector: (connector, cb) ->
-    debugger
     cb = (()->) unless cb
     return @createConnector connector, cb unless connector.id
     @updateConnector connector, cb
@@ -98,5 +97,5 @@ class ConnectorManager extends Emitter
   enhanceProduct: (product) ->
     product.connector.defaultSearch = product.defaultSearch if product.connector
     _.mixin product,
-      isLinked: () -> (this.linked || this.name == 'webhook')
-      isEnabled: () -> (this.linked || this.name == 'webhook') && this.connector && this.connector.enabled
+      isLinked: () -> (this.linked || this.name == 'webhooks')
+      isEnabled: () -> (this.linked || this.name == 'webhooks') && this.connector && this.connector.enabled is true

@@ -18,7 +18,7 @@ class BottomView extends View
         @div outlet: 'resizer', class:'split-handle-y'
         @div outlet: 'closeButton', class:'close-button', =>
           @raw '&times;'
-        
+
       @div class:'bottom-view-main zoomable', =>
         # @div outlet: 'projectSettings', class:'project-settings config-panel', =>
         #   @subview 'projectSettingsView', new ProjectSettingsView params
@@ -48,8 +48,6 @@ class BottomView extends View
     @loginView.handleEvents @emitter
     @shareTasksView.handleEvents @emitter
     # @projectSettingsView.handleEvents @emitter
-
-    
     startY = startHeight = null
     container = this
     @resizer.on 'mousedown', (e) =>
@@ -103,10 +101,10 @@ class BottomView extends View
       @hide() unless config.getSettings().showLoginOnLaunch
       @showLogin() if config.getSettings().showLoginOnLaunch
 
-    
+
     @emitter.on 'list.new', => @showNewList()
 
-    
+
     @emitter.on 'share', => @showShare()
 
     @emitter.on 'login', => @showLogin()
@@ -160,7 +158,7 @@ class BottomView extends View
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
-    @setHeight(500)
+    @setHeight(700)
     @show()
 
   showLogin: () ->
