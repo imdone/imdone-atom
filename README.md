@@ -27,7 +27,7 @@ You can also update tasks by returning a json response in the following format.
 }
 
 ```
-Stay Tuned...  I'm currently working on a [twitter webhook](https://github.com/imdone/webhook-twitter) that will tweet your TODO comments!
+Stay Tuned...  I just finished a [webhook on glitch](https://glitch.com/edit/#!/synonymous-knave) that tweets your TODO comments!
 
 You live in the code, your tasks should too!
 ----
