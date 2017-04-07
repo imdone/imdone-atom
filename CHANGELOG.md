@@ -1,3 +1,6 @@
+## 2.2
+- Webhooks
+
 ## 2.1.26
 - Fix no product error
 - shorten timeout for sync requests from 30 to 20 sec

@@ -7,8 +7,27 @@ Just use `alt+t` while editing a file to see your projects board.
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
-[![apm](https://img.shields.io/gratipay/user/piascikj.svg)](https://gratipay.com/~piascikj/)
 
+NEW in 2.2.  Webhooks!  
+----
+Now you can integrate any way you want.  Just configure the payloadURL of your [imdone.io](https://imdone.io) project's webhook.  The payloadURL will receive an HTTP POST with the following JSON body.
+```js
+{
+    "taskNow": {}, // https://github.com/imdone/imdone-core/blob/master/lib/task.js
+    "taskBefore": {}, // https://github.com/imdone/imdone-core/blob/master/lib/task.js
+    "delta": {} // https://github.com/benjamine/jsondiffpatch/blob/master/docs/deltas.md
+}
+```
+
+You can also update tasks by returning a json response in the following format.
+```js
+{
+  text: "The text of the task id:3 +story trello:19",
+  list: "DOING"
+}
+
+```
+Stay Tuned...  I'm currently working on a [twitter webhook](https://github.com/imdone/webhook-twitter) that will tweet your TODO comments!
 
 You live in the code, your tasks should too!
 ----
