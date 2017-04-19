@@ -320,7 +320,22 @@ class ImdoneioClient extends Emitter
         log "Chunk #{i}:#{chunks.length} of #{chunk.length} tasks sent to imdone.io"
       ,10
     , (err) ->
+      return cb err if err
       cb err, _.flatten modifiedTasks
+
+  syncTasksForDelete: (repo, tasks, cb) ->
+    projectId = @getProjectId repo
+    taskIds = _.map tasks, (task) -> task.meta.id[0]
+    # DOING: Eliminate undefined tasks
+    @doPost("/projects/#{projectId}/taskIds").send(taskIds: taskIds).end (err, res) =>
+      #console.log "Received Sync Response #{i} err:#{err}"
+      if err && err.code == 'ECONNREFUSED' && @authenticated
+        #console.log "Error on syncing tasks with imdone.io", err
+        @emit 'unavailable'
+        delete @authenticated
+        delete @user
+      return cb err if err
+      cb err, res.body
 
   db: (collection) ->
     path = require 'path'

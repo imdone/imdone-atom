@@ -550,7 +550,7 @@ class ImdoneAtomView extends ScrollView
                 @span class:'icon icon-trashcan'
         @ol class: 'tasks', "data-list":"#{list.name}", =>
     $tasks = $list.find('.tasks')
-    $tasks.append(self.getTask task) for task in tasks 
+    $tasks.append(self.getTask task) for task in tasks
     $list
 
   listOnBoard: (name) -> @board.find ".list[data-name='#{name}'] ol.tasks"
@@ -656,6 +656,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'did-destroy', callback
 
   openPath: (filePath, line) ->
+    # DOING: Fix issue with multiple tabs of same file opening id:144 gh:225
     return unless filePath
 
     fileService.openFile @path, filePath, line, (success) =>

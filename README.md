@@ -1,4 +1,4 @@
-The text editor's task board
+A task board made from TODO comments in your code and text files
 ----
 **Turn your TODO comments and plain text tasks into a task board and set up webhooks on [imdone.io](https://imdone.io) to integrate with anything**  
 Just use `alt+t` while editing a file to see your projects board.

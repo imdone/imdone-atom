@@ -2,7 +2,7 @@
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
   "version": "2.2.3",
-  "description": "The developer's task board.",
+  "description": "A task board made from TODO comments in your code and text files.",
   "keywords": [
     "todo",
     "fixme",
@@ -11,7 +11,9 @@
     "issues",
     "flow",
     "zone",
-    "waffle"
+    "waffle",
+    "github issues",
+    "webhooks"
   ],
   "author": {
     "name": "Jesse Piascik",

@@ -112,8 +112,9 @@ module.exports =  (repo) ->
             #console.log "Sync Error:", err
             return cm.emit 'sync.error', err
           repo.saveModifiedFiles (err, files)->
-            return syncDone(tasks)(err) unless cb
-            cb err, syncDone(tasks)
+            client.syncTasksForDelete repo, repo.getTasks(), (err, deletedTasks) ->
+              return syncDone(tasks)(err) unless cb
+              cb err, syncDone(tasks)
 
   syncFile = (file, cb) ->
     return cb("unauthenticated", ()->) unless client.isAuthenticated()
@@ -130,10 +131,12 @@ module.exports =  (repo) ->
           repo.modifyTask taskToModify, cb
         (err) ->
           return cm.emit 'sync.error', err if err
-          repo.writeFile file, (err, file)->
+          repo.writeFile file, (err, fileAfterSave)->
             # DOING: The tasks should come from the files id:139
-            return syncDone(tasks)(err) unless cb
-            cb err, syncDone(tasks)
+            file ?= fileAfterSave
+            client.syncTasksForDelete repo, file.getTasks(), (err, deletedTasks) ->
+              return syncDone(tasks)(err) unless cb
+              cb err, syncDone(tasks)
 
   loadSort = (cb) ->
     loadSortFile cb
