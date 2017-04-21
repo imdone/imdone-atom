@@ -1,6 +1,9 @@
 A task board made from TODO comments in your code and text files
 ----
-**Turn your TODO comments and plain text tasks into a task board and set up webhooks on [imdone.io](https://imdone.io) to integrate with anything**  
+**Turn your TODO comments and plain text tasks into a task board.**  
+
+**Sign up at [imdone.io](https://imdone.io) to integrate your TODO comments with [github](https://github.com) and [waffle](https://waffle.io) or set up webhooks to integrate with [jira](https://glitch.com/edit/#!/imdone-webhook-jira), [trello](https://glitch.com/edit/#!/imdone-webhook-trello), [twitter](https://glitch.com/edit/#!/imdone-webhook-twitter) or anything!**  
+
 Just use `alt+t` while editing a file to see your projects board.
 
 ![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
@@ -23,20 +26,23 @@ NEW in 2.2  Webhooks!
 **You can also update tasks by returning a json response in the following format.**
 ```js
 {
-  text: "The text of the task id:3 +story trello:19",
+  text: "The text of the task id:3 +story tr:19",
   list: "DOING"
 }
 
 ```
 
-Working webhook examples in [Glitch](https://glitch.com)
+Working webhooks in [Glitch](https://glitch.com)
 ----
 ### [imdone-webhook-twitter](https://glitch.com/edit/#!/imdone-webhook-twitter)
 - Tweet your TODO comments when they change
 - [Check out this blog post to get started](https://medium.com/imdoneio/tweet-from-todo-comments-with-imdone-atom-and-glitch-118e212acac8)  
 
 ### [imdone-webhook-trello](https://glitch.com/edit/#!/imdone-webhook-trello)
-- Keep your trello board updated with TODO comments
+- Keep your trello board updated using TODO comments
+
+### [imdone-webhook-jira](https://glitch.com/edit/#!/imdone-webhook-jira)
+- Keep your team's Jira project updated using TODO comments
 
 
 You live in the code, your tasks should too!

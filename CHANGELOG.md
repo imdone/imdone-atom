@@ -1,3 +1,6 @@
+## 2.2.5
+- Update readme with info about jira webhook
+
 ## 2.2.4
 - Sync with imdone.io for deleted TODO's so github issues will close when TODO is deleted
 
