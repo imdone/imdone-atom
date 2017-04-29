@@ -1,19 +1,26 @@
 A task board made from TODO comments in your code and text files
 ----
-**Turn your TODO comments and plain text tasks into a task board.**  
+Use `alt+t` while editing a file to see your projects board.
 
-**Sign up at [imdone.io](https://imdone.io) to integrate your TODO comments with [github](https://github.com) and [waffle](https://waffle.io) or set up webhooks to integrate with [jira](https://glitch.com/edit/#!/imdone-webhook-jira), [trello](https://glitch.com/edit/#!/imdone-webhook-trello), [twitter](https://glitch.com/edit/#!/imdone-webhook-twitter) or anything!**  
-
-Just use `alt+t` while editing a file to see your projects board.
+imdone-atom recognizes the common TODO style comments we're all used to, but it works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
 ![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
+
+Automate the boring stuff
+----
+**Instantly create issues, tasks, cards or track time in just about any other system through TODO comments with [imdone.io](https://imdone.io).**  
+
+**Use the built in GitHub connector or [remix](https://thenextweb.com/apps/2017/03/15/glitch-invites-you-to-remix-other-peoples-code-for-fun-and-functionality/#.tnw_hGWFb3OI) one of these webhooks we've created on [glitch](https://glitch.com) to get started automating the boring stuff.**
+- [jira webhook](https://glitch.com/edit/#!/imdone-webhook-jira)
+- [trello webhook](https://glitch.com/edit/#!/imdone-webhook-trello)
+- [twitter webhook](https://glitch.com/edit/#!/imdone-webhook-twitter)
 
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
-NEW in 2.2  Webhooks!  
+Getting started with webhooks
 ----
-### Now you can integrate any way you want  
+
 **Just configure the payloadURL of your [imdone.io](https://imdone.io) project's webhook.  The payloadURL will receive an HTTP POST with the following JSON body.**
 ```js
 {
@@ -49,9 +56,7 @@ You live in the code, your tasks should too!
 ----
 For decades developers have used [TODO style code comments](https://medium.com/imdoneio/5-ways-using-todo-comments-will-make-you-a-better-programmer-240abd00d9e4) to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that can integrate with [GitHub](https://github.com), [waffle.io](https://waffle.io) and soon whatever you want with webhooks using [imdone.io](https://imdone.io).
 
-imdone works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
-
-Features
+Task Board Features
 ----
 ### Filtering your board
 imdone uses regular expression matching to filter your cards on your board.  The content and the path of the file are searched, but the Token (e.g. TODO) is not searched.
