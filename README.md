@@ -1,3 +1,6 @@
+[![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
+[![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
+
 A task board made from TODO comments in your code and text files
 ----
 Use `alt+t` while editing a file to see your projects board.
@@ -14,9 +17,6 @@ Automate the boring stuff
 - [jira webhook](https://glitch.com/edit/#!/imdone-webhook-jira)
 - [trello webhook](https://glitch.com/edit/#!/imdone-webhook-trello)
 - [twitter webhook](https://glitch.com/edit/#!/imdone-webhook-twitter)
-
-[![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
-[![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 
 Getting started with webhooks
 ----
