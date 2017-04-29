@@ -1,3 +1,6 @@
+## 2.2.6
+- Readme updates
+
 ## 2.2.5
 - Update readme with info about jira webhook
 
