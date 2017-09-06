@@ -1,3 +1,7 @@
+## 2.2.7
+- Add elm and Idris
+- Fix config hierarchy
+
 ## 2.2.6
 - Readme updates
 

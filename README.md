@@ -5,11 +5,11 @@ A task board made from TODO comments in your code and text files
 ----
 Use `alt+t` while editing a file to see your projects board.
 
-imdone-atom recognizes the common TODO style comments we're all used to, but it works best with todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
+imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
 ![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
 
-Automate the boring stuff
+Automate your task flow
 ----
 **Instantly create issues, tasks, cards or track time in just about any other system through TODO comments with [imdone.io](https://imdone.io).**  
 
