@@ -14,14 +14,14 @@ _ = null
 config = require '../services/imdone-config'
 envConfig = require '../../config'
 
-# #BACKLOG: Add keen stats for features id:62
+# #BACKLOG: Add keen stats for features
 module.exports =
 class ImdoneAtomView extends ScrollView
 
   class PluginViewInterface extends Emitter
     constructor: (@imdoneView)->
       super()
-    emitter: -> @ # CHANGED: deprecated id:63
+    emitter: -> @ # CHANGED: deprecated
     selectTask: (id) ->
       @imdoneView.selectTask id
     showPlugin: (plugin) ->
@@ -158,7 +158,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'sync.error', => @hideMask()
 
     @emitter.on 'tasks.updated', (tasks) =>
-      @onRepoUpdate(tasks) # DOING: For UI performance only update the lists that have changed. id:134 +enhancement gh:205
+      @onRepoUpdate(tasks) # DOING: For UI performance only update the lists that have changed. +enhancement gh:205
 
     @emitter.on 'initialized', =>
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
@@ -173,7 +173,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'tasks.moved', (tasks) =>
       #console.log 'tasks.moved', tasks
-      @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed id:136
+      @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed
 
     @emitter.on 'config.update', =>
       #console.log 'config.update'
@@ -414,7 +414,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: (tasks) ->
-    # BACKLOG: This should be queued so two updates don't colide id:73
+    # BACKLOG: This should be queued so two updates don't colide
     @updateBoard(tasks)
     @boardWrapper.css 'bottom', 0
     @bottomView.attr 'style', ''
@@ -601,9 +601,9 @@ class ImdoneAtomView extends ScrollView
     @emitter.emit 'board.update'
 
 
-  # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:74
+  # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor
   updateBoard: (tasks) ->
-    # DOING: Only update board with changed tasks gh:205 id:137 +master
+    # DOING: Only update board with changed tasks gh:205 +master
     # return if @updateTasksOnBoard tasks
     self = @
     @destroySortables()
@@ -656,7 +656,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'did-destroy', callback
 
   openPath: (filePath, line) ->
-    # DOING: Fix issue with multiple tabs of same file opening id:144 gh:225
+    # DOING: Fix issue with multiple tabs of same file opening gh:225
     return unless filePath
 
     fileService.openFile @path, filePath, line, (success) =>

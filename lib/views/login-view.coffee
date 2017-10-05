@@ -45,7 +45,7 @@ class LoginView extends View
     @spinner.hide()
 
   onUnauthenticated: (event) ->
-    # BACKLOG: Show login error if present and hide progress id:85
+    # BACKLOG: Show login error if present and hide progress
     @showLogin()
 
   login: () ->
@@ -58,7 +58,7 @@ class LoginView extends View
     @client.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.val ''
-      # TODO: We need to show an error here if service can't be reached or login fails id:86 gh:116
+      # TODO: We need to show an error here if service can't be reached or login fails gh:116
       log 'login:end'
       return @showLogin() unless @client.isAuthenticated()
       @onAuthenticated()

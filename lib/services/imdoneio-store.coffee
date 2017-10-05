@@ -34,7 +34,7 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
-  # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. id:38
+  # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back.
   repo.isImdoneIOProject = () -> client.isAuthenticated() && repo.project && !repo.project.disabled
 
   repo.disableProject = (cb) ->
@@ -66,10 +66,10 @@ module.exports =  (repo) ->
     return unless client.isAuthenticated() && repo.initialized
     return repo.emit 'project.not-found' unless repo.getProjectId()
     client.getProject repo.getProjectId(), (err, project) =>
-      # TODO: Do something with this error id:40 gh:116
+      # TODO: Do something with this error gh:116
       unless project
         # repo.disableProject()
-        return repo.emit 'project.not-found' unless project # TODO: Handle the case where there is no project found. id:41 gh:116
+        return repo.emit 'project.not-found' unless project # TODO: Handle the case where there is no project found. gh:116
         # Check account for plan type
       return throw err if err
       repo.project = project
@@ -99,7 +99,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     #console.log "sending #{tasks.length} tasks to imdone-io "
     client.syncTasks repo, tasks, (err, ioTasks) ->
-      return if err # TODO: Do something with this error id:43 gh:116
+      return if err # TODO: Do something with this error gh:116
       #console.log "received tasks from imdone-io:", ioTasks
       async.eachSeries ioTasks,
         (task, cb) ->
@@ -122,7 +122,7 @@ module.exports =  (repo) ->
     cm.emit 'tasks.syncing'
     #console.log "sending tasks to imdone-io for: #{file.path}"
     client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO: Do something with this error id:48 gh:116
+      return if err # TODO: Do something with this error gh:116
       #console.log "received tasks from imdone-io for: %s", tasks
       async.eachSeries tasks,
         (task, cb) ->
@@ -132,7 +132,7 @@ module.exports =  (repo) ->
         (err) ->
           return cm.emit 'sync.error', err if err
           repo.writeFile file, (err, fileAfterSave)->
-            # DOING: The tasks should come from the files id:139
+            # DOING: The tasks should come from the files
             file ?= fileAfterSave
             client.syncTasksForDelete repo, file.getTasks(), (err, deletedTasks) ->
               return syncDone(tasks)(err) unless cb
@@ -193,7 +193,7 @@ module.exports =  (repo) ->
     return saveSort(cb) if _.get repo, 'project.taskOrder'
     fs.exists SORT_FILE, (exists) ->
       return cb() if exists
-      # BACKLOG: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:51
+      # BACKLOG: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168
       # Populate the config.sync.sort from existing sort
       setListSort list.name, tasksToIds(list.tasks) for list in _getTasksByList()
       saveSort cb
@@ -282,7 +282,7 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
-  # DOING: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. id:131
+  # DOING: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task.
 
   repo.initProducts = (cb) ->
     cb ?= ()->
@@ -301,7 +301,7 @@ module.exports =  (repo) ->
 
   repo.getPlugins = () -> @plugins
 
-  # BACKLOG: In new vue.js version we'll have to gain access to the $board id:128
+  # BACKLOG: In new vue.js version we'll have to gain access to the $board
   repo.visibleTasks = (list) ->
     visibleTasks = []
     addTask = (id) =>

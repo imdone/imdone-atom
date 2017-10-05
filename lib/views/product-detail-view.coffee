@@ -105,8 +105,8 @@ class ProductDetailView extends View
     _.set @product, 'connector.name', @product.name unless _.get @product, "connector.name"
     connector = _.cloneDeep @product.connector
     @imdoneRepo.saveConnector connector, (err, connector) =>
-      # TODO: Handle errors by unauthenticating if needed and show login with error id:99 gh:116
-      # BACKLOG: Need a way to handle repos that don't allow issues (Forks, etc).  Maybe two settings. (gitub repo and github issues repo) +enhancement gh:142 id:100
+      # TODO: Handle errors by unauthenticating if needed and show login with error gh:116
+      # BACKLOG: Need a way to handle repos that don't allow issues (Forks, etc).  Maybe two settings. (gitub repo and github issues repo) +enhancement gh:142
       return if err
       @product.connector = connector
       # @setProduct @product

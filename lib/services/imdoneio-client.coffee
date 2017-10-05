@@ -75,7 +75,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO: If we get a forbidden error, then emit auth failure. id:26 gh:116
+  # TODO: If we get a forbidden error, then emit auth failure. gh:116
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -118,7 +118,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         log "Authentication err:", err if err
         # @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO: if err.status == 404 we should show an error id:27
+        # TODO: if err.status == 404 we should show an error
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -224,7 +224,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github id:32 gh:116
+    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
@@ -326,7 +326,7 @@ class ImdoneioClient extends Emitter
   syncTasksForDelete: (repo, tasks, cb) ->
     projectId = @getProjectId repo
     taskIds = _.map tasks, (task) -> task.meta.id[0]
-    # DOING: Eliminate undefined tasks id:146
+    # DOING: Eliminate undefined tasks
     @doPost("/projects/#{projectId}/taskIds").send(taskIds: taskIds).end (err, res) =>
       #console.log "Received Sync Response #{i} err:#{err}"
       if err && err.code == 'ECONNREFUSED' && @authenticated

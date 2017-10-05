@@ -75,8 +75,8 @@ class ConnectorPluginView extends View
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>
-      # TODO: Check error for 404/Not Found when getting an issue from provider. +enhancement id:8 gh:203
-      # TODO: Be sure to fire waffle rules on the same request as the github issue creation to ensure it starts off in the right waffle list +enhancement id:132 gh:204
+      # TODO: Check error for 404/Not Found when getting an issue from provider. +enhancement gh:203
+      # TODO: Be sure to fire waffle rules on the same request as the github issue creation to ensure it starts off in the right waffle list +enhancement gh:204
       if err
         #console.log "error:", err
       else
@@ -97,7 +97,7 @@ class ConnectorPluginView extends View
         @searchResult.html 'No issues found'
 
   newIssue: ->
-    # BACKLOG: Also add the task list as a label when creating an issue on github +waffle id:9
+    # BACKLOG: Also add the task list as a label when creating an issue on github +waffle
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true, (err, result) =>
