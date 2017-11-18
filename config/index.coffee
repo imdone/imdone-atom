@@ -1,7 +1,7 @@
 dev =
   name: "localhost",
-  imdoneKeyA: 'NjbOJJ42rA4zdkEE8gs-D_USeA-_iUa9tpZLOFwKcGEh9PymSSP9zw=='
-  imdoneKeyB: 'ZHpAmF5D8S_7lVuDNP--hgJGncY='
+  imdoneKeyA: 'E4w10uxC3ov_WoaIqAXdEbzvD52I01Lr9_W1i44-bDVcAHKbBb9lAA=='
+  imdoneKeyB: 'eAgZpLvqEDAIWLwliNjSdPFnMho='
   pusherKey:  '64354707585286cfe58f'
   pusherChannelPrefix: 'private-imdoneio-dev'
   baseUrl: 'http://localhost:3000'
@@ -22,4 +22,4 @@ prod =
   baseUrl:    'https://imdone.io'
   pusherChannelPrefix: 'private-imdoneio'
 
-module.exports = prod;
+module.exports = dev;

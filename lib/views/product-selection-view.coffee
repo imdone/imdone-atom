@@ -15,7 +15,7 @@ class ProductSelectionView extends View
   populateList: ->
     @productControls.empty()
     @productControls.append @viewForItem(product) for product in @products
-    @saveDefaultConnector()
+    # @saveDefaultConnector()
 
   viewForItem: (product) ->
     plugin = pluginManager.getByProvider product.name

@@ -183,7 +183,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'task.modified', (task) =>
       #console.log "Task modified.  Syncing with imdone.io"
-      @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
+      # @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
 
     @emitter.on 'menu.toggle', =>
       @boardWrapper.toggleClass 'shift'
@@ -223,7 +223,7 @@ class ImdoneAtomView extends ScrollView
       else
         @openPath @imdoneRepo.getFullPath(file)
 
-    # @emitter.on 'repo.change', => @showMask "Loading TODOs..."
+    # @emitter.on 'repo.change', => @showMask "Loading TODO: s..."
 
     @emitter.on 'config.close', =>
       @boardWrapper.removeClass 'shift-bottom'
@@ -656,7 +656,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'did-destroy', callback
 
   openPath: (filePath, line) ->
-    # DOING: Fix issue with multiple tabs of same file opening gh:225
+    # DONE: Fix issue with multiple tabs of same file opening gh:225
     return unless filePath
 
     fileService.openFile @path, filePath, line, (success) =>

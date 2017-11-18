@@ -76,10 +76,10 @@ module.exports =  (repo) ->
       repo.setProjectName project.name
       return unless repo.isImdoneIOProject()
       _.set repo, 'sync.sort', project.taskOrder if sortEnabled()
-      repo.syncTasks repo.getTasks(), (err, done) =>
-        repo.emit 'project.found', project
-        repo.initProducts()
-        done err if done
+      # repo.syncTasks repo.getTasks(), (err, done) =>
+      repo.emit 'project.found', project
+      repo.initProducts()
+        # done err if done
 
   checkForIIOProject() if client.isAuthenticated()
   client.on 'authenticated', => checkForIIOProject()
@@ -219,18 +219,18 @@ module.exports =  (repo) ->
     cb ?= ()->
     _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
       return cb err if err
-      if shouldSync
-
-        #console.log "Tasks moved.  Syncing with imdone.io"
-        syncTasks tasks, (err, done) ->
-          repo.emit 'tasks.moved', tasks
-          return cb null, tasksByList unless sortEnabled()
-          saveSort (err) ->
-            done err
-            cb err, tasksByList
-      else
-        return cb null, tasksByList unless sortEnabled()
-        saveSort (err) -> cb err, tasksByList
+      # if shouldSync
+      #
+      #   #console.log "Tasks moved.  Syncing with imdone.io"
+      #   syncTasks tasks, (err, done) ->
+      #     repo.emit 'tasks.moved', tasks
+      #     return cb null, tasksByList unless sortEnabled()
+      #     saveSort (err) ->
+      #       done err
+      #       cb err, tasksByList
+      # else
+      return cb null, tasksByList unless sortEnabled()
+      saveSort (err) -> cb err, tasksByList
 
   repo.getTasksInList = (name, offset, limit) ->
     tasksInList = _getTasksInList  name, offset, limit

@@ -1,5 +1,6 @@
 {Emitter} = require 'atom'
 gitup = require 'git-up'
+config = require '../../config'
 _ = require 'lodash'
 shell = require 'shell'
 $el = require 'laconic'
@@ -89,12 +90,18 @@ class ConnectorPlugin extends Emitter
     {$, $$, $$$} = require 'atom-space-pen-views'
     return unless @repo
     connector = @connector
-    waffleURL = @getWaffleURL()
     title = "#{@connector.config.waffleIoProject} waffles!"
     pluginName = @constructor.pluginName
     icon = @constructor.icon
     issuesUrlBase = @issuesUrlBase()
     return unless issuesUrlBase
+    $imdonebtn = $$ ->
+      @div class:'imdone-icon imdone-toolbar-button', =>
+        @a href: "#", title: "", =>
+          @i class:'icon', =>
+            @tag 'svg', => @tag 'use', "xlink:href":"#imdone-logo-icon"
+          @span class:'tool-text', 'Configure imdone.io integrations'
+    $imdonebtn.on 'click', (e) => @openImdoneio()
     $wafflebtn = $$ ->
       @div class:"imdone-icon imdone-toolbar-button", =>
         @a href: "#{}", title: title, class: "#{pluginName}-waffle", =>
@@ -108,7 +115,7 @@ class ConnectorPlugin extends Emitter
           @i class:"icon icon-octoface toolbar-icon"
           @span class:"tool-text", "Open GitHub issues"
     $githubbtn.on 'click', (e) => @openGithub()
-    return [$wafflebtn,$githubbtn]
+    return [$imdonebtn,$wafflebtn,$githubbtn]
 
 
     # openWaffle = @openWaffle
@@ -122,5 +129,6 @@ class ConnectorPlugin extends Emitter
     $($btn)
 
   openWaffle: -> shell.openExternal @getWaffleURL()
+  openImdoneio: -> shell.openExternal "#{config.baseUrl}/account/projects##{@connector._project}"
   openGithub: -> shell.openExternal @issuesUrlBase()
   getWaffleURL: -> "https://waffle.io/#{@connector.config.waffleIoProject}"

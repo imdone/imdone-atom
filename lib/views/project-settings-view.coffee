@@ -1,5 +1,6 @@
 {$, $$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {Emitter} = require 'atom'
+shell = require 'shell'
 _ = require 'lodash'
 util = require 'util'
 debug = require 'debug'
@@ -57,22 +58,24 @@ class ProjectSettingsView extends View
     @progress.attr 'value', val
     @progressValue.html "#{val}%"
 
+  # TODO: Remove this method
   enableProject: (e) ->
-    @emitter.emit 'error.hide'
-    @startTime = new Date().getTime()
-    @updateProgress @imdoneRepo.getTasks().length
-    @enableProjectBtn.hide()
-    #console.log "Creating new project"
-    @client.createProject @imdoneRepo, (err, project) =>
-      if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
-        @emitter.emit 'error', @tooManyProjectsMsg()
-        @enableProjectBtn.show()
-        @disabledProject.show()
-      else
-        throw err if err
-      return unless project
-      @updatePercent 0
-      @imdoneRepo.checkForIIOProject()
+    shell.openExternal "https://imdone.io/app"
+    # @emitter.emit 'error.hide'
+    # @startTime = new Date().getTime()
+    # @updateProgress @imdoneRepo.getTasks().length
+    # @enableProjectBtn.hide()
+    # #console.log "Creating new project"
+    # @client.createProject @imdoneRepo, (err, project) =>
+    #   if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
+    #     @emitter.emit 'error', @tooManyProjectsMsg()
+    #     @enableProjectBtn.show()
+    #     @disabledProject.show()
+    #   else
+    #     throw err if err
+    #   return unless project
+    #   @updatePercent 0
+    #   @imdoneRepo.checkForIIOProject()
 
   tooManyProjectsMsg: ->
     """

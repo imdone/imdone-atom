@@ -95,7 +95,9 @@ class BottomView extends View
 
     @closeButton.on 'click', => @hide()
 
-    @emitter.on 'authenticated', => @$login.hide()
+    @emitter.on 'authenticated', =>
+      @$login.hide()
+      @hide()
 
     @emitter.on 'unauthenticated', =>
       @hide() unless config.getSettings().showLoginOnLaunch
