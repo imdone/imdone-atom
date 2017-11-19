@@ -153,7 +153,7 @@ class ImdoneAtomView extends ScrollView
       atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
 
 
-    @emitter.on 'tasks.syncing', => @showMask "Syncing with #{envConfig.name}..."
+    # @emitter.on 'tasks.syncing', => @showMask "Syncing with #{envConfig.name}..."
 
     @emitter.on 'sync.error', => @hideMask()
 
@@ -181,7 +181,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'error', (mdMsg) => atom.notifications.addWarning "OOPS!", description: mdMsg, dismissable: true, icon: 'alert'
 
-    @emitter.on 'task.modified', (task) =>
+    @emitter.on 'task.modified', (task) => @onRepoUpdate()
       #console.log "Task modified.  Syncing with imdone.io"
       # @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
 

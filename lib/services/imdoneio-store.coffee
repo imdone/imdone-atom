@@ -218,6 +218,7 @@ module.exports =  (repo) ->
     shouldSync  = repo.isImdoneIOProject()
     cb ?= ()->
     _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
+      repo.emit 'tasks.moved', tasks
       return cb err if err
       # if shouldSync
       #
@@ -242,13 +243,13 @@ module.exports =  (repo) ->
     return tasksByList unless sortEnabled()
     ({name: list.name, tasks: sortBySyncId(list.name, list.tasks)} for list in tasksByList)
 
-  repo.emitFileUpdate = (file) ->
-    return _emitFileUpdate file unless client.isAuthenticated() && repo.project
-    if repo.shouldEmitFileUpdate file
-      syncFile file, (err, done) ->
-        _emitFileUpdate file
-        done err
-
+  # repo.emitFileUpdate = (file) ->
+  #   return _emitFileUpdate file unless client.isAuthenticated() && repo.project
+  #   if repo.shouldEmitFileUpdate file
+  #     syncFile file, (err, done) ->
+  #       _emitFileUpdate file
+  #       done err
+  #
 
   repo.init = (cb) ->
     cb ?= ()->
