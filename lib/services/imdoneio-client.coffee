@@ -326,11 +326,8 @@ class ImdoneioClient extends Emitter
   syncTasksForDelete: (repo, tasks, cb) ->
     projectId = @getProjectId repo
     taskIds = _.map tasks, (task) -> task.meta.id[0]
-    # DONE: Eliminate undefined tasks id:32 gh:258
     @doPost("/projects/#{projectId}/taskIds").send(taskIds: taskIds).end (err, res) =>
-      #console.log "Received Sync Response #{i} err:#{err}"
       if err && err.code == 'ECONNREFUSED' && @authenticated
-        #console.log "Error on syncing tasks with imdone.io", err
         @emit 'unavailable'
         delete @authenticated
         delete @user
