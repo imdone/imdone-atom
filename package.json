@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "description": "A task board made from TODO comments in your code and text files",
   "keywords": [
     "todo",
