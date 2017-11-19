@@ -283,8 +283,6 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
-  # DOING: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. id:13 gh:244
-
   repo.initProducts = (cb) ->
     cb ?= ()->
     connectorManager.getProducts (err, products) =>
