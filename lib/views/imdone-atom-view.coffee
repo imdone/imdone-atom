@@ -14,14 +14,14 @@ _ = null
 config = require '../services/imdone-config'
 envConfig = require '../../config'
 
-# #BACKLOG: Add keen stats for features
+# #BACKLOG: Add keen stats for features id:8 gh:240
 module.exports =
 class ImdoneAtomView extends ScrollView
 
   class PluginViewInterface extends Emitter
     constructor: (@imdoneView)->
       super()
-    emitter: -> @ # CHANGED: deprecated
+    emitter: -> @ # CHANGED: deprecated id:14 gh:245
     selectTask: (id) ->
       @imdoneView.selectTask id
     showPlugin: (plugin) ->
@@ -158,7 +158,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'sync.error', => @hideMask()
 
     @emitter.on 'tasks.updated', (tasks) =>
-      @onRepoUpdate(tasks) # DOING: For UI performance only update the lists that have changed. +enhancement gh:205
+      @onRepoUpdate(tasks) # DOING: For UI performance only update the lists that have changed. +enhancement gh:205 id:44
 
     @emitter.on 'initialized', =>
       @addPlugin(Plugin) for Plugin in pluginManager.getAll()
@@ -173,7 +173,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'tasks.moved', (tasks) =>
       #console.log 'tasks.moved', tasks
-      @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed
+      @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed id:35 gh:259
 
     @emitter.on 'config.update', =>
       #console.log 'config.update'
@@ -223,7 +223,7 @@ class ImdoneAtomView extends ScrollView
       else
         @openPath @imdoneRepo.getFullPath(file)
 
-    # @emitter.on 'repo.change', => @showMask "Loading TODO: s..."
+    # @emitter.on 'repo.change', => @showMask "Loading TODO: s..." id:22 gh:251
 
     @emitter.on 'config.close', =>
       @boardWrapper.removeClass 'shift-bottom'
@@ -414,7 +414,7 @@ class ImdoneAtomView extends ScrollView
       item.destroy()
 
   onRepoUpdate: (tasks) ->
-    # BACKLOG: This should be queued so two updates don't colide
+    # BACKLOG: This should be queued so two updates don't colide id:9 gh:241
     @updateBoard(tasks)
     @boardWrapper.css 'bottom', 0
     @bottomView.attr 'style', ''
@@ -601,9 +601,9 @@ class ImdoneAtomView extends ScrollView
     @emitter.emit 'board.update'
 
 
-  # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor
+  # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor id:15 gh:246
   updateBoard: (tasks) ->
-    # DOING: Only update board with changed tasks gh:205 +master
+    # DOING: Only update board with changed tasks gh:205 +master id:45
     # return if @updateTasksOnBoard tasks
     self = @
     @destroySortables()
@@ -656,7 +656,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'did-destroy', callback
 
   openPath: (filePath, line) ->
-    # DONE: Fix issue with multiple tabs of same file opening gh:225
+    # DONE: Fix issue with multiple tabs of same file opening gh:225 id:36
     return unless filePath
 
     fileService.openFile @path, filePath, line, (success) =>

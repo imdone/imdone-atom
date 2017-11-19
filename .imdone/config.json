@@ -62,6 +62,11 @@
     "smartLists": true,
     "langPrefix": "language-"
   },
+  "sync": {
+    "id": "5a11044eb01d742c3c4f516a",
+    "name": "imdone/imdone-atom",
+    "useImdoneioForPriority": true
+  },
   "meta": {
     "gh": {
       "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
