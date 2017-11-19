@@ -58,7 +58,7 @@ class ProjectSettingsView extends View
     @progress.attr 'value', val
     @progressValue.html "#{val}%"
 
-  # TODO: Remove this method
+  # TODO: Remove this method id:25 gh:253
   enableProject: (e) ->
     shell.openExternal "https://imdone.io/app"
     # @emitter.emit 'error.hide'
