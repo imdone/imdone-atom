@@ -326,7 +326,7 @@ class ImdoneioClient extends Emitter
   syncTasksForDelete: (repo, tasks, cb) ->
     projectId = @getProjectId repo
     taskIds = _.map tasks, (task) -> task.meta.id[0]
-    # DOING: Eliminate undefined tasks
+    # DONE: Eliminate undefined tasks
     @doPost("/projects/#{projectId}/taskIds").send(taskIds: taskIds).end (err, res) =>
       #console.log "Received Sync Response #{i} err:#{err}"
       if err && err.code == 'ECONNREFUSED' && @authenticated

@@ -11,7 +11,7 @@ imdone-atom recognizes the common TODO style comments we're all used to, with th
 
 Automate your task flow
 ----
-**Instantly create issues, tasks, cards or track time in just about any other system through TODO comments with [imdone.io](https://imdone.io).**  
+**Create issues, tasks, stories or anything from TODO comments using [imdone.io](https://imdone.io).**  
 
 **Use the built in GitHub connector or [remix](https://thenextweb.com/apps/2017/03/15/glitch-invites-you-to-remix-other-peoples-code-for-fun-and-functionality/#.tnw_hGWFb3OI) one of these webhooks we've created on [glitch](https://glitch.com) to get started automating the boring stuff.**
 - [jira webhook](https://glitch.com/edit/#!/imdone-webhook-jira)

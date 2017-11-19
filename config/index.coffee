@@ -22,4 +22,4 @@ prod =
   baseUrl:    'https://imdone.io'
   pusherChannelPrefix: 'private-imdoneio'
 
-module.exports = dev;
+module.exports = prod;
