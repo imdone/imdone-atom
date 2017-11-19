@@ -59,7 +59,7 @@ class ProductSelectionView extends View
       if e.target.checked
         if connector.id
           @imdoneRepo.enableConnector connector, (err, updatedConnector) =>
-            # TODO: Handle errors
+            # TODO: Handle errors id:47 gh:265
             return if err
             @selected.connector = updatedConnector
             @emitter.emit 'connector.changed', @selected
@@ -68,7 +68,7 @@ class ProductSelectionView extends View
           @saveConnector connector
       else
         @imdoneRepo.disableConnector connector, (err, updatedConnector) =>
-          # TODO: Handle errors
+          # TODO: Handle errors id:38 gh:261
           return unless updatedConnector
           @selected.connector = updatedConnector
           @emitter.emit 'connector.changed', @selected
