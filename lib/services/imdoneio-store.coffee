@@ -132,7 +132,6 @@ module.exports =  (repo) ->
         (err) ->
           return cm.emit 'sync.error', err if err
           repo.writeFile file, (err, fileAfterSave)->
-            # DOING: The tasks should come from the files id:20 gh:249
             file ?= fileAfterSave
             client.syncTasksForDelete repo, file.getTasks(), (err, deletedTasks) ->
               return syncDone(tasks)(err) unless cb
