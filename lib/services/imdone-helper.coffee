@@ -1,7 +1,7 @@
 ImdoneRepo = require 'imdone-core/lib/repository'
-# fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
 atomFsStore = require './atom-watched-fs-store'
-fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
+# fsStore = require 'imdone-core/lib/mixins/repo-watched-fs-store'
+fsStore = require './worker-watched-fs-store'
 path = require 'path'
 getSettings = require('./imdone-config').getSettings
 repos = {}

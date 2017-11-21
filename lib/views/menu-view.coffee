@@ -172,7 +172,7 @@ class MenuView extends View
     @emitter.on 'unavailable', => @unauthenticated()
 
   authenticated: ->
-    user = @imdoneRepo.user
+    user = @imdoneRepo.user()
     crlf = "&#x0a;"
     title = "Account: #{user.profile.name || user.handle} (#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail

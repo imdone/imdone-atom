@@ -10,7 +10,6 @@ Task = require 'imdone-core/lib/task'
 config = require '../../config'
 helper = require './imdone-helper'
 debug = require('debug')
-pluginManager = require './plugin-manager'
 log = debug 'imdone-atom:client'
 # localStorage.debug = 'imdone-atom:client'
 
@@ -126,7 +125,6 @@ class ImdoneioClient extends Emitter
     @authenticated = true
     @authRetryCount = 0
     @emit 'authenticated'
-    pluginManager.init()
     @saveCredentials (err) =>
       @storageAuthFailed = false
       cb(null, user)

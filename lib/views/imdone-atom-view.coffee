@@ -147,6 +147,8 @@ class ImdoneAtomView extends ScrollView
       @hideMask() if status == "unavailable" && retries
       #console.log "auth-failed" if status == "failed"
 
+    @emitter.on 'authenticated', => pluginManager.init()
+
     @emitter.on 'unavailable', =>
       @hideMask()
       atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
