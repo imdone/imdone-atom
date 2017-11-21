@@ -3,7 +3,6 @@
 path = null
 util = null
 Sortable = null
-Client = null
 config = require '../../config'
 menuOpenClass = "icon-chevron-left"
 menuClosedClass = "icon-chevron-right"
@@ -82,17 +81,15 @@ class MenuView extends View
                 @tag 'svg', => @tag 'use', "xlink:href":"#imdone-logo-icon"
               @span class:'tool-text', 'Login'
 
-          # BACKLOG: Add the plugin project buttons id:37 gh:260
+          # BACKLOG: Add the plugin project buttons. id:37 gh:260
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'
     util = require 'util'
     Sortable = require 'sortablejs'
-    Client = require '../services/imdoneio-client'
     require('./jq-utils')($)
-    @client = Client.instance
-    return @authenticated() if @client.isAuthenticated()
-    @client.authFromStorage
+    return @authenticated() if @imdoneRepo.isAuthenticated()
+    @imdoneRepo.authFromStorage
     @$disconnect.show() if @imdoneRepo.isImdoneIOProject()
 
   addPluginProjectButtons: () ->
@@ -168,9 +165,6 @@ class MenuView extends View
     @emitter.on 'project.removed', => @$disconnect.hide()
 
     @emitter.on 'initialized', => @updateMenu()
-    # @emitter.on 'list.modified', => @updateMenu()
-    # @emitter.on 'file.update', => @updateMenu()
-    # @emitter.on 'tasks.moved', => @updateMenu()
     @emitter.on 'board.update', => @updateMenu()
 
     @emitter.on 'authenticated', => @authenticated()
@@ -178,8 +172,7 @@ class MenuView extends View
     @emitter.on 'unavailable', => @unauthenticated()
 
   authenticated: ->
-    #console.log 'authenticated:', @client.user
-    user = @client.user
+    user = @imdoneRepo.user
     crlf = "&#x0a;"
     title = "Account: #{user.profile.name || user.handle} (#{user.email})"
     src = if user.profile.picture then user.profile.picture else user.thumbnail
@@ -197,12 +190,12 @@ class MenuView extends View
   openShare: -> @emitter.emit 'share'
 
   openLogin: ->
-    @client.authFromStorage (err) =>
+    @imdoneRepo.authFromStorage (err) =>
       #console.log err
       @emitter.emit 'login' if err
 
   logOff: ->
-    @client.logoff()
+    @imdoneRepo.logoff()
     @emitter.emit "logoff"
 
   disconnectImdoneio: (e) ->

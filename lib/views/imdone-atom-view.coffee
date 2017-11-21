@@ -43,7 +43,6 @@ class ImdoneAtomView extends ScrollView
     Sortable = require 'sortablejs'
     pluginManager = require '../services/plugin-manager'
     fileService = require '../services/file-service'
-    @client = require('../services/imdoneio-client').instance
     log = require '../services/log'
     _ = require 'lodash'
     require('./jq-utils')($)

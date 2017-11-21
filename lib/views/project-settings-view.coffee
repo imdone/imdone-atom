@@ -6,7 +6,6 @@ util = require 'util'
 debug = require 'debug'
 config = require '../../config'
 log = debug 'imdone-atom:project-settings-view'
-Client = require '../services/imdoneio-client'
 
 module.exports =
 class ProjectSettingsView extends View
@@ -28,7 +27,6 @@ class ProjectSettingsView extends View
         # @h1 "Configuration (.imdone/config.json)"
 
   initialize: ({@imdoneRepo, @path, @uri}) ->
-    @client = Client.instance
     @disabledProject.show() unless @imdoneRepo.isImdoneIOProject()
 
   handleEvents: (@emitter) ->
@@ -58,29 +56,12 @@ class ProjectSettingsView extends View
     @progress.attr 'value', val
     @progressValue.html "#{val}%"
 
-  # TODO: Remove this method id:25 gh:253
-  enableProject: (e) ->
-    shell.openExternal "https://imdone.io/app"
-    # @emitter.emit 'error.hide'
-    # @startTime = new Date().getTime()
-    # @updateProgress @imdoneRepo.getTasks().length
-    # @enableProjectBtn.hide()
-    # #console.log "Creating new project"
-    # @client.createProject @imdoneRepo, (err, project) =>
-    #   if _.get(err,'response.body.name') == "TOO_MANY_PROJECTS_ERROR"
-    #     @emitter.emit 'error', @tooManyProjectsMsg()
-    #     @enableProjectBtn.show()
-    #     @disabledProject.show()
-    #   else
-    #     throw err if err
-    #   return unless project
-    #   @updatePercent 0
-    #   @imdoneRepo.checkForIIOProject()
+  enableProject: (e) -> shell.openExternal "https://imdone.io/app"
 
   tooManyProjectsMsg: ->
     """
     Too many projects
     ----
-    You'll have to [upgrade](#{Client.plansUrl}) or [disable/remove projects](#{Client.projectsUrl}) before adding
+    You'll have to [upgrade](#{@imdoneRepo.plansUrl}) or [disable/remove projects](#{@imdoneRepo.projectsUrl}) before adding
     another project.
     """

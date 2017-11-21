@@ -15,7 +15,9 @@ module.exports =
     repos[pathname] = require('./imdoneio-store') imdoneRepo
     repos[pathname]
 
-  destroyRepos: () -> repo.repo.destroy() for path, repo of repos
+  destroyRepos: () ->
+    for path, repo of repos
+      repo.destroy()
 
   fsStore: (repo) ->
     fsStore = atomFsStore if getSettings().useAlternateFileWatcher

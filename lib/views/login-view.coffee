@@ -5,10 +5,10 @@ util = require 'util'
 debug = require 'debug'
 config = require '../../config'
 log = debug 'imdone-atom:share-tasks-view'
-Client = require '../services/imdoneio-client'
 
 module.exports =
 class LoginView extends View
+
   @content: (params) ->
     @div class: "login-container config-container", =>
       @div class: "text-center", =>
@@ -25,11 +25,11 @@ class LoginView extends View
         @div class:'btn-group btn-group-login inline-block-tight', =>
           @button outlet: 'loginButton', click: 'login', title: 'WHOOSH!', class:'btn btn-primary inline-block-tight', 'LOGIN'
       @h2 "or"
-      @a class: 'btn btn-lg btn-success icon icon-mark-github', href:"#{Client.githubAuthUrl}", "Sign up with GitHub"
+      @a class: 'btn btn-lg btn-success icon icon-mark-github', href:"#{params.imdoneRepo.githubAuthUrl}", "Sign up with GitHub"
       # @iframe width: "974", height:"548", src:"https://www.youtube.com/embed/ECIfGmngetU", frameborder:"0", allowfullscreen: true
 
-  initialize: ({@imdoneRepo, @path, @uri}) ->
-    @client = Client.instance
+  constructor: ({@imdoneRepo, @path, @uri}) ->
+    super
 
   show: () ->
     super
@@ -55,12 +55,13 @@ class LoginView extends View
     @spinner.show()
     email = @emailEditor.val()
     password = @passwordEditor.val()
-    @client.authenticate email, password, (err, profile) =>
+    debugger
+    @imdoneRepo.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.val ''
       # TODO: We need to show an error here if service can't be reached or login fails gh:116 id:27
       log 'login:end'
-      return @showLogin() unless @client.isAuthenticated()
+      return @showLogin() unless @imdoneRepo.isAuthenticated()
       @onAuthenticated()
 
   handleEvents: (@emitter) ->

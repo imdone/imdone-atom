@@ -5,7 +5,8 @@ module.exports =  (repo) ->
   ERRORS = require('imdone-core/lib/constants').ERRORS
   ConnectorManager = require './connector-manager'
   connectorManager = cm = new ConnectorManager repo
-  imdoneioClient = client = require('./imdoneio-client').instance
+  Client = require('./imdoneio-client')
+  imdoneioClient = client = Client.instance
   log = require('debug') 'imdoneio-store'
   Task = require 'imdone-core/lib/task'
   fs = require 'fs'
@@ -325,6 +326,13 @@ module.exports =  (repo) ->
   repo.enableConnector = (connector, cb) -> connectorManager.enableConnector connector, cb
   repo.disableConnector = (connector, cb) -> connectorManager.disableConnector connector, cb
   repo.getGitOrigin = () -> connectorManager.getGitOrigin()
-
+  repo.githubAuthUrl = Client.githubAuthUrl
+  repo.authenticate = client.authenticate.bind client
+  repo.isAuthenticated = client.isAuthenticated.bind client
+  repo.authFromStorage = client.authFromStorage.bind client
+  repo.logoff = client.logoff.bind client
+  repo.user = client.user
+  repo.plansUrl = Client.plansUrl
+  repo.projectsUrl = Client.projectsUrl
   repo.connectorManager = connectorManager
   repo

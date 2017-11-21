@@ -6,8 +6,6 @@ module.exports =
 class BottomView extends View
   constructor: ({@imdoneRepo, @path, @uri}) ->
     super
-    @client = require('../services/imdoneio-client').instance
-
 
   @content: (params) ->
     LoginView = require './login-view'
@@ -160,13 +158,13 @@ class BottomView extends View
   showShare: () ->
     @hide()
     @shareTasks.show () => @shareTasksView.show()
-    @setHeight(700)
+    @setHeight(300)
     @show()
 
   showLogin: () ->
     @hide()
     @$login.show () => @loginView.show()
-    @setHeight(500)
+    @setHeight(300)
     @show()
 
   # showProjectSettings: () ->

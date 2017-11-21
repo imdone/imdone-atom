@@ -40,7 +40,7 @@ module.exports = ImdoneAtom =
       default: 1
       minimum: .2
       maximum: 2.5
-    
+
     openIn:
       title: 'File Opener'
       description: 'Open files in a different IDE or editor'
@@ -90,7 +90,7 @@ module.exports = ImdoneAtom =
   #   serialized
 
   activate: (state) ->
-    
+
     _ = require 'lodash'
     url = require 'url'
     ImdoneAtomView ?= require './views/imdone-atom-view'
@@ -124,7 +124,7 @@ module.exports = ImdoneAtom =
 
     @fileService = require('./services/file-service').init configHelper.getSettings().openIn.port
 
-    
+
 
   emit: (name, data) ->
     active = atom.workspace.getActivePaneItem()
@@ -142,8 +142,8 @@ module.exports = ImdoneAtom =
       previousActivePane.activate()
 
   deactivate: ->
-    imdoneHelper require './services/imdone-helper'
-    imdoneHelper.destroyRepos() 
+    imdoneHelper = require './services/imdone-helper'
+    imdoneHelper.destroyRepos()
     @subscriptions.dispose()
 
   getCurrentProject: ->
@@ -151,7 +151,7 @@ module.exports = ImdoneAtom =
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
     if active && active.getPath && active.getPath()
-      
+
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]
