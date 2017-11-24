@@ -81,8 +81,6 @@ class MenuView extends View
                 @tag 'svg', => @tag 'use', "xlink:href":"#imdone-logo-icon"
               @span class:'tool-text', 'Login'
 
-          # BACKLOG: Add the plugin project buttons. id:37 gh:260
-
   initialize: ({@imdoneRepo, @path, @uri}) ->
     path = require 'path'
     util = require 'util'

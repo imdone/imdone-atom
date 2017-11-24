@@ -97,7 +97,7 @@ class ConnectorPluginView extends View
         @searchResult.html 'No issues found'
 
   newIssue: ->
-    # DOING: Also add the task list as a label when creating an issue on github +waffle id:10 gh:242
+    # DOING: Also add the task list as a label when creating an issue on github!!! +waffle id:10 gh:242
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true, (err, result) =>

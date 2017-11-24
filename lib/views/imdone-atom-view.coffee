@@ -239,7 +239,8 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'zoom', (dir) => @zoom dir
 
-    $('body').on 'click', '.source-link',  (e) =>
+    @on 'click', '.source-link',  (e) =>
+      # DONE: Fix issue with multiple tabs of same file opening gh:225 id:36
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
 
@@ -657,7 +658,6 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'did-destroy', callback
 
   openPath: (filePath, line) ->
-    # TODO: Fix issue with multiple tabs of same file opening gh:225 id:36
     return unless filePath
 
     fileService.openFile @path, filePath, line, (success) =>
