@@ -21,12 +21,12 @@ imdone-atom recognizes the common TODO style comments we're all used to, with th
 // TODO: Refactor and DRY up
 ```
 
-** A TODO in markdown **
+**A TODO in markdown**
 ``` markdown
 #TODO: As a user I would like to ... so that ...
 ```
 
-** Comming soon in markdown! GFM style tasks. (Help us prioritize. [Give this task a thumbs up.](https://github.com/imdone/imdone-core/issues/90#issue-276668120)) **
+**Comming soon in markdown! GFM style tasks. (Help us prioritize. [Give this task a thumbs up.](https://github.com/imdone/imdone-core/issues/90#issue-276668120))**
 ``` markdown
 - [ ] As a user I would like to ... so that ... +TODO
 ```
