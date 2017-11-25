@@ -1,18 +1,38 @@
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 
-A task board made from TODO comments in your code and text files
+A kanban board with lists and cards controlled by TODO comments in code and text files.  
 ----
-Use `alt+t` while editing a file to see your projects board.
+Manage your coding tasks and stories in your code and eliminate context switching to web based issue tracking software.
+Use `alt+t` to open your project's board.
 
-imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
+**Create issues, tasks, stories or anything from TODO comments using [imdone.io](https://imdone.io).**  
 
 ![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
 
+You live in the code, your tasks should too!
+----
+For decades developers have used [TODO style code comments](https://medium.com/imdoneio/3-reasons-why-todo-comments-are-a-good-thing-c2cf3d7b7c2b) to track issues that almost never end up in issue tracking software.  imdone turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that can integrate with [GitHub](https://github.com), [waffle.io](https://waffle.io) and whatever you want using [imdone.io](https://imdone.io).
+
+imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
+
+**A TODO in javascript**
+``` javascript
+// TODO: Refactor and DRY up
+```
+
+**A TODO in markdown**
+``` markdown
+#TODO: As a user I would like to ... so that ...
+```
+
+**Comming soon in markdown! GFM style tasks. (Help us prioritize. [Give this task a thumbs up.](https://github.com/imdone/imdone-core/issues/90#issue-276668120))**
+``` markdown
+- [ ] As a user I would like to ... so that ... +TODO
+```
+
 Automate your task flow
 ----
-**Create issues, tasks, stories or anything from TODO comments using [imdone.io](https://imdone.io).**  
-
 **Use the built in GitHub connector or [remix](https://thenextweb.com/apps/2017/03/15/glitch-invites-you-to-remix-other-peoples-code-for-fun-and-functionality/#.tnw_hGWFb3OI) one of these webhooks we've created on [glitch](https://glitch.com) to get started automating the boring stuff.**
 - [jira webhook](https://glitch.com/edit/#!/imdone-webhook-jira)
 - [trello webhook](https://glitch.com/edit/#!/imdone-webhook-trello)
@@ -50,11 +70,6 @@ Working webhooks in [Glitch](https://glitch.com)
 
 ### [imdone-webhook-jira](https://glitch.com/edit/#!/imdone-webhook-jira)
 - Keep your team's Jira project updated using TODO comments
-
-
-You live in the code, your tasks should too!
-----
-For decades developers have used [TODO style code comments](https://medium.com/imdoneio/5-ways-using-todo-comments-will-make-you-a-better-programmer-240abd00d9e4) to track issues that almost never end up in issue tracking software.  imdone is a plugin for your favorite text editor that turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that can integrate with [GitHub](https://github.com), [waffle.io](https://waffle.io) and soon whatever you want with webhooks using [imdone.io](https://imdone.io).
 
 Task Board Features
 ----

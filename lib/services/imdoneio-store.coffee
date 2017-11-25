@@ -258,6 +258,7 @@ module.exports =  (repo) ->
       (cb) -> loadSort cb
     ]
     async.parallel fns, (err, results) ->
+      console.log "loaded config", repo.config
       return cb err if err
       repo.config = results[0]
 
@@ -283,7 +284,7 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
-  # DOING: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. gh:244 id:13
+  # BACKLOG: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. gh:244 id:13
   repo.initProducts = (cb) ->
     cb ?= ()->
     connectorManager.getProducts (err, products) =>
