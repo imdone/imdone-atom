@@ -258,6 +258,7 @@ module.exports =  (repo) ->
       (cb) -> loadSort cb
     ]
     async.parallel fns, (err, results) ->
+      console.log "loaded config", repo.config
       return cb err if err
       repo.config = results[0]
 

@@ -55,7 +55,6 @@ class LoginView extends View
     @spinner.show()
     email = @emailEditor.val()
     password = @passwordEditor.val()
-    debugger
     @imdoneRepo.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.val ''
