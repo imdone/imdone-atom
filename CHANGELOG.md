@@ -1,3 +1,6 @@
+## 2.3.8
+- Fix task text on TODOs with sort order
+
 ## 2.3.7
 - Fix readme opening when readme is ignored
 
