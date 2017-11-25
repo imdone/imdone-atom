@@ -36,7 +36,7 @@ class MenuView extends View
           @div click: "openReadme", class: "readme-open imdone-toolbar-button", title: "Gimme some README", =>
             @a href: "#", =>
               @i class: "icon icon-book toolbar-icon"
-              @span class:'tool-text', 'Open the README.md'
+              @span class:'tool-text', 'README.md'
           @div click: "newList", class: "new-list-open imdone-toolbar-button", title: "I need another list", =>
             @a href: "#", =>
               @i class: "icon icon-plus toolbar-icon"

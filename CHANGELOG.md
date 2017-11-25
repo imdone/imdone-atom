@@ -1,3 +1,6 @@
+## 2.3.7
+- Fix readme opening when readme is ignored
+
 ## 2.3
 - Performance improvement.  Run watcher in forked process
 
