@@ -178,7 +178,6 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'config.update', =>
       #console.log 'config.update'
-      # DOING: Too many config updates happening!!!  Also broken when adding a list name in the UI +urgent +performance
       repo.refresh()
 
     @emitter.on 'error', (mdMsg) => atom.notifications.addWarning "OOPS!", description: mdMsg, dismissable: true, icon: 'alert'
