@@ -1,3 +1,7 @@
+## 2.3.9
+- Add list to include_lists
+- Only run refresh once
+
 ## 2.3.8
 - Fix task text on TODOs with sort order
 
