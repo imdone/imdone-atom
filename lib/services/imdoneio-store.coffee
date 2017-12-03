@@ -83,7 +83,8 @@ module.exports =  (repo) ->
         # done err if done
 
   checkForIIOProject() if client.isAuthenticated()
-  client.on 'authenticated', => checkForIIOProject()
+  repo.on 'authenticated', => checkForIIOProject()
+  # repo.on 'initialized', => checkForIIOProject()
 
   syncDone = (tasks) ->
     return (err) ->
@@ -200,6 +201,7 @@ module.exports =  (repo) ->
 
   getIdsForList = (name) -> _.get repo, "sync.sort.#{name}"
 
+  # DOING: Fix sort problem where new tasks without ids are not sorted
   sortBySyncId = (name, tasks) ->
     ids = getIdsForList name
     return tasks unless ids

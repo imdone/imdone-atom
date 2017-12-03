@@ -1,12 +1,12 @@
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 
-A kanban board with lists and cards controlled by TODO comments in code and text files.  
+A kanban board with lists and cards controlled by TODO, FIXME, etc. comments in code and text files.  
 ----
 Manage your coding tasks and stories in your code and eliminate context switching to web based issue tracking software.
 Use `alt+t` to open your project's board.
 
-**Create issues, tasks, stories or anything from TODO comments using [imdone.io](https://imdone.io).**  
+**Open, update and close GitHub issues from TODO comments using [imdone.io](https://imdone.io).**  
 
 ![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
 
