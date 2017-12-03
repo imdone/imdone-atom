@@ -204,7 +204,6 @@ module.exports =  (repo) ->
 
   getIdsForList = (name) -> _.get repo, "sync.sort.#{name}"
 
-  # DOING: Fix sort problem where new tasks without ids are not sorted id:60 gh:283
   sortBySyncId = (name, tasks) ->
     ids = getIdsForList name
     return tasks unless ids
