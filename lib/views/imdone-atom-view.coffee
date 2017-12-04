@@ -224,8 +224,6 @@ class ImdoneAtomView extends ScrollView
       else
         @openPath @imdoneRepo.getFullPath(file)
 
-    # @emitter.on 'repo.change', => @showMask "Loading TODO: s..." id:22 gh:251
-
     @emitter.on 'config.close', =>
       @boardWrapper.removeClass 'shift-bottom'
       @boardWrapper.css 'bottom', ''
@@ -240,7 +238,6 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'zoom', (dir) => @zoom dir
 
     @on 'click', '.source-link',  (e) =>
-      # REVIEW: Fix issue with multiple tabs of same file opening gh:225 id:36
       link = e.target
       @openPath link.dataset.uri, link.dataset.line
 
