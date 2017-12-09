@@ -479,14 +479,6 @@ class ImdoneAtomView extends ScrollView
 
     $taskText.innerHTML = taskHtml
 
-    if dateDue
-      $tr = $el.tr class:'meta-data-row',
-        $el.td "due"
-        $el.td dateDue
-        $el.td class: 'meta-filter',
-          $el.a href:"#", title: "filter by due:#{dateDue}", class: "filter-link", "data-filter": "due:#{dateDue}",
-            $el.span class:"icon icon-light-bulb"
-      $taskMetaTable.appendChild $tr
     if dateCreated
       $tr = $el.tr class:'meta-data-row',
         $el.td "created"

@@ -66,6 +66,7 @@ class ConnectorPluginView extends View
     @showRelatedIssues()
     @doFind()
 
+  # TODO: Improve GitHub issue integration.  Allow for checking of tasks to update issue for DoD. due:2017-12-12
   showRelatedIssues: () ->
     @relatedIssues.empty()
     return unless @issues
@@ -97,7 +98,7 @@ class ConnectorPluginView extends View
         @searchResult.html 'No issues found'
 
   newIssue: ->
-    # TODO: Also add the task list as a label when creating an issue on github!!! +waffle id:10 gh:242
+    # TODO: Also add the task list as a label when creating an issue on github!!! +waffle id:10 gh:242 due:2017-12-10
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true, (err, result) =>

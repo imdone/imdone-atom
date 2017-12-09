@@ -100,7 +100,7 @@ class ConnectorPlugin extends Emitter
         @a href: "#", title: "", =>
           @i class:'icon', =>
             @tag 'svg', => @tag 'use', "xlink:href":"#imdone-logo-icon"
-          @span class:'tool-text', 'Configure imdone.io integrations'
+          @span class:'tool-text', 'Configure integrations'
     $imdonebtn.on 'click', (e) => @openImdoneio()
     $wafflebtn = $$ ->
       @div class:"imdone-icon imdone-toolbar-button", =>
