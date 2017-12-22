@@ -21,7 +21,8 @@
       "BACKLOG",
       "READY",
       "ICEBOX",
-      "INBOX"
+      "INBOX",
+      "I"
     ]
   },
   "lists": [

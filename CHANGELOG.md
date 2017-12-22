@@ -1,3 +1,6 @@
+## 2.3.19
+- Add All list names found in non-code files
+
 ## 2.3.9
 - Add list to include_lists
 - Only run refresh once
