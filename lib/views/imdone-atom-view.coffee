@@ -442,13 +442,13 @@ class ImdoneAtomView extends ScrollView
     dateDue = task.getDateDue()
     dateCreated = task.getDateCreated()
     dateCompleted = task.getDateCompleted()
-    opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
-    taskHtml = task.getHtml(opts)
-    showTagsInline = config.getSettings().showTagsInline
     $taskText = $el.div class: 'task-text'
     $filters = $el.div()
     $taskMetaTable = $el.table()
     $taskMeta = $el.div class: 'task-meta', $taskMetaTable
+    opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
+    taskHtml = task.getHtml(opts)
+    showTagsInline = config.getSettings().showTagsInline
     if showTagsInline
       if contexts
         for context, i in contexts
@@ -462,6 +462,7 @@ class ImdoneAtomView extends ScrollView
             $link = @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true
             taskHtml = taskHtml.replace( "+#{tag}", $el.div($link).innerHTML )
     else
+      taskHtml = task.getHtml $.extend({stripTags: true, stripContext: true})
       if contexts
         $div = $el.div()
         $filters.appendChild $div

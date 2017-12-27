@@ -1,3 +1,6 @@
+## 2.3.21
+- Better rules for task descriptions in non code files
+
 ## 2.3.20
 - Add following lines as task description
 
