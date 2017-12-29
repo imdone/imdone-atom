@@ -1,3 +1,6 @@
+## 2.3.24
+- Live checklist support.  Update TODO checklists from your board.
+
 ## 2.3.21
 - Better rules for task descriptions in non code files
 
