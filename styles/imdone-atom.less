@@ -21,6 +21,18 @@
 .imdone-atom {
   ul, ol {
     -webkit-padding-start: 1.5em;
+    &.checklist {
+      -webkit-padding-start: 0;
+      list-style-type: none;
+      li {
+        &>input {
+          float: left;
+        }
+        &>label {
+          max-width: 90%;
+        }
+      }
+    }
   }
   input[type='checkbox'] {
     margin-right: 5px;
