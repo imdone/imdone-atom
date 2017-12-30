@@ -287,12 +287,13 @@
       bottom: 2px;
       position: absolute;
       transition: left  0.2s;
+      width: 20px;
       &.open {
         left: -4px;
         width: @menu-width;
         .imdone-toolbar-button {
           .tool-text {
-            visibility: visible;
+            display: inline;
             transition: visibility 0.2s, opacity 0.2s linear;
             opacity: 1;
           }
@@ -348,7 +349,7 @@
         }
 
         .tool-text {
-          visibility: hidden;
+          display: none;
           opacity: 0;
           transition: visibility 0s, opacity 0s linear;
         }
