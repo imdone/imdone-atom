@@ -31,7 +31,7 @@ imdone-atom recognizes the common TODO style comments we're all used to, with th
 - [ ] As a user I would like to ... so that ... +TODO
 ```
 
-Task descriptions with live github style checklist support!
+NEW! Task descriptions with live, github flavored checklists!
 ----
 In code files, imdone recognizes any comment line after a TODO as a description and adds it to the card.  imdone stops looking for description lines if it encounters a new TODO or a line of code.
 
