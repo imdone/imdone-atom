@@ -8,11 +8,11 @@ Use `alt+t` to open your project's board.
 
 **Open, update and close GitHub issues from TODO comments using [imdone.io](https://imdone.io).**  
 
-![Static imdone image](https://cloud.githubusercontent.com/assets/233505/20188737/9a3decf8-a73f-11e6-89c3-c3b348c98ae7.png)
+![screen shot 2017-12-31 at 12 29 50 am](https://user-images.githubusercontent.com/233505/34460106-3f3f83f0-edc2-11e7-95b8-695a6fe77e28.png)
 
 You live in the code, your tasks should too!
 ----
-For decades developers have used [TODO style code comments](https://medium.com/imdoneio/3-reasons-why-todo-comments-are-a-good-thing-c2cf3d7b7c2b) to track issues that almost never end up in issue tracking software.  imdone turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that can integrate with [GitHub](https://github.com), [waffle.io](https://waffle.io) and whatever you want using [imdone.io](https://imdone.io).
+For decades developers have used [TODO style code comments](https://medium.com/imdoneio/3-reasons-why-todo-comments-are-a-good-thing-c2cf3d7b7c2b) to track issues that almost never end up in issue tracking software.  imdone turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that can integrate with [GitHub](https://github.com), [waffle.io](https://waffle.io) or whatever you want using [imdone.io](https://imdone.io).
 
 imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
@@ -26,10 +26,16 @@ imdone-atom recognizes the common TODO style comments we're all used to, with th
 #TODO: As a user I would like to ... so that ...
 ```
 
-**Comming soon in markdown! GFM style tasks. (Help us prioritize. [Give this task a thumbs up.](https://github.com/imdone/imdone-core/issues/90#issue-276668120))**
+**Comming soon in markdown! GFM style tasks. (Help us prioritize. [Give this feature a thumbs up.](https://github.com/imdone/imdone-core/issues/90#issue-276668120))**
 ``` markdown
 - [ ] As a user I would like to ... so that ... +TODO
 ```
+
+Multiline comments
+----
+In code files, imdone recognizes any comment line after a TODO as a description and adds it to the card.  imdone stops looking for description lines if it encounters a new TODO or a line of code.
+
+In non code files, imdone recognizes any line after a TODO as a description and adds it to the card.  imdone stops looking for description lines if it encounters a new TODO or a blank line.
 
 Automate your task flow
 ----
@@ -153,14 +159,21 @@ If the list name matches this this regex `/[\w\-]+?/`, then you will have to use
 ```js
 // #to-do: This is in a list that doesn't have all caps!
 ```
-### Code journal
+### Global journal
 Configure a directory to use as a daily journal.  Open the daily journal with alt+j.  If your like me, you'll just use dropbox directory for this.  Remember, you can use TODO's in any text file if you put a `#` in front of the token, like this...
 ```md
 This is my simple markdown journal
 - #TODO: Finish this work
 ```
 
-Use your code journal for anything, even planning your next set of features!
+### Project journal
+Configure a directory to use as a daily project journal.  Open the daily project journal with alt+p.  The daily project journal is stored in your project, and defaults to `<project-dir>/journal/${month}/${date}.md`
+Use your project journal for anything, even planning your next set of features like this...
+```md
+- #BACKLOG: As a user I would like to use templates to add a Definition of Done to my TODOs so that I spend less time context switching to my issue tracking system.
+  - [ ] Read templates from `.imdone/templates.md`
+  - [ ] Replace description lines with @<template-name>
+```
 
 <!-- ### Using markdown -->
 ### Open files in [intellij and webstorm](https://www.jetbrains.com/products.html)
@@ -188,26 +201,28 @@ or open Atom and go to Preferences > Install and search for `imdone-atom`
 
 Commands
 ----
-| Command Palette               | Key Mapping | Description              |
-|:------------------------------|:------------|:-------------------------|
-| `Imdone Atom: Tasks`          | Alt+T       | Open task board          |
-| `Imdone Atom: Todays Journal` | Alt+J       | Open todays journal file |
-| `Imdone Atom: Board Zoom In`  | Alt+.       | Zoom in board            |
-| `Imdone Atom: Board Zoom Out` | Alt+,       | Zoom out board           |
+| Command Palette                       | Key Mapping | Description                      |
+|:--------------------------------------|:------------|:---------------------------------|
+| `Imdone Atom: Tasks`                  | Alt+T       | Open task board                  |
+| `Imdone Atom: Todays Journal`         | Alt+J       | Open todays journal file         |
+| `Imdone Atom: Todays Project Journal` | Alt+P       | Open todays project journal file |
+| `Imdone Atom: Board Zoom In`          | Alt+.       | Zoom in board                    |
+| `Imdone Atom: Board Zoom Out`         | Alt+,       | Zoom out board                   |
 
 Settings
 ----
-| Name                               | Type    | Default     | Description                                                                                    |
-|:-----------------------------------|:--------|:------------|:-----------------------------------------------------------------------------------------------|
-| Exclude Vcs Ignored Paths          | boolean | false       | Exclude files that are ignored by your version control system                                  |
-| File Opener Port                   | integer | 9799        | Port the file opener communicates on                                                           |
-| Max Files Prompt                   | integer | 2500        | How many files is too many to parse without prompting to add ignores?                          |
-| Open in Intellij                   | string  | ''          | [Glob pattern](https://github.com/isaacs/node-glob) for files that should open in Intellij.    |
-| Show Notifications                 | boolean | false       | Show notifications upon clicking task source link.                                             |
-| Show Tags Inline                   | boolean | false       | Display inline tag and context links in task text?                                             |
-| Today's Journal Date Format        | string  | YYYY-MM-DD  | How would you like your `date` variable formatted?                                             |
-| Today's Journal Directory          | string  | $HOME/notes | Where do you want your journal files to live? (Their project directory)                        |
-| Today's Journal File Name Template | string  | ${date}.md  | How do you want your journal files to be named?                                                |
-| Today's Journal Month Format       | string  | YYYY-MM     | How would you like your `month` variable formatted for use in directory or file name template? |
-| Use Alternate File Watcher         | boolean | false       | If your board won't update when you edit files, then try the alternate file watcher            |
-| Zoom Level                         | Number  | 1           | Set the default zoom level on startup.  min: .2, max: 2.5                                      |
+| Name                                       | Type    | Default                     | Description                                                                                    |
+|:-------------------------------------------|:--------|:----------------------------|:-----------------------------------------------------------------------------------------------|
+| Exclude Vcs Ignored Paths                  | boolean | false                       | Exclude files that are ignored by your version control system                                  |
+| File Opener Port                           | integer | 9799                        | Port the file opener communicates on                                                           |
+| Max Files Prompt                           | integer | 2500                        | How many files is too many to parse without prompting to add ignores?                          |
+| Open in Intellij                           | string  | ''                          | [Glob pattern](https://github.com/isaacs/node-glob) for files that should open in Intellij.    |
+| Show Notifications                         | boolean | false                       | Show notifications upon clicking task source link.                                             |
+| Show Tags Inline                           | boolean | false                       | Display inline tag and context links in task text?                                             |
+| Today's Journal Date Format                | string  | YYYY-MM-DD                  | How would you like your `date` variable formatted?                                             |
+| Today's Journal Directory                  | string  | $HOME/notes                 | Where do you want your journal files to live? (Their project directory)                        |
+| Today's Journal File Name Template         | string  | ${date}.md                  | How do you want your journal files to be named?                                                |
+| Today's Journal Project File Name Template | string  | journal/${month}/${date}.md | How do you want your project journal files to be named?                                        |
+| Today's Journal Month Format               | string  | YYYY-MM                     | How would you like your `month` variable formatted for use in directory or file name template? |
+| Use Alternate File Watcher                 | boolean | false                       | If your board won't update when you edit files, then try the alternate file watcher            |
+| Zoom Level                                 | Number  | 1                           | Set the default zoom level on startup.  min: .2, max: 2.5                                      |

@@ -1,3 +1,6 @@
+## 2.3.27
+- Add project daily journal to add daily journal files in the open project.  Alt+p
+
 ## 2.3.24
 - Live checklist support.  Update TODO checklists from your board.
 
