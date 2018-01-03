@@ -1,3 +1,6 @@
+## 2.3.29
+- Better detection of task ending description
+
 ## 2.3.27
 - Add project daily journal to add daily journal files in the open project.  Alt+p
 
