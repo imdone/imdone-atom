@@ -1,3 +1,6 @@
+## 2.3.30
+- Allow hash style tasks in code if they're in config.lists or config.code.include_lists
+
 ## 2.3.29
 - Better detection of task ending description
 
