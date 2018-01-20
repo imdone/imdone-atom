@@ -21,8 +21,7 @@
       "BACKLOG",
       "READY",
       "ICEBOX",
-      "INBOX",
-      "I"
+      "INBOX"
     ]
   },
   "lists": [
@@ -44,7 +43,7 @@
     },
     {
       "name": "REVIEW",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "CHANGED",
@@ -53,6 +52,10 @@
     {
       "name": "NOTE",
       "hidden": true
+    },
+    {
+      "name": "DONE",
+      "hidden": false
     }
   ],
   "marked": {

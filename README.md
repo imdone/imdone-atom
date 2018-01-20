@@ -5,13 +5,13 @@ A kanban board with cards and lists that are made from TODOs in your code, markd
 ----
 Use `alt+t` to open your project's board.
 
-Reveal your code insights to your team. **Open, update and close GitHub issues from TODO comments using [imdone.io](https://imdone.io).**  
+Identify, Organize and analyze technical debt so it can be integrated into the product backlog with **[imdone.io](https://imdone.io)**.  
 
-![screen shot 2017-12-31 at 12 29 50 am](https://user-images.githubusercontent.com/233505/34460106-3f3f83f0-edc2-11e7-95b8-695a6fe77e28.png)
+![screen shot 2018-01-20 at 12 41 15 am](https://user-images.githubusercontent.com/233505/35181209-b7f8ae08-fd7a-11e7-9cc3-4ef282e23db5.png)
 
-You live in the code, your tasks should too!
+Track your TODO comments in a kanban board
 ----
-For decades developers have used [TODO style code comments](https://medium.com/imdoneio/3-reasons-why-todo-comments-are-a-good-thing-c2cf3d7b7c2b) to track issues that almost never end up in issue tracking software.  imdone turns code comments into trackable issues that you can update from your code.  It collects all TODO style comments in your project and organizes them in a drag and drop task-board that can integrate with [GitHub](https://github.com), [waffle.io](https://waffle.io) or whatever you want using [imdone.io](https://imdone.io).
+Imdone finds [TODO comments](https://medium.com/imdoneio/3-reasons-why-todo-comments-are-a-good-thing-c2cf3d7b7c2b) in your project and organizes them in a drag and drop kanban board that can integrate with [GitHub](https://imdone.io/), [waffle.io](https://imdone.io/) or whatever you want using [imdone.io](https://imdone.io).  It's great for casual use of TODOs or better yet identifying, organizing and analyzing technical debt so it can be integrated into the product backlog.
 
 imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
 
@@ -38,46 +38,6 @@ In non code files, imdone recognizes any line after a TODO as a description and 
 
 Checklists in your descriptions will render in your cards and will live update your file as they're checked.
 
-Automate your task flow
-----
-**Use the built in GitHub connector or [remix](https://thenextweb.com/apps/2017/03/15/glitch-invites-you-to-remix-other-peoples-code-for-fun-and-functionality/#.tnw_hGWFb3OI) one of these webhooks we've created on [glitch](https://glitch.com) to get started automating the boring stuff.**
-- [jira webhook](https://glitch.com/edit/#!/imdone-webhook-jira)
-- [trello webhook](https://glitch.com/edit/#!/imdone-webhook-trello)
-- [twitter webhook](https://glitch.com/edit/#!/imdone-webhook-twitter)
-
-Getting started with webhooks
-----
-
-**Just configure the payloadURL of your [imdone.io](https://imdone.io) project's webhook.  The payloadURL will receive an HTTP POST with the following JSON body.**
-```js
-{
-    "taskNow": {}, // https://github.com/imdone/imdone-core/blob/master/lib/task.js
-    "taskBefore": {}, // https://github.com/imdone/imdone-core/blob/master/lib/task.js
-    "delta": {} // https://github.com/benjamine/jsondiffpatch/blob/master/docs/deltas.md
-}
-```
-
-**You can also update tasks by returning a json response in the following format.**
-```js
-{
-  text: "The text of the task id:3 +story tr:19",
-  list: "DOING"
-}
-
-```
-
-Working webhooks in [Glitch](https://glitch.com)
-----
-### [imdone-webhook-twitter](https://glitch.com/edit/#!/imdone-webhook-twitter)
-- Tweet your TODO comments when they change
-- [Check out this blog post to get started](https://medium.com/imdoneio/tweet-from-todo-comments-with-imdone-atom-and-glitch-118e212acac8)  
-
-### [imdone-webhook-trello](https://glitch.com/edit/#!/imdone-webhook-trello)
-- Keep your trello board updated using TODO comments
-
-### [imdone-webhook-jira](https://glitch.com/edit/#!/imdone-webhook-jira)
-- Keep your team's Jira project updated using TODO comments
-
 Task Board Features
 ----
 ### Filtering your board
@@ -98,60 +58,6 @@ You can use [Todo.txt](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo
 
 ### metadata
 Another great benefit of using [Todo.txt format](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format) is the [metadata](https://github.com/ginatrapani/todo.txt-cli/wiki/The-Todo.txt-Format#add-on-file-format-definitions). Just use the format ` key:value `, and your metadata will be listed in a table inside the task card.  We use metadata for imdone.io integrations like `gh:1` to represent github issue number 1 and `id:1` to represent imdone task id 1.
-
-### Integrate with issue tracking
-My favorite feature of imdone are the integrations.  Today you can integrate with github and waffle.io.  Jira SaaS integration is coming soon.
-
-
-<a href="https://imdone.io/#video" target="_blank"><img src="http://img.youtube.com/vi/ECIfGmngetU/0.jpg" alt="imdone.io integration" width="240" height="180" border="10" /></a>
-
-- Create an issue and attach it to a TODO that has a tag you configure like +enhancement, +feature or +bug
-
-  A TODO like this
-
-  ```js
-  // TODO: DRY this code up, and create a new method +enhancement
-  ```
-
-  will trun into this
-
-  ```js
-  // TODO: DRY this code up, and create a new method +enhancement id:1 gh:1
-  ```
-
-  creating github issue number 1 with the title "DRY this code up, and create a new method" and attaching it to the TODO
-
-- Close a TODO's attached issue(s) when it's token changes to something you configure, like DONE.
-
-  A comment like this
-
-  ```js
-  // DONE: DRY this code up, and create a new method +enhancement id:1 gh:1
-  ```
-
-  would close github issue number 1.
-
-- Comment on a TODO's attached issue(s) when it's modified and optionaly contains a tag you configure
-
-- Create and add labels to a TODO's attached issue(s) for tags that occur in the TODO
-
-  A comment like this
-
-  ```js
-  // TODO: DRY this code up, and create a new method +enhancement id:1 gh:1 +groovy
-  ```
-
-  would add the label groovy to github issue number 1
-
--  Move a TODO's attached issues to a waffle.io list you configure when the TODO's token is changed to a token you configure.
-
-  if the token DOING is mapped to "in progress" then a TODO like this
-
-  ```js
-  // DOING: DRY this code up, and create a new method +enhancement id:1 gh:1
-  ```
-
-  will move the waffle card to the "in progress" list in your waffle.io project
 
 ### Adding and removing TODO tokens
 You can add a token by just adding an all caps list using the add list button.  If the list name matches this regex `[A-Z]+[A-Z-_]{2,}` a new token will be created.
