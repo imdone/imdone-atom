@@ -1,3 +1,6 @@
+## 2.3.33
+- Update screenshot in README
+
 ## 2.3.32
 - Fix image style for description in cards
 - Update README
