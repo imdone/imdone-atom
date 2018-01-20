@@ -1,3 +1,7 @@
+## 2.3.32
+- Fix image style for description in cards
+- Update README
+
 ## 2.3.30
 - Allow hash style tasks in code if they're in config.lists or config.code.include_lists
 
