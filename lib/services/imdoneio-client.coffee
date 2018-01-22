@@ -74,7 +74,7 @@ class ImdoneioClient extends Emitter
     log 'setHeaders:end'
     withHeaders
 
-  # TODO: If we get a forbidden error, then emit auth failure. gh:116
+  # TODO: If we get a forbidden error, then emit auth failure. gh:116 id:68
   doGet: (path) ->
     @setHeaders request.get("#{baseAPIUrl}#{path || ''}")
 
@@ -117,7 +117,7 @@ class ImdoneioClient extends Emitter
       @_auth (err, user) =>
         log "Authentication err:", err if err
         # @storageAuthFailed = _.get err, 'imdone_status'
-        # TODO: if err.status == 404 we should show an error gh:243
+        # TODO: if err.status == 404 we should show an error gh:243 id:71
         cb err, user
 
   onAuthSuccess: (user, cb) ->
@@ -222,7 +222,7 @@ class ImdoneioClient extends Emitter
       cb(null, res.body)
 
   getIssue: (connector, number, cb) ->
-    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116
+    # TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:80
     @doGet("/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}").end (err, res) =>
       return cb(err, res) if err || !res.ok
       cb(null, res.body)
