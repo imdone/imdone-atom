@@ -7,7 +7,7 @@ Use `alt+t` to open your project's board.
 
 Identify, Organize and analyze technical debt so it can be integrated into the product backlog with **[imdone.io](https://imdone.io)**.  
 
-![screen shot 2018-01-20 at 12 48 46 am](https://user-images.githubusercontent.com/233505/35181262-b74be69a-fd7b-11e7-9031-30920f68621e.png)
+![screen shot 2018-01-20 at 5 24 12 pm](https://user-images.githubusercontent.com/233505/35189496-c05ed71e-fe08-11e7-9390-6e8fb999d1f7.png)
 
 Track your TODO comments in a kanban board
 ----

@@ -13,7 +13,6 @@ log = null
 _ = null
 config = require '../services/imdone-config'
 envConfig = require '../../config'
-
 # #BACKLOG: Add keen stats for features id:8 gh:240
 module.exports =
 class ImdoneAtomView extends ScrollView
@@ -285,7 +284,7 @@ class ImdoneAtomView extends ScrollView
       taskId = $task.id
       items = $task.querySelectorAll('.task-description .checklist-item')
       [].forEach.call items, (el) ->
-        if (el.checked) then el.setAttribute('checked', true) else el.removeAttribute('checked') 
+        if (el.checked) then el.setAttribute('checked', true) else el.removeAttribute('checked')
       repo.modifyTaskFromHtml repo.getTask(taskId), $task.querySelector('.task-text').innerHTML
 
     pluginManager.emitter.on 'plugin.added', (Plugin) =>
@@ -442,7 +441,10 @@ class ImdoneAtomView extends ScrollView
       $el.span class: opts.linkClass, "#{linkPrefix}#{opts.linkText}"
     $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
     $link
-
+  # TODO: Use web components to make the UI more testable and portable. +enhancement
+  # - Create a task component
+  # - Write task component tests
+  # - Use the new component in the UI
   getTask: (task) =>
     self = @;
     repo = @imdoneRepo
