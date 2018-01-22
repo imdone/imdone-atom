@@ -441,7 +441,7 @@ class ImdoneAtomView extends ScrollView
       $el.span class: opts.linkClass, "#{linkPrefix}#{opts.linkText}"
     $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
     $link
-  # TODO: Use web components to make the UI more testable and portable. +enhancement gh:297
+  # TODO: Use web components to make the UI more testable and portable. +enhancement gh:297 id:65
   # - Create a task component
   # - Write task component tests
   # - Use the new component in the UI
