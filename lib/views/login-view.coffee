@@ -45,7 +45,7 @@ class LoginView extends View
     @spinner.hide()
 
   onUnauthenticated: (event) ->
-    # BACKLOG: Show login error if present and hide progress gh:252
+    # BACKLOG: Show login error if present and hide progress gh:252 id:91
     @showLogin()
 
   login: () ->
@@ -58,7 +58,7 @@ class LoginView extends View
     @imdoneRepo.authenticate email, password, (err, profile) =>
       @spinner.hide()
       @passwordEditor.val ''
-      # TODO: We need to show an error here if service can't be reached or login fails gh:116
+      # TODO: We need to show an error here if service can't be reached or login fails gh:116 id:76
       log 'login:end'
       return @showLogin() unless @imdoneRepo.isAuthenticated()
       @onAuthenticated()
