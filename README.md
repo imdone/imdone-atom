@@ -1,19 +1,43 @@
+
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 
-A kanban board with cards and lists that are made from TODOs in your code, markdown and text files.
-----
+**A kanban board with cards and lists that are made from TODOs in your code, markdown and text files.**
 Use `alt+t` to open your project's board.
 
 Identify, organize and address technical debt so it can be integrated into the product backlog with **[imdone.io](https://imdone.io)**.
 
 ![screen shot 2018-01-20 at 5 24 12 pm](https://user-images.githubusercontent.com/233505/35189496-c05ed71e-fe08-11e7-9390-6e8fb999d1f7.png)
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+### **Table of Contents**
+
+- [Track your TODO comments in a kanban board](#track-your-todo-comments-in-a-kanban-board)
+- [NEW! Task descriptions with live, github flavored checklists!](#new-task-descriptions-with-live-github-flavored-checklists)
+- [Task Board Features](#task-board-features)
+  - [Filtering your board](#filtering-your-board)
+  - [Delete all visible tasks](#delete-all-visible-tasks)
+  - [Open all files for visible tasks](#open-all-files-for-visible-tasks)
+  - [Using tags in your TODO comments](#using-tags-in-your-todo-comments)
+  - [Using contexts and @name syntax](#using-contexts-and-name-syntax)
+  - [metadata](#metadata)
+  - [Adding and removing TODO tokens](#adding-and-removing-todo-tokens)
+  - [Global journal](#global-journal)
+  - [Project journal](#project-journal)
+  - [Ignoring files](#ignoring-files)
+- [Install](#install)
+- [Commands](#commands)
+- [Settings](#settings)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Track your TODO comments in a kanban board
 ----
 Imdone finds [TODO comments](https://medium.com/imdoneio/3-reasons-why-todo-comments-are-a-good-thing-c2cf3d7b7c2b) in your project and organizes them in a drag and drop kanban board that can integrate with [GitHub](https://imdone.io/), [waffle.io](https://imdone.io/) or whatever you want using [imdone.io](https://imdone.io).  It's great for keeping track of your work or better yet identifying, organizing and analyzing technical debt so it can be integrated into the product backlog.
 
-imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [syntax guide at imdone-core](https://github.com/imdone/imdone-core#task-formats) for details.
+imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [task formats at imdone-core](https://github.com/imdone/imdone-core#imdone-format) for details.
 
 **A TODO in javascript**
 ``` javascript
@@ -32,6 +56,11 @@ imdone-atom recognizes the common TODO style comments we're all used to, with th
 
 NEW! Task descriptions with live, github flavored checklists!
 ----
+``` javascript
+// TODO: Refactor and DRY up
+// - [ ] Replace all duplicate code with this method
+// - [ ] Make sure all tests are up to date
+```
 In code files, imdone recognizes any comment line after a TODO as a description and adds it to the card.  imdone stops looking for description lines if it encounters a new TODO or a line of code.
 
 In non code files, imdone recognizes any line after a TODO as a description and adds it to the card.  imdone stops looking for description lines if it encounters a new TODO or a blank line.
@@ -133,3 +162,8 @@ Settings
 | Today's Journal Month Format               | string  | YYYY-MM                     | How would you like your `month` variable formatted for use in directory or file name template? |
 | Use Alternate File Watcher                 | boolean | false                       | If your board won't update when you edit files, then try the alternate file watcher            |
 | Zoom Level                                 | Number  | 1                           | Set the default zoom level on startup.  min: .2, max: 2.5                                      |
+
+License
+----
+
+[MIT](LICENSE)
