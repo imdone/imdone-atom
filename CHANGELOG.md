@@ -1,3 +1,7 @@
+## 2.3.35
+- Update Readme
+- Improve styling for filters
+
 ## 2.3.34
 - Add .pug to languages
 - Update comment symbol for .jade and .pug to be //-
