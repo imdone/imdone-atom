@@ -454,7 +454,7 @@ class ImdoneAtomView extends ScrollView
     dateCreated = task.getDateCreated()
     dateCompleted = task.getDateCompleted()
     $taskText = $el.div class: 'task-text native-key-bindings'
-    $filters = $el.div()
+    $filters = $el.div class: 'task-filters'
     $taskMetaTable = $el.table()
     $taskMeta = $el.div class: 'task-meta', $taskMetaTable
     opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked

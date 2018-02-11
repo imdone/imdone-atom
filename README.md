@@ -3,7 +3,7 @@
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 
 **A kanban board with cards and lists that are made from TODOs in your code, markdown and text files.**
-Use `alt+t` to open your project's board.
+Use `alt(⌥)+t` to open your project's board.
 
 Identify, organize and address technical debt so it can be integrated into the product backlog with **[imdone.io](https://imdone.io)**.
 
@@ -37,7 +37,9 @@ Track your TODO comments in a kanban board
 ----
 Imdone finds [TODO comments](https://medium.com/imdoneio/3-reasons-why-todo-comments-are-a-good-thing-c2cf3d7b7c2b) in your project and organizes them in a drag and drop kanban board that can integrate with [GitHub](https://imdone.io/), [waffle.io](https://imdone.io/) or whatever you want using [imdone.io](https://imdone.io).  It's great for keeping track of your work or better yet identifying, organizing and analyzing technical debt so it can be integrated into the product backlog.
 
-imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  See the [task formats at imdone-core](https://github.com/imdone/imdone-core#imdone-format) for details.
+imdone-atom recognizes the common TODO style comments we're all used to, with the added flexibility of todo.txt and markdown syntax.  A complete syntax guide can be found in the [task formats](https://github.com/imdone/imdone-core#imdone-format) section of the [imdone-core README.md](https://github.com/imdone/imdone-core#imdone-format).
+
+**Try adding some TODO's and press Alt (⌥ Option)+T to see your board!**
 
 **A TODO in javascript**
 ``` javascript
@@ -137,13 +139,13 @@ or open Atom and go to Preferences > Install and search for `imdone-atom`
 
 Commands
 ----
-| Command Palette                       | Key Mapping | Description                      |
-|:--------------------------------------|:------------|:---------------------------------|
-| `Imdone Atom: Tasks`                  | Alt+T       | Open task board                  |
-| `Imdone Atom: Todays Journal`         | Alt+J       | Open todays journal file         |
-| `Imdone Atom: Todays Project Journal` | Alt+P       | Open todays project journal file |
-| `Imdone Atom: Board Zoom In`          | Alt+.       | Zoom in board                    |
-| `Imdone Atom: Board Zoom Out`         | Alt+,       | Zoom out board                   |
+| Command Palette                       | Key Mapping      | Description                      |
+|:--------------------------------------|:-----------------|:---------------------------------|
+| `Imdone Atom: Tasks`                  | Alt (⌥ Option)+T | Open task board                  |
+| `Imdone Atom: Todays Journal`         | Alt (⌥ Option)+J | Open todays journal file         |
+| `Imdone Atom: Todays Project Journal` | Alt (⌥ Option)+P | Open todays project journal file |
+| `Imdone Atom: Board Zoom In`          | Alt (⌥ Option)+. | Zoom in board                    |
+| `Imdone Atom: Board Zoom Out`         | Alt (⌥ Option)+, | Zoom out board                   |
 
 Settings
 ----
