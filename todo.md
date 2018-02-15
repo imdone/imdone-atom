@@ -12,7 +12,7 @@ Roadmap
   Any markdown for your template
   ```
   - [ ] Remove `t:story` after the template has been appended to the description
-- #DOING: Add analytics for user actions
+- #DOING: Add analytics for user actions id:107
   - [ ] Open board
   - [ ] Create list
-- #DOING: As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story
+- #DOING: As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story id:108
