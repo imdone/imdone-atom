@@ -18,7 +18,7 @@ class MenuView extends View
           @div click: "clearFilter", class:"icon icon-x clear-filter", outlet:'$clearFilter'
         @div class:'lists-wrapper', outlet:'$listWrapper', =>
           @ul outlet: "lists", class: "lists"
-        # BACKLOG: Save my favorite filters gh:247 id:85
+        # TODO: Save my favorite filters
         @div click: "toggleMenu", outlet:"$menuButton", class: "imdone-menu-toggle imdone-toolbar-button", title: "Lists and filter", =>
           @a href: "#", class: "icon #{menuClosedClass}"
         @div outlet: '$toolbar', class: "imdone-toolbar", =>
