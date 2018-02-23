@@ -1,6 +1,8 @@
 
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
+![made](https://octicons.glitch.me/svg/pencil.svg?size=16) with ![love](https://octicons.glitch.me/svg/heart.svg?size=16) by
+<a href="https://imdone.io/"><img src="https://imdone.io/images/logos/imdone-logo.svg" width=16> imdone.io</a>
 
 **A kanban board with cards and lists that are made from TODOs in your code, markdown and text files.**
 Use `alt(⌥)+t` to open your project's board.
