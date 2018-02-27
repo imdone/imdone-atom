@@ -2,7 +2,7 @@
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
   "version": "2.3.35",
-  "description": "A kanban board with cards and lists that are made from TODOs in your code, markdown and text files.",
+  "description": "A kanban board with an invisible user interface. It's cards and lists are made from TODOs in your code, markdown and text files.",
   "keywords": [
     "kanban",
     "agile",
@@ -41,7 +41,7 @@
     "fs-plus": "^2.8.1",
     "git-up": "^2.0.1",
     "ignore": "^3.3.7",
-    "imdone-core": "1.3.55",
+    "imdone-core": "1.3.57",
     "json-editor": "^0.7.28",
     "laconic": "^0.2.2",
     "lodash": "^4.12.0",

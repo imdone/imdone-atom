@@ -1,3 +1,6 @@
+## 2.3.36
+- Add GAMS project support
+
 ## 2.3.35
 - Update Readme
 - Improve styling for filters
