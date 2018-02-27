@@ -1,7 +1,7 @@
 {
   "name": "imdone-atom",
   "main": "./lib/imdone-atom",
-  "version": "2.3.35",
+  "version": "2.3.36",
   "description": "A kanban board with an invisible user interface. It's cards and lists are made from TODOs in your code, markdown and text files.",
   "keywords": [
     "kanban",
