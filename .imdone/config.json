@@ -21,7 +21,8 @@
       "BACKLOG",
       "READY",
       "ICEBOX",
-      "INBOX"
+      "INBOX",
+      "QUESTION"
     ]
   },
   "lists": [
@@ -43,10 +44,14 @@
     },
     {
       "name": "NOTE",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DONE",
+      "hidden": false
+    },
+    {
+      "name": "QUESTION",
       "hidden": false
     }
   ],

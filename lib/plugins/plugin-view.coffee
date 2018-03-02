@@ -100,6 +100,7 @@ class ConnectorPluginView extends View
   newIssue: ->
     # TODO: Also add the task list as a label when creating an issue on github. +new id:67 gh:300 ic:gh
     # - I think this is done
+    # QUESTION: Will this work?
     @client.newIssue @connector, {title:@task.text}, (e, data) =>
       @task.addMetaData @idMetaKey, data.number
       @repo.modifyTask @task, true, (err, result) =>
