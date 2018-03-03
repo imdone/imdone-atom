@@ -1,6 +1,6 @@
 Roadmap
 ----
-- #BACKLOG: Add configuration editor view for .imdone/config.json +Roadmap id:106
+- #BACKLOG: Add configuration editor view for .imdone/config.json +Roadmap
   - Use copy/modified version of [settings-view/settings-panel.coffee at master · atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
 - #DOING: As a user I would like to add content to my TODO descriptions from markdown templates stored in my project id:104 gh:322 ic:gh
   - [ ] Append templates to tasks with `t:<type>` metadata in them. (e.g. `t:story`)
