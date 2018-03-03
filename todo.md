@@ -1,6 +1,6 @@
 Roadmap
 ----
-- #BACKLOG: Add configuration editor view for .imdone/config.json id:126
+- #BACKLOG: Add configuration editor view for .imdone/config.json
   - Use copy/modified version of [settings-view/settings-panel.coffee at master atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)
 - #DOING: As a user I would like to add content to my TODO descriptions from markdown templates stored in my project id:104 gh:322 ic:gh
   - [ ] Append templates to tasks with `t:<type>` metadata in them. (e.g. `t:story`)
@@ -16,4 +16,4 @@ Roadmap
   - [ ] Open board
   - [ ] Create list
 - #DOING: As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story id:108 ic:gh gh:329
-- #DOING: As a user I would like to save groups of visible lists so that I can have multiple process flows in a single project. id:127
+- #DOING: As a user I would like to save groups of visible lists so that I can have multiple process flows in a single project.
