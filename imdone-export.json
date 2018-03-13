@@ -1,0 +1,1391 @@
+[
+  {
+    "text": "Remember to update changelog before +publishing +package @piascikj gh:237 id:66",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 534,
+    "id": "52a88917d8ed980b62adb312dd16f3e7aafaef14",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "CHANGELOG.md",
+      "id": "CHANGELOG.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-03-11T23:07:07.169Z"
+    },
+    "type": "HASHTAG",
+    "tags": [
+      "publishing",
+      "package"
+    ],
+    "context": [
+      "piascikj"
+    ],
+    "meta": {
+      "gh": [
+        "237"
+      ],
+      "id": [
+        "66"
+      ]
+    },
+    "description": [],
+    "commentStartOnLine": -10922,
+    "rawTask": "#TODO: Remember to update changelog before +publishing +package @piascikj gh:237 id:66"
+  },
+  {
+    "text": " Improve GitHub issue integration.  Allow for checking of tasks to update issue for DoD. gh:286 id:69",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 69,
+    "id": "baf8ac3798f18916810d5c5a3be0f6d9e934f7a3",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/plugins/plugin-view.coffee",
+      "id": "lib/plugins/plugin-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:14:09.714Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "286"
+      ],
+      "id": [
+        "69"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: Improve GitHub issue integration.  Allow for checking of tasks to update issue for DoD. gh:286 id:69",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": " Check error for 404/Not Found when getting an issue from provider. +enhancement gh:203 id:78",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 78,
+    "id": "e091a9fd46f358cf0db0ba5339a7feeea649a205",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/plugins/plugin-view.coffee",
+      "id": "lib/plugins/plugin-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:14:09.714Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "enhancement"
+    ],
+    "meta": {
+      "gh": [
+        "203"
+      ],
+      "id": [
+        "78"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: Check error for 404/Not Found when getting an issue from provider. +enhancement gh:203 id:78",
+    "commentStartOnLine": 6
+  },
+  {
+    "text": " Be sure to fire waffle rules on the same request as the github issue creation to ensure it starts off in the right waffle list +enhancement gh:204 id:93",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 79,
+    "id": "1b667dc8518b3a65e9c32e4e8e403919097c6289",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/plugins/plugin-view.coffee",
+      "id": "lib/plugins/plugin-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:14:09.714Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "enhancement"
+    ],
+    "meta": {
+      "gh": [
+        "204"
+      ],
+      "id": [
+        "93"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: Be sure to fire waffle rules on the same request as the github issue creation to ensure it starts off in the right waffle list +enhancement gh:204 id:93",
+    "commentStartOnLine": 6
+  },
+  {
+    "text": " Also add the task list as a label when creating an issue on github. +new id:67 gh:300 ic:gh",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 100,
+    "id": "b0ed98c4dc4d28053ff2a019b8b785a4c77903bb",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/plugins/plugin-view.coffee",
+      "id": "lib/plugins/plugin-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:14:09.714Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "new"
+    ],
+    "meta": {
+      "id": [
+        "67"
+      ],
+      "gh": [
+        "300"
+      ],
+      "ic": [
+        "gh"
+      ]
+    },
+    "description": [
+      "- I think this is done"
+    ],
+    "originalList": "TODO",
+    "rawTask": "TODO: Also add the task list as a label when creating an issue on github. +new id:67 gh:300 ic:gh",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " Use fs.list gh:263 id:70",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 185,
+    "id": "2b9c7e79a7265b3bf0abe5d0cda1d63f7bbe269b",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/atom-watched-fs-store.coffee",
+      "id": "lib/services/atom-watched-fs-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-01-22T21:22:40.785Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "263"
+      ],
+      "id": [
+        "70"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: Use fs.list gh:263 id:70",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " if imdone is not listening we should ask for another port issue:52 gh:257 id:79",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 40,
+    "id": "c473c261dd266b2e68cc3cdec4a2c982065d735a",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/file-service.coffee",
+      "id": "lib/services/file-service.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-01-22T21:22:40.786Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "issue": [
+        "52"
+      ],
+      "gh": [
+        "257"
+      ],
+      "id": [
+        "79"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: if imdone is not listening we should ask for another port issue:52 gh:257 id:79",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout gh:238 id:94",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 11,
+    "id": "c5474ec1a3cb523cc07a84d09e6c4d311fcd25db",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdone-helper.coffee",
+      "id": "lib/services/imdone-helper.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-11T22:59:24.141Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "238"
+      ],
+      "id": [
+        "94"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout gh:238 id:94",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " If we get a forbidden error, then emit auth failure. gh:116 id:68",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 77,
+    "id": "250a019ef1f8c90c338b9618c22c04391954f4ee",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-client.coffee",
+      "id": "lib/services/imdoneio-client.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:50:36.930Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "116"
+      ],
+      "id": [
+        "68"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: If we get a forbidden error, then emit auth failure. gh:116 id:68",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": " if err.status == 404 we should show an error gh:243 id:71",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 120,
+    "id": "d9d876597395afad5c24bb6a22c8e35f45715e74",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-client.coffee",
+      "id": "lib/services/imdoneio-client.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:50:36.930Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "243"
+      ],
+      "id": [
+        "71"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: if err.status == 404 we should show an error gh:243 id:71",
+    "commentStartOnLine": 8
+  },
+  {
+    "text": " We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:80",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 222,
+    "id": "ba0645e9a733728af0382f3a8fdae8cfc1c6ec14",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-client.coffee",
+      "id": "lib/services/imdoneio-client.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:50:36.930Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "116"
+      ],
+      "id": [
+        "80"
+      ]
+    },
+    "description": [
+      "    @doGet(\"/projects/#{connector._project}/connectors/#{connector.id}/issues/#{number}\").end (err, res) =>"
+    ],
+    "originalList": "TODO",
+    "rawTask": "TODO: We have to be better about communicating errors from connector api response such as insufficient permissions with github gh:116 id:80",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. gh:239 id:95",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 38,
+    "id": "31fc0233927d7bf2e8a06c61c0aeb2e40180c8d9",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-store.coffee",
+      "id": "lib/services/imdoneio-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:45:57.765Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "239"
+      ],
+      "id": [
+        "95"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. gh:239 id:95",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": " Do something with this error gh:116 id:87",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 70,
+    "id": "7f08cc5e45da479ca1f92c8fff6d08f81331c7f5",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-store.coffee",
+      "id": "lib/services/imdoneio-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:45:57.765Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "116"
+      ],
+      "id": [
+        "87"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: Do something with this error gh:116 id:87",
+    "commentStartOnLine": 6
+  },
+  {
+    "text": " Handle the case where there is no project found. gh:116 id:72",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 73,
+    "id": "5409f9cfa89b59c9ba5d8c064cb5fde7720d4678",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-store.coffee",
+      "id": "lib/services/imdoneio-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:45:57.765Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "116"
+      ],
+      "id": [
+        "72"
+      ]
+    },
+    "description": [
+      "Check account for plan type"
+    ],
+    "originalList": "TODO",
+    "rawTask": "TODO: Handle the case where there is no project found. gh:116 id:72",
+    "commentStartOnLine": 60
+  },
+  {
+    "text": " Do something with this error gh:116 id:81",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 107,
+    "id": "f1619f458377406fcf83df1b32c173ee269d5c55",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-store.coffee",
+      "id": "lib/services/imdoneio-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:45:57.765Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "116"
+      ],
+      "id": [
+        "81"
+      ]
+    },
+    "description": [
+      "console.log \"received tasks from imdone-io:\", ioTasks"
+    ],
+    "originalList": "TODO",
+    "rawTask": "TODO: Do something with this error gh:116 id:81",
+    "commentStartOnLine": 20
+  },
+  {
+    "text": " Do something with this error gh:116 id:96",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 130,
+    "id": "450e8a6e51d2ef2971ae9e47f4a218883deb3136",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-store.coffee",
+      "id": "lib/services/imdoneio-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:45:57.765Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "116"
+      ],
+      "id": [
+        "96"
+      ]
+    },
+    "description": [
+      "console.log \"received tasks from imdone-io for: %s\", tasks"
+    ],
+    "originalList": "TODO",
+    "rawTask": "TODO: Do something with this error gh:116 id:96",
+    "commentStartOnLine": 20
+  },
+  {
+    "text": " remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:88",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 203,
+    "id": "847dbb12da5fd2a62335dabda7a4a08408717828",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-store.coffee",
+      "id": "lib/services/imdoneio-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:45:57.765Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "enhancement"
+    ],
+    "meta": {
+      "gh": [
+        "168"
+      ],
+      "id": [
+        "88"
+      ]
+    },
+    "description": [
+      "Populate the config.sync.sort from existing sort"
+    ],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: remove sort number on all TODO comments when saving sort to cloud +enhancement gh:168 id:88",
+    "commentStartOnLine": 6
+  },
+  {
+    "text": " Provide a way to delete tasks after they integrate,  maybe a delete\\:true on the returning task. gh:244 id:73",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 294,
+    "id": "be77b255c18dab126c1c7b064fc8d37acf791c9f",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/services/imdoneio-store.coffee",
+      "id": "lib/services/imdoneio-store.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:45:57.765Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "delete\\": [
+        "true"
+      ],
+      "gh": [
+        "244"
+      ],
+      "id": [
+        "73"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: Provide a way to delete tasks after they integrate,  maybe a delete\\:true on the returning task. gh:244 id:73",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": " Close bottom-view if none of it's direct descendants are visible +bug gh:182 @piascikj id:82",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 118,
+    "id": "22bfdb95e93242b94b53007f492b63c7d24c8b8f",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/bottom-view.coffee",
+      "id": "lib/views/bottom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-01-22T21:22:40.791Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "bug"
+    ],
+    "context": [
+      "piascikj"
+    ],
+    "meta": {
+      "gh": [
+        "182"
+      ],
+      "id": [
+        "82"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: Close bottom-view if none of it's direct descendants are visible +bug gh:182 @piascikj id:82",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " DRY these show... methods up gh:250 id:97",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 157,
+    "id": "3d513b5ae9766bdc821aab2d88397b1a52580cdd",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/bottom-view.coffee",
+      "id": "lib/views/bottom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-01-22T21:22:40.791Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "250"
+      ],
+      "id": [
+        "97"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: DRY these show... methods up gh:250 id:97",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": "Add keen stats for features gh:240 id:89",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 16,
+    "id": "cac91dd2fa4afedda918e447f735d18093e0e8d7",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "HASHTAG",
+    "meta": {
+      "gh": [
+        "240"
+      ],
+      "id": [
+        "89"
+      ]
+    },
+    "description": [],
+    "commentStartOnLine": 0,
+    "rawTask": "#BACKLOG: Add keen stats for features gh:240 id:89"
+  },
+  {
+    "text": " deprecated gh:245 id:74",
+    "list": "CHANGED",
+    "order": "",
+    "hasColon": true,
+    "line": 23,
+    "id": "0b9682cb7d68e7464224e4462542330e2e299ceb",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "245"
+      ],
+      "id": [
+        "74"
+      ]
+    },
+    "description": [],
+    "originalList": "CHANGED",
+    "rawTask": "CHANGED: deprecated gh:245 id:74",
+    "commentStartOnLine": 18
+  },
+  {
+    "text": " For UI performance only update the lists that have changed. +enhancement gh:205 id:83",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 161,
+    "id": "6f195943d233bf403c98547c53597f2215556d1b",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "enhancement"
+    ],
+    "meta": {
+      "gh": [
+        "205"
+      ],
+      "id": [
+        "83"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: For UI performance only update the lists that have changed. +enhancement gh:205 id:83",
+    "commentStartOnLine": 27
+  },
+  {
+    "text": " For performance maybe only update the lists that have changed gh:259 id:98",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 176,
+    "id": "a0fc79aa535ee40c6653c7c05786439cc7883f31",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "259"
+      ],
+      "id": [
+        "98"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: For performance maybe only update the lists that have changed gh:259 id:98",
+    "commentStartOnLine": 27
+  },
+  {
+    "text": " This should be queued so two updates don't colide gh:241 id:90",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 424,
+    "id": "dcdcc3b1bde3feafef00586e63cfadb34d1ad641",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "241"
+      ],
+      "id": [
+        "90"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: This should be queued so two updates don't colide gh:241 id:90",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " Use web components or vuejs to make the UI more testable and portable. +enhancement gh:297 id:75 ic:gh",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 445,
+    "id": "1fd581a6ad47a4946c2bceb9ce546cf96f875e66",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "enhancement"
+    ],
+    "meta": {
+      "gh": [
+        "297"
+      ],
+      "id": [
+        "75"
+      ],
+      "ic": [
+        "gh"
+      ]
+    },
+    "description": [
+      "- Create a task component",
+      "- Write task component tests",
+      "- Use the new component in the UI"
+    ],
+    "originalList": "TODO",
+    "rawTask": "TODO: Use web components or vuejs to make the UI more testable and portable. +enhancement gh:297 id:75 ic:gh",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": " Split this apart into it's own class to simplify. Call it BoardView +refactor gh:246 id:84",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 607,
+    "id": "850552ecfba765f71056e5b04ae703e162709eee",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "refactor"
+    ],
+    "meta": {
+      "gh": [
+        "246"
+      ],
+      "id": [
+        "84"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor gh:246 id:84",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": " Only update board with changed tasks gh:205 +master id:99",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 609,
+    "id": "93af551e67e0f3edd7f87f945d9d2cd1e8382163",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/imdone-atom-view.coffee",
+      "id": "lib/views/imdone-atom-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-03-12T05:51:45.601Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "master"
+    ],
+    "meta": {
+      "gh": [
+        "205"
+      ],
+      "id": [
+        "99"
+      ]
+    },
+    "description": [
+      "return if @updateTasksOnBoard tasks"
+    ],
+    "originalList": "TODO",
+    "rawTask": "TODO: Only update board with changed tasks gh:205 +master id:99",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " Show login error if present and hide progress gh:252 id:91",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 48,
+    "id": "d11e2d8f9783ef32e9c1d22898e4ccbb406ccb14",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/login-view.coffee",
+      "id": "lib/views/login-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-02-14T21:21:38.549Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "252"
+      ],
+      "id": [
+        "91"
+      ]
+    },
+    "description": [],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: Show login error if present and hide progress gh:252 id:91",
+    "commentStartOnLine": 4
+  },
+  {
+    "text": " We need to show an error here if service can't be reached or login fails gh:116 id:76",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 61,
+    "id": "96022b95623be55292ed3e15c1992bebfba07546",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/login-view.coffee",
+      "id": "lib/views/login-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-02-14T21:21:38.549Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "gh": [
+        "116"
+      ],
+      "id": [
+        "76"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: We need to show an error here if service can't be reached or login fails gh:116 id:76",
+    "commentStartOnLine": 6
+  },
+  {
+    "text": " Save my favorite filters id:109 gh:330 ic:gh",
+    "list": "TODO",
+    "order": "",
+    "hasColon": true,
+    "line": 21,
+    "id": "b4ce979b221ea719ea228eb994ade3df9b5402a8",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/menu-view.coffee",
+      "id": "lib/views/menu-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-02-18T07:02:32.473Z"
+    },
+    "type": "CODE",
+    "meta": {
+      "id": [
+        "109"
+      ],
+      "gh": [
+        "330"
+      ],
+      "ic": [
+        "gh"
+      ]
+    },
+    "description": [],
+    "originalList": "TODO",
+    "rawTask": "TODO: Save my favorite filters id:109 gh:330 ic:gh",
+    "commentStartOnLine": 8
+  },
+  {
+    "text": " Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> +feature gh:177 id:100",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 28,
+    "id": "40070140c347cb797738478cf32d27205a6550b1",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/menu-view.coffee",
+      "id": "lib/views/menu-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-02-18T07:02:32.473Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "feature"
+    ],
+    "meta": {
+      "gh": [
+        "177"
+      ],
+      "id": [
+        "100"
+      ]
+    },
+    "description": [
+      "@div click: \"toggleMenu\", outlet:\"$menuButton\", class: \"imdone-menu-toggle imdone-toolbar-button\", title: \"Lists and filter\", =>",
+      "  @a href: \"#\", class: \"icon #{menuClosedClass}\"",
+      "@div class: \"menu-sep-space-2x\""
+    ],
+    "originalList": "BACKLOG",
+    "rawTask": "BACKLOG: Open package config with a button click `atom.workspace.open 'atom://config/packages/imdone-atom'` <https://github.com/mrodalgaard/atom-todo-show/blob/804cced598daceb1c5f870ae87a241bbf31e2f17/lib/todo-options-view.coffee#L49> +feature gh:177 id:100",
+    "commentStartOnLine": 10
+  },
+  {
+    "text": " This issue was created in @atom with @imdone.  Stay in the flow~~~~~~~ +discuss gh:171 id:92",
+    "list": "NOTE",
+    "order": "",
+    "hasColon": true,
+    "line": 139,
+    "id": "d12981cbf4ef4997f4655af679e4ca7ff16acddc",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "lib/views/menu-view.coffee",
+      "id": "lib/views/menu-view.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-02-18T07:02:32.473Z"
+    },
+    "type": "CODE",
+    "tags": [
+      "discuss"
+    ],
+    "context": [
+      "atom",
+      "imdone."
+    ],
+    "meta": {
+      "gh": [
+        "171"
+      ],
+      "id": [
+        "92"
+      ]
+    },
+    "description": [],
+    "originalList": "NOTE",
+    "rawTask": "NOTE: This issue was created in @atom with @imdone.  Stay in the flow~~~~~~~ +discuss gh:171 id:92",
+    "commentStartOnLine": 2
+  },
+  {
+    "text": "Work on tests gh:255 id:77",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 3,
+    "id": "2603666a7d64c43970b584b1b0c6bb23bef09bed",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "spec/imdone-atom-spec.coffee",
+      "id": "spec/imdone-atom-spec.coffee",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "coffee",
+      "lang": "coffeescript",
+      "modified": false,
+      "modifiedTime": "2018-01-22T21:22:40.796Z"
+    },
+    "type": "HASHTAG",
+    "meta": {
+      "gh": [
+        "255"
+      ],
+      "id": [
+        "77"
+      ]
+    },
+    "description": [
+      "Use the command `window:run-package-specs` (cmd-alt-ctrl-p) to run specs.",
+      "To run a specific `it` or `describe` block add an `f` to the front (e.g. `fit`",
+      "or `fdescribe`). Remove the `f` to unfocus the block."
+    ],
+    "commentStartOnLine": 0,
+    "rawTask": "#BACKLOG: Work on tests gh:255 id:77"
+  },
+  {
+    "text": "Add configuration editor view for .imdone/config.json id:138 gh:350 ic:gh",
+    "list": "BACKLOG",
+    "order": "",
+    "hasColon": true,
+    "line": 3,
+    "id": "dbc112deb1c6bbab06e9984a19ca4ad459569e99",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "todo.md",
+      "id": "todo.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-03-08T23:25:09.886Z"
+    },
+    "type": "HASHTAG",
+    "meta": {
+      "id": [
+        "138"
+      ],
+      "gh": [
+        "350"
+      ],
+      "ic": [
+        "gh"
+      ]
+    },
+    "description": [
+      "  - Use copy/modified version of [settings-view/settings-panel.coffee at master atom/settings-view](https://github.com/atom/settings-view/blob/master/lib/settings-panel.coffee)"
+    ],
+    "commentStartOnLine": -13,
+    "rawTask": "#BACKLOG: Add configuration editor view for .imdone/config.json id:138 gh:350 ic:gh"
+  },
+  {
+    "text": "As a user I would like to add content to my TODO descriptions from markdown templates stored in my project id:104 gh:322 ic:gh",
+    "list": "DOING",
+    "order": "",
+    "hasColon": true,
+    "line": 5,
+    "id": "9bd7efa71fac7f337fb10a19071ebdb70066b0bd",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "todo.md",
+      "id": "todo.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-03-08T23:25:09.886Z"
+    },
+    "type": "HASHTAG",
+    "meta": {
+      "id": [
+        "104"
+      ],
+      "gh": [
+        "322"
+      ],
+      "ic": [
+        "gh"
+      ]
+    },
+    "description": [
+      "  - [ ] Append templates to tasks with `t:<type>` metadata in them. (e.g. `t:story`)",
+      "    - [ ] if TODO appears in a single line comment, append template with single line comment prefix and the same indentation as the TODO comment",
+      "    - [ ] If TODO appears in a multiline comment, just append template at the same indentation as the TODO comment",
+      "    - [ ] Remove `t:story` after the template has been appended to the description",
+      "  - [ ] templates.md will contain templates in the format...",
+      "  ```",
+      "  # <type>",
+      "  Any markdown for your template",
+      "  ```"
+    ],
+    "commentStartOnLine": -276,
+    "rawTask": "#DOING: As a user I would like to add content to my TODO descriptions from markdown templates stored in my project id:104 gh:322 ic:gh"
+  },
+  {
+    "text": "Add analytics for user actions id:107 gh:328 ic:gh",
+    "list": "DOING",
+    "order": "",
+    "hasColon": true,
+    "line": 15,
+    "id": "cc65252821bc7f8d5b4616b01f077351d5e5de29",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "todo.md",
+      "id": "todo.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-03-08T23:25:09.886Z"
+    },
+    "type": "HASHTAG",
+    "meta": {
+      "id": [
+        "107"
+      ],
+      "gh": [
+        "328"
+      ],
+      "ic": [
+        "gh"
+      ]
+    },
+    "description": [
+      "  - [ ] Open board",
+      "  - [ ] Create list"
+    ],
+    "commentStartOnLine": -958,
+    "rawTask": "#DOING: Add analytics for user actions id:107 gh:328 ic:gh"
+  },
+  {
+    "text": "As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story id:108 ic:gh gh:329",
+    "list": "DOING",
+    "order": "",
+    "hasColon": true,
+    "line": 18,
+    "id": "7bf7e3571b6b1ad20b45c1ec30b2612ddd60e97f",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "todo.md",
+      "id": "todo.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-03-08T23:25:09.886Z"
+    },
+    "type": "HASHTAG",
+    "tags": [
+      "story"
+    ],
+    "meta": {
+      "id": [
+        "108"
+      ],
+      "ic": [
+        "gh"
+      ],
+      "gh": [
+        "329"
+      ]
+    },
+    "description": [],
+    "commentStartOnLine": -1058,
+    "rawTask": "#DOING: As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story id:108 ic:gh gh:329"
+  },
+  {
+    "text": "As a user I would like to save groups of visible lists so that I can have multiple process flows in a single project. id:139 gh:351 ic:gh",
+    "list": "DOING",
+    "order": "",
+    "hasColon": true,
+    "line": 19,
+    "id": "e671b2ff64b32951dd6942c28e128bc8e18aa52d",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "todo.md",
+      "id": "todo.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-03-08T23:25:09.886Z"
+    },
+    "type": "HASHTAG",
+    "meta": {
+      "id": [
+        "139"
+      ],
+      "gh": [
+        "351"
+      ],
+      "ic": [
+        "gh"
+      ]
+    },
+    "description": [],
+    "commentStartOnLine": -1207,
+    "rawTask": "#DOING: As a user I would like to save groups of visible lists so that I can have multiple process flows in a single project. id:139 gh:351 ic:gh"
+  },
+  {
+    "text": "As a user I would like to add the github issue content to my TODO comment so that I can stay in the code while tracking my work.",
+    "list": "DOING",
+    "order": "",
+    "hasColon": true,
+    "line": 20,
+    "id": "2031b519c477e9f9c493fbee347403fa1a9df64d",
+    "repoId": "/Users/jesse/projects/imdone-atom",
+    "source": {
+      "path": "todo.md",
+      "id": "todo.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-03-08T23:25:09.886Z"
+    },
+    "type": "HASHTAG",
+    "meta": {},
+    "description": [
+      "Acceptance Criteria",
+      "----",
+      "- [ ] When a user creates a todo with no content and identifies a github issue with gh:123 then issue 123 should become the content of the TODO."
+    ],
+    "commentStartOnLine": -1355,
+    "rawTask": "#DOING: As a user I would like to add the github issue content to my TODO comment so that I can stay in the code while tracking my work." id:140 gh:353 ic:gh
+  }
+]
