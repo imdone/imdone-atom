@@ -86,6 +86,23 @@ module.exports =  (repo) ->
   repo.on 'authenticated', => checkForIIOProject()
   # repo.on 'initialized', => checkForIIOProject()
 
+  repo.transformTasks = (tasks, cb) =>
+    repo.pause()
+    cb(null, tasks)
+    client.transformTasks tasks, (err, tasks) =>
+      async.mapSeries tasks, (task, cb) =>
+        repo.modifyTask task, false, (err, updatedTask) =>
+          return cb(null, updatedTask) unless err
+          cb err
+      , (err, results) ->
+        if err
+          repo.resume()
+          return cb err
+        repo.saveModifiedFiles (err) =>
+          repo.resume()
+          return cb err if err
+          cb(null, repo.getTasks())
+
   syncDone = (tasks) ->
     return (err) ->
       repo.emit 'tasks.updated', tasks unless err

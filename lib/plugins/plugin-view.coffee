@@ -72,7 +72,6 @@ class ConnectorPluginView extends View
     return unless @issues
     @relatedIssues.html @$spinner()
     async.map @issues, (number, cb) =>
-
       @client.getIssue @connector, number, (err, issue) =>
         cb(err, issue)
     , (err, results) =>

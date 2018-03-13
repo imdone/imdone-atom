@@ -1,7 +1,7 @@
 dev =
   name: "localhost",
-  imdoneKeyA: 'E4w10uxC3ov_WoaIqAXdEbzvD52I01Lr9_W1i44-bDVcAHKbBb9lAA=='
-  imdoneKeyB: 'eAgZpLvqEDAIWLwliNjSdPFnMho='
+  imdoneKeyA: 'tn2tCIlnXoyqq2uXL3RimZ6iYBjPz986zxUNHpghvMzO6bgid3DfMA=='
+  imdoneKeyB: 'aapG72sp7lWy5X6zSaSYubbPZyU='
   pusherKey:  '64354707585286cfe58f'
   pusherChannelPrefix: 'private-imdoneio-dev'
   baseUrl: 'http://localhost:3000'

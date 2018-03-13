@@ -48,9 +48,10 @@
     "loophole": "^1.1.0",
     "minimatch": "^3.0.0",
     "mkdirp": "^0.5.1",
-    "moment": "^2.11.0",
+    "moment": "^2.21.0",
     "nedb": "^1.8.0",
     "pusher-js": "^3.0.0",
+    "regex-parser": "^2.2.9",
     "sortablejs": "1.7.0",
     "superagent": "^2.3.0",
     "superagent-no-cache": "^0.1.0"

@@ -17,3 +17,7 @@ Roadmap
   - [ ] Create list
 - #DOING: As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story id:108 ic:gh gh:329
 - #DOING: As a user I would like to save groups of visible lists so that I can have multiple process flows in a single project. id:139 gh:351 ic:gh
+- #DOING: As a user I would like to add the github issue content to my TODO comment so that I can stay in the code while tracking my work.
+Acceptance Criteria
+----
+- [ ] When a user creates a todo with no content and identifies a github issue with gh:123 then issue 123 should become the content of the TODO.

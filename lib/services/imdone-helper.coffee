@@ -7,13 +7,15 @@ getSettings = require('./imdone-config').getSettings
 repos = {}
 
 module.exports =
-  getRepo: (pathname, uri) ->
+  getRepo: (pathname) ->
     # TODO: This returns repo and connectorManager, but we could use the connectorManager contained in the repo throughout gh:238 id:94
     return repos[pathname] if repos and repos[pathname]
     imdoneRepo = @fsStore(new ImdoneRepo(pathname))
     @excludeVcsIgnoresMixin imdoneRepo
     repos[pathname] = require('./imdoneio-store') imdoneRepo
     repos[pathname]
+
+  getRepos: -> repos
 
   destroyRepos: () ->
     for path, repo of repos

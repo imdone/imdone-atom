@@ -122,6 +122,11 @@ module.exports = ImdoneAtom =
       evt.stopImmediatePropagation()
       @openJournalFile(@getCurrentProject())
 
+    @subscriptions.add atom.commands.add 'atom-workspace', "imdone-atom:export", (evt) =>
+      evt.stopPropagation()
+      evt.stopImmediatePropagation()
+      @openExport(@getCurrentProject())
+
     @subscriptions.add atom.commands.add 'atom-workspace', 'imdone-atom:board-zoom-in', (evt) => @zoom 'in'
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'imdone-atom:board-zoom-out', (evt) => @zoom 'out'
@@ -159,13 +164,24 @@ module.exports = ImdoneAtom =
     paths = atom.project.getPaths()
     return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
+    return active.imdoneRepo.getPath() if active && active.imdoneRepo
     if active && active.getPath && active.getPath()
-
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
     else
       paths[0]
 
   provideService: -> require './services/plugin-manager'
+
+  openExport: (projectDir) ->
+    fs = require 'fs'
+    imdoneHelper ?= require './services/imdone-helper'
+    if projectDir
+      repo = imdoneHelper.getRepo projectDir
+      file = path.join projectDir, 'imdone-export.json'
+      json = JSON.stringify(repo.getTasks(), null, 2);
+      fs.writeFile file, json, (err) ->
+        return if err
+        atom.workspace.open(file)
 
   openJournalFile: (projectDir) ->
     moment = require 'moment'
@@ -204,5 +220,4 @@ module.exports = ImdoneAtom =
     ImdoneAtomView ?= require './views/imdone-atom-view'
     imdoneHelper ?= require './services/imdone-helper'
     repo = imdoneHelper.getRepo path, uri
-
     view = new ImdoneAtomView(imdoneRepo: repo, path: path, uri: uri)

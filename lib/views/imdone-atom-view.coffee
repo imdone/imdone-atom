@@ -20,7 +20,7 @@ class ImdoneAtomView extends ScrollView
   class PluginViewInterface extends Emitter
     constructor: (@imdoneView)->
       super()
-    emitter: -> @ # CHANGED: deprecated gh:245 id:74
+    emitter: -> @ # CHANGED: deprecated! gh:245 id:74
     selectTask: (id) ->
       @imdoneView.selectTask id
     showPlugin: (plugin) ->
@@ -150,7 +150,7 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'unavailable', =>
       @hideMask()
-      atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login to retry", dismissable: true, icon: 'alert'
+      atom.notifications.addInfo "#{envConfig.name} is unavailable", detail: "Click login in an imdone tab to try again.", dismissable: true, icon: 'alert'
 
 
     # @emitter.on 'tasks.syncing', => @showMask "Syncing with #{envConfig.name}..."
@@ -422,12 +422,13 @@ class ImdoneAtomView extends ScrollView
 
   onRepoUpdate: (tasks) ->
     # BACKLOG: This should be queued so two updates don't colide gh:241 id:90
-    @updateBoard(tasks)
-    @boardWrapper.css 'bottom', 0
-    @bottomView.attr 'style', ''
-    @loading.hide()
-    @mainContainer.show()
-    @hideMask()
+    @imdoneRepo.transformTasks tasks, (err, tasks) =>
+      @updateBoard(tasks)
+      @boardWrapper.css 'bottom', 0
+      @bottomView.attr 'style', ''
+      @loading.hide()
+      @mainContainer.show()
+      @hideMask()
 
   showMask: (msg)->
     @spinnerMessage.html msg if msg
@@ -441,7 +442,7 @@ class ImdoneAtomView extends ScrollView
       $el.span class: opts.linkClass, "#{linkPrefix}#{opts.linkText}"
     $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
     $link
-  # TODO: Use web components to make the UI more testable and portable. +enhancement gh:297 id:75
+  # TODO: Use web components or vuejs to make the UI more testable and portable. +enhancement gh:297 id:75 ic:gh
   # - Create a task component
   # - Write task component tests
   # - Use the new component in the UI
