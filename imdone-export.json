@@ -1386,6 +1386,6 @@
       "- [ ] When a user creates a todo with no content and identifies a github issue with gh:123 then issue 123 should become the content of the TODO."
     ],
     "commentStartOnLine": -1355,
-    "rawTask": "#DOING: As a user I would like to add the github issue content to my TODO comment so that I can stay in the code while tracking my work."
+    "rawTask": "#DOING: As a user I would like to add the github issue content to my TODO comment so that I can stay in the code while tracking my work." id:140 gh:353 ic:gh
   }
 ]
