@@ -32,7 +32,7 @@
     },
     {
       "name": "TODO",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "DOING",
@@ -40,7 +40,7 @@
     },
     {
       "name": "CHANGED",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "NOTE",

@@ -1,5 +1,6 @@
 {$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
 $el = require 'laconic'
+moment = require 'moment'
 {Emitter} = require 'atom'
 fs = require 'fs'
 MenuView = null
@@ -511,6 +512,8 @@ class ImdoneAtomView extends ScrollView
 
     for data in task.getMetaDataWithLinks(repo.getConfig())
       do (data) =>
+        if (data.key == 'due' || data.key == 'remind')
+          data.value = moment(data.value).fromNow()
         $icons = $el.td()
         if data.link
           $link = $el.a href: data.link.url, title: data.link.title,
