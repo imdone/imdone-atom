@@ -452,14 +452,11 @@ class ImdoneAtomView extends ScrollView
     repo = @imdoneRepo
     contexts = task.getContext()
     tags = task.getTags()
-    dateDue = task.getDateDue()
-    dateCreated = task.getDateCreated()
-    dateCompleted = task.getDateCompleted()
     $taskText = $el.div class: 'task-text native-key-bindings'
     $filters = $el.div class: 'task-filters'
     $taskMetaTable = $el.table()
     $taskMeta = $el.div class: 'task-meta', $taskMetaTable
-    opts = $.extend {}, {stripMeta: true, stripDates: true, sanitize: true}, repo.getConfig().marked
+    opts = $.extend {}, {stripMeta: true, sanitize: true}, repo.getConfig().marked
     taskHtml = task.getHtml(opts)
     showTagsInline = config.getSettings().showTagsInline
     if showTagsInline
@@ -493,27 +490,12 @@ class ImdoneAtomView extends ScrollView
 
     $taskText.innerHTML = taskHtml
 
-    if dateCreated
-      $tr = $el.tr class:'meta-data-row',
-        $el.td "created"
-        $el.td dateCreated
-        $el.td class: 'meta-filter',
-          $el.a href:"#", title: "filter by created on #{dateCreated}", class: "filter-link", "data-filter": "(x\\s\\d{4}-\\d{2}-\\d{2}\\s)?#{dateCreated}",
-            $el.span class:"icon icon-light-bulb"
-      $taskMetaTable.appendChild $tr
-    if dateCompleted
-      $tr = $el.tr class:'meta-data-row',
-        $el.td "completed"
-        $el.td dateCompleted
-        $el.td class: 'meta-filter',
-          $el.a href:"#", title: "filter by completed on #{dateCompleted}", class: "filter-link", "data-filter": "x #{dateCompleted}",
-            $el.span class:"icon icon-light-bulb"
-      $taskMetaTable.appendChild $tr
-
     for data in task.getMetaDataWithLinks(repo.getConfig())
       do (data) =>
         if (data.key == 'due' || data.key == 'remind')
           data.value = moment(data.value).fromNow()
+        if (data.key == 'created' || data.key == 'completed')
+          data.value = moment(data.value).format('LLLL')
         $icons = $el.td()
         if data.link
           $link = $el.a href: data.link.url, title: data.link.title,
