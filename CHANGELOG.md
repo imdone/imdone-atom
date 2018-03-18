@@ -1,5 +1,11 @@
-## 2.3.37
-- Add export with alt-x
+## 2.4
+- Add export to imdone-export.json with alt-x
+- Set explicit order on config
+- Use meta created and completed instead of todo.txt created and completed
+- replace $now and $today variables with timestamp and date on paid plans
+- replace plain text reminders with remind:[timestamp] on paid plans
+- replace plain text due with due:[timestamp] on paid plans
+- Add OS notifications for remind:[timestamp]
 
 ## 2.3.36
 - Add GAMS project support
