@@ -9,39 +9,46 @@ configHelper        = require './services/imdone-config'
 module.exports = ImdoneAtom =
   config:
     showLoginOnLaunch:
+      order: 1
       description: "Display imdone.io login panel on startup if user is not logged in."
       type: 'boolean'
       default: true
     useAlternateFileWatcher:
+      order: 2
       description: "If your board won't update when you edit files, then try the alternate file watcher"
       type: 'boolean'
       default: false
     showTagsInline:
+      order: 3
       description: 'Display inline tag and context links in task text?'
       type: 'boolean'
       default: false
     maxFilesPrompt:
+      order: 4
       description: 'How many files is too many to parse without prompting to add ignores?'
       type: 'integer'
       default: 2000
       minimum: 1000
       maximum: 10000
     excludeVcsIgnoredPaths:
+      order: 5
       description: 'Exclude files that are ignored by your version control system'
       type: 'boolean'
       default: true
     showNotifications:
+      order: 6
       description: 'Show notifications upon clicking task source link.'
       type: 'boolean'
       default: false
     zoomLevel:
+      order: 7
       description: 'Set the default zoom level on startup'
       type: 'number'
       default: 1
       minimum: .2
       maximum: 2.5
-
     openIn:
+      order: 8
       title: 'File Opener'
       description: 'Open files in a different IDE or editor'
       type: 'object'
@@ -63,6 +70,7 @@ module.exports = ImdoneAtom =
           type: 'string'
           default: 'Glob pattern'
     todaysJournal:
+      order: 9,
       type: 'object'
       properties:
         directory:
