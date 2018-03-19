@@ -16,7 +16,10 @@ The best issue tracker is one that's invisible.  Integrate your TODO comments in
 ### **Table of Contents**
 
 - [Track your TODO comments in a kanban board](#track-your-todo-comments-in-a-kanban-board)
-- [NEW! Task descriptions with live, github flavored checklists!](#new-task-descriptions-with-live-github-flavored-checklists)
+- [NEW for imdone.io subscribers!!!](#new-for-imdoneio-subscribers)
+  - [$now and $today variable replacement](#now-and-today-variable-replacement)
+  - [Plain text remind: and due: timestamps](#plain-text-remind-and-due-timestamps)
+  - [OS notifications for remind:[timestamp] metadata](#os-notifications-for-remindtimestamp-metadata)
 - [Task Board Features](#task-board-features)
   - [Filtering your board](#filtering-your-board)
   - [Delete all visible tasks](#delete-all-visible-tasks)
@@ -53,23 +56,37 @@ imdone-atom recognizes the common TODO style comments we're all used to, with th
 #TODO: As a user I would like to ... so that ...
 ```
 
-**Comming soon in markdown! GFM style tasks. (Help us prioritize. [Give this feature a thumbs up.](https://github.com/imdone/imdone-core/issues/90#issue-276668120))**
-``` markdown
-- [ ] As a user I would like to ... so that ... +TODO
-```
-
-NEW! Task descriptions with live, github flavored checklists!
-----
-``` javascript
-// TODO: Refactor and DRY up
-// - [ ] Replace all duplicate code with this method
-// - [ ] Make sure all tests are up to date
-```
 In code files, imdone recognizes any comment line after a TODO as a description and adds it to the card.  imdone stops looking for description lines if it encounters a new TODO or a line of code.
 
 In non code files, imdone recognizes any line after a TODO as a description and adds it to the card.  imdone stops looking for description lines if it encounters a new TODO or a blank line.
 
 Checklists in your descriptions will render in your cards and will live update your file as they're checked.
+``` javascript
+// TODO: Refactor and DRY up
+// - [x] Replace all duplicate code with this method
+// - [ ] Make sure all tests are up to date
+```
+
+NEW for [imdone.io](https://imdone.io) subscribers!!!
+----
+### $now and $today variable replacement
+- replace `$now` with with the current timestamp (ex. `2018-03-18T09:37:49-06:00`)
+- replace `$today` with the current date (ex. `2018-03-18`)
+
+### Plain text remind: and due: timestamps
+Use plain text to set reminders and due dates for your tasks. Uses [date.js](https://www.npmjs.com/package/date.js#examples).
+- replace `due tomorrow at noon.`
+  - with **due:[timestamp of tomorrow at noon]**
+  - (ex. `due:2018-03-19T10:00:00-06:00`)
+- replace `remind me in 2 hours.`
+  - with **due:[timestamp in 2 hours]**
+  - (ex. `remind:2018-03-18T11:45:06-06:00`)
+- replace `due tomorrow at noon. remind me 30 min before.`
+  - with **due:[timestamp of tomorrow at noon] remind:[timestamp for 30 minutes before due]**
+  - (ex. `due:2018-03-19T10:00:00-06:00  remind:2018-03-19T11:30:00-04:00`)
+
+### OS notifications for remind:[timestamp] metadata
+
 
 Task Board Features
 ----

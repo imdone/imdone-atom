@@ -88,7 +88,7 @@ module.exports =  (repo) ->
 
   repo.transformTasks = (tasks, cb) =>
     repo.pause()
-    client.transformTasks tasks, (err, tasks) =>
+    client.transformTasks repo.config, tasks, (err, tasks) =>
       async.mapSeries tasks, (task, cb) =>
         repo.modifyTask task, false, (err, updatedTask) =>
           return cb(null, updatedTask) unless err

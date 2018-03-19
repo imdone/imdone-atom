@@ -290,21 +290,23 @@ class ImdoneioClient extends Emitter
       transformable = false
       @transformers.forEach (transformer) =>
         return if transformable
-        regex = parseRegex(transformer.pattern)
-        transformable = regex.test task.text
+        if transformer.pattern
+          regex = parseRegex transformer.pattern
+          return transformable = regex.test task.text
+        transformable = task.list == transformer.list
       transformable
 
-  transformTasks: (tasks, cb) ->
+  transformTasks: (config, tasks, cb) ->
     async.series([
       (next) =>
         return next(null, @transformers) if @transformers
-        @doGet("/transform/transformers").end (err, res) =>
+        @doPost("/transform/transformers").send(config).end (err, res) =>
           return next(err, res) if err || !res.ok
           @transformers = res.body
           next()
       (next) =>
         tasks = @getTransformableTasks tasks
-        @doPost("/transform").send({tasks, utcOffset: moment().format()}).end (err, res) =>
+        @doPost("/transform").send({config, tasks, utcOffset: moment().format()}).end (err, res) =>
           return next err if err
           next(null, res.body)
       ], (err, result) =>
