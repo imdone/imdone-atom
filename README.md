@@ -20,6 +20,7 @@ The best issue tracker is one that's invisible.  Integrate your TODO comments in
   - [$now and $today variable replacement](#now-and-today-variable-replacement)
   - [Plain text remind: and due: timestamps](#plain-text-remind-and-due-timestamps)
   - [OS notifications for remind:[timestamp] metadata](#os-notifications-for-remindtimestamp-metadata)
+  - [Auto completed:[timestamp]](#auto-completedtimestamp)
 - [Task Board Features](#task-board-features)
   - [Filtering your board](#filtering-your-board)
   - [Delete all visible tasks](#delete-all-visible-tasks)
@@ -86,7 +87,18 @@ Use plain text to set reminders and due dates for your tasks. Uses [date.js](htt
   - (ex. `due:2018-03-19T10:00:00-06:00  remind:2018-03-19T11:30:00-04:00`)
 
 ### OS notifications for remind:[timestamp] metadata
+If you set a reminder for your task, you'll receive an OS notification with a show button that will take you back to task in the file.
 
+### Auto completed:[timestamp]
+Adding this section to your `.imdone/config.json` will cause all tasks in `DONE` to have a `completed:[timestamp]` added to the task text.  
+```json
+"transformers": {
+  "autocomplete": {
+    "list": "DONE"
+  }
+}
+```
+Set `list` to whatever list you use for done.
 
 Task Board Features
 ----
