@@ -292,8 +292,8 @@ class ImdoneioClient extends Emitter
         return if transformable
         if transformer.pattern
           regex = parseRegex transformer.pattern
-          return transformable = regex.test task.text
-        transformable = task.list == transformer.list
+          transformable = regex.test task.text
+        transformable = ((task.list == transformer.list) && transformable) if transformer.list
       transformable
 
   transformTasks: (config, tasks, cb) ->
