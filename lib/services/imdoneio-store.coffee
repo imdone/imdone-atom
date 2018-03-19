@@ -85,6 +85,7 @@ module.exports =  (repo) ->
   # repo.on 'initialized', => checkForIIOProject()
 
   repo.transformTasks = (tasks, cb) =>
+    return cb(null, repo.getTasks()) unless client.isAuthenticated()
     repo.pause()
     client.transformTasks repo.config, tasks, (err, tasks) =>
       async.mapSeries tasks, (task, cb) =>

@@ -297,6 +297,7 @@ class ImdoneioClient extends Emitter
       transformable
 
   transformTasks: (config, tasks, cb) ->
+    return cb() unless @authenticated
     async.series([
       (next) =>
         return next(null, @transformers) if @transformers
