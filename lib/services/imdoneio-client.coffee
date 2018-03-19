@@ -306,58 +306,35 @@ class ImdoneioClient extends Emitter
           next()
       (next) =>
         tasks = @getTransformableTasks tasks
-        @doPost("/transform").send({config, tasks, utcOffset: moment().format()}).end (err, res) =>
+        chunks = _.chunk tasks, 20
+        modifiedTasks = []
+        total = 0
+        log "Sending #{tasks.length} tasks to imdone.io"
+        async.eachOfLimit chunks, 2, (chunk, i, cb) =>
+          log "Sending chunk #{i}:#{chunks.length} of #{chunk.length} tasks to imdone.io"
+          setTimeout () => # Not sure why, but this sometimes hangs without using setTimeout
+            @doPost("/transform").send({config, tasks: chunk, utcOffset: moment().format()}).end (err, res) =>
+              #console.log "Received Sync Response #{i} err:#{err}"
+              if err && err.code == 'ECONNREFUSED' && @authenticated
+                #console.log "Error on syncing tasks with imdone.io", err
+                @emit 'unavailable'
+                delete @authenticated
+                delete @user
+              return cb err if err
+              data = res.body
+              modifiedTasks.push data
+              total += data.length
+              log "Received #{i}:#{chunks.length} #{total} tasks from imdone.io"
+              cb()
+            log "Chunk #{i}:#{chunks.length} of #{chunk.length} tasks sent to imdone.io"
+          ,10
+        , (err) ->
           return next err if err
-          next(null, res.body)
+          next err, _.flatten modifiedTasks
       ], (err, result) =>
         return cb err if err
         cb(null, result[1].map (task) => new Task(task))
       )
-
-  syncTasks: (repo, tasks, cb) ->
-    gitRepo = helper.repoForPath repo.getPath()
-    projectId = @getProjectId repo
-    chunks = _.chunk tasks, 20
-    modifiedTasks = []
-    total = 0
-    log "Sending #{tasks.length} tasks to imdone.io"
-    repo.emit 'sync.percent', 0
-    async.eachOfLimit chunks, 2, (chunk, i, cb) =>
-      log "Sending chunk #{i}:#{chunks.length} of #{chunk.length} tasks to imdone.io"
-      data =
-        tasks: chunk
-        branch: gitRepo && gitRepo.branch
-      setTimeout () => # Not sure why, but this sometimes hangs without using setTimeout
-        @doPost("/projects/#{projectId}/tasks").send(data).end (err, res) =>
-          #console.log "Received Sync Response #{i} err:#{err}"
-          if err && err.code == 'ECONNREFUSED' && @authenticated
-            #console.log "Error on syncing tasks with imdone.io", err
-            @emit 'unavailable'
-            delete @authenticated
-            delete @user
-          return cb err if err
-          data = res.body
-          modifiedTasks.push data
-          total += data.length
-          repo.emit 'sync.percent', Math.ceil(total/tasks.length*100)
-          log "Received #{i}:#{chunks.length} #{total} tasks from imdone.io"
-          cb()
-        log "Chunk #{i}:#{chunks.length} of #{chunk.length} tasks sent to imdone.io"
-      ,10
-    , (err) ->
-      return cb err if err
-      cb err, _.flatten modifiedTasks
-
-  syncTasksForDelete: (repo, tasks, cb) ->
-    projectId = @getProjectId repo
-    taskIds = _.map tasks, (task) -> task.meta.id[0]
-    @doPost("/projects/#{projectId}/taskIds").send(taskIds: taskIds).end (err, res) =>
-      if err && err.code == 'ECONNREFUSED' && @authenticated
-        @emit 'unavailable'
-        delete @authenticated
-        delete @user
-      return cb err if err
-      cb err, res.body
 
   db: (collection) ->
     path = require 'path'

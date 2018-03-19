@@ -77,10 +77,8 @@ module.exports =  (repo) ->
       repo.setProjectName project.name
       return unless repo.isImdoneIOProject()
       _.set repo, 'sync.sort', project.taskOrder if sortEnabled()
-      # repo.syncTasks repo.getTasks(), (err, done) =>
       repo.emit 'project.found', project
       repo.initProducts()
-        # done err if done
 
   checkForIIOProject() if client.isAuthenticated()
   repo.on 'authenticated', => checkForIIOProject()
@@ -107,53 +105,6 @@ module.exports =  (repo) ->
       repo.emit 'tasks.updated', tasks unless err
       return if err == ERRORS.NO_CONTENT
       throw err if err
-
-  repo.syncTasks = syncTasks = (tasks, cb) ->
-    return cb("unauthenticated", ()->) unless client.isAuthenticated()
-    return cb("not enabled") unless repo.getProjectId()
-    tasks = [tasks] unless _.isArray tasks
-    return cb() unless tasks.length > 0
-
-    cm.emit 'tasks.syncing'
-    #console.log "sending #{tasks.length} tasks to imdone-io "
-    client.syncTasks repo, tasks, (err, ioTasks) ->
-      return if err # TODO: Do something with this error gh:116 id:81
-      #console.log "received tasks from imdone-io:", ioTasks
-      async.eachSeries ioTasks,
-        (task, cb) ->
-          currentTask = repo.getTask task.id
-          taskToModify = _.assign currentTask, task
-          return cb "Task not found" unless Task.isTask taskToModify
-          repo.modifyTask taskToModify, cb
-        (err) ->
-          if err
-            #console.log "Sync Error:", err
-            return cm.emit 'sync.error', err
-          repo.saveModifiedFiles (err, files)->
-            client.syncTasksForDelete repo, repo.getTasks(), (err, deletedTasks) ->
-              return syncDone(tasks)(err) unless cb
-              cb err, syncDone(tasks)
-
-  syncFile = (file, cb) ->
-    return cb("unauthenticated", ()->) unless client.isAuthenticated()
-    return cb("not enabled") unless repo.getProjectId()
-    cm.emit 'tasks.syncing'
-    #console.log "sending tasks to imdone-io for: #{file.path}"
-    client.syncTasks repo, file.getTasks(), (err, tasks) ->
-      return if err # TODO: Do something with this error gh:116 id:96
-      #console.log "received tasks from imdone-io for: %s", tasks
-      async.eachSeries tasks,
-        (task, cb) ->
-          taskToModify = _.assign repo.getTask(task.id), task
-          return cb "Task not found" unless Task.isTask taskToModify
-          repo.modifyTask taskToModify, cb
-        (err) ->
-          return cm.emit 'sync.error', err if err
-          repo.writeFile file, (err, fileAfterSave)->
-            file ?= fileAfterSave
-            client.syncTasksForDelete repo, file.getTasks(), (err, deletedTasks) ->
-              return syncDone(tasks)(err) unless cb
-              cb err, syncDone(tasks)
 
   loadSort = (cb) ->
     loadSortFile cb
@@ -240,16 +191,6 @@ module.exports =  (repo) ->
     _moveTasks tasks, newList, newPos, shouldSync, (err, tasksByList) ->
       repo.emit 'tasks.moved', tasks
       return cb err if err
-      # if shouldSync
-      #
-      #   #console.log "Tasks moved.  Syncing with imdone.io"
-      #   syncTasks tasks, (err, done) ->
-      #     repo.emit 'tasks.moved', tasks
-      #     return cb null, tasksByList unless sortEnabled()
-      #     saveSort (err) ->
-      #       done err
-      #       cb err, tasksByList
-      # else
       return cb null, tasksByList unless sortEnabled()
       saveSort (err) -> cb err, tasksByList
 
@@ -262,14 +203,6 @@ module.exports =  (repo) ->
     tasksByList = _getTasksByList()
     return tasksByList unless sortEnabled()
     ({name: list.name, tasks: sortBySyncId(list.name, list.tasks)} for list in tasksByList)
-
-  # repo.emitFileUpdate = (file) ->
-  #   return _emitFileUpdate file unless client.isAuthenticated() && repo.project
-  #   if repo.shouldEmitFileUpdate file
-  #     syncFile file, (err, done) ->
-  #       _emitFileUpdate file
-  #       done err
-  #
 
   repo.init = (cb) ->
     cb ?= ()->

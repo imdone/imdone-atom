@@ -183,8 +183,6 @@ class ImdoneAtomView extends ScrollView
     @emitter.on 'error', (mdMsg) => atom.notifications.addWarning "OOPS!", description: mdMsg, dismissable: true, icon: 'alert'
 
     @emitter.on 'task.modified', (task) => @onRepoUpdate()
-      #console.log "Task modified.  Syncing with imdone.io"
-      # @imdoneRepo.syncTasks [task], (err) => @onRepoUpdate()
 
     @emitter.on 'menu.toggle', =>
       @boardWrapper.toggleClass 'shift'
