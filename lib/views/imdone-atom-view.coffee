@@ -422,6 +422,7 @@ class ImdoneAtomView extends ScrollView
   onRepoUpdate: (tasks) ->
     # BACKLOG: This should be queued so two updates don't colide gh:241 id:90
     @imdoneRepo.transformTasks tasks, (err, tasks) =>
+      @imdoneRepo.reminders.schedule()
       @updateBoard(tasks)
       @boardWrapper.css 'bottom', 0
       @bottomView.attr 'style', ''
@@ -490,10 +491,7 @@ class ImdoneAtomView extends ScrollView
 
     for data in task.getMetaDataWithLinks(repo.getConfig())
       do (data) =>
-        if (data.key == 'due' || data.key == 'remind')
-          data.value = moment(data.value).fromNow()
-        if (data.key == 'created' || data.key == 'completed')
-          data.value = moment(data.value).format('LLLL')
+        data.value = moment(data.value).format('llll') if data.key in ['due', 'remind', 'created', 'completed']
         $icons = $el.td()
         if data.link
           $link = $el.a href: data.link.url, title: data.link.title,
