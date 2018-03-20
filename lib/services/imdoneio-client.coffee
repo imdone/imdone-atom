@@ -124,14 +124,15 @@ class ImdoneioClient extends Emitter
 
   onAuthSuccess: (user, cb) ->
     return cb null, user if @authenticated
-    @authenticated = true
-    @authRetryCount = 0
-    @emit 'authenticated'
-    @saveCredentials (err) =>
-      @storageAuthFailed = false
-      cb(null, user)
-      log 'onAuthSuccess'
-      @handlePushEvents()
+    @getPlan (err, @plan) =>
+      @authenticated = true
+      @authRetryCount = 0
+      @emit 'authenticated'
+      @saveCredentials (err) =>
+        @storageAuthFailed = false
+        cb(null, user)
+        log 'onAuthSuccess'
+        @handlePushEvents()
 
   onAuthFailure: (err, res, cb) ->
     status = err.imdone_status = if err && (err.code == 'ECONNREFUSED' || _.get(err, 'response.err.status') == 404) then 'unavailable' else 'failed'
@@ -284,6 +285,11 @@ class ImdoneioClient extends Emitter
     _.set repo, 'config.keepEmptyPriority', true
   getProjectName: (repo) -> _.get repo, 'config.sync.name'
   setProjectName: (repo, name) -> _.set repo, 'config.sync.name', name
+
+  getPlan: (cb) ->
+    @doGet("/plan").end (err, res) =>
+      return cb(err, res) if err || !res.ok
+      cb(null, res.body)
 
   getTransformableTasks: (tasks) ->
     tasks.filter (task) =>
