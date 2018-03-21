@@ -1,3 +1,7 @@
+## 2.4.1
+- Don't remind if task has completed metadata
+- Set reminder to notify every 5 minutes until remind metadata is removed or changed
+
 ## 2.4.0
 - Add export to imdone-export.json with alt-x
 - Set explicit order on config
