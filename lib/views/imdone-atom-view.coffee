@@ -422,7 +422,6 @@ class ImdoneAtomView extends ScrollView
   onRepoUpdate: (tasks) ->
     # BACKLOG: This should be queued so two updates don't colide gh:241 id:90
     @imdoneRepo.transformTasks tasks, (err, tasks) =>
-      @imdoneRepo.reminders.schedule()
       @updateBoard(tasks)
       @boardWrapper.css 'bottom', 0
       @bottomView.attr 'style', ''

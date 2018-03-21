@@ -10,6 +10,7 @@ module.exports =  (repo) ->
   log = require('debug') 'imdoneio-store'
   transform = require('./transform')
   Task = require 'imdone-core/lib/task'
+  Reminders = require './reminders'
   fs = require 'fs'
   _ = require 'lodash'
   async = require 'async'
@@ -100,6 +101,7 @@ module.exports =  (repo) ->
         return cb err
       repo.saveModifiedFiles (err) =>
         repo.resume()
+        repo.reminders.schedule()
         return cb err if err
         cb(null, repo.getTasks())
 
@@ -222,10 +224,12 @@ module.exports =  (repo) ->
         if sortEnabled()
           _init (err, files) ->
             return cb err if err
+            repo.reminders = new Reminders(repo);
             checkForIIOProject()
             populateSort (err) -> cb null, files
         else
           _init (err, files) ->
+            repo.reminders = new Reminders(repo);
             return cb err if err
             checkForIIOProject()
             cb null, files
