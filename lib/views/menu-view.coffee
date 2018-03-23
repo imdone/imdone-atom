@@ -136,7 +136,6 @@ class MenuView extends View
 
   deleteTasks: -> @emitter.emit 'tasks.delete'
 
-  # NOTE: This issue was created in @atom with @imdone. Stay in the flow~~~~~~~ +discuss gh:171 id:92
   openVisible: -> @emitter.emit 'visible.open'
 
   openReadme: -> @emitter.emit 'readme.open'
