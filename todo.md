@@ -22,4 +22,4 @@ Acceptance Criteria
 ----
 - [ ] When a user creates a todo with no content and identifies a github issue with gh:123 then issue 123 should become the content of the TODO.
 
-#TODO: As a user I would like to set email reminders from TODO comments in my code +feature +imdoneio
+#TODO: As a user I would like to set email reminders from TODO comments in my code +feature +imdoneio id:143 gh:361 ic:gh
