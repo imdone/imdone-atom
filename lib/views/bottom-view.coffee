@@ -115,7 +115,7 @@ class BottomView extends View
 
     @emitter.on 'menu.toggle', => @toggleClass 'shift'
 
-    # BACKLOG: Close bottom-view if none of it's direct descendants are visible +bug gh:182 @piascikj id:82
+    # BACKLOG: Close bottom-view if none of it's direct descendants are visible +bug @piascikj gh:182 id:82
 
   isOpen: ->
     @hasClass 'open'

@@ -586,7 +586,7 @@ class ImdoneAtomView extends ScrollView
 
   # BACKLOG: Split this apart into it's own class to simplify. Call it BoardView +refactor gh:246 id:84
   updateBoard: (tasks) ->
-    # TODO: Only update board with changed tasks gh:205 +master id:99
+    # TODO: Only update board with changed tasks +master gh:205 id:99
     # return if @updateTasksOnBoard tasks
     self = @
     @destroySortables()

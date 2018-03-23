@@ -66,7 +66,7 @@ class ConnectorPluginView extends View
     @showRelatedIssues()
     @doFind()
 
-  # TODO: Improve GitHub issue integration.  Allow for checking of tasks to update issue for DoD. gh:286 id:69
+  # TODO: Improve GitHub issue integration. Allow for checking of tasks to update issue for DoD. gh:286 id:69
   showRelatedIssues: () ->
     @relatedIssues.empty()
     return unless @issues

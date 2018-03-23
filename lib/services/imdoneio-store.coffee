@@ -37,7 +37,7 @@ module.exports =  (repo) ->
   repo.getProjectName = () -> _.get repo, 'config.sync.name'
   repo.setProjectName = (name) -> _.set repo, 'config.sync.name', name
 
-  # TODO: Handle the case when imdone.io is offline!  Keep a message saying offline! and auto reconnect when it's back. gh:239 id:95
+  # TODO: Handle the case when imdone.io is offline! Keep a message saying offline! and auto reconnect when it's back. gh:239 id:95
   repo.isImdoneIOProject = () -> client.isAuthenticated() && repo.project && !repo.project.disabled
 
   repo.disableProject = (cb) ->
@@ -244,7 +244,7 @@ module.exports =  (repo) ->
           return cb err if err
           cb null, files
 
-  # BACKLOG: Provide a way to delete tasks after they integrate,  maybe a delete\:true on the returning task. gh:244 id:73
+  # BACKLOG: Provide a way to delete tasks after they integrate, maybe a delete\:true on the returning task. gh:244 id:73
   repo.initProducts = (cb) ->
     cb ?= ()->
     connectorManager.getProducts (err, products) =>
