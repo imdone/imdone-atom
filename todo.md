@@ -23,4 +23,4 @@ Acceptance Criteria
 - [ ] When a user creates a todo with no content and identifies a github issue with gh:123 then issue 123 should become the content of the TODO.
 
 #TODO: As a user I would like to set email reminders from TODO comments in my code +feature +imdoneio id:143 gh:361 ic:gh
-#TODO: As a user I would like the label on my github issue to change if I move a task to a different list. +feature +imdoneio
+#TODO: As a user I would like the label on my github issue to change if I move a task to a different list. +feature +imdoneio id:144 gh:363 ic:gh
