@@ -11,6 +11,7 @@ module.exports =  (repo) ->
   transform = require('./transform')
   Task = require 'imdone-core/lib/task'
   Reminders = require './reminders'
+  waitUntil = require 'wait-until'
   fs = require 'fs'
   _ = require 'lodash'
   async = require 'async'
@@ -89,21 +90,25 @@ module.exports =  (repo) ->
   repo.transformTasks = (tasks, cb) =>
     return cb(null, repo.getTasks()) unless client.isAuthenticated()
     return cb(null, repo.getTasks()) if !client.plan || client.plan.free
-    repo.pause()
-    transformed = transform.transformTasks repo.config, tasks
-    async.mapSeries transformed, (task, cb) =>
-      repo.modifyTask task, false, (err, updatedTask) =>
-        return cb(null, updatedTask) unless err
-        cb err
-    , (err, results) ->
-      if err
-        repo.resume()
-        return cb err
-      repo.saveModifiedFiles (err) =>
-        repo.resume()
-        repo.reminders.schedule()
-        return cb err if err
-        cb(null, repo.getTasks())
+    waitUntil 200, 10, () =>
+      !repo.savingFiles
+    , (result) =>
+      return cb(null, repo.getTasks()) unless result
+      repo.pause()
+      transformed = transform.transformTasks repo.config, tasks
+      async.mapSeries transformed, (task, cb) =>
+        repo.modifyTask task, false, (err, updatedTask) =>
+          return cb(null, updatedTask) unless err
+          cb err
+      , (err, results) ->
+        if err
+          repo.resume()
+          return cb err
+        repo.saveModifiedFiles (err) =>
+          repo.resume()
+          repo.reminders.schedule()
+          return cb err if err
+          cb(null, repo.getTasks())
 
   syncDone = (tasks) ->
     return (err) ->

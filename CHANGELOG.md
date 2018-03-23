@@ -1,3 +1,7 @@
+## 2.4.2
+- Wait until imdone is done saving modified files to transform tasks
+- Use HTML5 notifications
+
 ## 2.4.1
 - Don't remind if task has completed metadata
 - Set reminder to notify every 5 minutes until remind metadata is removed or changed

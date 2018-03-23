@@ -180,6 +180,7 @@ Commands
 | `Imdone Atom: Todays Project Journal` | Alt (⌥ Option)+P | Open todays project journal file |
 | `Imdone Atom: Board Zoom In`          | Alt (⌥ Option)+. | Zoom in board                    |
 | `Imdone Atom: Board Zoom Out`         | Alt (⌥ Option)+, | Zoom out board                   |
+| `Imdone Atom: Export`                 | Alt (⌥ Option)+X | Create `imdone-export.json`      |
 
 Settings
 ----
