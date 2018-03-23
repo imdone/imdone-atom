@@ -89,8 +89,9 @@ Use plain text to set reminders and due dates for your tasks. Uses [date.js](htt
   - (ex. `due:2018-03-19T10:00:00-06:00  remind:2018-03-19T11:30:00-04:00`)
 
 ### OS notifications for remind:[timestamp] metadata
-If you set a reminder for your task, you'll receive an OS notification with a show button that will take you back to task in the file.  
-<img width="356" alt="imdone reminder notification" src="https://user-images.githubusercontent.com/233505/37665556-240e081e-2c23-11e8-9504-27a0207c6bca.png">
+If you set a reminder for your task, you'll receive an OS notification that when clicked, will taske you to the task in the file containing it.  
+ 
+<img width="353" alt="screen shot 2018-03-23 at 9 09 05 am" src="https://user-images.githubusercontent.com/233505/37837111-01cee9e0-2e7a-11e8-8aab-6eb9115b5dea.png">
 
 ### Auto completed:[timestamp]
 Adding this section to your `.imdone/config.json` will cause all tasks in `DONE` to have a `completed:[timestamp]` added to the task text.  
