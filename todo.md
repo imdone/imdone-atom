@@ -26,5 +26,5 @@ Acceptance Criteria
 
 #TODO: As a user I would like to set email reminders from TODO comments in my code +feature +imdoneio id:143 gh:361 ic:gh
 #TODO: As a user I would like the label on my github issue to change if I move a task to a different list. +feature +imdoneio id:144 gh:363 ic:gh
-#DOING: When creating a new project new journal file doesn't get noticed by watcher.
+#DOING: When creating a new project new journal file doesn't get noticed by watcher. id:145 gh:372 ic:gh
 - [ ] Check if watcher is watching root folder
