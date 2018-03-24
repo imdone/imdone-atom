@@ -9,7 +9,7 @@
       'command': 'imdone-atom:todays-journal'
     }
   ],
-  '.tree-view.full-menu': [
+  '.tree-view .file, .tree-view .directory': [
     {
       'label': 'imdone task-board'
       'command': 'imdone-atom:tasks'

@@ -15,6 +15,8 @@ Roadmap
 - #DOING: Add analytics for user actions id:107 gh:328 ic:gh
   - [ ] Open board
   - [ ] Create list
+  - [ ] add github issue
+  - [ ]
 - #TODO: As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story id:108 ic:gh gh:329
 - #TODO: As a user I would like to save groups of visible lists so that I can have multiple process flows in a single project. id:139 gh:351 ic:gh
 - #TODO: As a user I would like to add the github issue content to my TODO comment so that I can stay in the code while tracking my work. id:141 gh:354 ic:gh
@@ -24,3 +26,5 @@ Acceptance Criteria
 
 #TODO: As a user I would like to set email reminders from TODO comments in my code +feature +imdoneio id:143 gh:361 ic:gh
 #TODO: As a user I would like the label on my github issue to change if I move a task to a different list. +feature +imdoneio id:144 gh:363 ic:gh
+#DOING: When creating a new project new journal file doesn't get noticed by watcher.
+- [ ] Check if watcher is watching root folder
