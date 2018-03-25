@@ -29,4 +29,4 @@ Acceptance Criteria
 #DOING: When creating a new project new journal file doesn't get noticed by watcher. +bug id:145 gh:372 ic:gh
 - [x] Check if watcher is watching root folder
 - [ ] alt-p only opens project journal file if user is in a file that's part of the project when it's pressed
-#DOING: Sort in file and save to project is broken +bug
+#DOING: Sort in file and save to project is broken +bug id:146 gh:374 ic:gh
