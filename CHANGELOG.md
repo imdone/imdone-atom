@@ -1,3 +1,6 @@
+## 2.4.4
+- Fix bug where project journal is created in the wrong project
+
 ## 2.4.3
 - Fix issue with chokidar.  Upgrade to 2.x
 - Add file and directory context menus
