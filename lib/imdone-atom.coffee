@@ -170,8 +170,9 @@ module.exports = ImdoneAtom =
 
   getCurrentProject: ->
     paths = atom.project.getPaths()
-    return unless paths.length > 0
     active = atom.workspace.getActivePaneItem()
+    return unless paths.length > 0 || active.selectedPath
+    return active.selectedPath if active && active.selectedPath
     return active.imdoneRepo.getPath() if active && active.imdoneRepo
     if active && active.getPath && active.getPath()
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0

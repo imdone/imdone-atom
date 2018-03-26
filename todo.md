@@ -26,7 +26,6 @@ Acceptance Criteria
 
 #TODO: As a user I would like to set email reminders from TODO comments in my code +feature +imdoneio id:143 gh:361 ic:gh
 #TODO: As a user I would like the label on my github issue to change if I move a task to a different list. +feature +imdoneio id:144 gh:363 ic:gh
-#DOING: When creating a new project new journal file doesn't get noticed by watcher. +bug id:145 gh:372 ic:gh
-- [x] Check if watcher is watching root folder
-- [ ] alt-p only opens project journal file if user is in a file that's part of the project when it's pressed
 #DOING: Sort in file and save to project is broken +bug id:146 gh:374 ic:gh
+- [ ] Come up with solution for tasks not integrated yet.  They need id's to be sorted.
+- [ ] Maybe use the transform endpoint?  Create a transformer for tasks with no id
