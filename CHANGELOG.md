@@ -1,4 +1,4 @@
-## 2.4.5
+## 2.4.6
 - Only return modified tasks from transform
 
 ## 2.4.4
