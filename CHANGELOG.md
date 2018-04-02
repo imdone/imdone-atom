@@ -1,3 +1,6 @@
+## 2.4.5
+- Only return modified tasks from transform
+
 ## 2.4.4
 - Fix bug where project journal is created in the wrong project
 
