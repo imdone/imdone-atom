@@ -1,3 +1,6 @@
+## 2.4.9
+- Fix issue with transform
+
 ## 2.4.6
 - Only return modified tasks from transform
 
