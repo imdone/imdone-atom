@@ -16,7 +16,6 @@ Roadmap
   - [ ] Open board
   - [ ] Create list
   - [ ] add github issue
-  - [ ]
 - #TODO: As a user I would like to clear the filter with the escape key so that I can be more productive with filtering. +story id:108 ic:gh gh:329
 - #TODO: As a user I would like to save groups of visible lists so that I can have multiple process flows in a single project. id:139 gh:351 ic:gh
 - #TODO: As a user I would like to add the github issue content to my TODO comment so that I can stay in the code while tracking my work. id:141 gh:354 ic:gh
