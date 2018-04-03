@@ -387,8 +387,10 @@ class ImdoneAtomView extends ScrollView
       @board.find('.task').show()
     else
       @board.find('.task').hide()
-      @filterByPath text
-      @filterByContent text
+      tasks = @imdoneRepo.query text
+      @board.find("##{task.id}").show() for task in tasks
+      # @filterByPath text
+      # @filterByContent text
     @emitter.emit 'board.update'
 
   filterByPath: (text) -> @board.find(util.format('.task:attrContainsRegex(data-path,%s)', text)).each -> $(this).show().attr('id')
@@ -436,10 +438,9 @@ class ImdoneAtomView extends ScrollView
   hideMask: -> @mask.hide() if @mask
 
   genFilterLink: (opts) ->
-    linkPrefix = if opts.displayPrefix then opts.linkPrefix else ""
     $link = $el.a href:"#", title: "just show me tasks with #{opts.linkText}", class: "filter-link",
-      $el.span class: opts.linkClass, "#{linkPrefix}#{opts.linkText}"
-    $link.dataset.filter = opts.linkPrefix.replace( "+", "\\+" )+opts.linkText
+      $el.span class: opts.linkClass, opts.linkText
+    $link.dataset.filter = opts.filter
     $link
   # DOING: Use web components or vuejs to make the UI more testable and portable. +enhancement gh:297 id:75 ic:gh
   # - Create a task component
@@ -461,13 +462,14 @@ class ImdoneAtomView extends ScrollView
       if contexts
         for context, i in contexts
           do (context, i) =>
-            $link = @genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context", displayPrefix: true
+            $link = @genFilterLink linkText: context, filter: "contains(context,#{context})", linkClass: "task-context"
             taskHtml = taskHtml.replace( "@#{context}", $el.div($link).innerHTML )
 
       if tags
         for tag, i in tags
           do (tag, i) =>
-            $link = @genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags", displayPrefix: true
+            $link = @genFilterLink linkText: tag, filter:"contains(tags,#{tag})", linkClass: "task-tags"
+            $link = "contains(tags,#{tag})"
             taskHtml = taskHtml.replace( "+#{tag}", $el.div($link).innerHTML )
     else
       taskHtml = task.getHtml $.extend({stripTags: true, stripContext: true}, opts)
@@ -476,33 +478,34 @@ class ImdoneAtomView extends ScrollView
         $filters.appendChild $div
         for context, i in contexts
           do (context, i) =>
-            $div.appendChild(self.genFilterLink linkPrefix: "@", linkText: context, linkClass: "task-context")
+            $div.appendChild(self.genFilterLink linkText: context, filter:"contains(context,#{context})", linkClass: "task-context")
             $div.appendChild($el.span ", ") if (i < contexts.length-1)
       if tags
         $div = $el.div()
         $filters.appendChild $div
         for tag, i in tags
           do (tag, i) =>
-            $div.appendChild(self.genFilterLink linkPrefix: "+", linkText: tag, linkClass: "task-tags")
+            $div.appendChild(self.genFilterLink linkText: tag, filter:"contains(tags,#{tag})", linkClass: "task-tags")
             $div.appendChild($el.span ", ") if (i < tags.length-1)
 
     $taskText.innerHTML = taskHtml
 
     for data in task.getMetaDataWithLinks(repo.getConfig())
       do (data) =>
-        data.value = moment(data.value).format('llll') if data.key in ['due', 'remind', 'created', 'completed']
+        value = data.value
+        value = moment(data.value).format('llll') if data.key in ['due', 'remind', 'created', 'completed']
         $icons = $el.td()
         if data.link
           $link = $el.a href: data.link.url, title: data.link.title,
             $el.span class:"icon #{data.link.icon || 'icon-link-external'}"
           $icons.appendChild $link
-        $filterLink = $el.a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "#{data.key}:#{data.value}",
+        $filterLink = $el.a href:"#", title: "just show me tasks with #{data.key}:#{data.value}", class: "filter-link", "data-filter": "contains(meta.#{data.key},string:#{encodeURIComponent(data.value)})",
           $el.span class:"icon icon-light-bulb"
         $icons.appendChild $filterLink
 
         $tr = $el.tr class:'meta-data-row',
           $el.td data.key
-          $el.td data.value
+          $el.td value
           $icons
         $taskMetaTable.appendChild $tr
 
@@ -515,7 +518,7 @@ class ImdoneAtomView extends ScrollView
       $el.div class: 'task-source',
         $el.a href: '#', class: 'source-link', title: 'take me to the source', 'data-uri': "#{repo.getFullPath(task.source.path)}", 'data-line': task.line, "#{task.source.path + ':' + task.line}"
         $el.span ' | '
-        $el.a href:"#", title: "just show me tasks in #{task.source.path}", class: "filter-link", "data-filter": "#{task.source.path}",
+        $el.a href:"#", title: "just show me tasks in #{task.source.path}", class: "filter-link", "data-filter": "source.path=#{encodeURIComponent(task.source.path)}",
           $el.span class:"icon icon-light-bulb"
 
   getList: (list) =>

@@ -90,7 +90,7 @@ Use plain text to set reminders and due dates for your tasks. Uses [date.js](htt
 
 ### OS notifications for remind:[timestamp] metadata
 If you set a reminder for your task, you'll receive an OS notification that when clicked, will taske you to the task in the file containing it.  
- 
+
 <img width="353" alt="screen shot 2018-03-23 at 9 09 05 am" src="https://user-images.githubusercontent.com/233505/37837111-01cee9e0-2e7a-11e8-8aab-6eb9115b5dea.png">
 
 ### Auto completed:[timestamp]
@@ -107,8 +107,47 @@ Set `list` to whatever list you use for done.
 Task Board Features
 ----
 ### Filtering your board
-imdone uses regular expression matching to filter your cards on your board.  The content and the path of the file are searched, but the Token (e.g. TODO) is not searched.
-![filter-tasks](https://cloud.githubusercontent.com/assets/233505/21971105/fc44f31c-db72-11e6-857a-17fa92082a46.gif)
+imdone uses [rql](https://github.com/persvr/rql) to filter your board. Click on the tags, contexts or the lightbulb icon next to metadata or the filename to see some examples.
+You can query for any property of a task.
+```json
+{
+   "text": "Remember to update changelog before +publishing +package @piascikj gh:237 id:66",
+   "list": "TODO",
+   "order": "",
+   "hasColon": true,
+   "line": 568,
+   "id": "74a2ceff5d820f71574fbc2c8f7a6fff10fddcc9",
+   "repoId": "/Users/jesse/projects/imdone-atom",
+   "source": {
+      "path": "CHANGELOG.md",
+      "id": "CHANGELOG.md",
+      "repoId": "/Users/jesse/projects/imdone-atom",
+      "type": "File",
+      "ext": "md",
+      "lang": "markdown",
+      "modified": false,
+      "modifiedTime": "2018-04-03T17:58:15.523Z"
+   },
+   "type": "HASHTAG",
+   "tags": [
+      "publishing",
+      "package"
+   ],
+   "context": [
+      "piascikj"
+   ],
+   "meta": {
+      "gh": [
+         "237"
+      ],
+      "id": [
+         "66"
+      ]
+   },
+   "description": [],
+   "rawTask": "#TODO: Remember to update changelog before +publishing +package @piascikj gh:237 id:66"
+}
+```
 
 ### Delete all visible tasks
 Just click on the trash can icon and all the visible tasks will be deleted.  imdone will also get rid of any blank lines left behind!  Great for cleaning up!

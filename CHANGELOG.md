@@ -1,3 +1,6 @@
+## 2.4.10
+- Use [persvr/rql: Resource Query Language](https://github.com/persvr/rql) for querying
+
 ## 2.4.9
 - Fix issue with transform
 
