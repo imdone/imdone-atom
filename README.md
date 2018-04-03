@@ -8,7 +8,7 @@
 **A kanban board with an invisible user interface. It's cards and lists are made from TODOs in your code, markdown and text files.**
 Use `alt(⌥)+t` to open your project's board.
 
-The best issue tracker is one that's invisible.  Integrate your TODO comments into the product backlog with **[imdone.io](https://imdone.io)**.
+Integrate your TODO comments into your teams issue tracker or backlog with **[imdone.io](https://imdone.io)**.
 
 Vote on new features! [![vote on features](https://img.shields.io/github/issues/imdone/imdone-atom/feature.svg)](https://github.com/imdone/imdone-atom/issues?q=is%3Aissue+is%3Aopen+label%3Afeature+sort%3Acreated-desc)
 ![screen shot 2018-01-20 at 5 24 12 pm](https://user-images.githubusercontent.com/233505/35189496-c05ed71e-fe08-11e7-9390-6e8fb999d1f7.png)
