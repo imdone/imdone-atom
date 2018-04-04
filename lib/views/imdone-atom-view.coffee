@@ -72,6 +72,7 @@ class ImdoneAtomView extends ScrollView
     return zoomable.css 'zoom', dir if typeof dir is 'number'
     zoomVal = new Number(zoomable.css 'zoom')
     zoomVal = if dir == 'in' then zoomVal+.05 else zoomVal-.05
+    console.log zoomVal
     zoomable.css 'zoom', zoomVal
 
   @content: (params) ->

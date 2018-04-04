@@ -1,3 +1,6 @@
+## 2.4.11
+- Fix issue with project path when opening board
+
 ## 2.4.10
 - Use [persvr/rql: Resource Query Language](https://github.com/persvr/rql) for querying
 

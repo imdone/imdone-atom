@@ -45,8 +45,6 @@ module.exports = ImdoneAtom =
       description: 'Set the default zoom level on startup'
       type: 'number'
       default: 1
-      minimum: .2
-      maximum: 2.5
     openIn:
       order: 8
       title: 'File Opener'
@@ -172,7 +170,7 @@ module.exports = ImdoneAtom =
     paths = atom.project.getPaths()
     active = atom.workspace.getActivePaneItem()
     return unless paths.length > 0 || active.selectedPath
-    return active.selectedPath if active && active.selectedPath
+    return active.getSelectedEntries()[0].closest('.project-root').getPath() if active && active.selectedPath
     return active.imdoneRepo.getPath() if active && active.imdoneRepo
     if active && active.getPath && active.getPath()
       return projectPath for projectPath in paths when active.getPath().indexOf(projectPath+path.sep) == 0
