@@ -531,11 +531,13 @@ class ImdoneAtomView extends ScrollView
         @div class: 'list-name-wrapper well', =>
           @div class: 'list-name', 'data-list': list.name, title: "I don't like this name", =>
             @raw list.name
-
             if (tasks.length < 1)
               @a href: '#', title: "delete #{list.name}", class: 'delete-list', "data-list": list.name, =>
                 @span class:'icon icon-trashcan'
-        @ol class: 'tasks', "data-list":"#{list.name}", =>
+        @ol class: 'tasks', "data-list":"#{list.name}"
+        if (list.ignore)
+          @div class:'ignored-list-message text-center', =>
+            @raw "Cards dropped here will be ignored by imdone."
     $tasks = $list.find('.tasks')
     $tasks.append(self.getTask task) for task in tasks
     $list
