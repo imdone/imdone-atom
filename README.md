@@ -25,6 +25,7 @@ Vote on new features! [![vote on features](https://img.shields.io/github/issues/
   - [Auto completed:[timestamp]](#auto-completedtimestamp)
 - [Task Board Features](#task-board-features)
   - [Filtering your board](#filtering-your-board)
+  - [Ignoring all tasks in a list](#ignoring-all-tasks-in-a-list)
   - [Delete all visible tasks](#delete-all-visible-tasks)
   - [Open all files for visible tasks](#open-all-files-for-visible-tasks)
   - [Using tags in your TODO comments](#using-tags-in-your-todo-comments)
@@ -148,6 +149,23 @@ You can query for any property of a task.
    "rawTask": "#TODO: Remember to update changelog before +publishing +package @piascikj gh:237 id:66"
 }
 ```
+
+### Ignoring all tasks in a list
+Add an `ignore: true` property to the list in `.imdone/config.js` to keep tasks in the given list off the board and ignored by imdone.io integrations.
+If you add the `ignore: true` property to a list in `.imdone/config.json` like this...
+```json
+"lists": [
+  {
+    "name": "ARCHIVE",
+    "hidden": false,
+    "ignore": true
+  }
+]
+```
+
+The list will look like this...
+
+![screen shot 2018-04-04 at 12 26 46 pm](https://user-images.githubusercontent.com/233505/38326640-83770a08-3803-11e8-9dbb-d58a388f2454.png)
 
 ### Delete all visible tasks
 Just click on the trash can icon and all the visible tasks will be deleted.  imdone will also get rid of any blank lines left behind!  Great for cleaning up!

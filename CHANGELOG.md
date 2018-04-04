@@ -1,8 +1,6 @@
-## 2.4.12
-- ignore tasks found in list if list has property `ignore: true` in config.lists
-
 ## 2.4.11
 - Fix issue with project path when opening board
+- ignore tasks found in list if list has property `ignore: true` in config.lists
 
 ## 2.4.10
 - Use [persvr/rql: Resource Query Language](https://github.com/persvr/rql) for querying
