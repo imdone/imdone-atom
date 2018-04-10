@@ -1,3 +1,7 @@
+## 2.4.12
+- Independent list scrolling
+- Find TODOs in .vue files
+
 ## 2.4.11
 - Fix issue with project path when opening board
 - ignore tasks found in list if list has property `ignore: true` in config.lists

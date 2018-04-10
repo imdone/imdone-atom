@@ -455,9 +455,10 @@
       .list {
         float: left;
         width: @board-list-width;
-        padding: 10px;
+        padding: 10px 5px 50px 10px;
         background-color: @panel-heading-background-color;
         margin-right: 10px;
+        height: 100%;
         .list-name-wrapper {
           background-color: @task-background-color;
           font-size: 1.5em;
@@ -480,7 +481,9 @@
         .tasks {
           min-height: 50px;
           list-style: none;
-          padding-left: 0;
+          padding: 0 10px 0 0;
+          height: 100%;
+          overflow-y: auto;
         }
         .task {
           background-color: @task-background-color;

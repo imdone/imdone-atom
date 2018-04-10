@@ -43,16 +43,9 @@
       "hidden": true
     },
     {
-      "name": "NOTE",
-      "hidden": false
-    },
-    {
       "name": "DONE",
-      "hidden": false
-    },
-    {
-      "name": "QUESTION",
-      "hidden": false
+      "hidden": false,
+      "ignore": true
     }
   ],
   "marked": {
