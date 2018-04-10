@@ -470,7 +470,7 @@ class ImdoneAtomView extends ScrollView
         for tag, i in tags
           do (tag, i) =>
             $link = @genFilterLink linkText: tag, filter:"contains(tags,#{tag})", linkClass: "task-tags"
-            taskHtml = taskHtml.replace( "\+#{tag}", $el.div($link).innerHTML )
+            taskHtml = taskHtml.replace( "+#{tag}", $el.div($link).innerHTML )
     else
       taskHtml = task.getHtml $.extend({stripTags: true, stripContext: true}, opts)
       if contexts
