@@ -1,3 +1,6 @@
+## 2.4.13
+- Fix in-line tags
+
 ## 2.4.12
 - Independent list scrolling
 - Find TODOs in .vue files
