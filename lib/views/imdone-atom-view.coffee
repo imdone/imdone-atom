@@ -510,7 +510,9 @@ class ImdoneAtomView extends ScrollView
         $taskMetaTable.appendChild $tr
 
     $el.li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line,
-      $el.div class: 'imdone-task-plugins'
+      $el.div class: 'imdone-task-plugins-wrapper',
+        $el.span class:"icon icon-three-bars drag-handle pull-left"
+        $el.span class: 'imdone-task-plugins'
       $el.div class: 'task-full-text hidden', task.getTextAndDescription()
       $taskText
       $filters
@@ -621,6 +623,7 @@ class ImdoneAtomView extends ScrollView
       sort: true
       ghostClass: 'imdone-ghost'
       scroll: @boardWrapper[0]
+      handle: '.drag-handle'
       onEnd: (evt) =>
         id = evt.item.id
         pos = evt.newIndex

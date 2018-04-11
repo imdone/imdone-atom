@@ -441,7 +441,8 @@
     bottom: 0;
     left: 32px;
     right: 0;
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     &.shift {
       left: @menu-width;
     }
@@ -491,13 +492,17 @@
           white-space: normal;
           word-wrap: break-word;
           position: relative;
-          cursor: move;
           border: 2px solid @task-background-color;
           .task-text {
             margin-right: 1em;
             p {
               margin: 0 0 5px;
             }
+          }
+          .drag-handle {
+            cursor: move;
+            display: inline-block;
+            width: 3em;
           }
           .task-description {
             img {
@@ -543,10 +548,10 @@
               color: @text-color-info;
             }
           }
-          .imdone-task-plugins {
+          .imdone-task-plugins, .imdone-task-plugins-wrapper {
             text-align: right;
             min-height: 20px;
-            margin-right: .3em;
+            margin-left: -1.6em;
           }
           &.selected {
             border-color: @text-color-info;
