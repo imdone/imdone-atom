@@ -1,3 +1,6 @@
+## 2.4.14
+- Allow user to select text in cards by adding a drag handle
+
 ## 2.4.13
 - Fix in-line tags
 
@@ -548,7 +551,7 @@
 * Remove clunky transition on list rename
 
 ## 1.1.3
-* Add list rename supprt
+* Add list rename support
 
 ## 1.1.2
 * Add filter link support #filter/*filter*
