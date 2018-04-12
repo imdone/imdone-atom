@@ -1,4 +1,9 @@
-## 2.4.14
+## 2.4.16
+- Provide data-key and data-value in metadata rows for plugins or custom css. e.g. `tr.meta-data-row[data-key=gh]`
+- When filtering only show lists with tasks and ignored lists
+- Highlight the current filter link in tasks
+
+## 2.4.15
 - Allow user to select text in cards by adding a drag handle
 
 ## 2.4.13

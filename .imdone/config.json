@@ -28,15 +28,15 @@
   "lists": [
     {
       "name": "BACKLOG",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "TODO",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "DOING",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "CHANGED",
