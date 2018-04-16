@@ -192,7 +192,6 @@ class ImdoneAtomView extends ScrollView
       @boardWrapper.toggleClass 'shift'
 
     @emitter.on 'filter', (text) =>
-      track.send 'filter', {text}
       @filter text
 
     @emitter.on 'filter.clear', =>
@@ -389,7 +388,6 @@ class ImdoneAtomView extends ScrollView
 
   filter: (text) ->
     text = @getFilter() unless text
-    @lastFilter = text
     if text == ''
       @board.find('.task').show()
       @emitter.emit 'board.update'
@@ -399,6 +397,7 @@ class ImdoneAtomView extends ScrollView
       try @board.find(".task a[href='#filter/#{text}']").addClass('inline-block highlight-info')
       catch e then console.error(e)
       tasks = @imdoneRepo.query text
+      track.send 'filter', {text, tasks: tasks.length} unless text == @lastFilter
       lists = _.uniq(tasks.map (task) -> task.list).sort()
       if JSON.stringify(@shownLists) is JSON.stringify(lists)
         @showTasks(tasks)
@@ -408,6 +407,7 @@ class ImdoneAtomView extends ScrollView
         for list in @imdoneRepo.getLists()
           list.hidden = !lists.includes(list.name) && !list.ignore
         @imdoneRepo.saveConfig()
+    @lastFilter = text
 
   visibleTasks: (listName) ->
     return [] unless @imdoneRepo
@@ -644,6 +644,7 @@ class ImdoneAtomView extends ScrollView
         filePath = @imdoneRepo.getFullPath evt.item.dataset.path
         task = @imdoneRepo.getTask id
         @showMask "Moving Tasks"
+        track.send 'move', {task,list,pos}
         @imdoneRepo.moveTasks [task], list, pos
 
     @tasksSortables = tasksSortables = []

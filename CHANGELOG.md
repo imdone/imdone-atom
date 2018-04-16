@@ -1,3 +1,6 @@
+## 2.4.18
+- Use string.search on rawTask as fallback to rql
+
 ## 2.4.17
 - Fix filter syntax error
 
