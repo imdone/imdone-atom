@@ -124,10 +124,10 @@ class ImdoneioClient extends Emitter
 
   onAuthSuccess: (user, cb) ->
     return cb null, user if @authenticated
+    @authenticated = true
     @getPlan (err, @plan) =>
-      @authenticated = true
       @authRetryCount = 0
-      @emit 'authenticated'
+      @emit 'authenticated', user
       @saveCredentials (err) =>
         @storageAuthFailed = false
         cb(null, user)

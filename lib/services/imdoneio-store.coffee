@@ -28,7 +28,7 @@ module.exports =  (repo) ->
 
   plugins = []
 
-  client.on 'authenticated', -> repo.emit 'authenticated'
+  client.on 'authenticated', (user) -> repo.emit 'authenticated', user
   client.on 'unauthenticated', -> repo.emit 'unauthenticated'
   client.on 'authentication-failed', ({status, retries}) -> repo.emit 'authentication-failed', ({status, retries})
   client.on 'unavailable', -> repo.emit 'unavailable'

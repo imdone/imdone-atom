@@ -36,7 +36,7 @@
     },
     {
       "name": "DOING",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "CHANGED",

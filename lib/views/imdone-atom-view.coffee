@@ -1,5 +1,6 @@
 {$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
 $el = require 'laconic'
+track = require '../services/track'
 moment = require 'moment'
 {Emitter} = require 'atom'
 fs = require 'fs'
@@ -148,7 +149,9 @@ class ImdoneAtomView extends ScrollView
       @hideMask() if status == "unavailable" && retries
       #console.log "auth-failed" if status == "failed"
 
-    @emitter.on 'authenticated', => pluginManager.init()
+    @emitter.on 'authenticated', (user) =>
+      track.send 'authenticated', user
+      pluginManager.init()
 
     @emitter.on 'unavailable', =>
       @hideMask()
@@ -189,6 +192,7 @@ class ImdoneAtomView extends ScrollView
       @boardWrapper.toggleClass 'shift'
 
     @emitter.on 'filter', (text) =>
+      track.send 'filter', {text}
       @filter text
 
     @emitter.on 'filter.clear', =>
@@ -202,6 +206,7 @@ class ImdoneAtomView extends ScrollView
         fullPath = @imdoneRepo.getFullPath file
         paths[fullPath] = task.line
 
+      track.send 'openVisible', paths
       numFiles = _.keys(paths).length
       if numFiles < 5 || window.confirm "imdone is about to open #{numFiles} files.  Continue?"
         for fpath, line of paths
@@ -239,6 +244,7 @@ class ImdoneAtomView extends ScrollView
 
     @on 'click', '.source-link',  (e) =>
       link = e.target
+      track.send 'source-link', {uri: link.dataset.uri, line: link.dataset.line}
       @openPath link.dataset.uri, link.dataset.line
 
       if config.getSettings().showNotifications && !$(link).hasClass('info-link')
@@ -390,7 +396,8 @@ class ImdoneAtomView extends ScrollView
     else
       @board.find('.task').hide()
       @board.find('.task a[href^="#filter/"]').removeClass('inline-block highlight-info')
-      @board.find(".task a[href='#filter/#{text}']").addClass('inline-block highlight-info')
+      try @board.find(".task a[href='#filter/#{text}']").addClass('inline-block highlight-info')
+      catch e then console.error(e)
       tasks = @imdoneRepo.query text
       lists = _.uniq(tasks.map (task) -> task.list).sort()
       if JSON.stringify(@shownLists) is JSON.stringify(lists)
@@ -401,10 +408,6 @@ class ImdoneAtomView extends ScrollView
         for list in @imdoneRepo.getLists()
           list.hidden = !lists.includes(list.name) && !list.ignore
         @imdoneRepo.saveConfig()
-
-  filterByPath: (text) -> @board.find(util.format('.task:attrContainsRegex(data-path,%s)', text)).each -> $(this).show().attr('id')
-
-  filterByContent: (text) -> @board.find(util.format('.task-full-text:containsRegex("%s")', text)).each -> $(this).closest('.task').show().attr('id')
 
   visibleTasks: (listName) ->
     return [] unless @imdoneRepo

@@ -1,3 +1,6 @@
+## 2.4.17
+- Fix filter syntax error
+
 ## 2.4.16
 - Provide data-key and data-value in metadata rows for plugins or custom css. e.g. `tr.meta-data-row[data-key=gh]`
 - When filtering only show lists with tasks and ignored lists
