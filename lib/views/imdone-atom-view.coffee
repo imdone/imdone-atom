@@ -241,6 +241,24 @@ class ImdoneAtomView extends ScrollView
 
     @emitter.on 'zoom', (dir) => @zoom dir
 
+    @on 'click', '.move-up', (e) =>
+      id = e.target.dataset.id
+      task = @imdoneRepo.getTask id
+      list = task.list
+      pos = 0
+      @showMask "Moving Tasks"
+      track.send 'move', {task,list,pos}
+      @imdoneRepo.moveTasks [task], list, pos
+
+    @on 'click', '.move-down', (e) =>
+      id = e.target.dataset.id
+      task = @imdoneRepo.getTask id
+      list = task.list
+      pos = @imdoneRepo.getTasksInList(list).length
+      @showMask "Moving Tasks"
+      track.send 'move', {task,list,pos}
+      @imdoneRepo.moveTasks [task], list, pos
+
     @on 'click', '.source-link',  (e) =>
       link = e.target
       track.send 'source-link', {uri: link.dataset.uri, line: link.dataset.line}
@@ -462,6 +480,8 @@ class ImdoneAtomView extends ScrollView
     self = @;
     repo = @imdoneRepo
     contexts = task.getContext()
+    index = repo.getTaskIndex(task)
+    listLength = repo.getTasksInList(task.list).length
     tags = task.getTags()
     $taskText = $el.div class: 'task-text native-key-bindings'
     $filters = $el.div class: 'task-filters'
@@ -525,6 +545,11 @@ class ImdoneAtomView extends ScrollView
     $el.li class: 'task well native-key-bindings', id: "#{task.id}", tabindex: -1, "data-path": task.source.path, "data-line": task.line,
       $el.div class: 'imdone-task-plugins-wrapper',
         $el.span class:"icon icon-three-bars drag-handle pull-left"
+        $el.span class:"sequence-buttons pull-left",
+          unless index == 0
+            $el.a href: '#', class:"icon icon-move-up move-up pull-left", "data-id": task.id, title: "Move to top"
+          unless index == listLength-1
+            $el.a href: '#', class:"icon icon-move-down move-down pull-left" , "data-id": task.id, title: "Move to bottom"
         $el.span class: 'imdone-task-plugins'
       $el.div class: 'task-full-text hidden', task.getTextAndDescription()
       $taskText

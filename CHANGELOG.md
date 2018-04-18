@@ -1,3 +1,6 @@
+## 2.4.19
+- Move tasks to bottom and top with one click
+
 ## 2.4.18
 - Use filter by string.search on rawTask as fallback to rql
 
