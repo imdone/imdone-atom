@@ -110,6 +110,8 @@ Task Board Features
 ### Filtering your board
 imdone uses [rql](https://github.com/persvr/rql) to filter your board. Click on the tags, contexts or the lightbulb icon next to metadata or the filename to see some examples.
 You can query for any property of a task.
+
+Metadata fields with the keys "created", "completed", "due" and "remind" will be added as date fields to the task so you can filter with lt() and gt() (e.g. "gt(due,date:2018-04-20)")
 ```json
 {
    "text": "Remember to update changelog before +publishing +package @piascikj gh:237 id:66",
@@ -143,9 +145,13 @@ You can query for any property of a task.
       ],
       "id": [
          "66"
+      ],
+      "due": [
+        "2018-4-21"
       ]
    },
    "description": [],
+   "due": "2018-04-21T06:00:00.000Z"
    "rawTask": "#TODO: Remember to update changelog before +publishing +package @piascikj gh:237 id:66"
 }
 ```

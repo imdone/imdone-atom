@@ -1,3 +1,6 @@
+## 2.4.20
+- Allow filtering of task properties "created", "completed", "due" and "remind" as dates (e.g. "gt(due,date:2018-04-20)")
+
 ## 2.4.19
 - Move tasks to bottom and top with one click
 
