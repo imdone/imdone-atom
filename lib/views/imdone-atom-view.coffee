@@ -405,12 +405,11 @@ class ImdoneAtomView extends ScrollView
     @emitter.emit 'board.update'
 
   filter: (text) ->
-    @showMask()
     text = @getFilter() unless text
     if text == ''
-      @board.find('.task').show()
-      @emitter.emit 'board.update'
+      @showTasks(@imdoneRepo.getTasks())
     else
+      @showMask()
       @board.find('.task').hide()
       @board.find('.task a[href^="#filter/"]').removeClass('inline-block highlight-info')
       try @board.find(".task a[href='#filter/#{text}']").addClass('inline-block highlight-info')
