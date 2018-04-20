@@ -405,6 +405,7 @@ class ImdoneAtomView extends ScrollView
     @emitter.emit 'board.update'
 
   filter: (text) ->
+    @showMask()
     text = @getFilter() unless text
     if text == ''
       @board.find('.task').show()
