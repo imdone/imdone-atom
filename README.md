@@ -94,22 +94,25 @@ If you set a reminder for your task, you'll receive an OS notification that when
 
 <img width="353" alt="screen shot 2018-03-23 at 9 09 05 am" src="https://user-images.githubusercontent.com/233505/37837111-01cee9e0-2e7a-11e8-8aab-6eb9115b5dea.png">
 
-### Auto completed:[timestamp]
-Adding this section to your `.imdone/config.json` will cause all tasks in `DONE` to have a `completed:[timestamp]` added to the task text.  
+### Auto completed:[timestamp] and Auto created:[timestamp]
+Adding this section to your `.imdone/config.json` will cause all tasks in `DONE` to have a `completed:[timestamp]` added to the task text, and tasks not in `DONE` to have a `created:[timestamp]` added to the task text.
+See [rql](https://github.com/persvr/rql) for filter syntax.
 ```json
 "transformers": {
   "autocomplete": {
-    "list": "DONE"
+    "filter": "eq(list,DONE)"
+  },
+  "autocreate": {
+    "filter": "ne(list,DONE)"
   }
 }
 ```
-Set `list` to whatever list you use for done.
 
 Task Board Features
 ----
 ### Filtering your board
 imdone uses [rql](https://github.com/persvr/rql) to filter your board. Click on the tags, contexts or the lightbulb icon next to metadata or the filename to see some examples.
-You can query for any property of a task.
+You can query for any property of a task. If the rql query doesn't return a result the filter will be treated as a regular expression and matched agains task.rawTask.
 
 Metadata fields with the keys "created", "completed", "due" and "remind" will be added as date fields to the task so you can filter with lt() and gt() (e.g. "gt(due,date:2018-04-20)")
 ```json
