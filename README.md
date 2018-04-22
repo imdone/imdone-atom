@@ -154,7 +154,7 @@ Metadata fields with the keys "created", "completed", "due" and "remind" will be
       ]
    },
    "description": [],
-   "due": "2018-04-21T06:00:00.000Z"
+   "due": "2018-04-21T06:00:00.000Z",
    "rawTask": "#TODO: Remember to update changelog before +publishing +package @piascikj gh:237 id:66"
 }
 ```
