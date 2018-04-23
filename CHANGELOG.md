@@ -1,3 +1,6 @@
+## 2.4.22
+- fix hide mask when showing tasks after filter
+
 ## 2.4.21
 - use filter property in autocreate and autocomplete transformers
 
