@@ -485,7 +485,6 @@ class ImdoneAtomView extends ScrollView
   genFilterLink: (opts) ->
     $link = $el.a href:"#filter/#{opts.filter}", title: "just show me tasks with #{opts.linkText}",
       $el.span class: opts.linkClass, opts.linkText
-    # $link.dataset.filter = opts.filter
     $link
   # DOING: Use web components or vuejs to make the UI more testable and portable. +enhancement gh:297 id:75 ic:gh
   # - Create a task component
