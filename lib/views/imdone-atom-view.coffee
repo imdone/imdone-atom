@@ -181,7 +181,11 @@ class ImdoneAtomView extends ScrollView
       console.log 'tasks.moved', tasks
       @destroySortables()
       for task in tasks
-        do (task) => @board.find(".task##{task.id}").replaceWith(@getTask(task))
+        do (task) =>
+          taskEl = @board.find(".task##{task.id}")
+          return taskEl.remove() if @imdoneRepo.config.ignoreList(task.list)
+          @replaceTasksInList(task.list)
+          @replaceTasksInList(task.oldList)
       @makeTasksSortable()
       @hideMask()
       # @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed gh:259 id:98
@@ -592,6 +596,15 @@ class ImdoneAtomView extends ScrollView
     $tasks.append(self.getTask task) for task in tasks
     $list
 
+  replaceTasksInList: (list) ->
+    imdoneRepo = @imdoneRepo
+    getTask = @getTask
+    listEl = @board.find(".list[data-name='#{list}'] .tasks")
+    listEl.find('.task').each () ->
+      taskEl = $(this)
+      task = imdoneRepo.getTask(taskEl[0].id)
+      taskEl.replaceWith(getTask(task))
+
   listOnBoard: (name) -> @board.find ".list[data-name='#{name}'] ol.tasks"
 
   addListToBoard: (name) ->
@@ -677,7 +690,6 @@ class ImdoneAtomView extends ScrollView
         id = evt.item.id
         pos = evt.newIndex
         list = evt.item.parentNode.dataset.list
-        filePath = @imdoneRepo.getFullPath evt.item.dataset.path
         task = @imdoneRepo.getTask id
         @showMask "Moving Tasks"
         track.send 'move', {task,list,pos}
