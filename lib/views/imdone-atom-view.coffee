@@ -599,7 +599,7 @@ class ImdoneAtomView extends ScrollView
     imdoneRepo = @imdoneRepo
     getTask = @getTask
     listEl = @board.find(".list[data-name='#{list}'] .tasks")
-    listEl.find('.task').each () ->
+    listEl.find('.task:visible').each () ->
       taskEl = $(this)
       task = imdoneRepo.getTask(taskEl[0].id)
       taskEl.replaceWith(getTask(task))
