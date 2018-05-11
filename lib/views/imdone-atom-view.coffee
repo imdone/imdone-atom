@@ -16,6 +16,7 @@ _ = null
 config = require '../services/imdone-config'
 envConfig = require '../../config'
 # #BACKLOG: Add keen stats for features gh:240 id:89
+
 module.exports =
 class ImdoneAtomView extends ScrollView
 
@@ -177,8 +178,13 @@ class ImdoneAtomView extends ScrollView
       @onRepoUpdate(file.getTasks()) if file.getPath()
 
     @emitter.on 'tasks.moved', (tasks) =>
-      #console.log 'tasks.moved', tasks
-      @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed gh:259 id:98
+      console.log 'tasks.moved', tasks
+      @destroySortables()
+      for task in tasks
+        do (task) => @board.find(".task##{task.id}").replaceWith(@getTask(task))
+      @makeTasksSortable()
+      @hideMask()
+      # @onRepoUpdate(tasks) # TODO: For performance maybe only update the lists that have changed gh:259 id:98
 
     @emitter.on 'config.update', =>
       #console.log 'config.update'
@@ -246,6 +252,8 @@ class ImdoneAtomView extends ScrollView
       task = @imdoneRepo.getTask id
       list = task.list
       pos = 0
+      taskEl = $(e.target).closest('.task')
+      taskEl.closest('.tasks').prepend(taskEl)
       @showMask "Moving Tasks"
       track.send 'move', {task,list,pos}
       @imdoneRepo.moveTasks [task], list, pos
@@ -255,6 +263,8 @@ class ImdoneAtomView extends ScrollView
       task = @imdoneRepo.getTask id
       list = task.list
       pos = @imdoneRepo.getTasksInList(list).length
+      taskEl = $(e.target).closest('.task')
+      taskEl.closest('.tasks').append(taskEl)
       @showMask "Moving Tasks"
       track.send 'move', {task,list,pos}
       @imdoneRepo.moveTasks [task], list, pos
