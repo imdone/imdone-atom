@@ -1,3 +1,6 @@
+## 2.4.26
+- Fix regex dependency in imdone-core
+
 ## 2.4.25
 - Only replace visible tasks on move
 
