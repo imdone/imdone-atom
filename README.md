@@ -21,7 +21,7 @@ Vote on new features! [![vote on features](https://img.shields.io/github/issues/
   - [$now and $today variable replacement](#now-and-today-variable-replacement)
   - [Plain text remind: and due: timestamps](#plain-text-remind-and-due-timestamps)
   - [OS notifications for remind:[timestamp] metadata](#os-notifications-for-remindtimestamp-metadata)
-  - [Auto completed:[timestamp]](#auto-completedtimestamp)
+  - [Auto completed:[timestamp] and Auto created:[timestamp]](#auto-completedtimestamp-and-auto-createdtimestamp)
 - [Task Board Features](#task-board-features)
   - [Filtering your board](#filtering-your-board)
   - [Ignoring all tasks in a list](#ignoring-all-tasks-in-a-list)
@@ -33,6 +33,7 @@ Vote on new features! [![vote on features](https://img.shields.io/github/issues/
   - [Adding and removing TODO tokens](#adding-and-removing-todo-tokens)
   - [Global journal](#global-journal)
   - [Project journal](#project-journal)
+  - [Front matter](#front-matter)
   - [Ignoring files](#ignoring-files)
 - [Install](#install)
 - [Commands](#commands)
@@ -70,7 +71,7 @@ Checklists in your descriptions will render in your cards and will live update y
 // - [ ] Make sure all tests are up to date
 ```
 
-NEW for [imdone.io](https://imdone.io) subscribers!!!
+For [imdone.io](https://imdone.io) subscribers!!!
 ----
 ### $now and $today variable replacement
 - replace `$now` with with the current timestamp (ex. `2018-03-18T09:37:49-06:00`)
@@ -212,6 +213,26 @@ Use your project journal for anything, even planning your next set of features l
   - [ ] Read templates from `.imdone/templates.md`
   - [ ] Replace description lines with @<template-name>
 ```
+
+### Front matter
+You can add tags, context and metadata to all tasks in a markdown file with [YAML front matter](https://github.com/jxson/front-matter) like this...
+```markdown
+---
+tags:
+  - story
+  - enhancement
+context:
+  - github
+meta:
+  sprint:
+   - 1
+---
+```
+These attributes will be available to use in filters like this...
+- `contains(frontMatter.tags,story)`
+
+If you also want to capture tasks with an inline **story** tag try this...
+- `or(contains(frontMatter.tags,story),contains(tags,story))`
 
 <!-- ### Using markdown -->
 ### Open files in [intellij and webstorm](https://www.jetbrains.com/products.html)
