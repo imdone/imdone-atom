@@ -508,13 +508,13 @@ class ImdoneAtomView extends ScrollView
       if contexts
         for context, i in contexts
           do (context, i) =>
-            $link = @genFilterLink linkText: context, filter: "contains(context,#{context})", linkClass: "task-context"
+            $link = @genFilterLink linkText: context, filter: "or(contains(context,#{context}),contains(frontMatter.context,#{context}))", linkClass: "task-context"
             taskHtml = taskHtml.replace( "@#{context}", $el.div($link).innerHTML )
 
       if tags
         for tag, i in tags
           do (tag, i) =>
-            $link = @genFilterLink linkText: tag, filter:"contains(tags,#{tag})", linkClass: "task-tags"
+            $link = @genFilterLink linkText: tag, filter:"or(contains(tags,#{tag}),contains(frontMatter.tags,#{tag}))", linkClass: "task-tags"
             taskHtml = taskHtml.replace( "+#{tag}", $el.div($link).innerHTML )
     else
       taskHtml = task.getHtml $.extend({stripTags: true, stripContext: true}, opts)
@@ -523,14 +523,14 @@ class ImdoneAtomView extends ScrollView
         $filters.appendChild $div
         for context, i in contexts
           do (context, i) =>
-            $div.appendChild(self.genFilterLink linkText: context, filter:"contains(context,#{context})", linkClass: "task-context")
+            $div.appendChild(self.genFilterLink linkText: context, filter:"or(contains(context,#{context}),contains(frontMatter.context,#{context}))", linkClass: "task-context")
             $div.appendChild($el.span ", ") if (i < contexts.length-1)
       if tags
         $div = $el.div()
         $filters.appendChild $div
         for tag, i in tags
           do (tag, i) =>
-            $div.appendChild(self.genFilterLink linkText: tag, filter:"contains(tags,#{tag})", linkClass: "task-tags")
+            $div.appendChild(self.genFilterLink linkText: tag, filter:"or(contains(tags,#{tag}),contains(frontMatter.tags,#{tag}))", linkClass: "task-tags")
             $div.appendChild($el.span ", ") if (i < tags.length-1)
 
     $taskText.innerHTML = taskHtml
@@ -544,7 +544,7 @@ class ImdoneAtomView extends ScrollView
           $link = $el.a href: data.link.url, title: data.link.title,
             $el.span class:"icon #{data.link.icon || 'icon-link-external'}"
           $icons.appendChild $link
-        filter = "contains(meta.#{data.key},string:#{encodeURIComponent(data.value)})"
+        filter = "or(contains(meta.#{data.key},string:#{encodeURIComponent(data.value)}),contains(frontMatter.meta.#{data.key},string:#{encodeURIComponent(data.value)}))"
         $filterLink = $el.a href:"#filter/#{filter}", title: "just show me tasks with #{data.key}:#{data.value}",
           $el.span class:"icon icon-light-bulb"
         $icons.appendChild $filterLink
