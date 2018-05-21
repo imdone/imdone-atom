@@ -1,3 +1,9 @@
+## 2.4.28
+- Add allTags, allContext and allMeta
+
+## 2.4.27
+- Add frontMatter
+
 ## 2.4.26
 - Fix regex dependency in imdone-core
 
