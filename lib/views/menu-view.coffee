@@ -194,7 +194,7 @@ class MenuView extends View
 
   updateMenu: ->
     return unless @imdoneRepo
-    @listsSortable.destroy() if @listsSortable
+    @listsSortable.destroy() if @listsSortable && @listsSortable.el
     @lists.empty()
 
     repo = @imdoneRepo
