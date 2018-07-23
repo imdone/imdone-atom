@@ -22,10 +22,15 @@
       "READY",
       "ICEBOX",
       "INBOX",
-      "QUESTION"
+      "QUESTION",
+      "HELP"
     ]
   },
   "lists": [
+    {
+      "name": "HELP",
+      "hidden": false
+    },
     {
       "name": "BACKLOG",
       "hidden": true
