@@ -12,7 +12,7 @@ Roadmap
   # <type>
   Any markdown for your template
   ```
-- #DOING: Add analytics for user actions id:107 gh:328 ic:gh
+- #TODO: Add analytics for user actions id:107 gh:328 ic:gh
   - [ ] Open board
   - [ ] Create list
   - [ ] add github issue
