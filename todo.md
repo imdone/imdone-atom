@@ -12,7 +12,7 @@ Roadmap
   # <type>
   Any markdown for your template
   ```
-- #DOING: Add analytics for user actions id:107 gh:328 ic:gh
+- #TODO: Add analytics for user actions id:107 gh:328 ic:gh
   - [ ] Open board
   - [ ] Create list
   - [ ] add github issue
@@ -24,7 +24,7 @@ Acceptance Criteria
 - [ ] When a user creates a todo with no content and identifies a github issue with gh:123 then issue 123 should become the content of the TODO.
 
 #TODO: As a user I would like to set email reminders from TODO comments in my code +feature +imdoneio id:143 gh:361 ic:gh
-#DOING: As a user I would like the label on my github issue to change if I move a task to a different list. +feature +imdoneio id:144 gh:363 ic:gh
-#DOING: Sort in file and save to project is broken +bug id:146 gh:374 ic:gh
+#TODO: As a user I would like the label on my github issue to change if I move a task to a different list. +feature +imdoneio id:144 gh:363 ic:gh
+#TODO: Sort in file and save to project is broken +bug id:146 gh:374 ic:gh
 - [ ] Come up with solution for tasks not integrated yet.  They need id's to be sorted.
 - [ ] Maybe use the transform endpoint?  Create a transformer for tasks with no id

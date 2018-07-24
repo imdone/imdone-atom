@@ -1,9 +1,48 @@
 {
-  "exclude": [
-    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+  "noHelp": true,
+  "meta": {
+    "gh": {
+      "icon": "icon-octoface",
+      "titleTemplate": "View github issue %s",
+      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s"
+    }
+  },
+  "sync": {
+    "useImdoneioForPriority": true,
+    "name": "imdone/imdone-atom",
+    "id": "5a11044eb01d742c3c4f516a"
+  },
+  "marked": {
+    "langPrefix": "language-",
+    "smartLists": true,
+    "pedantic": false,
+    "breaks": false,
+    "tables": true,
+    "gfm": true
+  },
+  "lists": [
+    {
+      "hidden": true,
+      "name": "BACKLOG"
+    },
+    {
+      "hidden": false,
+      "name": "TODO"
+    },
+    {
+      "hidden": false,
+      "name": "DOING"
+    },
+    {
+      "hidden": true,
+      "name": "CHANGED"
+    },
+    {
+      "ignore": true,
+      "hidden": false,
+      "name": "DONE"
+    }
   ],
-  "watcher": true,
-  "keepEmptyPriority": false,
   "code": {
     "include_lists": [
       "TODO",
@@ -22,50 +61,13 @@
       "READY",
       "ICEBOX",
       "INBOX",
-      "QUESTION"
+      "QUESTION",
+      "HELP"
     ]
   },
-  "lists": [
-    {
-      "name": "BACKLOG",
-      "hidden": true
-    },
-    {
-      "name": "TODO",
-      "hidden": false
-    },
-    {
-      "name": "DOING",
-      "hidden": false
-    },
-    {
-      "name": "CHANGED",
-      "hidden": false
-    },
-    {
-      "name": "DONE",
-      "hidden": false,
-      "ignore": true
-    }
-  ],
-  "marked": {
-    "gfm": true,
-    "tables": true,
-    "breaks": false,
-    "pedantic": false,
-    "smartLists": true,
-    "langPrefix": "language-"
-  },
-  "sync": {
-    "id": "5a11044eb01d742c3c4f516a",
-    "name": "imdone/imdone-atom",
-    "useImdoneioForPriority": true
-  },
-  "meta": {
-    "gh": {
-      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s",
-      "titleTemplate": "View github issue %s",
-      "icon": "icon-octoface"
-    }
-  }
+  "keepEmptyPriority": false,
+  "watcher": true,
+  "exclude": [
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+  ]
 }
