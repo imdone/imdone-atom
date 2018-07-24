@@ -190,19 +190,39 @@ module.exports = ImdoneAtom =
         return if err
         atom.workspace.open(file)
 
-  openJournalFile: (projectDir) ->
+  # DOING: Journal-names
+  # https://github.com/imdone/imdone-atom/issues/81
+  # https://github.com/xeor
+  # <thanks>`imdone` almost hit a PERFECT hit on my current workflow. Looking very much forward to whats next!</thanks>
+  # In the settings, it supports journal filenames based on text and one variable (`${DATE}`). Would it be, or is it in the pipeline to expand journal creations to support more advanced name-templates? Example, based on highlighed text, a popup to ask for part of the filenames, and so on.
+  # I usually ends up taking a lot of notes during the day, all in the format "YYYY-MM-DD notename here.md".
+  # - Use modalPanel
+  # - [Create your first Atom package | Blog Eleven Labs](https://blog.eleven-labs.com/en/create-atom-package/)
+  # ```coffeescript
+  # regex = /\${(\w*?)}/g
+  # vars = []
+  # while (result = regex.exec(t))
+  #   variable = result[1]
+  #   vars.push(variable) if (!data[variable])
+  # ```
+  template: (t) ->
     moment = require 'moment'
-    mkdirp = require 'mkdirp'
     config = configHelper.getSettings().todaysJournal
     date = moment().format config.dateFormat
     month = moment().format config.monthFormat
-    template = (t) -> t.replace("${date}",date).replace("${month}", month)
+    data = {date, month}
+    _.template(t)(data)
+
+  openJournalFile: (projectDir) ->
+    mkdirp = require 'mkdirp'
+    config = configHelper.getSettings().todaysJournal
+
     if projectDir
-      file = template config.projectFileNameTemplate
+      file = @template(config.projectFileNameTemplate)
       atom.workspace.open(path.join projectDir, file)
     else
-      file = template config.fileNameTemplate
-      dir = template config.directory
+      file = @template(config.fileNameTemplate)
+      dir = config.directory
       filePath = path.join dir, file
       mkdirp dir, (err) ->
         if (err)

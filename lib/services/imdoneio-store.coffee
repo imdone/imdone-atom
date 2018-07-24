@@ -150,7 +150,9 @@ module.exports =  (repo) ->
   saveSortFile = (cb) ->
     cb ?= ()->
     sort = _.get repo, 'sync.sort'
-    fs.writeFile SORT_FILE, JSON.stringify(sort), cb
+    for k, v of sort
+      sort[k] = _.uniq v
+    fs.writeFile SORT_FILE, JSON.stringify(sort, null, 2), cb
 
   sortEnabled = () -> repo.usingImdoneioForPriority()
 
@@ -167,6 +169,7 @@ module.exports =  (repo) ->
 
   setListSort = (name, ids, save) ->
     _.remove ids, (val) -> val == null
+    ids = ids.map (val) -> parseInt(val, 10)
     _.set repo, "sync.sort.#{name}", ids
     saveSort() if save
 
@@ -179,7 +182,9 @@ module.exports =  (repo) ->
       setListSort list.name, tasksToIds(list.tasks) for list in _getTasksByList()
       saveSort cb
 
-  getIdsForList = (name) -> _.get repo, "sync.sort.#{name}"
+  getIdsForList = (name) ->
+    sort = _.get repo, "sync.sort.#{name}"
+    sort.map (id) -> parseInt(id, 10)
 
   sortBySyncId = (name, tasks) ->
     ids = getIdsForList name
