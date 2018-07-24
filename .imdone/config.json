@@ -1,24 +1,30 @@
 {
-  "noHelp": true,
-  "meta": {
-    "gh": {
-      "icon": "icon-octoface",
-      "titleTemplate": "View github issue %s",
-      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s"
-    }
-  },
-  "sync": {
-    "useImdoneioForPriority": true,
-    "name": "imdone/imdone-atom",
-    "id": "5a11044eb01d742c3c4f516a"
-  },
-  "marked": {
-    "langPrefix": "language-",
-    "smartLists": true,
-    "pedantic": false,
-    "breaks": false,
-    "tables": true,
-    "gfm": true
+  "exclude": [
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+  ],
+  "watcher": true,
+  "keepEmptyPriority": false,
+  "code": {
+    "include_lists": [
+      "TODO",
+      "DOING",
+      "DONE",
+      "PLANNING",
+      "FIXME",
+      "ARCHIVE",
+      "HACK",
+      "CHANGED",
+      "XXX",
+      "IDEA",
+      "NOTE",
+      "REVIEW",
+      "BACKLOG",
+      "READY",
+      "ICEBOX",
+      "INBOX",
+      "QUESTION",
+      "HELP"
+    ]
   },
   "lists": [
     {
@@ -43,31 +49,25 @@
       "name": "DONE"
     }
   ],
-  "code": {
-    "include_lists": [
-      "TODO",
-      "DOING",
-      "DONE",
-      "PLANNING",
-      "FIXME",
-      "ARCHIVE",
-      "HACK",
-      "CHANGED",
-      "XXX",
-      "IDEA",
-      "NOTE",
-      "REVIEW",
-      "BACKLOG",
-      "READY",
-      "ICEBOX",
-      "INBOX",
-      "QUESTION",
-      "HELP"
-    ]
+  "marked": {
+    "langPrefix": "language-",
+    "smartLists": true,
+    "pedantic": false,
+    "breaks": false,
+    "tables": true,
+    "gfm": true
   },
-  "keepEmptyPriority": false,
-  "watcher": true,
-  "exclude": [
-    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
-  ]
+  "sync": {
+    "useImdoneioForPriority": true,
+    "name": "imdone/imdone-atom",
+    "id": "5a11044eb01d742c3c4f516a"
+  },
+  "noHelp": true,
+  "meta": {
+    "gh": {
+      "icon": "icon-octoface",
+      "titleTemplate": "View github issue %s",
+      "urlTemplate": "https://github.com/imdone/imdone-atom/issues/%s"
+    }
+  }
 }
