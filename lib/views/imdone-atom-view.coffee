@@ -486,7 +486,7 @@ class ImdoneAtomView extends ScrollView
     $link = $el.a href:"#filter/#{opts.filter}", title: "just show me tasks with #{opts.linkText}",
       $el.span class: opts.linkClass, opts.linkText
     $link
-  # DOING: Use web components or vuejs to make the UI more testable and portable. +enhancement gh:297 id:75 ic:gh
+  # DOING: Use [imdone/imdone-vue-lib](https://github.com/imdone/imdone-vue-lib) to make the UI more testable and portable. +enhancement gh:297 id:75 ic:gh
   # - Create a task component
   # - Write task component tests
   # - Use the new component in the UI

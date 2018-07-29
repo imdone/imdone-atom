@@ -190,7 +190,7 @@ module.exports = ImdoneAtom =
         return if err
         atom.workspace.open(file)
 
-  # DOING: Journal-names id:152
+  # TODO: Journal-names id:152
   # https://github.com/imdone/imdone-atom/issues/81
   # https://github.com/xeor
   # <thanks>`imdone` almost hit a PERFECT hit on my current workflow. Looking very much forward to whats next!</thanks>
