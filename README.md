@@ -17,7 +17,7 @@ Vote on new features! [![vote on features](https://img.shields.io/github/issues/
 ### **Table of Contents**
 
 - [Track your TODO comments in a kanban board](#track-your-todo-comments-in-a-kanban-board)
-- [NEW for imdone.io subscribers!!!](#new-for-imdoneio-subscribers)
+- [For imdone.io subscribers!!!](#for-imdoneio-subscribers)
   - [$now and $today variable replacement](#now-and-today-variable-replacement)
   - [Plain text remind: and due: timestamps](#plain-text-remind-and-due-timestamps)
   - [OS notifications for remind:[timestamp] metadata](#os-notifications-for-remindtimestamp-metadata)
