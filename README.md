@@ -1,4 +1,10 @@
 
+Retiring - imdone-atom
+----
+I have decided to retire as the imdone-atom maintainer. Instead, I'm putting all my energy into imdone desktop, an electron based desktop app that works with any text editor. If you would like to take over maintenance of imdone-atom, please [contact me](mailto:jesse@piascik.net).
+
+Sincerely, Jesse Piascik
+
 [![apm](https://img.shields.io/apm/v/imdone-atom.svg)]()
 [![apm](https://img.shields.io/apm/dm/imdone-atom.svg)](https://atom.io/packages/imdone-atom)
 </> with ![love](https://octicons.glitch.me/svg/heart.svg?size=16&color=ff0000) by
