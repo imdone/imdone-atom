@@ -1,6 +1,5 @@
 {$, $$, $$$, ScrollView} = require 'atom-space-pen-views'
 $el = require 'laconic'
-track = require '../services/track'
 moment = require 'moment'
 {Emitter} = require 'atom'
 fs = require 'fs'
@@ -151,7 +150,6 @@ class ImdoneAtomView extends ScrollView
       #console.log "auth-failed" if status == "failed"
 
     @emitter.on 'authenticated', (user) =>
-      track.send 'authenticated', user
       pluginManager.init()
 
     @emitter.on 'unavailable', =>
@@ -215,7 +213,6 @@ class ImdoneAtomView extends ScrollView
         fullPath = @imdoneRepo.getFullPath file
         paths[fullPath] = task.line
 
-      track.send 'openVisible', paths
       numFiles = _.keys(paths).length
       if numFiles < 5 || window.confirm "imdone is about to open #{numFiles} files.  Continue?"
         for fpath, line of paths
@@ -259,7 +256,6 @@ class ImdoneAtomView extends ScrollView
       taskEl = $(e.target).closest('.task')
       taskEl.closest('.tasks').prepend(taskEl)
       @showMask "Moving Tasks"
-      track.send 'move', {task,list,pos}
       @imdoneRepo.moveTasks [task], list, pos
 
     @on 'click', '.move-down', (e) =>
@@ -270,12 +266,10 @@ class ImdoneAtomView extends ScrollView
       taskEl = $(e.target).closest('.task')
       taskEl.closest('.tasks').append(taskEl)
       @showMask "Moving Tasks"
-      track.send 'move', {task,list,pos}
       @imdoneRepo.moveTasks [task], list, pos
 
     @on 'click', '.source-link',  (e) =>
       link = e.target
-      track.send 'source-link', {uri: link.dataset.uri, line: link.dataset.line}
       @openPath link.dataset.uri, link.dataset.line
 
       if config.getSettings().showNotifications && !$(link).hasClass('info-link')
@@ -430,7 +424,6 @@ class ImdoneAtomView extends ScrollView
       try @board.find(".task a[href='#filter/#{text}']").addClass('inline-block highlight-info')
       catch e then console.error(e)
       tasks = @imdoneRepo.query text
-      track.send 'filter', {text, tasks: tasks.length} unless text == @lastFilter
       lists = _.uniq(tasks.map (task) -> task.list).sort()
       if JSON.stringify(@shownLists) is JSON.stringify(lists)
         @showTasks(tasks)
@@ -689,7 +682,6 @@ class ImdoneAtomView extends ScrollView
         list = evt.item.parentNode.dataset.list
         task = @imdoneRepo.getTask id
         @showMask "Moving Tasks"
-        track.send 'move', {task,list,pos}
         @imdoneRepo.moveTasks [task], list, pos
 
     @tasksSortables = tasksSortables = []
